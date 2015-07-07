@@ -29,7 +29,11 @@
     {{#if  map}}
     <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
     <h3>{{ name }} </h3>
-    <h4>{{ variant }} / {{ map }}</h4>
+	{{#if variant}}
+		<h4>{{ variant }} / {{ map }}</h4>
+	{{else}}
+		<h4>{{ map }}</h4>
+	{{/if}}
 	<h3>{{hostPlayer}}</h3>
 		<p><em>Players:</em> {{ numPlayers }}/{{ maxPlayers }} || {{status}} <br>
 		{{#if passworded}}
