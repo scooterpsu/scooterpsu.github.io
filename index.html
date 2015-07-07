@@ -31,21 +31,25 @@
     <h3>{{ name }} </h3>
     <h4>{{ variant }} / {{ map }}</h4>
 	<h3>{{hostPlayer}}</h3>
-    <p><em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}} <br>
-        <ul>
-        {{#each players}}
-        {{#if name}}
-        <li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
-        {{else}}
-        <li>[ no name ] - {{kills}}/{{deaths}}/{{assists}}</li>
-        {{/if}}
-        {{/each}}
-        </ul>
-    </p>
-    {{else}}
-    <h3>Do not join<h3>
+	<div class="panel panel-info" id="#players{{ serverId }}">
+		<div class="panel-heading">
+			<h4><a class="accordian toggle" data-toggle="collapse" data-parent="#players{{ serverId }}" href="#plist{{ serverId }}"> <em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}}</a></h4> 
+		</div>
+		<div id="plist{{ serverId }}" class="panel-collapse collapse">
+				<ul>
+				{{#each players}}
+				{{#if name}}
+				<li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
+				{{else}}
+				<li>[ no name ] - {{kills}}/{{deaths}}/{{assists}}</li>
+				{{/if}}
+				{{/each}}
+				</ul>
+		</div>
+	</div>
+	{{else}}
+		<h3>Do not join<h3>
     {{/if}}
-    
 </script>
 
 <script id="server-list-template" type="text/x-handlebars-template">
@@ -94,6 +98,7 @@
                                                 });
                                             var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                                             .done(function(serverInfo) {
+													serverInfo["serverId"] = i;
                                                     var html = serverTemplate(serverInfo);
                                                     $("#server" + i).html(html);
                                             });
