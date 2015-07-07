@@ -31,17 +31,21 @@
     <h3>{{ name }} </h3>
     <h4>{{ variant }} / {{ map }}</h4>
 	<h3>{{hostPlayer}}</h3>
-    <p><em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}} <br>
-        <ul>
-        {{#each players}}
-        {{#if name}}
-        <li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
-        {{else}}
-        <li>[ no name ] - {{kills}}/{{deaths}}/{{assists}}</li>
-        {{/if}}
-        {{/each}}
-        </ul>
-    </p>
+		{{#if passworded}}
+		<h4>[Private Game]</h4>
+		{{else}}
+		<p><em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}} <br>
+			<ul>
+			{{#each players}}
+			{{#if name}}
+			<li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
+			{{else}}
+			<li>[ no name ] - {{kills}}/{{deaths}}/{{assists}}</li>
+			{{/if}}
+			{{/each}}
+			</ul>
+		</p>
+		{{/if}}
     {{else}}
     <h3>Do not join<h3>
     {{/if}}
