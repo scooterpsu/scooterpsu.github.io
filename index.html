@@ -31,7 +31,7 @@
     <h3>{{ name }} </h3>
     <h4>{{ variant }} / {{ map }}</h4>
 	<h3>{{hostPlayer}}</h3>
-		<p><em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}} <br>
+		<p><em>Players:</em> {{ numPlayers }}/{{ maxPlayers }} || {{status}} <br>
 		{{#if passworded}}
 		<h4>[Private Game]</h4>
 		{{else}}
@@ -39,8 +39,6 @@
 			{{#each players}}
 			{{#if name}}
 			<li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
-			{{else}}
-			<li>[ no name ] - {{kills}}/{{deaths}}/{{assists}}</li>
 			{{/if}}
 			{{/each}}
 			</ul>
