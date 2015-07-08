@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <script src="js/bootstrap.min.js"></script>
+	
+	<script src="js/dewRcon.js"></script>
+	
     <style>
     #bg {
       position: fixed; 
@@ -41,7 +44,9 @@
     </style>
 </head>
 <body>
+<!--
 <img src="images/bg.jpg" id="bg" alt="">
+-->
 <div id="container">
 
         <div id="serverList" class="col-lg-8 serverlist"> </div>
@@ -84,7 +89,7 @@
 
 <script id="server-list-template" type="text/x-handlebars-template">
     {{#each servers}}
-    <div class="well" id="serverlist{{ i }}">
+    <div class="well" id="serverlist{{ i }}" onclick="joinServer({{serverIP}});">
         <div class="col-md-2"><a href="#" onclick="updateServerInfo({{i}});">{{ serverIP }}</a></div>
         <div class="col-md-2"><span id="region{{ i }}">Anywhere, United States</span></div>
         <div class="col-md-8" id="serverid{{ i }}"></div>
@@ -152,6 +157,9 @@
     function updateServerInfo(i) {
         var html = serverTemplate(serverList.servers[i]);
         $("#serverInfo").html(html)
+    }
+	function joinServer(ip) {
+		dewRcon.send('connect ' + ip);
     }
 </script>
 
