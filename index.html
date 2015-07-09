@@ -38,37 +38,49 @@
     <h3>{{hostPlayer}}</h3>
         <div class="panel-heading">
             <h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }} <b>Status:</b> {{status}}</h4> 
-                <table class="table-striped">
-                <thead>
-                    <th>Name</th>
-                    <th>Score</th>
-                    <th>K</th>
-                    <th>D</th>
-                    <th>A</th>
-                </thead>
-                <tbody>
-                {{#each players}}
-                {{#if name}}
-                <tr>
-                    <td class="col-xs-1">{{this.name}}</td>
-                    <td><center>{{score}}</center></td>
-                    <td>{{kills}}</td>
-                    <td>{{deaths}}</td>
-                    <td>{{assists}}</td>
-                </tr>
+                {{#if passworded}}
+                    <h4><b>[PRIVATE GAME]</b></h4>
+                {{else}}
+                    <table class="table-striped">
+                    <thead>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>K</th>
+                        <th>D</th>
+                        <th>A</th>
+                    </thead>
+                    <tbody>
+                    {{#each players}}
+                    {{#if name}}
+                    <tr>
+                        <td class="col-xs-1">{{this.name}}</td>
+                        <td><center>{{score}}</center></td>
+                        <td>{{kills}}</td>
+                        <td>{{deaths}}</td>
+                        <td>{{assists}}</td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                    </table>
                 {{/if}}
-                {{/each}}
-                </tbody>
-                </table>
     {{else}}
         <h3>Game / Data Unavailable<h3>
     {{/if}}
 </script>
 
 <script id="server-listinfo-template" type="text/x-handlebars-template">
-<div class="row">
+{{#if passworded}}
+    <div class="row text-danger">
+{{else}}
+    <div class="row">
+{{/if}}
         <div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
-        <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}</div>
+        <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}
+        {{#if passworded}}
+        <br /><b>[PASSWORDED]</b>
+        {{/if}}
+        </div>
         {{#if variant}}
         <div class="col-sm-3"><b>{{ variant }}</b> <br /> <em>{{ map }}</em></div>
         {{else}}

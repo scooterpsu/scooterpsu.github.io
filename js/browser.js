@@ -57,5 +57,10 @@ function updateServerInfo(i) {
 }
 function joinServer(i) {
     //console.log(serverList.servers[i].serverIP);
-    dewRcon.send('connect ' + serverList.servers[i].serverIP);
+    if(serverList.servers[i].passworded){
+        var password = prompt("The server at " + serverList.servers[i].serverIP + " is passworded, enter the password to join", "");
+        dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + password);
+    }else {
+        dewRcon.send('connect ' + serverList.servers[i].serverIP);
+    }
 }
