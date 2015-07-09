@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Server Browser</title>
+    <script src="js/handlebars.min.js"></script>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+    #bg {
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+        
+      /* Preserve aspect ratio */
+      min-width: 100%;
+      min-height: 100%;
+    }
+    </style>
+</head>
+<body>
+<img src="images/bg.jpg" id="bg" alt="">
+<div id="container"> </div>
+<div id="serverList" class="row"> </div>
+
+<script id="server-template" type="text/x-handlebars-template">
+    {{#if  map}}
+    <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
+    <h3>{{ name }} </h3>
+    {{#if variant}}
+        <h4>{{ variant }} / {{ map }}</h4>
+    {{else}}
+        <h4>{{ map }}</h4>
+    {{/if}}
+    <h3>{{hostPlayer}}</h3>
+    <div class="panel panel-info" id="#players{{ serverId }}">
+        <div class="panel-heading">
+            <h4><a class="accordian toggle" data-toggle="collapse" data-parent="#players{{ serverId }}" href="#plist{{ serverId }}"> <em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}}</a></h4> 
+        </div>
+        <div id="plist{{ serverId }}" class="panel-collapse collapse">
+                <ul>
+                {{#each players}}
+                {{#if name}}
+                <li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
+                {{else}}
+                <li>[ no name ] - {{kills}}/{{deaths}}/{{assists}}</li>
+                {{/if}}
+                {{/each}}
+                </ul>
+        </div>
+    </div>
+    {{else}}
+        <h3>Do not join<h3>
+    {{/if}}
+</script>
+
+<script id="server-list-template" type="text/x-handlebars-template">
+    {{#each servers}}
+    <div class="col-md-3 " id="serverlist{{ i }}">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ serverIP }} </h3>
+                <h2 class="panel-title"><span id="region{{ i }}">Anywhere, United States</span></h2>
+            </div>
+            <div class="panel-body">
+                <div class="server" id="server{{ i }}">Loading...</div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+
+
+<script>
+        var serverList = {
+        servers: []
+        };
+        
+        var serverTemplateSource = $("#server-template").html();
+        var serverTemplate = Handlebars.compile(serverTemplateSource);
+        
+        var serverListTemplateSource = $("#server-list-template").html();
+        var serverListTemplate = Handlebars.compile(serverListTemplateSource);
+        
+        var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+       
+        var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
+                .done(function( data ) {
+                        for(var i = 0; i < data.result.servers.length; i++)
+                        {
+                                var serverIP = data.result.servers[i];
+                                //because sometimes jackasses inject into the server list
+
+                                if(VerifyIPRegex.test(serverIP)){
+                                        serverList.servers.push({serverIP, i});
+                                        (function(i, serverIP) {
+                                            var jqhxrGeoInfo = $.getJSON("http://www.telize.com/geoip/" + serverIP.substr(0, serverIP.indexOf(':')), null )
+                                            .done(function(data) {
+                                                    $("#region" + i).html(data.region + ", " + data.country);
+                                                });
+                                            var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
+                                            .done(function(serverInfo) {
+                                                    serverInfo["serverId"] = i;
+                                                    serverInfo["serverIP"] = serverIP;
+                                                    var html = serverTemplate(serverInfo);
+                                                    $("#server" + i).html(html);
+                                            });
+                                        })(i, serverIP);
+                                } else {
+                                    console.log("Invalid IP, skipping.");
+                                }
+                        }
+                        var listHtml = serverListTemplate(serverList);
+                        $("#serverList").html(listHtml);
+
+                for (var j = 0; j < serverList.servers.length; j++)
+                {
+                        console.log(serverList.servers[j]);
+                }
+                });
+
+</script>
+
+</body>
+</html>
