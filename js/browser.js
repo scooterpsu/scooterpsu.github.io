@@ -15,7 +15,11 @@
                                         (function(i, serverIP) {
                                             var jqhxrGeoInfo = $.getJSON("http://www.telize.com/geoip/" + serverIP.substr(0, serverIP.indexOf(':')), null )
                                             .done(function(data) {
+													if(data.region){
                                                     $("#region" + i).html(data.region + ", " + data.country);
+													}else{
+                                                    $("#region" + i).html(data.country);
+													}														
                                                 });
                                             var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                                             .done(function(serverInfo) {
