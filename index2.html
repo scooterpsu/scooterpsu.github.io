@@ -57,7 +57,11 @@
     {{#if  map}}
     <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
     <h3>{{ name }} </h3>
+	{{#if variant}}
     <h4>{{ variant }} / {{ map }}</h4>
+	{{else}}
+    <h4>{{ map }}</h4>
+	{{/if}}
     <h3>{{hostPlayer}}</h3>
         <div class="panel-heading">
             <h4><em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}}</h4> 
@@ -92,7 +96,7 @@
 			<td class="col-md-2"><a href="#" onclick="updateServerInfo({{i}});">{{ serverIP }}</a></td>
 			<td class="col-sm-1"><a href="#" onclick="console.log({{serverIP}});">JOIN</a></td>
 			<td class="col-md-2"><span id="region{{ i }}">Anywhere, United States</span></td>
-			<td class="col-md-10" id="serverid{{ i }}"></td>
+			<td class="col-md-6" id="serverid{{ i }}"></td>
 		</tr>
     {{/each}}
 		</tbody>
