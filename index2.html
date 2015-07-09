@@ -78,9 +78,15 @@
 </script>
 
 <script id="server-listinfo-template" type="text/x-handlebars-template">
-        <div class="col-sm-4">{{ name }}</div>
-        <div class="col-sm-4">{{ numPlayers }} / {{ maxPlayers }}</div>
-        <div class="col-sm-4">{{ variant }}</div>        
+<div class="row">
+        <div class="col-sm-5">{{ hostPlayer }} || {{ name }}</div>
+        <div class="col-xs-3">{{ numPlayers }} / {{ maxPlayers }}</div>
+		{{#if variant}}
+        <div class="col-sm-3">{{ variant }}</div>
+		{{else}}
+		<div class="col-sm-3">{{ map }}</div>
+		{{/if}}
+</div>        
 </script>
 <script id="server-list-template" type="text/x-handlebars-template">
     <table class="table table-bordered table-hover" id="serverlist{{ i }}">
