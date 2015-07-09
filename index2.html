@@ -38,8 +38,7 @@
 		right: 0;
 		width: 27%;
 	}
-	
-	
+
     </style>
 </head>
 <body>
@@ -99,8 +98,8 @@
 		<tbody>
     {{#each servers}}
 		<tr>
-			<td class="col-md-2"><a href="#" onclick="updateServerInfo({{i}});">{{ serverIP }}</a></td>
-			<td class="col-sm-1"><a href="#" onclick="console.log({{serverIP}});">JOIN</a></td>
+			<td class="col-md-2"><a href="#" onclick="console.log({{serverIP}});">{{ serverIP }}</a></td>
+			<td class="col-sm-1"><a href="#" onclick="updateServerInfo({{i}});">INFO</a></td>
 			<td class="col-md-2"><span id="region{{ i }}">Anywhere, United States</span></td>
 			<td class="col-md-6" id="serverid{{ i }}"></td>
 		</tr>
