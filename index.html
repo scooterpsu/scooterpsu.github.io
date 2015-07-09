@@ -29,30 +29,30 @@
     {{#if  map}}
     <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
     <h3>{{ name }} </h3>
-	{{#if variant}}
-		<h4>{{ variant }} / {{ map }}</h4>
-	{{else}}
-		<h4>{{ map }}</h4>
-	{{/if}}
-	<h3>{{hostPlayer}}</h3>
-	<div class="panel panel-info" id="#players{{ serverId }}">
-		<div class="panel-heading">
-			<h4><a class="accordian toggle" data-toggle="collapse" data-parent="#players{{ serverId }}" href="#plist{{ serverId }}"> <em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}}</a></h4> 
-		</div>
-		<div id="plist{{ serverId }}" class="panel-collapse collapse">
-				<ul>
-				{{#each players}}
-				{{#if name}}
-				<li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
-				{{else}}
-				<li>[ no name ] - {{kills}}/{{deaths}}/{{assists}}</li>
-				{{/if}}
-				{{/each}}
-				</ul>
-		</div>
-	</div>
-	{{else}}
-		<h3>Do not join<h3>
+    {{#if variant}}
+        <h4>{{ variant }} / {{ map }}</h4>
+    {{else}}
+        <h4>{{ map }}</h4>
+    {{/if}}
+    <h3>{{hostPlayer}}</h3>
+    <div class="panel panel-info" id="#players{{ serverId }}">
+        <div class="panel-heading">
+            <h4><a class="accordian toggle" data-toggle="collapse" data-parent="#players{{ serverId }}" href="#plist{{ serverId }}"> <em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}}</a></h4> 
+        </div>
+        <div id="plist{{ serverId }}" class="panel-collapse collapse">
+                <ul>
+                {{#each players}}
+                {{#if name}}
+                <li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
+                {{else}}
+                <li>[ no name ] - {{kills}}/{{deaths}}/{{assists}}</li>
+                {{/if}}
+                {{/each}}
+                </ul>
+        </div>
+    </div>
+    {{else}}
+        <h3>Do not join<h3>
     {{/if}}
 </script>
 
@@ -102,13 +102,14 @@
                                                 });
                                             var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                                             .done(function(serverInfo) {
-													serverInfo["serverId"] = i;
+                                                    serverInfo["serverId"] = i;
+                                                    serverInfo["serverIP"] = serverIP;
                                                     var html = serverTemplate(serverInfo);
                                                     $("#server" + i).html(html);
                                             });
                                         })(i, serverIP);
                                 } else {
-									console.log("Invalid IP, skipping.");
+                                    console.log("Invalid IP, skipping.");
                                 }
                         }
                         var listHtml = serverListTemplate(serverList);

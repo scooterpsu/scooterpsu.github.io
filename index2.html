@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <script src="js/bootstrap.min.js"></script>
-	
-	<!--<script src="js/dewRcon.js"></script>-->
-	
+    
+    <!--<script src="js/dewRcon.js"></script>-->
+    
     <style>
     #bg {
       position: fixed; 
@@ -22,22 +22,22 @@
       min-height: 100%;
     }
     
-	#serverlist {
-		position: absolute;
-		top: 5px;
-		bottom: 0;
-		left: 5px;
-		right: 1px;
-		width: 85%;
-	}
+    #serverlist {
+        position: absolute;
+        top: 5px;
+        bottom: 0;
+        left: 5px;
+        right: 1px;
+        width: 85%;
+    }
 
-	#serverinfo {
-		position: absolute;
-		top: 10;
-		bottom: 0;
-		right: 0;
-		width: 27%;
-	}
+    #serverinfo {
+        position: absolute;
+        top: 10;
+        bottom: 0;
+        right: 0;
+        width: 27%;
+    }
 
     </style>
 </head>
@@ -56,35 +56,43 @@
     {{#if  map}}
     <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
     <h3>{{ name }} </h3>
+<<<<<<< HEAD
 	{{#if variant}}
     <h4><b>Gametype: </b>{{ variant }} <br /> <b>Map: </b>{{ map }}</h4>
 	{{else}}
     <h4><b>Map: </b>{{ map }}</h4>
 	{{/if}}
+=======
+    {{#if variant}}
+    <h4>{{ variant }} / {{ map }}</h4>
+    {{else}}
+    <h4>{{ map }}</h4>
+    {{/if}}
+>>>>>>> origin/master
     <h3>{{hostPlayer}}</h3>
         <div class="panel-heading">
             <h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }} <b>Status:</b> {{status}}</h4> 
                 <table class="table-striped">
-				<thead>
-					<th>Name</th>
-					<th>Score</th>
-					<th>K</th>
-					<th>D</th>
-					<th>A</th>
-				</thead>
-				<tbody>
+                <thead>
+                    <th>Name</th>
+                    <th>Score</th>
+                    <th>K</th>
+                    <th>D</th>
+                    <th>A</th>
+                </thead>
+                <tbody>
                 {{#each players}}
                 {{#if name}}
-				<tr>
-					<td class="col-xs-1">{{this.name}}</td>
-					<td><center>{{score}}</center></td>
-					<td>{{kills}}</td>
-					<td>{{deaths}}</td>
-					<td>{{assists}}</td>
-				</tr>
+                <tr>
+                    <td class="col-xs-1">{{this.name}}</td>
+                    <td><center>{{score}}</center></td>
+                    <td>{{kills}}</td>
+                    <td>{{deaths}}</td>
+                    <td>{{assists}}</td>
+                </tr>
                 {{/if}}
                 {{/each}}
-				</tbody>
+                </tbody>
                 </table>
     {{else}}
         <h3>Game / Data Unavailable<h3>
@@ -93,6 +101,7 @@
 
 <script id="server-listinfo-template" type="text/x-handlebars-template">
 <div class="row">
+<<<<<<< HEAD
         <div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
         <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}</div>
 		{{#if variant}}
@@ -100,10 +109,20 @@
 		{{else}}
 		<div class="col-sm-3"><b>{{ map }}</b></div>
 		{{/if}}
+=======
+        <div class="col-sm-5">{{ hostPlayer }} || {{ name }}</div>
+        <div class="col-xs-3">{{ numPlayers }} / {{ maxPlayers }}</div>
+        {{#if variant}}
+        <div class="col-sm-3">{{ variant }} / {{ map }}</div>
+        {{else}}
+        <div class="col-sm-3">{{ map }}</div>
+        {{/if}}
+>>>>>>> origin/master
 </div>        
 </script>
 <script id="server-list-template" type="text/x-handlebars-template">
     <table class="table table-bordered table-hover" id="serverlist{{ i }}">
+<<<<<<< HEAD
 		<thead>
 			<th><center>IP (Click to Join)</center></th>
 			<th>Details</th>
@@ -118,8 +137,24 @@
 			<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
 			<td class="col-md-6" id="serverid{{ i }}">Loading...</td>
 		</tr>
+=======
+        <thead>
+            <th><center>IP</center></th>
+            <th></th>
+            <th><center>Location</center></th>
+            <th><center>Game Data</center></th>
+        </thead>
+        <tbody>
+    {{#each servers}}
+        <tr>
+            <td class="col-md-2"><a href="#" onclick="console.log({{serverIP}});">{{ serverIP }}</a></td>
+            <td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});">INFO</a></td>
+            <td class="col-md-2"><span id="region{{ i }}">Anywhere, United States</span></td>
+            <td class="col-md-6" id="serverid{{ i }}">Loading...</td>
+        </tr>
+>>>>>>> origin/master
     {{/each}}
-		</tbody>
+        </tbody>
     </table>
 </script>
 
@@ -156,7 +191,11 @@
                                             var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                                             .done(function(serverInfo) {
                                                     serverInfo["serverId"] = i;
+<<<<<<< HEAD
 												    serverInfo["serverIP"] = serverIP;
+=======
+                                                    serverInfo["serverIP"] = serverIP;
+>>>>>>> origin/master
                                                     var html = serverListInfoTemplate(serverInfo);
                                                     $("#serverid" + i).html(html);
                                                     for (var j = 0; j < serverList.servers.length; j++)
@@ -185,8 +224,8 @@
         var html = serverTemplate(serverList.servers[i]);
         $("#serverInfo").html(html)
     }
-	function joinServer(ip) {
-		dewRcon.send('connect ' + ip);
+    function joinServer(ip) {
+        dewRcon.send('connect ' + ip);
     }
 </script>
 
