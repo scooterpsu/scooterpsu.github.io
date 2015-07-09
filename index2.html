@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <script src="js/bootstrap.min.js"></script>
 	
-	<!--<script src="js/dewRcon.js"></script>-->
+	<script src="js/dewRcon.js"></script>
 	
     <style>
     #bg {
@@ -113,7 +113,7 @@
 		<tbody>
     {{#each servers}}
 		<tr>
-			<td class="col-md-2"><a href="#" onclick="console.log({{serverIP}});">{{ serverIP }}</a></td>
+			<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a></td>
 			<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b></a></td>
 			<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
 			<td class="col-md-6" id="serverid{{ i }}">Loading...</td>
@@ -185,8 +185,9 @@
         var html = serverTemplate(serverList.servers[i]);
         $("#serverInfo").html(html)
     }
-	function joinServer(ip) {
-		dewRcon.send('connect ' + ip);
+	function joinServer(i) {
+		//console.log(serverList.servers[i].serverIP);
+		dewRcon.send('connect ' + serverList.servers[i].serverIP);
     }
 </script>
 
