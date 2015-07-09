@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <script src="js/bootstrap.min.js"></script>
-	
-	<script src="js/dewRcon.js"></script>
-	
+    
+    <script src="js/dewRcon.js"></script>
+    
     <script src="js/browser.js"></script>
-    <link rel="stylesheet" href="css/browser.css">	
+    <link rel="stylesheet" href="css/browser.css">  
 
 </head>
 <body>
@@ -30,35 +30,35 @@
     {{#if  map}}
     <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
     <h3>{{ name }} </h3>
-	{{#if variant}}
+    {{#if variant}}
     <h4><b>Gametype: </b>{{ variant }} <br /> <b>Map: </b>{{ map }}</h4>
-	{{else}}
+    {{else}}
     <h4><b>Map: </b>{{ map }}</h4>
-	{{/if}}
+    {{/if}}
     <h3>{{hostPlayer}}</h3>
         <div class="panel-heading">
             <h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }} <b>Status:</b> {{status}}</h4> 
                 <table class="table-striped">
-				<thead>
-					<th>Name</th>
-					<th>Score</th>
-					<th>K</th>
-					<th>D</th>
-					<th>A</th>
-				</thead>
-				<tbody>
+                <thead>
+                    <th>Name</th>
+                    <th>Score</th>
+                    <th>K</th>
+                    <th>D</th>
+                    <th>A</th>
+                </thead>
+                <tbody>
                 {{#each players}}
                 {{#if name}}
-				<tr>
-					<td class="col-xs-1">{{this.name}}</td>
-					<td><center>{{score}}</center></td>
-					<td>{{kills}}</td>
-					<td>{{deaths}}</td>
-					<td>{{assists}}</td>
-				</tr>
+                <tr>
+                    <td class="col-xs-1">{{this.name}}</td>
+                    <td><center>{{score}}</center></td>
+                    <td>{{kills}}</td>
+                    <td>{{deaths}}</td>
+                    <td>{{assists}}</td>
+                </tr>
                 {{/if}}
                 {{/each}}
-				</tbody>
+                </tbody>
                 </table>
     {{else}}
         <h3>Game / Data Unavailable<h3>
@@ -69,31 +69,31 @@
 <div class="row">
         <div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
         <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}</div>
-		{{#if variant}}
+        {{#if variant}}
         <div class="col-sm-3"><b>{{ variant }}</b> <br /> <em>{{ map }}</em></div>
-		{{else}}
-		<div class="col-sm-3"><b>{{ map }}</b></div>
-		{{/if}}
+        {{else}}
+        <div class="col-sm-3"><b>{{ map }}</b></div>
+        {{/if}}
 </div>        
 </script>
 <script id="server-list-template" type="text/x-handlebars-template">
     <table class="table table-bordered table-hover" id="serverlist{{ i }}">
-		<thead>
-			<th><center>IP (Click to Join)</center></th>
-			<th>Details</th>
-			<th><center>Host Location</center></th>
-			<th><center>Game Data</center></th>
-		</thead>
-		<tbody>
+        <thead>
+            <th><center>IP (Click to Join)</center></th>
+            <th>Details</th>
+            <th><center>Host Location</center></th>
+            <th><center>Game Data</center></th>
+        </thead>
+        <tbody>
     {{#each servers}}
-		<tr>
-			<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a></td>
-			<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b></a></td>
-			<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
-			<td class="col-md-6" id="serverid{{ i }}">Loading...</td>
-		</tr>
+        <tr>
+            <td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a></td>
+            <td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b></a></td>
+            <td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
+            <td class="col-md-6" id="serverid{{ i }}">Loading...</td>
+        </tr>
     {{/each}}
-		</tbody>
+        </tbody>
     </table>
 </script>
 

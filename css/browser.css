@@ -1,26 +1,26 @@
-    #bg {
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-        
-      /* Preserve aspect ratio */
-      min-width: 100%;
-      min-height: 100%;
-    }
+#bg {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
     
-	#serverlist {
-		position: absolute;
-		top: 5px;
-		bottom: 0;
-		left: 5px;
-		right: 1px;
-		width: 85%;
-	}
+  /* Preserve aspect ratio */
+  min-width: 100%;
+  min-height: 100%;
+}
 
-	#serverinfo {
-		position: absolute;
-		top: 10;
-		bottom: 0;
-		right: 0;
-		width: 27%;
-	}
+#serverlist {
+    position: absolute;
+    top: 5px;
+    bottom: 0;
+    left: 5px;
+    right: 1px;
+    width: 85%;
+}
+
+#serverinfo {
+    position: absolute;
+    top: 10;
+    bottom: 0;
+    right: 0;
+    width: 27%;
+}
