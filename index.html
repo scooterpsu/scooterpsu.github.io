@@ -16,9 +16,10 @@
 
 </head>
 <body>
-<!--
 <img src="images/bg.jpg" id="bg" alt="">
--->
+<img src="images/eldorito.png" id="logo">
+<h2 class="browserTitle"><b>Eldorito Server Browser</b></h2>
+
 <div id="container">
 
         <div id="serverList" class="serverlist"> </div>
@@ -27,6 +28,7 @@
 </div>
 
 <script id="server-panel-template" type="text/x-handlebars-template">
+<div class="gameCard">
     {{#if  map}}
     <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
     <h3>{{ name }} </h3>
@@ -39,7 +41,7 @@
         <div class="panel-heading">
             <h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }} <b>Status:</b> {{status}}</h4> 
                 {{#if passworded}}
-                    <h4><b>[PRIVATE GAME]</b></h4>
+                    <h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
                 {{else}}
                     <table class="table-striped">
                     <thead>
@@ -65,8 +67,10 @@
                     </table>
                 {{/if}}
     {{else}}
-        <h3>Game / Data Unavailable<h3>
+        <img src="images/maps/mainmenu.png" alt="{{map}}" class="img-responsive">
+        <h3><center>Game / Data Unavailable</center><h3>
     {{/if}}
+</div>
 </script>
 
 <script id="server-listinfo-template" type="text/x-handlebars-template">
@@ -78,7 +82,7 @@
         <div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
         <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}
         {{#if passworded}}
-        <br /><b>[PRIVATE]</b>
+        <br /><b><div class="text-danger">[PRIVATE]</div></b>
         {{/if}}
         </div>
         {{#if variant}}
@@ -89,7 +93,7 @@
 </div>        
 </script>
 <script id="server-list-template" type="text/x-handlebars-template">
-    <table class="table table-bordered table-hover" id="serverlist{{ i }}">
+    <table class="serverTable table table-bordered table-hover" id="serverlist{{ i }}">
         <thead>
             <th><center>IP (Click to Join)</center></th>
             <th>Details</th>
