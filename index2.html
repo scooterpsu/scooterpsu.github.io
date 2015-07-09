@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <script src="js/bootstrap.min.js"></script>
 	
-	<script src="js/dewRcon.js"></script>
+	<!--<script src="js/dewRcon.js"></script>-->
 	
     <style>
     #bg {
@@ -22,25 +22,25 @@
       min-height: 100%;
     }
     
-    @media (min-width: 768px){
-  #serverlist {
-    position: absolute;
-    top: 0px;
-    bottom: 0;
-    left: 0;
-    width: 75%;
-    overflow-y: scroll; 
-  }
-  
-  #serverinfo {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    overflow-y: scroll;
-    width: 25%;
-  }
-}
+	#serverlist {
+		position: absolute;
+		top: 1px;
+		bottom: 0;
+		left: 1px;
+		overflow-y: scroll;
+		width: 70%;
+	}
+
+	#serverinfo {
+		position: absolute;
+		top: 10;
+		bottom: 0;
+		right: 0;
+		overflow-y: scroll;
+		width: 30%;
+	}
+	
+	
     </style>
 </head>
 <body>
@@ -49,8 +49,8 @@
 -->
 <div id="container">
 
-        <div id="serverList" class="col-lg-8 serverlist"> </div>
-        <div id="serverInfo" class="col-lg-4 serverinfo"> </div>
+        <div id="serverList" class="serverlist"> </div>
+        <div id="serverInfo" class="col-lg-3 serverinfo"> </div>
 
 </div>
 
@@ -75,19 +75,29 @@
 </script>
 
 <script id="server-listinfo-template" type="text/x-handlebars-template">
-        <div class="col-md-4">{{ name }}</div>
-        <div class="col-md-4">{{ numPlayers }} / {{ maxPlayers }}</div>
-        <div class="col-md-4">{{ variant }}</div>        
+        <div class="col-sm-4">{{ name }}</div>
+        <div class="col-sm-4">{{ numPlayers }} / {{ maxPlayers }}</div>
+        <div class="col-sm-4">{{ variant }}</div>        
 </script>
 <script id="server-list-template" type="text/x-handlebars-template">
+    <table class="table table-bordered table-hover" id="serverlist{{ i }}">
+		<thead>
+			<th><center>IP</center></th>
+			<th></th>
+			<th><center>Location</center></th>
+			<th><center>Game Data</center></th>
+		</thead>
+		<tbody>
     {{#each servers}}
-    <div class="well" id="serverlist{{ i }}">
-		<div class="col-md-2"><a href="#" onclick="updateServerInfo({{i}});">{{ serverIP }}</a></div>
-        <div class="col-md-2"><a href="#" onclick="console.log({{serverIP}});">[ JOIN ]</a></div>
-        <div class="col-md-2"><span id="region{{ i }}">Anywhere, United States</span></div>
-        <div class="col-md-8" id="serverid{{ i }}"></div>
-    </div>
+		<tr>
+			<td class="col-md-2"><a href="#" onclick="updateServerInfo({{i}});">{{ serverIP }}</a></td>
+			<td class="col-sm-1"><a href="#" onclick="console.log({{serverIP}});">JOIN</a></td>
+			<td class="col-md-3"><span id="region{{ i }}">Anywhere, United States</span></td>
+			<td class="col-md-8" id="serverid{{ i }}"></td>
+		</tr>
     {{/each}}
+		</tbody>
+    </table>
 </script>
 
 <script>
