@@ -57,13 +57,13 @@
     <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
     <h3>{{ name }} </h3>
 	{{#if variant}}
-    <h4>{{ variant }} / {{ map }}</h4>
+    <h4><b>Gametype: </b>{{ variant }} <br /> <b>Map: </b>{{ map }}</h4>
 	{{else}}
-    <h4>{{ map }}</h4>
+    <h4><b>Map: </b>{{ map }}</h4>
 	{{/if}}
     <h3>{{hostPlayer}}</h3>
         <div class="panel-heading">
-            <h4><em>Players:</em> {{ numPlayers }}/{{ maxPlayers }} || {{status}}</h4> 
+            <h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }} <b>Status:</b> {{status}}</h4> 
                 <table class="table-striped">
 				<thead>
 					<th>Name</th>
@@ -87,35 +87,35 @@
 				</tbody>
                 </table>
     {{else}}
-        <h3>Do not join<h3>
+        <h3>Game / Data Unavailable<h3>
     {{/if}}
 </script>
 
 <script id="server-listinfo-template" type="text/x-handlebars-template">
 <div class="row">
-        <div class="col-sm-5">{{ hostPlayer }} || {{ name }}</div>
-        <div class="col-xs-3">{{ numPlayers }} / {{ maxPlayers }}</div>
+        <div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
+        <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}</div>
 		{{#if variant}}
-        <div class="col-sm-3">{{ variant }} / {{ map }}</div>
+        <div class="col-sm-3"><b>{{ variant }}</b> <br /> <em>{{ map }}</em></div>
 		{{else}}
-		<div class="col-sm-3">{{ map }}</div>
+		<div class="col-sm-3"><b>{{ map }}</b></div>
 		{{/if}}
 </div>        
 </script>
 <script id="server-list-template" type="text/x-handlebars-template">
     <table class="table table-bordered table-hover" id="serverlist{{ i }}">
 		<thead>
-			<th><center>IP</center></th>
-			<th></th>
-			<th><center>Location</center></th>
+			<th><center>IP (Click to Join)</center></th>
+			<th>Details</th>
+			<th><center>Host Location</center></th>
 			<th><center>Game Data</center></th>
 		</thead>
 		<tbody>
     {{#each servers}}
 		<tr>
 			<td class="col-md-2"><a href="#" onclick="console.log({{serverIP}});">{{ serverIP }}</a></td>
-			<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});">INFO</a></td>
-			<td class="col-md-2"><span id="region{{ i }}">Anywhere, United States</span></td>
+			<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b></a></td>
+			<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
 			<td class="col-md-6" id="serverid{{ i }}">Loading...</td>
 		</tr>
     {{/each}}
@@ -156,6 +156,7 @@
                                             var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                                             .done(function(serverInfo) {
                                                     serverInfo["serverId"] = i;
+												    serverInfo["serverIP"] = serverIP;
                                                     var html = serverListInfoTemplate(serverInfo);
                                                     $("#serverid" + i).html(html);
                                                     for (var j = 0; j < serverList.servers.length; j++)
