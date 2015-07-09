@@ -63,14 +63,29 @@
 	{{/if}}
     <h3>{{hostPlayer}}</h3>
         <div class="panel-heading">
-            <h4><em>Players:</em> {{ players.length }}/{{ maxPlayers }} || {{status}}</h4> 
-                <ul>
+            <h4><em>Players:</em> {{ numPlayers }}/{{ maxPlayers }} || {{status}}</h4> 
+                <table class="table-striped">
+				<thead>
+					<th>Name</th>
+					<th>S</th>
+					<th>K</th>
+					<th>D</th>
+					<th>A</th>
+				</thead>
+				<tbody>
                 {{#each players}}
                 {{#if name}}
-                <li>{{this.name}} - {{kills}}/{{deaths}}/{{assists}}</li>
+				<tr>
+					<td class="col-xs-1">{{this.name}}</td>
+					<td>{{score}}</td>
+					<td>{{kills}}</td>
+					<td>{{deaths}}</td>
+					<td>{{assists}}</td>
+				</tr>
                 {{/if}}
                 {{/each}}
-                </ul>
+				</tbody>
+                </table>
     {{else}}
         <h3>Do not join<h3>
     {{/if}}
