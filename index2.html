@@ -24,11 +24,11 @@
     
 	#serverlist {
 		position: absolute;
-		top: 1px;
+		top: 5px;
 		bottom: 0;
-		left: 1px;
-		overflow-y: scroll;
-		width: 70%;
+		left: 5px;
+		right: 1px;
+		width: 85%;
 	}
 
 	#serverinfo {
@@ -36,8 +36,7 @@
 		top: 10;
 		bottom: 0;
 		right: 0;
-		overflow-y: scroll;
-		width: 30%;
+		width: 27%;
 	}
 	
 	
@@ -50,7 +49,7 @@
 <div id="container">
 
         <div id="serverList" class="serverlist"> </div>
-        <div id="serverInfo" class="col-lg-3 serverinfo"> </div>
+        <div id="serverInfo" class="col-md-3 serverinfo"> </div>
 
 </div>
 
@@ -92,8 +91,8 @@
 		<tr>
 			<td class="col-md-2"><a href="#" onclick="updateServerInfo({{i}});">{{ serverIP }}</a></td>
 			<td class="col-sm-1"><a href="#" onclick="console.log({{serverIP}});">JOIN</a></td>
-			<td class="col-md-3"><span id="region{{ i }}">Anywhere, United States</span></td>
-			<td class="col-md-8" id="serverid{{ i }}"></td>
+			<td class="col-md-2"><span id="region{{ i }}">Anywhere, United States</span></td>
+			<td class="col-md-10" id="serverid{{ i }}"></td>
 		</tr>
     {{/each}}
 		</tbody>
