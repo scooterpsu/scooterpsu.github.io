@@ -44,13 +44,13 @@
                 {{#if passworded}}
                     <h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
                 {{else}}
-                    <table class="table-striped">
+                    <table class="table-striped table-bordered">
                     <thead>
-                        <th>Name</th>
-                        <th>Score</th>
-                        <th>K</th>
-                        <th>D</th>
-                        <th>A</th>
+                        <th><center>Name</center></th>
+                        <th><center>Score</center></th>
+                        <th><center>K</center></th>
+                        <th><center>D</center></th>
+                        <th><center>A</center></th>
                     </thead>
                     <tbody>
                     {{#each players}}
@@ -58,9 +58,9 @@
                     <tr>
                         <td class="col-xs-1">{{this.name}}</td>
                         <td><center>{{score}}</center></td>
-                        <td>{{kills}}</td>
-                        <td>{{deaths}}</td>
-                        <td>{{assists}}</td>
+                        <td><center>{{kills}}</center></td>
+                        <td><center>{{deaths}}</center></td>
+                        <td><center>{{assists}}</center></td>
                     </tr>
                     {{/if}}
                     {{/each}}
