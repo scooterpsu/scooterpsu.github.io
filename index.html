@@ -78,7 +78,11 @@
 {{#if passworded}}
     <div class="row text-danger">
 {{else}}
-    <div class="row">
+    {{#ifCond status "InGame"}}
+    <div class="row text-warning">
+    {{else}}
+    <div class="row text-success">
+    {{/ifCond}}
 {{/if}}
         <div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
         <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}
