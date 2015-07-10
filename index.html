@@ -40,7 +40,13 @@
     {{/if}}
     <h3>{{hostPlayer}}</h3>
         <div class="panel-heading">
-            <h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }} <b>Status:</b> {{status}}</h4> 
+            <h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }} <b>Status:</b>
+                {{#ifCond status "InGame"}}
+                In Progress
+                {{else}}
+                In Lobby
+                {{/ifCond}}            
+            </h4> 
                 {{#if passworded}}
                     <h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
                 {{else}}
@@ -87,7 +93,7 @@
         <div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
         <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}
         {{#if passworded}}
-        <br /><b><div class="text-danger">[PRIVATE]</div></b>
+        <br /><b>[PRIVATE]</b>
         {{/if}}
         </div>
         {{#if variant}}
