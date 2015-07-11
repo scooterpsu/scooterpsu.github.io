@@ -71,3 +71,9 @@ Handlebars.registerHelper('ifCond', function(v1, v2, options) {
   }
   return options.inverse(this);
 });
+
+Mousetrap.bind('f11', function() {
+    setTimeout(function() {
+        dewRcon.send('game.togglemenu');
+    }, "400");
+});
