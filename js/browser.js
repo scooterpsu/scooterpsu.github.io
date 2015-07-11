@@ -63,6 +63,7 @@ function joinServer(i) {
     }else {
         dewRcon.send('connect ' + serverList.servers[i].serverIP);
     }
+    dewRcon.send('game.togglemenu');
 }
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
   if(v1 === v2) {
