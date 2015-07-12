@@ -73,7 +73,13 @@ Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 });
 
 Mousetrap.bind('f11', function() {
+/*
     setTimeout(function() {
-        dewRcon.send('game.togglemenu');
+        dewRcon.send('game.togglemenu'); //they removed this in-game but didn't impliment a replacement
     }, "400");
+*/
+    setTimeout(function() {
+        window.close(); //but the menu opens in a new window, so this works
+    }, "400");
+
 });
