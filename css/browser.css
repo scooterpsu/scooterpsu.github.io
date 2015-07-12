@@ -1,7 +1,7 @@
 #bg {
   position: fixed; 
-  top: 0; 
-  left: 0; 
+  top: -76px; 
+  left: -135px; 
     
   /* Preserve aspect ratio */
   min-width: 100%;
