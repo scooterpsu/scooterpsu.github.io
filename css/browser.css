@@ -1,15 +1,10 @@
-@media screen and (max-width: 1650px){
-    #bg {
-        top: -8.25%;
-        left: -8.25%;
-    }
-}
-
 #bg {
     position: fixed;
     /* Preserve aspect ratio */
     min-width: 100%;
     min-height: 100%;
+    top: -8.25%;
+    left: -8.25%;
 }
 
 #overlay {
@@ -72,4 +67,7 @@
     position: absolute;
     top: 25;
     left: 455;
+}
+body{
+    background-color: black;
 }
