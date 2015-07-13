@@ -11,18 +11,27 @@
   min-height: 100%;
 }
 
+#overlay {
+position: fixed;
+top:0;
+left:0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  }
+
 #serverlist {
     position: absolute;
-    top: 35px;
+    top: 40px;
     bottom: 0;
-    left: 5px;
+    left: 8px;
     right: 1px;
     width: 85%;
 }
 
 #serverinfo {
     position: absolute;
-    top: 10;
+    top: 15;
     bottom: 0;
     right: 0;
     width: 27%;
@@ -44,15 +53,15 @@
 .browserTitle{
     opacity: 0.8;
     position: absolute;
-    top: 1;
-    left: 75;
+    top: 6;
+    left: 80;
     color: white;
 }
 
 #logo{
 position: absolute;
-top: 10;
-left: 10;
+top: 15;
+left: 15;
     opacity: 0.8;
     width: 58px;
     height: 50px;
@@ -60,6 +69,6 @@ left: 10;
 .refresh {
     opacity: 0.8;
 position: absolute;
-top: 20;
-left: 450;
+top: 25;
+left: 455;
 }
