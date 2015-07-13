@@ -1,10 +1,15 @@
+@media screen and (max-width: 1900px){
+    #bg {
+        top: -8.25%;
+        left: -8.25%;
+    }
+}
+
 #bg {
-  position: fixed;
-  top: -8.25%;
-  left: -8.25%;
-  /* Preserve aspect ratio */
-  min-width: 100%;
-  min-height: 100%;
+    position: fixed;
+    /* Preserve aspect ratio */
+    min-width: 100%;
+    min-height: 100%;
 }
 
 #overlay {
