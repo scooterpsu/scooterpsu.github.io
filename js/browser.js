@@ -64,8 +64,7 @@ function joinServer(i) {
         dewRcon.send('connect ' + serverList.servers[i].serverIP);
     }
     dewRcon.send('game.togglemenu');
-    dewRcon.send('set_menu false');
-    //window.close();
+    dewRcon.send('Game.SetMenuEnabled 0');
 }
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
   if(v1 === v2) {
@@ -78,11 +77,7 @@ Mousetrap.bind('f11', function() {
 
     setTimeout(function() {
         dewRcon.send('game.togglemenu');
-        dewRcon.send('set_menu false');
+        dewRcon.send('Game.SetMenuEnabled 0');
     }, "400");
-/*
-    setTimeout(function() {
-        window.close(); //but the menu opens in a new window, so this works
-    }, "400");
-*/
+    
 });
