@@ -34,16 +34,18 @@
 }
 
 .gameCard{
-    opacity: 0.9;
+    opacity: 0.8;
     padding: 8;
     padding-bottom: 10;
     background-color:white;
+    color: teal;
 }
    
 .serverTable{
-    opacity: 0.9;
+    opacity: 0.8;
     padding: 5;
     background-color:white;
+    color: teal;
 }
 
 .browserTitle{
@@ -51,7 +53,7 @@
     position: absolute;
     top: 6;
     left: 80;
-    color: white;
+    color: teal;
 }
 
 #logo{
@@ -67,6 +69,7 @@
     position: absolute;
     top: 25;
     left: 455;
+    color: teal;
 }
 body{
     background-color: black;
