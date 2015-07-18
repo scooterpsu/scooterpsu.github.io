@@ -20,8 +20,9 @@
 <body>
 <img src="images/hanger.png" id="bg" alt="">
 <img src="images/overlay.png" id="overlay">
-<img src="images/eldorito.png" id="logo">
+<img src="images/eldorito.png" id="logo" class="tinted-image">
 <h2 class="browserTitle"><b>Eldorito Server Browser</b></h2>
+<h3><div class="playerCount">00 players</div><div class="serverCount">00 servers</div></h3>
 <a class="btn btn-default refresh" href="#" role="button" onclick="window.location.reload();"><b>Refresh</b></a>
 
 <div id="container">
@@ -54,7 +55,7 @@
                 {{#if passworded}}
                     <h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
                 {{else}}
-                    <table class="table-striped table-bordered">
+                    <table class="table-bordered statBreakdown">
                     <thead>
                         <th><center>Name</center></th>
                         <th><center>Score</center></th>
@@ -79,9 +80,11 @@
                     </table>
                         <h5 class="text-muted"><b>Version: </b>{{eldewritoVersion}}</h5>
                 {{/if}}
+            </div>
     {{else}}
-        <img src="images/maps/mainmenu.png" alt="{{map}}" class="img-responsive">
+        <center><img src="images/error.png" alt="Error" class="img-responsive"></center>
         <h3><center>Game / Data Unavailable</center><h3>
+        <center><img src="images/error.png" alt="Error" class="img-responsive"></center>
     {{/if}}
 </div>
 </script>

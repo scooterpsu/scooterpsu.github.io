@@ -6,7 +6,6 @@
     top: -8.25%;
     left: -8.25%;
 }
-
 #overlay {
     position: fixed;
     top:0;
@@ -15,7 +14,6 @@
     height: 100%;
     opacity: 0.7;
 }
-
 #serverlist {
     position: absolute;
     top: 40px;
@@ -24,38 +22,40 @@
     right: 1px;
     width: 85%;
 }
-
 #serverinfo {
     position: absolute;
-    top: 15;
+    top: 10;
     bottom: 0;
-    right: 0;
+    right: -5;
     width: 27%;
 }
-
 .gameCard{
-    opacity: 0.8;
-    padding: 8;
-    padding-bottom: 10;
-    background-color:white;
-    color: teal;
+    padding: 20;
+    margin-right: -10;
+    color: white;
+    background-image: url("../images/gamecard.png");
+    background-size: cover;
+    background-width: 10%;
+    background-position: 0px 0px;
 }
-   
+.gameCard img{
+    padding-top: 10;
+    padding-left: 10;
+    padding-right: 0;
+}
 .serverTable{
     opacity: 0.8;
     padding: 5;
-    background-color:white;
+    background-color:black;
     color: teal;
 }
-
 .browserTitle{
     opacity: 0.9;
     position: absolute;
     top: 6;
-    left: 80;
+    left: 90;
     color: teal;
 }
-
 #logo{
     position: absolute;
     top: 15;
@@ -64,12 +64,30 @@
     width: 58px;
     height: 50px;
 }
+.playerCount {
+    opacity: 0.8;
+    position: absolute;
+    top: 30;
+    left: 570;
+    color: teal;
+}
+.serverCount {
+    opacity: 0.8;
+    position: absolute;
+    top: 30;
+    left: 725;
+    color: teal;
+}
 .refresh {
     opacity: 0.8;
     position: absolute;
     top: 25;
     left: 455;
     color: teal;
+}
+.statBreakdown{
+    background: black;
+    color:teal;
 }
 body{
     background-color: black;

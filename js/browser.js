@@ -1,6 +1,8 @@
 var serverList = {
 servers: []
 }; 
+var serverCount = 0;
+var playerCount = 0;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
 var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
@@ -32,6 +34,12 @@ var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
                                                 if (serverList.servers[j]["i"] == i)
                                                 {
                                                     serverList.servers[j] = serverInfo;
+                                                    serverCount++;
+                                                    playerCount+=serverInfo.numPlayers;
+                                                    $('.serverCount').html(serverCount + " servers");
+                                                    console.log(serverCount);
+                                                    $('.playerCount').html(playerCount + " players");
+                                                    console.log(playerCount);
                                                 }
                                             }
                                             console.log(serverInfo);
