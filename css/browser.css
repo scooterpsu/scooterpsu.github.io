@@ -30,6 +30,7 @@
     width: 27%;
 }
 .gameCard{
+    opacity: 0.8;
     padding: 20;
     margin-right: -10;
     color: white;
