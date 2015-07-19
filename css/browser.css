@@ -92,6 +92,7 @@
 }
 body{
     background-color: black;
+    cursor: url('../images/cursor.png'), default;
 }
 a {
     color: teal;
