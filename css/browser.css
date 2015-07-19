@@ -69,22 +69,34 @@
     opacity: 0.8;
     position: absolute;
     top: 30;
-    left: 570;
+    left: 605;
     color: teal;
 }
 .serverCount {
     opacity: 0.8;
     position: absolute;
     top: 30;
-    left: 725;
+    left: 745;
     color: teal;
 }
 .refresh {
-    opacity: 0.8;
+    opacity: 0.7;
     position: absolute;
-    top: 25;
-    left: 455;
-    color: teal;
+    top: 0;
+    left: 445;
+    color: black;
+    font-weight: bold;
+    background: url("../images/button.png") 0px 0px no-repeat;
+    background-size: contain;
+    background-position: center; 
+    width: 150px;
+    height: 85px;
+    border: none;
+}
+.refresh:hover{
+    background: url("../images/buttonOver.png") 0px 0px no-repeat;
+    background-size: contain;
+    background-position: center; 
 }
 .statBreakdown{
     background: black;
