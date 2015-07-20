@@ -2,147 +2,143 @@
 <head>
     <meta charset="utf-8" />
     <title>Server Browser</title>
-    <script src="js/handlebars.min.js"></script>
-    <script src="js/jquery-1.11.3.min.js"></script>
-    
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <script src="js/bootstrap.min.js"></script>
-    
-    <script src="js/dewRcon.js"></script>
-    <script src="js/mousetrap.min.js"></script>
-
-    
-    <script src="js/browser.js"></script>
-    <link rel="stylesheet" href="css/browser.css">  
-
+	<!-- Includes -->
+		<script src="js/handlebars.min.js"></script>
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/dewRcon.js"></script>
+		<script src="js/mousetrap.min.js"></script>
+	<!-- Custom stuff -->
+		<script src="js/browser.js"></script>
+		<link rel="stylesheet" href="css/browser.css">
 </head>
+
 <body>
-<img src="images/hanger.png" id="bg" alt="">
-<img src="images/overlay.png" id="overlay">
-<img src="images/eldorito.png" id="logo" class="tinted-image">
-<h2 class="browserTitle"><b>Eldorito Server Browser</b></h2>
-<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
+	<img src="images/hanger.png" id="bg">
+	<img src="images/overlay.png" id="overlay">
+	<img src="images/eldorito.png" id="logo">
+	<h2 class="browserTitle"><b>Eldorito Server Browser</b></h2>
+	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
 
-<div id="container">
+	<div id="container">
+		<div id="serverList" class="serverlist"></div>
+		<button class="refresh" onclick="window.location.reload();">Refresh</button>
+		<div id="serverInfo" class="col-md-3 serverinfo"></div>
+	</div>
 
-        <div id="serverList" class="serverlist"> </div>
-        <button class="refresh" onclick="window.location.reload();">Refresh</button>
-        <div id="serverInfo" class="col-md-3 serverinfo"> </div>
+	<script id="server-panel-template" type="text/x-handlebars-template">
+		<div class="gameCard">
+			{{#if  map}}
+			<img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
+			<h3>{{ name }} </h3>
+			{{#if variant}}
+			<h4><b>Gametype: </b>{{ variant }} <br /> <b>Map: </b>{{ map }}</h4>
+			{{else}}
+			<h4><b>Map: </b>{{ map }}</h4>
+			{{/if}}
+			<h3>{{hostPlayer}}</h3>
+				<div class="panel-heading">
+					<h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }}</h4>
+					<h4><b>Status:</b>
+						{{#ifCond status "InGame"}}
+						In Progress
+						{{else}}
+						In Lobby
+						{{/ifCond}}            
+					</h4> 
+					{{#if passworded}}
+					<h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
+					{{else}}
+						<table class="table-bordered statBreakdown">
+							<thead>
+								<th><center>Name</center></th>
+								<th><center>Score</center></th>
+								<th><center>K</center></th>
+								<th><center>D</center></th>
+								<th><center>A</center></th>
+							</thead>
+							<tbody>
+								{{#each players}}
+								{{#if name}}
+								<tr>
+									<td class="col-xs-1">{{this.name}}</td>
+									<td><center>{{score}}</center></td>
+									<td><center>{{kills}}</center></td>
+									<td><center>{{deaths}}</center></td>
+									<td><center>{{assists}}</center></td>
+								</tr>
+								{{/if}}
+								{{/each}}
+							</tbody>
+						</table>
+						<h5 class="text-muted"><b>Version: </b>{{eldewritoVersion}}</h5>
+					{{/if}}
+				</div>
+			{{else}}
+				<center><img src="images/error.png" alt="Error" class="img-responsive"></center>
+				<h3><center>Game / Data Unavailable</center><h3>
+				<center><img src="images/error.png" alt="Error" class="img-responsive"></center>
+			{{/if}}
+		</div>
+	</script>
 
-</div>
+	<script id="server-listinfo-template" type="text/x-handlebars-template">
+		{{#if passworded}}
+			<div class="row text-danger">
+		{{else}}
+			{{#ifCond status "InGame"}}
+			<div class="row text-warning">
+			{{else}}
+			<div class="row text-success">
+			{{/ifCond}}
+		{{/if}}
+		<div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
+			<div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}
+			{{#if passworded}}
+				<br /><b>[PRIVATE]</b>
+			{{/if}}
+			</div>
+		{{#if variant}}
+			<div class="col-sm-3"><b>{{ variant }}</b> <br /> <em>{{ map }}</em></div>
+		{{else}}
+			<div class="col-sm-3"><b>{{ map }}</b></div>
+		{{/if}}
+		</div>        
+	</script>
 
-<script id="server-panel-template" type="text/x-handlebars-template">
-<div class="gameCard">
-    {{#if  map}}
-    <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
-    <h3>{{ name }} </h3>
-    {{#if variant}}
-    <h4><b>Gametype: </b>{{ variant }} <br /> <b>Map: </b>{{ map }}</h4>
-    {{else}}
-    <h4><b>Map: </b>{{ map }}</h4>
-    {{/if}}
-    <h3>{{hostPlayer}}</h3>
-        <div class="panel-heading">
-            <h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }}</h4>
-            <h4><b>Status:</b>
-                {{#ifCond status "InGame"}}
-                In Progress
-                {{else}}
-                In Lobby
-                {{/ifCond}}            
-            </h4> 
-                {{#if passworded}}
-                    <h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
-                {{else}}
-                    <table class="table-bordered statBreakdown">
-                    <thead>
-                        <th><center>Name</center></th>
-                        <th><center>Score</center></th>
-                        <th><center>K</center></th>
-                        <th><center>D</center></th>
-                        <th><center>A</center></th>
-                    </thead>
-                    <tbody>
-                    {{#each players}}
-                    {{#if name}}
-                    <tr>
-                        <td class="col-xs-1">{{this.name}}</td>
-                        <td><center>{{score}}</center></td>
-                        <td><center>{{kills}}</center></td>
-                        <td><center>{{deaths}}</center></td>
-                        <td><center>{{assists}}</center></td>
-                    </tr>
-                    {{/if}}
-                    {{/each}}
-                    
-                    </tbody>
-                    </table>
-                        <h5 class="text-muted"><b>Version: </b>{{eldewritoVersion}}</h5>
-                {{/if}}
-            </div>
-    {{else}}
-        <center><img src="images/error.png" alt="Error" class="img-responsive"></center>
-        <h3><center>Game / Data Unavailable</center><h3>
-        <center><img src="images/error.png" alt="Error" class="img-responsive"></center>
-    {{/if}}
-</div>
-</script>
+	<script id="server-list-template" type="text/x-handlebars-template">
+		<table class="serverTable table table-bordered table-hover" id="serverlist{{ i }}">
+			<thead>
+				<th><center>IP (Click to Join)</center></th>
+				<th>Details</th>
+				<th><center>Host Location</center></th>
+				<th><center>Game Data</center></th>
+			</thead>
+			<tbody>
+				{{#each servers}}
+					<tr>
+						<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a></td>
+						<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b></a></td>
+						<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
+						<td class="col-md-6 text-muted" id="serverid{{ i }}">Loading...</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</script>
 
-<script id="server-listinfo-template" type="text/x-handlebars-template">
-{{#if passworded}}
-    <div class="row text-danger">
-{{else}}
-    {{#ifCond status "InGame"}}
-    <div class="row text-warning">
-    {{else}}
-    <div class="row text-success">
-    {{/ifCond}}
-{{/if}}
-        <div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
-        <div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}
-        {{#if passworded}}
-        <br /><b>[PRIVATE]</b>
-        {{/if}}
-        </div>
-        {{#if variant}}
-        <div class="col-sm-3"><b>{{ variant }}</b> <br /> <em>{{ map }}</em></div>
-        {{else}}
-        <div class="col-sm-3"><b>{{ map }}</b></div>
-        {{/if}}
-</div>        
-</script>
-<script id="server-list-template" type="text/x-handlebars-template">
-    <table class="serverTable table table-bordered table-hover" id="serverlist{{ i }}">
-        <thead>
-            <th><center>IP (Click to Join)</center></th>
-            <th>Details</th>
-            <th><center>Host Location</center></th>
-            <th><center>Game Data</center></th>
-        </thead>
-        <tbody>
-    {{#each servers}}
-        <tr>
-            <td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a></td>
-            <td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b></a></td>
-            <td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
-            <td class="col-md-6 text-muted" id="serverid{{ i }}">Loading...</td>
-        </tr>
-    {{/each}}
-        </tbody>
-    </table>
-</script>
-
-<script>   
-        var serverTemplateSource = $("#server-panel-template").html();
-        var serverTemplate = Handlebars.compile(serverTemplateSource);
-        
-        var serverListTemplateSource = $("#server-list-template").html();
-        var serverListTemplate = Handlebars.compile(serverListTemplateSource);
-        
-        var serverListInfoTemplateSource = $("#server-listinfo-template").html();
-        var serverListInfoTemplate = Handlebars.compile(serverListInfoTemplateSource);
- </script>
+	<script>   
+		var serverTemplateSource = $("#server-panel-template").html();
+		var serverTemplate = Handlebars.compile(serverTemplateSource);
+		
+		var serverListTemplateSource = $("#server-list-template").html();
+		var serverListTemplate = Handlebars.compile(serverListTemplateSource);
+		
+		var serverListInfoTemplateSource = $("#server-listinfo-template").html();
+		var serverListInfoTemplate = Handlebars.compile(serverListInfoTemplateSource);
+	 </script>
 
 </body>
 </html>
