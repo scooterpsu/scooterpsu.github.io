@@ -34,12 +34,14 @@ var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
                                                 if (serverList.servers[j]["i"] == i)
                                                 {
                                                     serverList.servers[j] = serverInfo;
-                                                    serverCount++;
-                                                    playerCount+=serverInfo.numPlayers;
-                                                    $('.serverCount').html(serverCount + " servers");
-                                                    console.log(serverCount);
-                                                    $('.playerCount').html(playerCount + " players");
-                                                    console.log(playerCount);
+													if(serverInfo.map.length > 0){
+														serverCount++;
+														playerCount+=serverInfo.numPlayers;
+														$('.serverCount').html(serverCount + " servers");
+														console.log(serverCount);
+														$('.playerCount').html(playerCount + " players");
+														console.log(playerCount);
+													}
                                                 }
                                             }
                                             console.log(serverInfo);
