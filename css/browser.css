@@ -48,14 +48,14 @@
     opacity: 0.8;
     padding: 5;
     background-color:black;
-    color: teal;
+    color: #5eaeb4;
 }
 .browserTitle{
     opacity: 0.9;
     position: absolute;
     top: 6;
     left: 90;
-    color: teal;
+    color: #5eaeb4;
 }
 #logo{
     position: absolute;
@@ -70,14 +70,14 @@
     position: absolute;
     top: 30;
     left: 605;
-    color: teal;
+    color: #5eaeb4;
 }
 .serverCount {
     opacity: 0.8;
     position: absolute;
     top: 30;
     left: 745;
-    color: teal;
+    color: #5eaeb4;
 }
 .refresh {
     opacity: 0.7;
@@ -100,12 +100,12 @@
 }
 .statBreakdown{
     background: black;
-    color:teal;
+    color:#5eaeb4;
 }
 body{
     background-color: black;
     cursor: url('../images/cursor.png'), default;
 }
 a {
-    color: teal;
+    color: #5eaeb4;
 }
