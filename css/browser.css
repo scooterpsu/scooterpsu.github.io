@@ -65,20 +65,6 @@
     width: 58px;
     height: 50px;
 }
-.playerCount {
-    opacity: 0.8;
-    position: absolute;
-    top: 30;
-    left: 605;
-    color: #5eaeb4;
-}
-.serverCount {
-    opacity: 0.8;
-    position: absolute;
-    top: 30;
-    left: 745;
-    color: #5eaeb4;
-}
 .refresh {
     opacity: 0.7;
     position: absolute;
@@ -97,6 +83,14 @@
     background: url("../images/buttonOver.png") 0px 0px no-repeat;
     background-size: contain;
     background-position: center; 
+}
+.serverStats {
+	font-weight: bold;
+    opacity: 0.8;
+    position: absolute;
+    top: 23;
+    left: 600;
+    color: #5eaeb4;
 }
 .statBreakdown{
     background: black;
