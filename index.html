@@ -31,14 +31,14 @@
 	<script id="server-panel-template" type="text/x-handlebars-template">
 		<div class="gameCard">
 			{{#if  map}}
-			<img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
-			<h3>{{ name }} </h3>
-			{{#if variant}}
-			<h4><b>Gametype: </b>{{ variant }} <br /> <b>Map: </b>{{ map }}</h4>
-			{{else}}
-			<h4><b>Map: </b>{{ map }}</h4>
-			{{/if}}
-			<h3>{{hostPlayer}}</h3>
+                <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
+                <h3>{{ name }} </h3>
+                {{#if variant}}
+                <h4><b>Gametype: </b>{{ variant }} <br /> <b>Map: </b>{{ map }}</h4>
+                {{else}}
+                <h4><b>Map: </b>{{ map }}</h4>
+                {{/if}}
+                <h3>{{hostPlayer}}</h3>
 				<div class="panel-heading">
 					<h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }}</h4>
 					<h4><b>Status:</b>
@@ -77,9 +77,8 @@
 					{{/if}}
 				</div>
 			{{else}}
-				<center><img src="images/error.png" alt="Error" class="img-responsive"></center>
-				<h3><center>Game / Data Unavailable</center><h3>
-				<center><img src="images/error.png" alt="Error" class="img-responsive"></center>
+				<center><img src="images/error.png" alt="Error" height="200"></center>
+				<h3 class="text-danger"><center>Game Data Unavailable</center><h3>
 			{{/if}}
 		</div>
 	</script>

@@ -27,24 +27,26 @@ var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
                                     .done(function(serverInfo) {
                                             serverInfo["serverId"] = i;
                                             serverInfo["serverIP"] = serverIP;
-                                            var html = serverListInfoTemplate(serverInfo);
-                                            $("#serverid" + i).html(html);
-                                            for (var j = 0; j < serverList.servers.length; j++)
-                                            {
-                                                if (serverList.servers[j]["i"] == i)
+                                            if(serverInfo.map.length > 0){ //blank map means glitched server entry
+                                                var html = serverListInfoTemplate(serverInfo);
+                                                $("#serverid" + i).html(html);
+                                                for (var j = 0; j < serverList.servers.length; j++)
                                                 {
-                                                    serverList.servers[j] = serverInfo;
-													if(serverInfo.map.length > 0){
-														serverCount++;
-														playerCount+=serverInfo.numPlayers;
-														$('.serverCount').html(serverCount + " servers");
-														console.log(serverCount);
-														$('.playerCount').html(playerCount + " players");
-														console.log(playerCount);
-													}
+                                                    if (serverList.servers[j]["i"] == i)
+                                                    {
+                                                            serverList.servers[j] = serverInfo;
+                                                            serverCount++;
+                                                            playerCount+=serverInfo.numPlayers;
+                                                            $('.serverCount').html(serverCount + " servers");
+                                                            console.log(serverCount);
+                                                            $('.playerCount').html(playerCount + " players");
+                                                            console.log(playerCount);
+                                                    }
                                                 }
+                                                console.log(serverInfo);
+                                            } else {
+                                                console.log(serverInfo.serverIP + " is glitched");
                                             }
-                                            console.log(serverInfo);
                                     });
                                 })(i, serverIP);
                         } else {
@@ -66,7 +68,7 @@ function updateServerInfo(i) {
     $("#serverInfo").html(html)
 }
 function joinServer(i) {
-    //console.log(serverList.servers[i].serverIP);
+    console.log(serverList.servers[i].serverIP);
     if(serverList.servers[i].passworded){
         var password = prompt("The server at " + serverList.servers[i].serverIP + " is private, enter the password to join", "");
         dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + password);
