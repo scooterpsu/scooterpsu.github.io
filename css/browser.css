@@ -97,6 +97,14 @@
     background: black;
     color:#5eaeb4;
 }
+#connectionStatus{
+	opacity: 0.8;
+    color: white;
+	position:fixed; bottom:0; right: 0;
+	z-index:1000;
+	padding-right: 10;
+	padding-bottom: 5;
+}
 body{
     background-color: black;
     cursor: url('../images/cursor.png'), default;
