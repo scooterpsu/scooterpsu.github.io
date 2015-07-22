@@ -99,7 +99,6 @@
 }
 #connectionStatus{
 	opacity: 0.8;
-    color: white;
 	position:fixed; bottom:0; right: 0;
 	z-index:1000;
 	padding-right: 10;
