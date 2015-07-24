@@ -46,17 +46,17 @@
     padding-right: 0;
 }
 .serverTable{
-    opacity: 0.8;
+    opacity: 0.7;
     padding: 5;
-    background-color:black;
-    color: #5eaeb4;
+    color: white;
+    background: black;
 }
 .browserTitle{
     opacity: 0.9;
     position: absolute;
     top: 6;
     left: 90;
-    color: #5eaeb4;
+    color: white;
 }
 #logo{
     position: absolute;
@@ -71,7 +71,7 @@
     position: absolute;
     top: 0;
     left: 445;
-    color: black;
+    color: white;
     font-weight: bold;
     background: url("../images/button.png") 0px 0px no-repeat;
     background-size: contain;
@@ -91,11 +91,11 @@
     position: absolute;
     top: 23;
     left: 600;
-    color: #5eaeb4;
+    color: white;
 }
 .statBreakdown{
     background: black;
-    color:#5eaeb4;
+    color:white;
 }
 #connectionStatus{
 	opacity: 0.8;
@@ -109,5 +109,17 @@ body{
     cursor: url('../images/cursor.png'), default;
 }
 a {
-    color: #5eaeb4;
+    color: white;
+}
+a:hover {
+    color: white;
+}
+a:visited {
+    color: white;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #1a3d5a;
+}
+.tableHeader{
+  background-color: #1a3d5a;
 }
