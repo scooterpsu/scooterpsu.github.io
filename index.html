@@ -19,13 +19,11 @@
 </head>
 
 <body>
-
 	<img src="images/hanger.png" id="bg">
 	<img src="images/overlay.png" id="overlay">
 	<img src="images/eldorito.png" id="logo">
-	<h2 class="browserTitle"><b>Eldorito Server Browser</b></h2>
-	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
-
+	<h2 class="browserTitle whiteBlueOutline"><b>Eldorito Server Browser</b></h2>
+	<h4 class="serverStats whiteBlueOutline"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
 
 	<div id="container">
 		<div id="serverList" class="serverlist"></div>
@@ -38,50 +36,52 @@
 		<div class="gameCard">
 			{{#if  map}}
                 <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
-                <h3>{{ name }} </h3>
+                <h3 class="whiteBlueOutline">{{ name }} </h3>
+                <ul>
                 {{#if variant}}
-                <h4><b>Gametype: </b>{{ variant }} <br /> <b>Map: </b>{{ map }}</h4>
+                    <li><b class="heading">Gametype: </b>{{ variant }} <br /> <b class="heading">Map: </b>{{ map }}</li>
                 {{else}}
-                <h4><b>Map: </b>{{ map }}</h4>
+                    <li><b class="heading">Map: </b>{{ map }}</li>
                 {{/if}}
-                <h3>{{hostPlayer}}</h3>
-				<div class="panel-heading">
-					<h4><b>Players:</b> {{ numPlayers }}/{{ maxPlayers }}</h4>
-					<h4><b>Status:</b>
-						{{#ifCond status "InGame"}}
-							In Progress
-						{{else}}
-							In Lobby
-						{{/ifCond}}            
-					</h4> 
-					{{#if passworded}}
-					<h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
-					{{else}}
-						<table class="table-bordered statBreakdown">
-							<thead class="tableHeader">
-								<th><center>Name</center></th>
-								<th><center>Score</center></th>
-								<th><center>K</center></th>
-								<th><center>D</center></th>
-								<th><center>A</center></th>
-							</thead>
-							<tbody>
-								{{#each players}}
-								{{#if name}}
-								<tr>
-									<td class="col-xs-1">{{this.name}}</td>
-									<td><center>{{score}}</center></td>
-									<td><center>{{kills}}</center></td>
-									<td><center>{{deaths}}</center></td>
-									<td><center>{{assists}}</center></td>
-								</tr>
-								{{/if}}
-								{{/each}}
-							</tbody>
-						</table>
-						<h5 class="text-muted"><b>Version: </b>{{eldewritoVersion}}</h5>
-					{{/if}}
-				</div>
+                </ul>
+                <h3 class="whiteBlueOutline">{{hostPlayer}}</h3>
+                <ul>
+                <li><b class="heading">Players:</b> {{ numPlayers }}/{{ maxPlayers }}</li>
+                <li><b class="heading">Status:</b>
+                    {{#ifCond status "InGame"}}
+                        In Progress
+                    {{else}}
+                        In Lobby
+                    {{/ifCond}}            
+                </li>
+                </ul>
+                {{#if passworded}}
+                    <h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
+                {{else}}
+                    <table class="table-bordered statBreakdown">
+                        <thead class="tableHeader">
+                            <th><center>Name</center></th>
+                            <th><center>Score</center></th>
+                            <th><center>K</center></th>
+                            <th><center>D</center></th>
+                            <th><center>A</center></th>
+                        </thead>
+                        <tbody>
+                            {{#each players}}
+                            {{#if name}}
+                            <tr>
+                                <td class="col-xs-1">{{this.name}}</td>
+                                <td><center>{{score}}</center></td>
+                                <td><center>{{kills}}</center></td>
+                                <td><center>{{deaths}}</center></td>
+                                <td><center>{{assists}}</center></td>
+                            </tr>
+                            {{/if}}
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    <h5 class="text-muted"><b>Version: </b>{{eldewritoVersion}}</h5>
+                {{/if}}
 			{{else}}
 				<center><img src="images/error.png" alt="Error" height="200"></center>
 				<h3 class="text-danger"><center>Game Data Unavailable</center><h3>
