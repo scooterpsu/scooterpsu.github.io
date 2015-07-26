@@ -79,7 +79,7 @@
 .refresh {
     opacity: 0.9;
     position: absolute;
-    top: 0;
+    top: 13;
     left: 445;
     color: white;
     font-weight: bold;
@@ -87,13 +87,14 @@
     background-size: contain;
     background-position: center; 
     width: 150px;
-    height: 85px;
+    height: 60px;
     border: none;
 }
 .refresh:hover{
     background: url("../images/buttonOver.png") 0px 0px no-repeat;
     background-size: contain;
-    background-position: center; 
+    background-position: center;
+    color: #1a3d5a;
 }
 .serverStats {
     color: white;
