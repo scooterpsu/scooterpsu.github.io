@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Server Browser</title>
+    <title>Eldorito Server Browser</title>
 		<!-- Includes -->
 		<script src="js/handlebars.min.js"></script>
 		<script src="js/jquery-1.11.3.min.js"></script>
@@ -56,7 +56,7 @@
                 </li>
                 </ul>
                 {{#if passworded}}
-                    <h4><b><center><div class="text-danger">[PRIVATE]</div></center></b></h4>
+                    <h3><b><center><div class="text-danger">[PRIVATE]</div></center></b></h3>
                 {{else}}
                     <table class="table-bordered statBreakdown">
                         <thead class="tableHeader">
@@ -80,10 +80,10 @@
                             {{/each}}
                         </tbody>
                     </table>
-                    <h5 class="text-muted"><b>Version: </b>{{eldewritoVersion}}</h5>
                 {{/if}}
-			{{else}}
-				<center><img src="images/error.png" alt="Error" height="200"></center>
+                <h5 class="version text-muted"><b>Version: </b>{{eldewritoVersion}}</h5>
+            {{else}}
+				<center><img src="images/error.png" alt="Error" class="img-responsive"></center>
 				<h3 class="text-danger"><center>Game Data Unavailable</center><h3>
 			{{/if}}
 		</div>
