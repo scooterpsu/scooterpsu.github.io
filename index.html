@@ -22,8 +22,8 @@
 	<img src="images/hanger.png" id="bg">
 	<img src="images/overlay.png" id="overlay">
 	<img src="images/eldorito.png" id="logo">
-	<h2 class="browserTitle whiteBlueOutline"><b>Eldorito Server Browser</b></h2>
-	<h4 class="serverStats whiteBlueOutline"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
+	<h2 class="browserTitle"><b>Eldorito Server Browser</b></h2>
+	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
 
 	<div id="container">
 		<div id="serverList" class="serverlist"></div>
@@ -37,7 +37,7 @@
 		<div class="gameCard">
 			{{#if  map}}
                 <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
-                <h3 class="whiteBlueOutline">{{ name }} </h3>
+                <h3>{{ name }} </h3>
                 <ul>
                 {{#if variant}}
                     <li><b class="heading">Gametype: </b>{{ variant }} <br /> <b class="heading">Map: </b>{{ map }}</li>
@@ -45,7 +45,7 @@
                     <li><b class="heading">Map: </b>{{ map }}</li>
                 {{/if}}
                 </ul>
-                <h3 class="whiteBlueOutline">{{hostPlayer}}</h3>
+                <h3>{{hostPlayer}}</h3>
                 <ul>
                 <li><b class="heading">Players:</b> {{ numPlayers }}/{{ maxPlayers }}</li>
                 <li><b class="heading">Status:</b>
@@ -59,7 +59,7 @@
                 {{#if passworded}}
                     <h3><b><center><div class="text-danger">[PRIVATE]</div></center></b></h3>
                 {{else}}
-                    <table class="table-bordered statBreakdown">
+                    <table class="statBreakdown">
                         <thead class="tableHeader">
                             <th><center>Name</center></th>
                             <th><center>Score</center></th>
@@ -71,11 +71,11 @@
                             {{#each players}}
                             {{#if name}}
                             <tr>
-                                <td class="col-xs-1">{{this.name}}</td>
-                                <td><center>{{score}}</center></td>
-                                <td><center>{{kills}}</center></td>
-                                <td><center>{{deaths}}</center></td>
-                                <td><center>{{assists}}</center></td>
+                                <td class="col-xs-1 statLines">{{this.name}}</td>
+                                <td class="statLines"><center>{{score}}</center></td>
+                                <td class="statLines"><center>{{kills}}</center></td>
+                                <td class="statLines"><center>{{deaths}}</center></td>
+                                <td class="statLines"><center>{{assists}}</center></td>
                             </tr>
                             {{/if}}
                             {{/each}}
@@ -115,7 +115,7 @@
 	</script>
 
 	<script id="server-list-template" type="text/x-handlebars-template">
-		<table class="serverTable table table-bordered table-hover" id="serverlist{{ i }}">
+		<table class="serverTable table table-hover" id="serverlist{{ i }}">
 			<thead class="tableHeader">
 				<th><center>IP (Click to Join)</center></th>
 				<th>Details</th>
