@@ -75,7 +75,6 @@ function joinServer(i) {
     }else {
         dewRcon.send('connect ' + serverList.servers[i].serverIP);
     }
-    dewRcon.send('game.togglemenu');
     dewRcon.send('Game.SetMenuEnabled 0');
 }
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
@@ -88,8 +87,11 @@ Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 Mousetrap.bind('f11', function() {
 
     setTimeout(function() {
-        dewRcon.send('game.togglemenu');
         dewRcon.send('Game.SetMenuEnabled 0');
     }, "400");
     
 });
+function setBrowser() {
+    dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
+    dewRcon.send('writeconfig');
+}

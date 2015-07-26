@@ -108,10 +108,17 @@
 }
 #connectionStatus{
 	opacity: 0.8;
-	position:fixed; bottom:0; right: 0;
+	position:fixed; bottom:15; right: 0;
 	z-index:1000;
 	padding-right: 10;
 	padding-bottom: 5;
+}
+#setBrowser{
+	opacity: 0.35;
+	position:fixed; bottom:0; right: 0;
+	z-index:1000;
+	padding-right: 10;
+	padding-bottom: 4;
 }
 body{
     background-color: black;
@@ -143,4 +150,6 @@ button:focus {
 .version {
     float: right;
 }
-img{-webkit-user-drag: none;}
+img{
+    -webkit-user-drag: none;
+}
