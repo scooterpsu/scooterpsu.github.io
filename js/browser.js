@@ -95,3 +95,12 @@ function setBrowser() {
     dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
     dewRcon.send('writeconfig');
 }
+Handlebars.registerHelper('eachByScore', function(context,options){
+    var output = '';
+    var contextSorted = context.concat()
+        .sort( function(a,b) { return b.score - a.score } );
+    for(var i=0, j=contextSorted.length; i<j; i++) {
+        output += options.fn(contextSorted[i]);
+    }
+    return output;
+});

@@ -68,7 +68,7 @@
                             <th><center>A</center></th>
                         </thead>
                         <tbody>
-                            {{#each players}}
+                            {{#eachByScore players}}
                             {{#if name}}
                             <tr>
                                 <td class="col-xs-1 statLines">{{this.name}}</td>
@@ -78,7 +78,7 @@
                                 <td class="statLines"><center>{{assists}}</center></td>
                             </tr>
                             {{/if}}
-                            {{/each}}
+                            {{/eachByScore}}
                         </tbody>
                     </table>
                 {{/if}}
