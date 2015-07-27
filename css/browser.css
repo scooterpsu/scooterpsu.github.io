@@ -88,8 +88,7 @@
     border: 1px solid white;
 }
 .refresh:hover{
-    border: 1px solid #1a3d5a;
-    color: #1a3d5a;
+    background-color: #1a3d5a;
 }
 .serverStats {
     color: white;
@@ -142,9 +141,6 @@ a {
 .tableHeader{
     background-color: #1a3d5a;
 }
-button:focus { 
-    outline:0 !important; 
-}
 .heading {
     color: grey; 
 }
@@ -162,11 +158,9 @@ img{
 ::-webkit-scrollbar-button:end:increment  {
     display: none;
 }
- 
 ::-webkit-scrollbar-track-piece  {
     background-color: #1a3d5a;
-}
- 
+} 
 ::-webkit-scrollbar-thumb:vertical {
     -webkit-border-radius: 3px;
     background: black url(../images/scrollbar_thumb_bg.png) no-repeat center;
