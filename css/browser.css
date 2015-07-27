@@ -21,14 +21,14 @@
     bottom: 0;
     left: 8px;
     right: 0px;
-    width: 85%;
+    width: 84%;
 }
 #serverinfo {
     position: absolute;
     top: 15px;
     bottom: 0;
     right: 15px;
-    width: 25%;
+    width: 26%;
 }
 .gameCard{
     opacity: 0.8;
