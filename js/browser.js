@@ -76,14 +76,28 @@ function joinServer(i) {
     console.log(serverList.servers[i].serverIP);
 	if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
 		if(serverList.servers[i].passworded){
-			var password = prompt("The server at " + serverList.servers[i].serverIP + " is private, enter the password to join", "");
-			dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + password);
+            swal({   
+            title: "Private Server",   
+            text: "Enter Password:",   
+            type: "input",                    
+            showCancelButton: true,   
+            closeOnConfirm: false,    
+            inputPlaceholder: "Password goes here" 
+            }, 
+            function(inputValue){
+                if (inputValue === false) return false;      
+                if (inputValue === "") {     
+                 swal.showInputError("Passwords are never blank");     
+                 return false   
+                }
+                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
+            });
 		}else {
 			dewRcon.send('connect ' + serverList.servers[i].serverIP);
 		}
 		dewRcon.send('Game.SetMenuEnabled 0');
 	} else {
-		alert("Game is full");
+        sweetAlert("Uh oh...", "Game is full!", "error");
 	}
 }
 
@@ -116,47 +130,3 @@ Handlebars.registerHelper('eachByScore', function(context,options){
     }
     return output;
 });
-
-var ALERT_TITLE = "Error";
-var ALERT_BUTTON_TEXT = "Ok";
-
-if(document.getElementById) {
-	window.alert = function(txt) {
-		createCustomAlert(txt);
-	}
-}
-
-function createCustomAlert(txt) {
-	d = document;
-
-	if(d.getElementById("modalContainer")) return;
-
-	mObj = d.getElementsByTagName("body")[0].appendChild(d.createElement("div"));
-	mObj.id = "modalContainer";
-	mObj.style.height = d.documentElement.scrollHeight + "px";
-	
-	alertObj = mObj.appendChild(d.createElement("div"));
-	alertObj.id = "alertBox";
-	if(d.all && !window.opera) alertObj.style.top = document.documentElement.scrollTop + "px";
-	alertObj.style.left = (d.documentElement.scrollWidth - alertObj.offsetWidth)/2 + "px";
-	alertObj.style.visiblity="visible";
-
-	h1 = alertObj.appendChild(d.createElement("h1"));
-	h1.appendChild(d.createTextNode(ALERT_TITLE));
-
-	msg = alertObj.appendChild(d.createElement("p"));
-	//msg.appendChild(d.createTextNode(txt));
-	msg.innerHTML = txt;
-
-	btn = alertObj.appendChild(d.createElement("a"));
-	btn.id = "closeBtn";
-	btn.appendChild(d.createTextNode(ALERT_BUTTON_TEXT));
-	btn.href = "#";
-	btn.focus();
-	btn.onclick = function() { removeCustomAlert();return false; }
-	alertObj.style.display = "block";
-}
-
-function removeCustomAlert() {
-	document.getElementsByTagName("body")[0].removeChild(document.getElementById("modalContainer"));
-}
