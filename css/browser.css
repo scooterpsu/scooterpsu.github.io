@@ -60,7 +60,7 @@
 }
 .browserTitle{
     color: white;
-    opacity: 0.9;
+    opacity: 0.8;
     position: absolute;
     top: 1;
     left: 90;
@@ -69,12 +69,12 @@
     position: absolute;
     top: 10;
     left: 15;
-    opacity: 0.9;
+    opacity: 0.8;
     width: 58px;
     height: 50px;
 }
 .refresh {
-    opacity: 0.9;
+    opacity: 0.8;
     position: absolute;
     top: 23;
     left: 462;
