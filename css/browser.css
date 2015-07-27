@@ -13,11 +13,11 @@
     opacity: 0.6;
     background-color: #252525;
     border-style: solid;
-    border: 3px solid #1a3d5a;
+    border: 5px solid #1a3d5a;
 }
 #serverlist {
     position: absolute;
-    top: 40px;
+    top: 35px;
     bottom: 0;
     left: 8px;
     right: 0px;
@@ -27,7 +27,7 @@
     position: absolute;
     top: 10;
     bottom: 0;
-    right: 10;
+    right: 0.75%;
     width: 25%;
 }
 .gameCard{
@@ -62,12 +62,12 @@
     color: white;
     opacity: 0.9;
     position: absolute;
-    top: 6;
+    top: 1;
     left: 90;
 }
 #logo{
     position: absolute;
-    top: 15;
+    top: 10;
     left: 15;
     opacity: 0.9;
     width: 58px;
@@ -76,7 +76,7 @@
 .refresh {
     opacity: 0.9;
     position: absolute;
-    top: 28;
+    top: 23;
     left: 462;
     color: white;
     font-weight: bold;
@@ -96,7 +96,7 @@
 	font-weight: bold;
     opacity: 0.8;
     position: absolute;
-    top: 23;
+    top: 19;
     left: 610;
 }
 .statBreakdown{
@@ -113,7 +113,7 @@
 }
 #connectionStatus{
 	opacity: 0.8;
-	position:fixed; bottom:15; right: 0;
+	position:fixed; bottom:20; right: 0;
 	z-index:1000;
 	padding-right: 10;
 	padding-bottom: 5;
@@ -121,7 +121,7 @@
 }
 #setBrowser{
 	opacity: 0.8;
-	position:fixed; bottom:0; right: 0;
+	position:fixed; bottom:5; right: 0;
 	z-index:1000;
 	padding-right: 10;
 	padding-bottom: 4;
