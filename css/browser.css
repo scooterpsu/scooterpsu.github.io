@@ -154,3 +154,20 @@ button:focus {
 img{
     -webkit-user-drag: none;
 }
+::-webkit-scrollbar {
+    width: 15px;
+    height: 10px;
+}
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment  {
+    display: none;
+}
+ 
+::-webkit-scrollbar-track-piece  {
+    background-color: #1a3d5a;
+}
+ 
+::-webkit-scrollbar-thumb:vertical {
+    -webkit-border-radius: 3px;
+    background: black url(../images/scrollbar_thumb_bg.png) no-repeat center;
+}
