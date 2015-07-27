@@ -71,6 +71,7 @@ function updateServerInfo(i) {
     var html = serverTemplate(serverList.servers[i]);
     $("#serverInfo").html(html)
 }
+
 function joinServer(i) {
     console.log(serverList.servers[i].serverIP);
 	if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
@@ -85,6 +86,7 @@ function joinServer(i) {
 		alert("Game is full");
 	}
 }
+
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
   if(v1 === v2) {
     return options.fn(this);
@@ -99,10 +101,12 @@ Mousetrap.bind('f11', function() {
     }, "400");
     
 });
+
 function setBrowser() {
     dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
     dewRcon.send('writeconfig');
 }
+
 Handlebars.registerHelper('eachByScore', function(context,options){
     var output = '';
     var contextSorted = context.concat()
@@ -112,3 +116,47 @@ Handlebars.registerHelper('eachByScore', function(context,options){
     }
     return output;
 });
+
+var ALERT_TITLE = "Alert!";
+var ALERT_BUTTON_TEXT = "Ok";
+
+if(document.getElementById) {
+	window.alert = function(txt) {
+		createCustomAlert(txt);
+	}
+}
+
+function createCustomAlert(txt) {
+	d = document;
+
+	if(d.getElementById("modalContainer")) return;
+
+	mObj = d.getElementsByTagName("body")[0].appendChild(d.createElement("div"));
+	mObj.id = "modalContainer";
+	mObj.style.height = d.documentElement.scrollHeight + "px";
+	
+	alertObj = mObj.appendChild(d.createElement("div"));
+	alertObj.id = "alertBox";
+	if(d.all && !window.opera) alertObj.style.top = document.documentElement.scrollTop + "px";
+	alertObj.style.left = (d.documentElement.scrollWidth - alertObj.offsetWidth)/2 + "px";
+	alertObj.style.visiblity="visible";
+
+	h1 = alertObj.appendChild(d.createElement("h1"));
+	h1.appendChild(d.createTextNode(ALERT_TITLE));
+
+	msg = alertObj.appendChild(d.createElement("p"));
+	//msg.appendChild(d.createTextNode(txt));
+	msg.innerHTML = txt;
+
+	btn = alertObj.appendChild(d.createElement("a"));
+	btn.id = "closeBtn";
+	btn.appendChild(d.createTextNode(ALERT_BUTTON_TEXT));
+	btn.href = "#";
+	btn.focus();
+	btn.onclick = function() { removeCustomAlert();return false; }
+	alertObj.style.display = "block";
+}
+
+function removeCustomAlert() {
+	document.getElementsByTagName("body")[0].removeChild(document.getElementById("modalContainer"));
+}
