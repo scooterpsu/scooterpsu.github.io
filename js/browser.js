@@ -27,26 +27,30 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
                                     .done(function(serverInfo) {
                                             serverInfo["serverId"] = i;
                                             serverInfo["serverIP"] = serverIP;
-                                            if(serverInfo.map.length > 0){ //blank map means glitched server entry
-                                                var html = serverListInfoTemplate(serverInfo);
-                                                $("#serverid" + i).html(html);
-                                                for (var j = 0; j < serverList.servers.length; j++)
-                                                {
-                                                    if (serverList.servers[j]["i"] == i)
-                                                    {
-                                                            serverList.servers[j] = serverInfo;
-                                                            serverCount++;
-                                                            playerCount+=serverInfo.numPlayers;
-                                                            $('.serverCount').html(serverCount + " servers");
-                                                            console.log(serverCount);
-                                                            $('.playerCount').html(playerCount + " players");
-                                                            console.log(playerCount);
-                                                    }
-                                                }
-                                                console.log(serverInfo);
-                                            } else {
-                                                console.log(serverInfo.serverIP + " is glitched");
-                                            }
+											if (serverInfo.maxPlayers <= 16 ) {
+												if(serverInfo.map.length > 0){ //blank map means glitched server entry
+													var html = serverListInfoTemplate(serverInfo);
+													$("#serverid" + i).html(html);
+													for (var j = 0; j < serverList.servers.length; j++)
+													{
+														if (serverList.servers[j]["i"] == i)
+														{
+																serverList.servers[j] = serverInfo;
+																serverCount++;
+																playerCount+=serverInfo.numPlayers;
+																$('.serverCount').html(serverCount + " servers");
+																console.log(serverCount);
+																$('.playerCount').html(playerCount + " players");
+																console.log(playerCount);
+														}
+													}
+													console.log(serverInfo);
+												} else {
+													console.log(serverInfo.serverIP + " is glitched");
+												}
+											} else {
+												console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
+											}
                                     });
                                 })(i, serverIP);
                         } else {
@@ -69,13 +73,17 @@ function updateServerInfo(i) {
 }
 function joinServer(i) {
     console.log(serverList.servers[i].serverIP);
-    if(serverList.servers[i].passworded){
-        var password = prompt("The server at " + serverList.servers[i].serverIP + " is private, enter the password to join", "");
-        dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + password);
-    }else {
-        dewRcon.send('connect ' + serverList.servers[i].serverIP);
-    }
-    dewRcon.send('Game.SetMenuEnabled 0');
+	if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
+		if(serverList.servers[i].passworded){
+			var password = prompt("The server at " + serverList.servers[i].serverIP + " is private, enter the password to join", "");
+			dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + password);
+		}else {
+			dewRcon.send('connect ' + serverList.servers[i].serverIP);
+		}
+		dewRcon.send('Game.SetMenuEnabled 0');
+	} else {
+		alert("Game is full");
+	}
 }
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
   if(v1 === v2) {
