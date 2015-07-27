@@ -91,11 +91,12 @@ function joinServer(i) {
                  return false   
                 }
                 dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
+                dewRcon.send('Game.SetMenuEnabled 0');
             });
 		}else {
 			dewRcon.send('connect ' + serverList.servers[i].serverIP);
+            dewRcon.send('Game.SetMenuEnabled 0');
 		}
-		dewRcon.send('Game.SetMenuEnabled 0');
 	} else {
         sweetAlert("Uh oh...", "Game is full!", "error");
 	}
