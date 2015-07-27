@@ -117,7 +117,7 @@ Handlebars.registerHelper('eachByScore', function(context,options){
     return output;
 });
 
-var ALERT_TITLE = "Alert!";
+var ALERT_TITLE = "Error";
 var ALERT_BUTTON_TEXT = "Ok";
 
 if(document.getElementById) {
