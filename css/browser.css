@@ -146,7 +146,7 @@ button:focus {
     outline:0 !important; 
 }
 .heading {
-    color: #1a3d5a; 
+    color: grey; 
 }
 .version {
     float: right;
