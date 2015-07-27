@@ -20,7 +20,7 @@
 
 <body>
 	<img src="images/hanger.png" id="bg">
-	<img src="images/overlay.png" id="overlay">
+	<div id="overlay"></div>
 	<img src="images/eldorito.png" id="logo">
 	<h2 class="browserTitle"><b>Eldorito Server Browser</b></h2>
 	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
@@ -28,8 +28,8 @@
 	<div id="container">
 		<div id="serverList" class="serverlist"></div>
 		<button class="refresh" onclick="window.location.reload();">Refresh</button>
-		<div id="serverInfo" class="col-md-3 serverinfo"></div>
-		<div id="connectionStatus" class="text-muted"></div>
+		<div id="serverInfo" class="serverinfo"></div>
+		<div id="connectionStatus"></div>
         <div id="setBrowser"><a href="#" onclick="setBrowser();">Set to In-Game Browser (if connected)</a>
 	</div>
 

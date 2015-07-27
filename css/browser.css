@@ -8,11 +8,12 @@
 }
 #overlay {
     position: fixed;
-    top:0;
-    left:0;
     width: 100%;
     height: 100%;
-    opacity: 0.7;
+    opacity: 0.6;
+    background-color: #252525;
+    border-style: solid;
+    border: 3px solid #1a3d5a;
 }
 #serverlist {
     position: absolute;
@@ -26,23 +27,19 @@
     position: absolute;
     top: 10;
     bottom: 0;
-    right: 0;
-    width: 27%;
+    right: 10;
+    width: 25%;
 }
 .gameCard{
     opacity: 0.8;
-    padding: 20;
-    padding-left: 27;
+    padding: 15;
     padding-bottom: 30;
-    margin-right: -15;
     color: white;
-    background-image: url("../images/gamecard.png");
-    background-size: cover;
-    background-width: 10%;
-    background-position: 0px 0px;
+    background-color: black;
+    border-style: solid;
+    border: 3px solid #1a3d5a;
 }
 .gameCard img{
-    padding-top: 15;
     padding-right: -5;
     padding-bottom: 10;
 }
@@ -56,7 +53,7 @@
     margin:0;
 }
 .serverTable{
-    opacity: 0.7;
+    opacity: 0.8;
     padding: 5;
     color: white;
     background: black;
@@ -79,21 +76,19 @@
 .refresh {
     opacity: 0.9;
     position: absolute;
-    top: 13;
-    left: 445;
+    top: 28;
+    left: 462;
     color: white;
     font-weight: bold;
-    background: url("../images/button.png") 0px 0px no-repeat;
-    background-size: contain;
-    background-position: center; 
-    width: 150px;
-    height: 60px;
-    border: none;
+    background-color: black;
+    width: 125px;
+    height: 30px;
+    background-color: black;
+    border-style: solid;
+    border: 1px solid white;
 }
 .refresh:hover{
-    background: url("../images/buttonOver.png") 0px 0px no-repeat;
-    background-size: contain;
-    background-position: center;
+    border: 1px solid #1a3d5a;
     color: #1a3d5a;
 }
 .serverStats {
@@ -102,7 +97,7 @@
     opacity: 0.8;
     position: absolute;
     top: 23;
-    left: 600;
+    left: 610;
 }
 .statBreakdown{
     margin-top: 10;
@@ -122,9 +117,10 @@
 	z-index:1000;
 	padding-right: 10;
 	padding-bottom: 5;
+    color: white;
 }
 #setBrowser{
-	opacity: 0.35;
+	opacity: 0.8;
 	position:fixed; bottom:0; right: 0;
 	z-index:1000;
 	padding-right: 10;
