@@ -25,9 +25,9 @@
 }
 #serverinfo {
     position: absolute;
-    top: 10;
+    top: 15px;
     bottom: 0;
-    right: 0.75%;
+    right: 15px;
     width: 25%;
 }
 .gameCard{
