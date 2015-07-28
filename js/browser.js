@@ -73,7 +73,7 @@ function updateServerInfo(i) {
 }
 
 function joinServer(i) {
-    if(dewRconConnected){
+ //   if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].passworded){
                 swal({   
@@ -110,9 +110,9 @@ function joinServer(i) {
         } else {
             sweetAlert("Error", "Game is full or unavailable!", "error");
         }
-    } else {
-        sweetAlert("Error", "dewRcon is not connected!", "error");        
-    }
+ //   } else {
+ //       sweetAlert("Error", "dewRcon is not connected!", "error");        
+ //   }
 }
 
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
@@ -131,12 +131,12 @@ Mousetrap.bind('f11', function() {
 });
 
 function setBrowser() {
-    if(dewRconConnected){
+//    if(dewRconConnected){
         dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
         dewRcon.send('writeconfig');
-    } else {
-        sweetAlert("Error", "dewRcon is not connected!", "error");        
-    }
+//    } else {
+//        sweetAlert("Error", "dewRcon is not connected!", "error");        
+//    }
 }
 
 Handlebars.registerHelper('eachByScore', function(context,options){
