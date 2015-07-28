@@ -78,7 +78,7 @@ function joinServer(i) {
 		if(serverList.servers[i].passworded){
             swal({   
             title: "Private Server",   
-            text: "Enter Password:",   
+            text: "Please enter password",   
             type: "input",                    
             showCancelButton: true,   
             closeOnConfirm: false,    
@@ -98,7 +98,7 @@ function joinServer(i) {
             dewRcon.send('Game.SetMenuEnabled 0');
 		}
 	} else {
-        sweetAlert("Uh oh...", "Game is full!", "error");
+        sweetAlert("Error", "Game is full or unavailable!", "error");
 	}
 }
 
