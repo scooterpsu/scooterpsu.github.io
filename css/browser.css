@@ -123,6 +123,7 @@
 	z-index:1000;
 	padding-right: 8;
 	padding-bottom: 4;
+    display: none;
 }
 #setBrowser:a{
     font-weight: normal;
