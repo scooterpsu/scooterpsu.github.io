@@ -89,9 +89,18 @@ function joinServer(i) {
                 if (inputValue === "") {     
                  swal.showInputError("Passwords are never blank");     
                  return false   
+                } else {
+                    dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
+                    setTimeout(function() {
+                        if (dewRcon.lastMessage === "Incorrect password specified.") {
+                            swal.showInputError(dewRcon.lastMessage);
+                            return false
+                        }else {
+                            swal.close();
+                            dewRcon.send('Game.SetMenuEnabled 0');
+                        }
+                    }, "400");
                 }
-                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
-                dewRcon.send('Game.SetMenuEnabled 0');
             });
 		}else {
 			dewRcon.send('connect ' + serverList.servers[i].serverIP);
