@@ -10,6 +10,8 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
                 for(var i = 0; i < data.result.servers.length; i++)
                 {
                         var serverIP = data.result.servers[i];
+                        //because sometimes jackasses inject into the server list
+
                         if(VerifyIPRegex.test(serverIP)){
                                 serverList.servers.push({serverIP, i});
                                 (function(i, serverIP) {
@@ -25,7 +27,7 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
                                     .done(function(serverInfo) {
                                             serverInfo["serverId"] = i;
                                             serverInfo["serverIP"] = serverIP;
-											if (serverInfo.maxPlayers <= 16 ) { //maxPlayers over 16 means troll
+											if (serverInfo.maxPlayers <= 16 ) {
 												if(serverInfo.map.length > 0){ //blank map means glitched server entry
 													var html = serverListInfoTemplate(serverInfo);
 													$("#serverid" + i).html(html);
@@ -33,13 +35,13 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
 													{
 														if (serverList.servers[j]["i"] == i)
 														{
-															serverList.servers[j] = serverInfo;
-															serverCount++;
-															playerCount+=serverInfo.numPlayers;
-															$('.serverCount').html(serverCount + " servers");
-															console.log(serverCount);
-															$('.playerCount').html(playerCount + " players");
-															console.log(playerCount);
+																serverList.servers[j] = serverInfo;
+																serverCount++;
+																playerCount+=serverInfo.numPlayers;
+																$('.serverCount').html(serverCount + " servers");
+																console.log(serverCount);
+																$('.playerCount').html(playerCount + " players");
+																console.log(playerCount);
 														}
 													}
 													console.log(serverInfo);
@@ -60,7 +62,7 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
 
         for (var j = 0; j < serverList.servers.length; j++)
         {
-			console.log(serverList.servers[j]);
+                console.log(serverList.servers[j]);
         }
     }
 );
@@ -129,8 +131,12 @@ Mousetrap.bind('f11', function() {
 });
 
 function setBrowser() {
-	dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
-	dewRcon.send('writeconfig');
+    if(dewRconConnected){
+        dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
+        dewRcon.send('writeconfig');
+    } else {
+        sweetAlert("Error", "dewRcon is not connected!", "error");        
+    }
 }
 
 Handlebars.registerHelper('eachByScore', function(context,options){

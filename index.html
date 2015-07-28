@@ -33,7 +33,6 @@
 		<button class="refresh" onclick="window.location.reload();">Refresh</button>
 		<div id="serverInfo" class="serverinfo"></div>
 		<div id="connectionStatus"></div>
-		<div id="closeButton" onclick="dewRcon.send('Game.SetMenuEnabled 0');">X</div>
         <div id="setBrowser"><a href="#" onclick="setBrowser();">Set to In-Game Browser</a>
 	</div>
 
@@ -159,17 +158,6 @@
 		ga('create', 'UA-65637766-1', 'auto');
 		ga('send', 'pageview');
 	</script>
-	
-	<script>
-	if(dewRconConnected){
-		document.getElementById("connectionStatus").style.color = "green";
-		document.getElementById("connectionStatus").style.width = "125";		
-		document.getElementById("connectionStatus").style.right = "50";
-	} else {
-		document.getElementById("connectionStatus").style.color = "red";
-		document.getElementById("setBrowser").style.display = "none";
-		document.getElementById("closeButton").style.display = "none";
-	}
-	</script>
+	 
 </body>
 </html>
