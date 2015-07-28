@@ -79,9 +79,10 @@ function joinServer(i) {
             swal({   
             title: "Private Server",   
             text: "Please enter password",   
-            type: "input",                    
+            type: "input", 
+            inputType: "password",
             showCancelButton: true,   
-            closeOnConfirm: false,    
+            closeOnConfirm: false,
             inputPlaceholder: "Password goes here" 
             }, 
             function(inputValue){
