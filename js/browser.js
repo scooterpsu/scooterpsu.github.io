@@ -73,43 +73,46 @@ function updateServerInfo(i) {
 }
 
 function joinServer(i) {
-    console.log(serverList.servers[i].serverIP);
-	if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
-		if(serverList.servers[i].passworded){
-            swal({   
-            title: "Private Server",   
-            text: "Please enter password",   
-            type: "input", 
-            inputType: "password",
-            showCancelButton: true,   
-            closeOnConfirm: false,
-            inputPlaceholder: "Password goes here" 
-            }, 
-            function(inputValue){
-                if (inputValue === false) return false;      
-                if (inputValue === "") {     
-                 swal.showInputError("Passwords are never blank");     
-                 return false   
-                } else {
-                    dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
-                    setTimeout(function() {
-                        if (dewRcon.lastMessage === "Incorrect password specified.") {
-                            swal.showInputError(dewRcon.lastMessage);
-                            return false
-                        }else {
-                            swal.close();
-                            dewRcon.send('Game.SetMenuEnabled 0');
-                        }
-                    }, "400");
-                }
-            });
-		}else {
-			dewRcon.send('connect ' + serverList.servers[i].serverIP);
-            dewRcon.send('Game.SetMenuEnabled 0');
-		}
-	} else {
-        sweetAlert("Error", "Game is full or unavailable!", "error");
-	}
+    if(dewRconConnected){
+        if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
+            if(serverList.servers[i].passworded){
+                swal({   
+                title: "Private Server",   
+                text: "Please enter password",   
+                type: "input", 
+                inputType: "password",
+                showCancelButton: true,   
+                closeOnConfirm: false,
+                inputPlaceholder: "Password goes here" 
+                }, 
+                function(inputValue){
+                    if (inputValue === false) return false;      
+                    if (inputValue === "") {     
+                     swal.showInputError("Passwords are never blank");     
+                     return false   
+                    } else {
+                        dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
+                        setTimeout(function() {
+                            if (dewRcon.lastMessage === "Incorrect password specified.") {
+                                swal.showInputError(dewRcon.lastMessage);
+                                return false
+                            }else {
+                                swal.close();
+                                dewRcon.send('Game.SetMenuEnabled 0');
+                            }
+                        }, "400");
+                    }
+                });
+            }else {
+                dewRcon.send('connect ' + serverList.servers[i].serverIP);
+                dewRcon.send('Game.SetMenuEnabled 0');
+            }
+        } else {
+            sweetAlert("Error", "Game is full or unavailable!", "error");
+        }
+    } else {
+        sweetAlert("Error", "dewRcon is not connected!", "error");        
+    }
 }
 
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
@@ -128,8 +131,12 @@ Mousetrap.bind('f11', function() {
 });
 
 function setBrowser() {
-    dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
-    dewRcon.send('writeconfig');
+    if(dewRconConnected){
+        dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
+        dewRcon.send('writeconfig');
+    } else {
+        sweetAlert("Error", "dewRcon is not connected!", "error");        
+    }
 }
 
 Handlebars.registerHelper('eachByScore', function(context,options){
