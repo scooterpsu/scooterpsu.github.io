@@ -71,7 +71,7 @@ function updateServerInfo(i) {
 }
 
 function joinServer(i) {
-//    if(dewRconConnected){
+    if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].passworded){
                 swal({   
@@ -108,9 +108,9 @@ function joinServer(i) {
         } else {
             sweetAlert("Error", "Game is full or unavailable!", "error");
         }
- //   } else {
- //       sweetAlert("Error", "dewRcon is not connected!", "error");        
- //   }
+    } else {
+        sweetAlert("Error", "dewRcon is not connected!", "error");        
+    }
 }
 
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
