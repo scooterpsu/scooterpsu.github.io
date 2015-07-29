@@ -12,8 +12,8 @@
     height: 100%;
     opacity: 0.6;
     background-color: #252525;
-    border-style: solid;
-    border: 5px solid #1a3d5a;
+    border: 3px solid #1a3d5a;
+    border-right: 0;
 }
 #serverlist {
     position: absolute;
@@ -151,7 +151,7 @@ img{
     -webkit-user-drag: none;
 }
 ::-webkit-scrollbar {
-    width: 15px;
+    width: 20px;
     height: 10px;
 }
 ::-webkit-scrollbar-button:start:decrement,
@@ -159,9 +159,13 @@ img{
     display: none;
 }
 ::-webkit-scrollbar-track-piece  {
-    background-color: black;
+    background-color: rgba(0,0,0,0);
+    border: 3px solid #1a3d5a;
+    border-left: 0;
 } 
 ::-webkit-scrollbar-thumb:vertical {
-    -webkit-border-radius: 3px;
     background: grey url(../images/scrollbar_thumb_bg.png) no-repeat center;
+}
+html {
+    overflow-y:scroll;
 }
