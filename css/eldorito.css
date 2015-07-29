@@ -116,10 +116,17 @@
 }
 .sweet-alert .sa-error-container p {
     font-size: 16px;
+    font-weight: bold;
     color: red;
-    margin-top: 0; 
+    margin-top: 0;
+    opacity: 0.7;
 }
-
+.sweet-alert .sa-icon.sa-success::before, .sweet-alert .sa-icon.sa-success::after {
+    opacity: 0;
+}
+.sweet-alert .sa-icon.sa-success .sa-fix {
+    opacity: 0;
+}    
 @-webkit-keyframes animateErrorIcon {
   0% {
     transform: rotateX(100deg), scale(0.5);
@@ -140,4 +147,4 @@
   100% {
     transform: rotateX(0deg), scale(0.5);
     -webkit-transform: rotateX(0deg), scale(0.5);
-    opacity: 1; } }
+    opacity: 1; } } 
