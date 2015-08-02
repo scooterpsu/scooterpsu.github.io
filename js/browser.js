@@ -152,3 +152,7 @@ Handlebars.registerHelper('eachByScore', function(context,options){
 function connectionTrigger(){
     document.getElementById('setBrowser').style.display = "block";      
 }
+
+function showPrivate() {
+    sweetAlert("Error", "Yes, Private.", "error");  
+}

@@ -52,6 +52,13 @@
 .gamecard h3{
     margin:0;
 }
+.gamecard a{
+    color: #a94442 !important;
+    text-decoration: none;
+}
+.gamecard a:focus {
+    outline:0;
+}
 .serverTable{
     opacity: 0.8;
     padding: 5;
@@ -134,6 +141,7 @@ body{
 }
 a {
     color: white !important;
+    cursor: url('../images/cursor.png'), default;
 }
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
     background-color: #1a3d5a;
@@ -168,4 +176,7 @@ img{
 }
 html {
     overflow-y:scroll;
+}
+button {
+    cursor: url('../images/cursor.png'), default;
 }
