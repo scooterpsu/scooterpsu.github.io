@@ -3,6 +3,7 @@ servers: []
 }; 
 var serverCount = 0;
 var playerCount = 0;
+var gameVersion = 0;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
 var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
@@ -75,37 +76,46 @@ function updateServerInfo(i) {
 function joinServer(i) {
     if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
-            if(serverList.servers[i].passworded){
-                swal({   
-                title: "Private Server",   
-                text: "Please enter password",   
-                type: "input", 
-                inputType: "password",
-                showCancelButton: true,   
-                closeOnConfirm: false,
-                inputPlaceholder: "Password goes here" 
-                }, 
-                function(inputValue){
-                    if (inputValue === false) return false;      
-                    if (inputValue === "") {     
-                     swal.showInputError("Passwords are never blank");     
-                     return false   
-                    } else {
-                        dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
-                        setTimeout(function() {
-                            if (dewRcon.lastMessage === "Incorrect password specified.") {
-                                swal.showInputError(dewRcon.lastMessage);
-                                return false
-                            }else {
-                                swal.close();
-                                dewRcon.send('Game.SetMenuEnabled 0');
-                            }
-                        }, "400");
-                    }
+            if(serverList.servers[i].eldewritoVersion === gameVersion) {
+                if(serverList.servers[i].passworded){
+                    swal({   
+                    title: "Private Server",   
+                    text: "Please enter password",   
+                    type: "input", 
+                    inputType: "password",
+                    showCancelButton: true,   
+                    closeOnConfirm: false,
+                    inputPlaceholder: "Password goes here" 
+                    }, 
+                    function(inputValue){
+                        if (inputValue === false) return false;      
+                        if (inputValue === "") {     
+                         swal.showInputError("Passwords are never blank");     
+                         return false   
+                        } else {
+                            dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
+                            setTimeout(function() {
+                                if (dewRcon.lastMessage === "Incorrect password specified.") {
+                                    swal.showInputError(dewRcon.lastMessage);
+                                    return false
+                                }else {
+                                    swal.close();
+                                    dewRcon.send('Game.SetMenuEnabled 0');
+                                }
+                            }, "400");
+                        }
+                    });
+                }else {
+                    dewRcon.send('connect ' + serverList.servers[i].serverIP);
+                    dewRcon.send('Game.SetMenuEnabled 0');
+                }
+            } else {
+                swal({
+                title:"Error", 
+                text:"Host running different version.<br /> Unable to join!", 
+                type:"error",
+                html: true
                 });
-            }else {
-                dewRcon.send('connect ' + serverList.servers[i].serverIP);
-                dewRcon.send('Game.SetMenuEnabled 0');
             }
         } else {
             sweetAlert("Error", "Game is full or unavailable!", "error");
@@ -131,12 +141,8 @@ Mousetrap.bind('f11', function() {
 });
 
 function setBrowser() {
-    if(dewRconConnected){
-        dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
-        dewRcon.send('writeconfig');
-    } else {
-        sweetAlert("Error", "dewRcon is not connected!", "error");        
-    }
+    dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
+    dewRcon.send('writeconfig');
 }
 
 Handlebars.registerHelper('eachByScore', function(context,options){
@@ -150,7 +156,14 @@ Handlebars.registerHelper('eachByScore', function(context,options){
 });
 
 function connectionTrigger(){
-    document.getElementById('setBrowser').style.display = "block";      
+    document.getElementById('setBrowser').style.display = "block";
+    dewRcon.send('game.version');
+    setTimeout(function() {
+        if (dewRcon.lastMessage.length > 0) {
+            gameVersion = dewRcon.lastMessage;
+            console.log(gameVersion);
+        }
+    }, "400");
 }
 
 function showPrivate() {
