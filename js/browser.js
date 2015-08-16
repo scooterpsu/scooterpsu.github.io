@@ -195,9 +195,14 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
    //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
    if (e.control == "FACE_1"){
         //console.log("A");
-        joinServer(selectedID);
+        if($('.sweet-overlay').is(':visible')){
+            swal.close();   
+        } else {
+            joinServer(selectedID);
+        }
    }else if (e.control == "FACE_2"){
         //console.log("B");
+        swal.close();
    }else if (e.control == "FACE_3"){
         //console.log("X");
         updateServerInfo(selectedID);
