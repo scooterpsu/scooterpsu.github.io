@@ -16,7 +16,7 @@
 }
 #serverlist {
     position: absolute;
-    top: 35px;
+    top: 30px;
     bottom: 0;
     left: 8px;
     right: 0px;
@@ -31,7 +31,7 @@
 }
 .gameCard{
     opacity: 0.8;
-    margin-top: 54;
+    margin-top: 45px;
     padding: 15;
     margin-right: 0;
     padding-bottom: 30;
@@ -63,22 +63,22 @@
     color: white;
     opacity: 0.8;
     position: absolute;
-    top: 1;
-    left: 90;
+    top: -2px;
+    left: 80;
 }
 #logo{
     position: absolute;
     top: 10;
     left: 15;
     opacity: 0.8;
-    width: 58px;
-    height: 50px;
+    width: 50px;
+    height: 43px;
 }
 .refresh {
     opacity: 0.8;
     position: absolute;
-    top: 23;
-    left: 462;
+    top: 16;
+    left: 375;
     color: white;
     font-weight: bold;
     background-color: black;
@@ -93,8 +93,8 @@
 .closeButton {
     opacity: 0.8;
     position: absolute;
-    top: 23;
-    right: 0;
+    top: 16;
+    right: 1;
     color: white;
     font-weight: bold;
     background-color: black;
@@ -112,8 +112,8 @@
 	font-weight: bold;
     opacity: 0.8;
     position: absolute;
-    top: 19;
-    left: 610;
+    top: 12;
+    left: 515;
 }
 .statBreakdown{
     margin-top: 10;
@@ -134,23 +134,6 @@
 	padding-right: 8;
 	padding-bottom: 7;
     color: white;
-}
-#gamepadPrompt{
-	opacity: 0.8;
-	position:fixed; top:0; right: 0;
-	z-index:1000;
-	padding-right: 8;
-	padding-top: 7;
-    color: white;
-}
-#gamepadDisplay{
-	opacity: 0.8;
-	position:fixed; top:0; right: 0;
-	z-index:1000;
-	padding-right: 20;
-	padding-top: 20;
-    color: white;
-    background-color: black;
 }
 #setBrowser{
 	opacity: 0.8;
@@ -187,7 +170,7 @@ img{
     -webkit-user-drag: none;
 }
 ::-webkit-scrollbar {
-    width: 20px;
+    width: 18px;
     height: 10px;
 }
 ::-webkit-scrollbar-button:start:decrement,
