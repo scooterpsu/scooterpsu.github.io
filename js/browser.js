@@ -205,7 +205,13 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             }
         }else if (e.control == "FACE_2"){
             //console.log("B");
-            swal.close();
+            if($('.sweet-overlay').is(':visible')){
+                swal.close();   
+            } else {
+                setTimeout(function() {
+                    dewRcon.send('Game.SetMenuEnabled 0');
+                }, "400");
+            }
         }else if (e.control == "FACE_3"){
             //console.log("X");
             updateServerInfo(selectedID);

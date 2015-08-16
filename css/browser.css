@@ -206,11 +206,11 @@ button {
 .refresh .controllerButton{
     opacity: 1;
 }
-
 .controllerButton{
     opacity: 0;
+    margin-top: -3;
     margin-left: 5;
-    height: 25;
-    width: 25;
+    height: 28;
+    width: 28;
     display: none;
 }
