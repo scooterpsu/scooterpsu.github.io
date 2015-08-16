@@ -200,7 +200,15 @@ button {
 .selected{
     background-color: #1a3d5a;
 }
+.selected .controllerButton{
+    opacity: 1;
+}
+.refresh .controllerButton{
+    opacity: 1;
+}
+
 .controllerButton{
+    opacity: 0;
     margin-left: 5;
     height: 25;
     width: 25;

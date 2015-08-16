@@ -5,6 +5,7 @@ var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
 var selectedID = 0;
+var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
 var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
@@ -178,6 +179,7 @@ gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
     setTimeout(function() {
         $('.controllerButton').show();
         $("#serverList tbody tr").eq(selectedID).addClass('selected');
+        controllersOn = true;
     }, "400");
 });
 
@@ -192,47 +194,49 @@ gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
 });
 
 gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
-   //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
-   if (e.control == "FACE_1"){
-        //console.log("A");
-        if($('.sweet-overlay').is(':visible')){
-            swal.close();   
-        } else {
-            joinServer(selectedID);
-        }
-   }else if (e.control == "FACE_2"){
-        //console.log("B");
-        swal.close();
-   }else if (e.control == "FACE_3"){
-        //console.log("X");
-        updateServerInfo(selectedID);
-   }else if (e.control == "FACE_4"){
-       //console.log("Y");
-       window.location.reload();
-   }else if (e.control == "DPAD_UP"){
-        //console.log("UP");
-        if (selectedID > 0) {
-            selectedID = selectedID - 1;
-            updateSelection();
-        }
-   }else if (e.control == "DPAD_DOWN"){
-        //console.log("DOWN");
-        if (selectedID < ($("#serverList tbody tr").length - 1)){
-            selectedID = selectedID + 1;
-            updateSelection();
-        }
-     }else if (e.control == "DPAD_LEFT"){
-        console.log("LEFT");
-   }else if (e.control == "DPAD_RIGHT"){
-        //console.log("RIGHT");
-   }else if (e.control == "SELECT_BACK"){
-        //console.log("BACK");
-        setTimeout(function() {
-            dewRcon.send('Game.SetMenuEnabled 0');
-        }, "400");
-   }else if (e.control == "START_FORWARD"){
-        //console.log("START");
-   }  
+    if (controllersOn){
+        //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
+        if (e.control == "FACE_1"){
+            //console.log("A");
+            if($('.sweet-overlay').is(':visible')){
+                swal.close();   
+            } else {
+                joinServer(selectedID);
+            }
+        }else if (e.control == "FACE_2"){
+            //console.log("B");
+            swal.close();
+        }else if (e.control == "FACE_3"){
+            //console.log("X");
+            updateServerInfo(selectedID);
+        }else if (e.control == "FACE_4"){
+           //console.log("Y");
+           window.location.reload();
+        }else if (e.control == "DPAD_UP"){
+            //console.log("UP");
+            if (selectedID > 0) {
+                selectedID = selectedID - 1;
+                updateSelection();
+            }
+        }else if (e.control == "DPAD_DOWN"){
+            //console.log("DOWN");
+            if (selectedID < ($("#serverList tbody tr").length - 1)){
+                selectedID = selectedID + 1;
+                updateSelection();
+            }
+         }else if (e.control == "DPAD_LEFT"){
+            console.log("LEFT");
+        }else if (e.control == "DPAD_RIGHT"){
+            //console.log("RIGHT");
+        }else if (e.control == "SELECT_BACK"){
+            //console.log("BACK");
+            setTimeout(function() {
+                dewRcon.send('Game.SetMenuEnabled 0');
+            }, "400");
+        }else if (e.control == "START_FORWARD"){
+            //console.log("START");
+        }  
+    }
 });
 
 gamepad.bind(Gamepad.Event.BUTTON_UP, function(e) {
