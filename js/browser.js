@@ -80,7 +80,7 @@ function joinServer(i) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(serverList.servers[i].passworded){
-                    swal({   
+                    sweetAlert({   
                     title: "Private Server",   
                     text: "Please enter password",   
                     type: "input", 
@@ -107,20 +107,20 @@ function joinServer(i) {
                             }, "400");
                         }
                     });
-                }else {
+                } else {
                     dewRcon.send('connect ' + serverList.servers[i].serverIP);
                     closeBrowser();
                 }
             } else {
-                swal({
-                title:"Error", 
-                text:"Host running different version.<br /> Unable to join!", 
-                type:"error",
-                html: true
-                });
+                    sweetAlert({
+                    title:"Error", 
+                    text:"Host running different version.<br /> Unable to join!", 
+                    type:"error",
+                    html: true
+                    });
             }
         } else {
-            sweetAlert("Error", "Game is full or unavailable!", "error");
+                sweetAlert("Error", "Game is full or unavailable!", "error");
         }
     } else {
         sweetAlert("Error", "dewRcon is not connected!", "error");        
@@ -161,6 +161,7 @@ Handlebars.registerHelper('eachByScore', function(context,options){
 
 function connectionTrigger(){
     document.getElementById('setBrowser').style.display = "block";
+    $('.closeButton').show();
     gameVersion();
 }
 
@@ -221,13 +222,13 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
         }else if (e.control == "DPAD_UP"){
             //console.log("UP");
             if (selectedID > 0) {
-                selectedID = selectedID - 1;
+                selectedID--;
                 updateSelection();
             }
         }else if (e.control == "DPAD_DOWN"){
             //console.log("DOWN");
             if (selectedID < ($("#serverList tbody tr").length - 1)){
-                selectedID = selectedID + 1;
+                selectedID++;
                 updateSelection();
             }
          }else if (e.control == "DPAD_LEFT"){
