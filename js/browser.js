@@ -162,10 +162,6 @@ Handlebars.registerHelper('eachByScore', function(context,options){
 function connectionTrigger(){
     document.getElementById('setBrowser').style.display = "block";
     $('.closeButton').show();
-    gameVersion();
-}
-
-function gameVersion(){
     dewRcon.send('game.version');
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
