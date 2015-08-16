@@ -11,7 +11,9 @@
 		<script src="js/mousetrap.min.js"></script>
         <script src="js/sweetalert.min.js"></script> 
         <link rel="stylesheet" type="text/css" href="css/sweetalert.css">       
-        <link rel="stylesheet" type="text/css" href="css/eldorito.css">  
+        <link rel="stylesheet" type="text/css" href="css/eldorito.css">
+        <!-- Gamepad support -->
+        <script src="js/gamepad.js"></script>
 		<!-- Eldorito Stuff -->
 		<script src="js/dewRcon.js"></script>
 		<!-- Custom stuff -->
@@ -30,7 +32,7 @@
 
 	<div id="container">
 		<div id="serverList" class="serverlist"></div>
-		<button class="refresh" onclick="window.location.reload();">Refresh</button>
+		<button class="refresh" onclick="window.location.reload();">Refresh<img class="controllerButton" src="images/XboxOne_Y.png"></button>
 		<div id="serverInfo" class="serverinfo"></div>
 		<div id="connectionStatus"></div>
         <div id="setBrowser"><a href="#" onclick="setBrowser();">Set to In-Game Browser</a>
@@ -120,6 +122,7 @@
 	<script id="server-list-template" type="text/x-handlebars-template">
 		<table class="serverTable table table-hover" id="serverlist{{ i }}">
 			<thead class="tableHeader">
+                <!--<th>ID</th>-->
 				<th><center>IP (Click to Join)</center></th>
 				<th>Details</th>
 				<th><center>Host Location</center></th>
@@ -128,8 +131,9 @@
 			<tbody>
 				{{#each servers}}
 					<tr>
-						<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a></td>
-						<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b></a></td>
+                        <!--<td>{{i}}</td>-->
+						<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a><img class="controllerButton" src="images/XboxOne_A.png"></td>
+						<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b><img class="controllerButton" src="images/XboxOne_X.png"></a></td>
 						<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
 						<td class="col-md-6 text-muted" id="serverid{{ i }}">Loading...</td>
 					</tr>
@@ -158,6 +162,5 @@
 		ga('create', 'UA-65637766-1', 'auto');
 		ga('send', 'pageview');
 	</script>
-	
 </body>
 </html>
