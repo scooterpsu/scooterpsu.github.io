@@ -92,24 +92,24 @@ function joinServer(i) {
                     function(inputValue){
                         if (inputValue === false) return false;      
                         if (inputValue === "") {     
-                         swal.showInputError("Passwords are never blank");     
+                         sweetAlert.showInputError("Passwords are never blank");     
                          return false   
                         } else {
                             dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
                             setTimeout(function() {
                                 if (dewRcon.lastMessage === "Incorrect password specified.") {
-                                    swal.showInputError(dewRcon.lastMessage);
+                                    sweetAlert.showInputError(dewRcon.lastMessage);
                                     return false
                                 }else {
-                                    swal.close();
-                                    dewRcon.send('Game.SetMenuEnabled 0');
+                                    sweetAlert.close();
+                                    closeBrowser();
                                 }
                             }, "400");
                         }
                     });
                 }else {
                     dewRcon.send('connect ' + serverList.servers[i].serverIP);
-                    dewRcon.send('Game.SetMenuEnabled 0');
+                    closeBrowser();
                 }
             } else {
                 swal({
@@ -135,12 +135,14 @@ Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 });
 
 Mousetrap.bind('f11', function() {
+    closeBrowser();
+});
 
+function closeBrowser() {
     setTimeout(function() {
         dewRcon.send('Game.SetMenuEnabled 0');
     }, "400");
-    
-});
+}
 
 function setBrowser() {
     dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
@@ -159,6 +161,10 @@ Handlebars.registerHelper('eachByScore', function(context,options){
 
 function connectionTrigger(){
     document.getElementById('setBrowser').style.display = "block";
+    gameVersion();
+}
+
+function gameVersion(){
     dewRcon.send('game.version');
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
@@ -166,10 +172,6 @@ function connectionTrigger(){
             console.log(gameVersion);
         }
     }, "400");
-}
-
-function showPrivate() {
-    sweetAlert("Error", "Yes, Private.", "error");  
 }
 
 var gamepad = new Gamepad();
@@ -199,18 +201,16 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
         if (e.control == "FACE_1"){
             //console.log("A");
             if($('.sweet-overlay').is(':visible')){
-                swal.close();   
+                sweetAlert.close();   
             } else {
                 joinServer(selectedID);
             }
         }else if (e.control == "FACE_2"){
             //console.log("B");
             if($('.sweet-overlay').is(':visible')){
-                swal.close();   
+                sweetAlert.close();   
             } else {
-                setTimeout(function() {
-                    dewRcon.send('Game.SetMenuEnabled 0');
-                }, "400");
+                closeBrowser();
             }
         }else if (e.control == "FACE_3"){
             //console.log("X");
@@ -231,14 +231,12 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
                 updateSelection();
             }
          }else if (e.control == "DPAD_LEFT"){
-            console.log("LEFT");
+            //console.log("LEFT");
         }else if (e.control == "DPAD_RIGHT"){
             //console.log("RIGHT");
         }else if (e.control == "SELECT_BACK"){
             //console.log("BACK");
-            setTimeout(function() {
-                dewRcon.send('Game.SetMenuEnabled 0');
-            }, "400");
+            closeBrowser();
         }else if (e.control == "START_FORWARD"){
             //console.log("START");
         }  

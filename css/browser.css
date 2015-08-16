@@ -52,13 +52,6 @@
 .gamecard h3{
     margin:0;
 }
-.gamecard a{
-    color: #a94442 !important;
-    text-decoration: none;
-}
-.gamecard a:focus {
-    outline:0;
-}
 .serverTable{
     opacity: 0.8;
     padding: 5;
