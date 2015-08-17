@@ -1,46 +1,60 @@
 //Coded by DARKC0DE
-var dewRcon;
-var dewRconConnected = false;
-jQuery(function() {
-    StartRconConnection();
-    if (!dewRconConnected) {
-        setTimeout(StartRconConnection, 2000);
-    }
-});
+dewRcon = "";
+dewRconConnected = false;
+//snacking = 0;
+
 StartRconConnection = function() {
     dewRcon = new dewRconHelper();
     dewRcon.dewWebSocket.onopen = function() {
-        //When we are connected do something
-        jQuery("#connectionStatus").text('Connected!');
-        //myCodeMirror.replaceRange('Connected to Eldewrito!', CodeMirror.Pos(myCodeMirror.lastLine()));
+        //DisplayNotification("Connected to Eldewrito!");
         dewRconConnected = true;
-        connectionTrigger(); //my addition
+        //Session.set('dewRconConnected', true);
+        LoadDewStuff();
     };
     dewRcon.dewWebSocket.onerror = function() {
-        //Something bad happened
-        jQuery("#connectionStatus").text('Not connected. Is the game running?!');
         dewRconConnected = false;
-        StartRconConnection();
+        //Session.set('dewRconConnected', false);
+        if (!dewRconConnected) {
+            if (DewRconPortIndex == 0) {
+                DewRconPortIndex = 1;
+                //snacking = 1;
+                StartRconConnection();
+            } else {
+                DewRconPortIndex = 0;
+                //snacking = 0;
+                setTimeout(StartRconConnection, 1000);
+            }/*
+            if (!snacking) {
+                DisplayNotification("Not connected to game. Is Eldewrito running?!");
+                snacking = 1;
+                setTimeout(function() {
+                    snacking = 0;
+                }, 9000);
+            }*/
+        }
+        console.error("WebSocket could not be established, check game is running");
     };
     dewRcon.dewWebSocket.onmessage = function(message) {
+        dewRcon._cbFunction(message.data);
         dewRcon.lastMessage = message.data;
-        console.log(dewRcon.lastMessage);
-        console.log(dewRcon.lastCommand);
-        //We can display the latest messages from dew using the code below
-        console.log(message.data);
-
-        //myCodeMirror.replaceRange(message.data, CodeMirror.Pos(myCodeMirror.lastLine()));
     };
 }
+var DewRconPortIndex = 0;
+var DewRconPorts = [11764, 11776];
 dewRconHelper = function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    this.dewWebSocket = new WebSocket('ws://127.0.0.1:11776', 'dew-rcon');
+    this.dewWebSocket = new WebSocket('ws://127.0.0.1:' + DewRconPorts[DewRconPortIndex], 'dew-rcon');
     this.lastMessage = "";
     this.lastCommand = "";
     this.open = false;
-
-    this.send = function(command) {
-        this.dewWebSocket.send(command);
-        this.lastCommand = command;
+    this._cbFunction = {};
+    this.send = function(command, cb) {
+        try {
+            this._cbFunction = cb;
+            this.dewWebSocket.send(command);
+            this.lastCommand = command;
+        } catch (e) {
+            //DisplayNotification("Unable to communicate with Eldewrito. Is the game running?", true);
+        }
     }
 }
