@@ -4,9 +4,11 @@ servers: []
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
+var selectedID = 0;
+var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
-var jqhxr = $.getJSON( "http://eldewrito-masterserver-scooterpsu.c9.io/list", null)
+var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
         .done(function( data ) {
                 for(var i = 0; i < data.result.servers.length; i++)
                 {
@@ -78,7 +80,7 @@ function joinServer(i) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(serverList.servers[i].passworded){
-                    swal({   
+                    sweetAlert({   
                     title: "Private Server",   
                     text: "Please enter password",   
                     type: "input", 
@@ -90,35 +92,35 @@ function joinServer(i) {
                     function(inputValue){
                         if (inputValue === false) return false;      
                         if (inputValue === "") {     
-                         swal.showInputError("Passwords are never blank");     
+                         sweetAlert.showInputError("Passwords are never blank");     
                          return false   
                         } else {
                             dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
                             setTimeout(function() {
                                 if (dewRcon.lastMessage === "Incorrect password specified.") {
-                                    swal.showInputError(dewRcon.lastMessage);
+                                    sweetAlert.showInputError(dewRcon.lastMessage);
                                     return false
                                 }else {
-                                    swal.close();
-                                    dewRcon.send('Game.SetMenuEnabled 0');
+                                    sweetAlert.close();
+                                    closeBrowser();
                                 }
                             }, "400");
                         }
                     });
-                }else {
+                } else {
                     dewRcon.send('connect ' + serverList.servers[i].serverIP);
-                    dewRcon.send('Game.SetMenuEnabled 0');
+                    closeBrowser();
                 }
             } else {
-                swal({
-                title:"Error", 
-                text:"Host running different version.<br /> Unable to join!", 
-                type:"error",
-                html: true
-                });
+                    sweetAlert({
+                    title:"Error", 
+                    text:"Host running different version.<br /> Unable to join!", 
+                    type:"error",
+                    html: true
+                    });
             }
         } else {
-            sweetAlert("Error", "Game is full or unavailable!", "error");
+                sweetAlert("Error", "Game is full or unavailable!", "error");
         }
     } else {
         sweetAlert("Error", "dewRcon is not connected!", "error");        
@@ -133,12 +135,14 @@ Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 });
 
 Mousetrap.bind('f11', function() {
-
-    setTimeout(function() {
-        dewRcon.send('Game.SetMenuEnabled 0');
-    }, "400");
-    
+    closeBrowser();
 });
+
+function closeBrowser() {
+    setTimeout(function() {
+        dewRcon.send('Menu.Show');
+    }, "400");
+}
 
 function setBrowser() {
     dewRcon.send('Game.MenuURL http://scooterpsu.github.io/');
@@ -157,6 +161,7 @@ Handlebars.registerHelper('eachByScore', function(context,options){
 
 function connectionTrigger(){
     document.getElementById('setBrowser').style.display = "block";
+    $('.closeButton').show();
     dewRcon.send('game.version');
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
@@ -166,6 +171,92 @@ function connectionTrigger(){
     }, "400");
 }
 
-function showPrivate() {
-    sweetAlert("Error", "Yes, Private.", "error");  
+var gamepad = new Gamepad();
+
+gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
+    console.log("a new gamepad connected");
+    setTimeout(function() {
+        $('.controllerButton').show();
+        $("#serverList tbody tr").eq(selectedID).addClass('selected');
+        controllersOn = true;
+    }, "400");
+});
+
+gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
+    console.log("gamepad disconnected");
+    $('.controllerButton').hide();
+    $('#serverList tbody tr.selected').removeClass('selected');
+});
+
+gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
+    //console.log("an unsupported gamepad connected (add new mapping)");
+});
+
+gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
+    if (controllersOn){
+        //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
+        if (e.control == "FACE_1"){
+            //console.log("A");
+            if($('.sweet-overlay').is(':visible')){
+                sweetAlert.close();   
+            } else {
+                joinServer(selectedID);
+            }
+        }else if (e.control == "FACE_2"){
+            //console.log("B");
+            if($('.sweet-overlay').is(':visible')){
+                sweetAlert.close();   
+            } else {
+                closeBrowser();
+            }
+        }else if (e.control == "FACE_3"){
+            //console.log("X");
+            updateServerInfo(selectedID);
+        }else if (e.control == "FACE_4"){
+           //console.log("Y");
+           window.location.reload();
+        }else if (e.control == "DPAD_UP"){
+            //console.log("UP");
+            if (selectedID > 0) {
+                selectedID--;
+                updateSelection();
+            }
+        }else if (e.control == "DPAD_DOWN"){
+            //console.log("DOWN");
+            if (selectedID < ($("#serverList tbody tr").length - 1)){
+                selectedID++;
+                updateSelection();
+            }
+         }else if (e.control == "DPAD_LEFT"){
+            //console.log("LEFT");
+        }else if (e.control == "DPAD_RIGHT"){
+            //console.log("RIGHT");
+        }else if (e.control == "SELECT_BACK"){
+            //console.log("BACK");
+            closeBrowser();
+        }else if (e.control == "START_FORWARD"){
+            //console.log("START");
+        }  
+    }
+});
+
+gamepad.bind(Gamepad.Event.BUTTON_UP, function(e) {
+    //console.log(e.control + " of gamepad " + e.gamepad + " released");
+});
+
+gamepad.bind(Gamepad.Event.AXIS_CHANGED, function(e) {
+    //console.log(e.axis + " changed to value " + e.value + " for gamepad " + e.gamepad);
+});
+
+gamepad.bind(Gamepad.Event.TICK, function(gamepads) {
+    //console.log("gamepads were updated (around 60 times a second)");
+});
+
+if (!gamepad.init()) {
+    // Your browser does not support gamepads, get the latest Google Chrome or Firefox
 }
+
+function updateSelection() {
+    $('#serverList tbody tr.selected').removeClass('selected');
+    $("#serverList tbody tr").eq(selectedID).addClass('selected');
+}    

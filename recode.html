@@ -11,11 +11,13 @@
 		<script src="js/mousetrap.min.js"></script>
         <script src="js/sweetalert.min.js"></script> 
         <link rel="stylesheet" type="text/css" href="css/sweetalert.css">       
-        <link rel="stylesheet" type="text/css" href="css/eldorito.css">  
+        <link rel="stylesheet" type="text/css" href="css/eldorito.css">
+        <!-- Gamepad support -->
+        <script src="js/gamepad.js"></script>
 		<!-- Eldorito Stuff -->
-		<script src="js/dewRcon2.js"></script>
+		<script src="js/dewRcon.DR.js"></script>
 		<!-- Custom stuff -->
-		<script src="js/browser2.js"></script>
+		<script src="js/browser.DR.js"></script>
 		<link rel="stylesheet" href="css/browser.css">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -25,16 +27,17 @@
 	<img src="images/hanger.png" id="bg">
 	<div id="overlay"></div>
 	<img src="images/eldorito.png" id="logo">
-	<h2 class="browserTitle"><b>Eldorito Server Browser</b></h2>
+	<h3 class="browserTitle"><b>Eldorito Server Browser</b></h3>
 	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
 
 	<div id="container">
 		<div id="serverList" class="serverlist"></div>
-		<button class="refresh" onclick="window.location.reload();">Refresh</button>
+		<button class="refresh" onclick="window.location.reload();">Refresh<img class="controllerButton" src="images/XboxOne_Y.png"></button>
 		<div id="serverInfo" class="serverinfo"></div>
+        <button class="closeButton" onclick="closeBrowser();">Close<img class="controllerButton" src="images/XboxOne_B.png"></button>
 		<div id="connectionStatus"></div>
         <div id="setBrowser"><a href="#" onclick="setBrowser();">Set to In-Game Browser</a>
-	</div>
+    </div>
 
 	<script id="server-panel-template" type="text/x-handlebars-template">
 		<div class="gameCard">
@@ -60,7 +63,7 @@
                 </li>
                 </ul>
                 {{#if passworded}}
-                    <h3><b><center><div class="text-danger"><a href="#" onClick="showPrivate()">[PRIVATE]</a></div></center></b></h3>
+                    <h3><b><center><div class="text-danger">[PRIVATE]</div></center></b></h3>
                 {{else}}
                     <table class="statBreakdown">
                         <thead class="tableHeader">
@@ -120,6 +123,7 @@
 	<script id="server-list-template" type="text/x-handlebars-template">
 		<table class="serverTable table table-hover" id="serverlist{{ i }}">
 			<thead class="tableHeader">
+                <!--<th>ID</th>-->
 				<th><center>IP (Click to Join)</center></th>
 				<th>Details</th>
 				<th><center>Host Location</center></th>
@@ -128,8 +132,9 @@
 			<tbody>
 				{{#each servers}}
 					<tr>
-						<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a></td>
-						<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b></a></td>
+                        <!--<td>{{i}}</td>-->
+						<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a><img class="controllerButton" src="images/XboxOne_A.png"></td>
+						<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b><img class="controllerButton" src="images/XboxOne_X.png"></a></td>
 						<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
 						<td class="col-md-6 text-muted" id="serverid{{ i }}">Loading...</td>
 					</tr>
@@ -158,6 +163,5 @@
 		ga('create', 'UA-65637766-1', 'auto');
 		ga('send', 'pageview');
 	</script>
-	
 </body>
 </html>
