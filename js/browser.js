@@ -205,11 +205,7 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             }
         }else if (e.control == "FACE_2"){
             //console.log("B");
-            if($('.sweet-overlay').is(':visible')){
-                sweetAlert.close();   
-            } else {
-                closeBrowser();
-            }
+            sweetAlert.close();   
         }else if (e.control == "FACE_3"){
             //console.log("X");
             updateServerInfo(selectedID);
