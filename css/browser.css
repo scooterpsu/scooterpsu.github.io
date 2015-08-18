@@ -18,13 +18,14 @@
     left: 8px;
     right: 0px;
     width: 84%;
+    word-wrap: break-word;
 }
 #serverinfo {
     position: absolute;
     top: 15px;
     bottom: 0;
     right: 15;
-    width: 27%;
+    width: 26.5%;
 }
 .gameCard{
     opacity: 0.8;
@@ -50,6 +51,7 @@
 }
 .gamecard h3{
     margin:0;
+    word-wrap: break-word;
 }
 .serverTable{
     opacity: 0.8;

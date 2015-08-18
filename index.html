@@ -126,17 +126,17 @@
                 <!--<th>ID</th>-->
 				<th><center>IP (Click to Join)</center></th>
 				<th>Details</th>
-				<th><center>Host Location</center></th>
+				<th><center>Location</center></th>
 				<th><center>Game Data</center></th>
 			</thead>
 			<tbody>
 				{{#each servers}}
 					<tr>
                         <!--<td>{{i}}</td>-->
-						<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a><img class="controllerButton" src="images/XboxOne_A.png"></td>
+						<td class="col-md-1"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a><img class="controllerButton" src="images/XboxOne_A.png"></td>
 						<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b><img class="controllerButton" src="images/XboxOne_X.png"></a></td>
-						<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
-						<td class="col-md-6 text-muted" id="serverid{{ i }}">Loading...</td>
+						<td class="col-md-1"><span id="region{{ i }}">Loading...</span></td>
+						<td class="col-md-5 text-muted" id="serverid{{ i }}">Loading...</td>
 					</tr>
 				{{/each}}
 			</tbody>
