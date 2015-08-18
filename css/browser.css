@@ -3,8 +3,10 @@
     /* Preserve aspect ratio */
     min-width: 100%;
     min-height: 100%;
-    top: -8.25%;
-    left: -8.25%;
+    @media (max-width: 1919px) { 
+        top: -8.25%;
+        left: -8.25%;
+    }
 }
 #overlay {
     position: fixed;
@@ -12,7 +14,6 @@
     height: 100%;
     background-color: rgba(37,37,37,0.6);
     border: 5px solid #1a3d5a;
-    border-right: 0;
 }
 #serverlist {
     position: absolute;
@@ -169,24 +170,26 @@ a {
 img{
     -webkit-user-drag: none;
 }
-::-webkit-scrollbar {
-    width: 18px;
-    height: 10px;
-}
-::-webkit-scrollbar-button:start:decrement,
-::-webkit-scrollbar-button:end:increment  {
-    display: none;
-}
-::-webkit-scrollbar-track-piece  {
-    background-color: rgba(37,37,37,0.8);
-    border: 5px solid #1a3d5a;
-    border-left: 0;
-} 
-::-webkit-scrollbar-thumb:vertical {
-    background: grey url(../images/scrollbar_thumb_bg.png) no-repeat center;
-}
-html {
-    overflow-y:scroll;
+@media (max-width: 1900px) { 
+    ::-webkit-scrollbar {
+        width: 18px;
+        height: 10px;
+    }
+    ::-webkit-scrollbar-button:start:decrement,
+    ::-webkit-scrollbar-button:end:increment  {
+        display: none;
+    }
+    ::-webkit-scrollbar-track-piece  {
+        background-color: rgba(37,37,37,0.8);
+        border: 5px solid #1a3d5a;
+        border-left: 0;
+    } 
+    ::-webkit-scrollbar-thumb:vertical {
+        background: grey url(../images/scrollbar_thumb_bg.png) no-repeat center;
+    }
+    html {
+        overflow-y:scroll;
+    }
 }
 button {
     cursor: url('../images/cursor.png'), default;
