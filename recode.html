@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Eldorito Server Browser</title>
+		<!-- Includes -->
+		<script src="js/handlebars.min.js"></script>
+		<script src="js/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/mousetrap.min.js"></script>
+        <script src="js/sweetalert.min.js"></script> 
+        <link rel="stylesheet" type="text/css" href="css/sweetalert.css">       
+        <link rel="stylesheet" type="text/css" href="css/eldorito.css">
+        <!-- Gamepad support -->
+        <script src="js/gamepad.js"></script>
+		<!-- Eldorito Stuff -->
+		<script src="js/dewRcon.DR.js"></script>
+		<!-- Custom stuff -->
+		<script src="js/browser.DR.js"></script>
+		<link rel="stylesheet" href="css/browser.css">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+	<img src="images/hanger.png" id="bg">
+	<div id="overlay"></div>
+	<img src="images/eldorito.png" id="logo">
+	<h3 class="browserTitle"><b>Eldorito Server Browser</b></h3>
+	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
+
+	<div id="container">
+		<div id="serverList" class="serverlist"></div>
+		<button class="refresh" onclick="window.location.reload();">Refresh<img class="controllerButton" src="images/XboxOne_Y.png"></button>
+		<div id="serverInfo" class="serverinfo"></div>
+        <button class="closeButton" onclick="closeBrowser();">Close<img class="controllerButton" src="images/XboxOne_B.png"></button>
+		<div id="connectionStatus"></div>
+        <div id="setBrowser"><a href="#" onclick="setBrowser();">Set to In-Game Browser</a>
+    </div>
+
+	<script id="server-panel-template" type="text/x-handlebars-template">
+		<div class="gameCard">
+			{{#if  map}}
+                <img src="images/maps/{{mapFile}}.png" alt="{{map}}" class="img-responsive">
+                <h3>{{ name }} </h3>
+                <ul>
+                {{#if variant}}
+                    <li><b class="heading">Gametype: </b>{{ variant }} <br /> <b class="heading">Map: </b>{{ map }}</li>
+                {{else}}
+                    <li><b class="heading">Map: </b>{{ map }}</li>
+                {{/if}}
+                </ul>
+                <h3>{{hostPlayer}}</h3>
+                <ul>
+                <li><b class="heading">Players:</b> {{ numPlayers }}/{{ maxPlayers }}</li>
+                <li><b class="heading">Status:</b>
+                    {{#ifCond status "InGame"}}
+                        In Progress
+                    {{else}}
+                        In Lobby
+                    {{/ifCond}}            
+                </li>
+                </ul>
+                {{#if passworded}}
+                    <h3><b><center><div class="text-danger">[PRIVATE]</div></center></b></h3>
+                {{else}}
+                    <table class="statBreakdown">
+                        <thead class="tableHeader">
+                            <th><center>Name</center></th>
+                            <th><center>Score</center></th>
+                            <th><center>K</center></th>
+                            <th><center>D</center></th>
+                            <th><center>A</center></th>
+                        </thead>
+                        <tbody>
+                            {{#eachByScore players}}
+                            {{#if name}}
+                            <tr>
+                                <td class="col-xs-1 statLines">{{this.name}}</td>
+                                <td class="statLines"><center>{{score}}</center></td>
+                                <td class="statLines"><center>{{kills}}</center></td>
+                                <td class="statLines"><center>{{deaths}}</center></td>
+                                <td class="statLines"><center>{{assists}}</center></td>
+                            </tr>
+                            {{/if}}
+                            {{/eachByScore}}
+                        </tbody>
+                    </table>
+                {{/if}}
+                <h5 class="version text-muted"><b>Version: </b>{{eldewritoVersion}}</h5>
+            {{else}}
+				<center><img src="images/error.png" alt="Error" class="img-responsive"></center>
+				<h3 class="text-danger"><center>Game Data Unavailable</center><h3>
+			{{/if}}
+		</div>
+	</script>
+
+	<script id="server-listinfo-template" type="text/x-handlebars-template">
+		{{#if passworded}}
+			<div class="row text-danger">
+		{{else}}
+			{{#ifCond status "InGame"}}
+			<div class="row text-warning">
+			{{else}}
+			<div class="row text-success">
+			{{/ifCond}}
+		{{/if}}
+		<div class="col-sm-5"><b>{{ hostPlayer }}</b> <br /> {{ name }}</div>
+			<div class="col-xs-3">{{ numPlayers }} <b>/</b> {{ maxPlayers }}
+			{{#if passworded}}
+				<br /><b>[PRIVATE]</b>
+			{{/if}}
+			</div>
+		{{#if variant}}
+			<div class="col-sm-3"><b>{{ variant }}</b> <br /> <em>{{ map }}</em></div>
+		{{else}}
+			<div class="col-sm-3"><b>{{ map }}</b></div>
+		{{/if}}
+		</div>        
+	</script>
+
+	<script id="server-list-template" type="text/x-handlebars-template">
+		<table class="serverTable table table-hover" id="serverlist{{ i }}">
+			<thead class="tableHeader">
+                <!--<th>ID</th>-->
+				<th><center>IP (Click to Join)</center></th>
+				<th>Details</th>
+				<th><center>Host Location</center></th>
+				<th><center>Game Data</center></th>
+			</thead>
+			<tbody>
+				{{#each servers}}
+					<tr>
+                        <!--<td>{{i}}</td>-->
+						<td class="col-md-2"><a href="#" onclick="joinServer({{i}});">{{ serverIP }}</a><img class="controllerButton" src="images/XboxOne_A.png"></td>
+						<td class="col-xs-1"><a href="#" onclick="updateServerInfo({{i}});"><b>View</b><img class="controllerButton" src="images/XboxOne_X.png"></a></td>
+						<td class="col-md-2"><span id="region{{ i }}">Loading...</span></td>
+						<td class="col-md-6 text-muted" id="serverid{{ i }}">Loading...</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</script>
+
+	<script>   
+		var serverTemplateSource = $("#server-panel-template").html();
+		var serverTemplate = Handlebars.compile(serverTemplateSource);
+		
+		var serverListTemplateSource = $("#server-list-template").html();
+		var serverListTemplate = Handlebars.compile(serverListTemplateSource);
+		
+		var serverListInfoTemplateSource = $("#server-listinfo-template").html();
+		var serverListInfoTemplate = Handlebars.compile(serverListInfoTemplateSource);
+	 </script>
+
+	 <script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-65637766-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</body>
+</html>

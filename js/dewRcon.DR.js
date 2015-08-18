@@ -34,7 +34,7 @@ StartRconConnection = function() {
 }
 dewRconHelper = function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    this.dewWebSocket = new WebSocket('ws://127.0.0.1:11776', 'dew-rcon');
+    this.dewWebSocket = new WebSocket('ws://127.0.0.1:11764', 'dew-rcon');
     this.lastMessage = "";
     this.lastCommand = "";
     this.open = false;
