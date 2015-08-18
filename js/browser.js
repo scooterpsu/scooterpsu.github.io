@@ -141,6 +141,7 @@ Mousetrap.bind('f11', function() {
 function closeBrowser() {
     setTimeout(function() {
         dewRcon.send('Game.SetMenuEnabled 0');
+        dewRcon.send('menu.show');
     }, "400");
 }
 
