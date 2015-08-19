@@ -12,21 +12,21 @@ $(document).ready(function() {
     var t = $('#serverTable').DataTable( {
         columns: [
             { title: "Name" },
-            { title: "Port" },
+            { title: "Port", visible: false },
             { title: "Host" },
 			{ title: "Map" },
             { title: "Map File" },
             { title: "Variant" },
             { title: "Variant Type" },
+            { title: "Status" },
 			{ title: "Num Players" },
             { title: "Max Players" },
-            { title: "Variant" },
-			{ title: "xkid" },
-			{ title: "xnid" },
+			{ title: "xkid", visible: false },
+			{ title: "xnid", visible: false },
 			{ title: "Players Array", visible: false},
-			{ title: "Build" },
+			{ title: "Build", visible: false },
 			{ title: "Version" },
-			{ title: "ID" },
+			{ title: "ID", visible: false },
 			{ title: "IP" }
         ]
     } );
