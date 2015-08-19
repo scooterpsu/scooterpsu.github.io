@@ -11,8 +11,7 @@ var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|2
 $(document).ready(function() {
     var t = $('#serverTable').DataTable( {
         columns: [
-            { title: "Name" },
-            { title: "Port", visible: false },
+            { title: "Name"},
             { title: "Host" },
 			{ title: "Map" },
             { title: "Map File" },
@@ -21,17 +20,12 @@ $(document).ready(function() {
             { title: "Status" },
 			{ title: "Num Players" },
             { title: "Max Players" },
-			{ title: "xkid", visible: false },
-			{ title: "xnid", visible: false },
-			{ title: "Players Array", visible: false},
-			{ title: "Build", visible: false },
 			{ title: "Version" },
-			{ title: "ID", visible: false },
+            { title: "Private" },
+			{ title: "ID"},
 			{ title: "IP" }
         ]
     } );
-
-
 var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
         .done(function( data ) {
                 for(var i = 0; i < data.result.servers.length; i++)
@@ -54,6 +48,13 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
 									*/
                                     var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                                     .done(function(serverInfo) {
+                                            if (serverInfo.hasOwnProperty("passworded")){
+                                                //console.log("passworded");
+                                                delete serverInfo.passworded;
+                                                serverInfo["passworded"] = true;
+                                            } else {
+                                                serverInfo["passworded"] = false;
+                                            }
                                             serverInfo["serverId"] = i;
                                             serverInfo["serverIP"] = serverIP;
 											if (serverInfo.maxPlayers <= 16 ) {
@@ -74,7 +75,13 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
 														}
 													}
 													console.log(serverInfo);
-													var array = $.map(serverInfo, function(value, index) {
+                                                    var serverInfo2 = serverInfo;
+                                                    delete serverInfo2.port;
+                                                    delete serverInfo2.players;
+                                                    delete serverInfo2.xnkid;
+                                                    delete serverInfo2.xnaddr;
+                                                    delete serverInfo2.gameVersion;
+													var array = $.map(serverInfo2, function(value, index) {
 														return [value];
 													});
 													t.row.add(array).draw();
