@@ -8,6 +8,29 @@ var gameVersion = 0;
 var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+$(document).ready(function() {
+    var t = $('#serverTable').DataTable( {
+        columns: [
+            { title: "Name" },
+            { title: "Port" },
+            { title: "Host" },
+			{ title: "Map" },
+            { title: "Map File" },
+            { title: "Variant" },
+            { title: "Variant Type" },
+			{ title: "Num Players" },
+            { title: "Max Players" },
+            { title: "Variant" },
+			{ title: "xkid" },
+			{ title: "xnid" },
+			{ title: "Players Array", visible: false},
+			{ title: "Build" },
+			{ title: "Version" },
+			{ title: "ID" },
+			{ title: "IP" }
+        ]
+    } );
+
 
 var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
         .done(function( data ) {
@@ -54,7 +77,7 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
 													var array = $.map(serverInfo, function(value, index) {
 														return [value];
 													});
-													serverTable.push(array);
+													t.row.add(array).draw();
 												} else {
 													console.log(serverInfo.serverIP + " is glitched");
 												}
@@ -66,9 +89,7 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
                         } else {
                             console.log("Invalid IP, skipping.");
                         }
-                }
-                //var listHtml = serverListTemplate(serverList);
-                //$("#serverList").html(listHtml);
+                }  
 
         for (var j = 0; j < serverList.servers.length; j++)
         {
@@ -76,29 +97,6 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
         }
     }
 );
-
-
-$(document).ready(function() {
-    $('#serverTable').DataTable( {
-        data: serverTable,
-        columns: [
-            { title: "Name" },
-            { title: "Port" },
-            { title: "Host" },
-			{ title: "Map" },
-            { title: "Map File" },
-            { title: "Variant" },
-            { title: "Variant Type" },
-			{ title: "Num Players" },
-            { title: "Max Players" },
-            { title: "Variant" },
-			{ title: "xkid" },
-			{ title: "xnid" },
-			{ title: "Players Array" },
-			{ title: "Build" },
-			{ title: "Version" },
-			{ title: "ID" },
-			{ title: "IP" }
-        ]
-    } );
 } );
+
+
