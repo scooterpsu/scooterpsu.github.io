@@ -73,9 +73,13 @@
     top: 55;
     padding-top: 0;
 }
-#serverTable tbody tr.odd td, tbody tr.even td{
+#serverTable tbody tr td{
     background-color: black;
     color: white;
+}
+#serverTable tbody tr.selected td{
+    background-color: white;
+    color: black;
 }
 #serverTable thead tr th.sorting_asc, thead tr th.sorting_desc {
     background-color: black;
@@ -86,7 +90,8 @@
     color: white;
 }
 #serverTable tbody tr:hover td{
-    background-color: #1a3d5a;
+    background-color: white;
+	color: black;
 }
 
 #serverTable_filter{
@@ -143,10 +148,6 @@
 }
 img{
     -webkit-user-drag: none;
-}
-.selected{
-    background-color: blue;
-    color: red;
 }
 .selected .controllerButton{
     opacity: 1;
