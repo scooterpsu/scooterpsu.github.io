@@ -9,9 +9,14 @@ var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
-var jgfjkds = $('#serverTable').on('click', 'tr', function() {
-    alert($(this).find('td:first').text());
-});
+$('#serverTable').on('click', 'tr:not(:first)', function() {
+    console.log("ip: " + $(this).find('td:eq(0)').text());
+    console.log("numplayers: " + $(this).find('td:eq(8)').text());
+	console.log("maxplayers: " + $(this).find('td:eq(9)').text());
+	console.log("private: " + $(this).find('td:eq(10)').text());
+	console.log("version: " + $(this).find('td:eq(11)').text());
+	joinServer($(this).find('td:eq(0)').text(), $(this).find('td:eq(8)').text(), $(this).find('td:eq(9)').text(), $(this).find('td:eq(10)').text(), $(this).find('td:eq(11)').text());
+});  
 var table = $('#serverTable').DataTable( {
     "autoWidth": true,
     columns: [
@@ -111,3 +116,66 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
     }
 );
 } );
+
+function joinServer(ip, numplayers, maxplayers, passworded, version) {
+    if(dewRconConnected){
+        if(numplayers < maxplayers) {
+            if(version === gameVersion) {
+                if(passworded){
+                    sweetAlert({   
+                    title: "Private Server",   
+                    text: "Please enter password",   
+                    type: "input", 
+                    inputType: "password",
+                    showCancelButton: true,   
+                    closeOnConfirm: false,
+                    inputPlaceholder: "Password goes here" 
+                    }, 
+                    function(inputValue){
+                        if (inputValue === false) return false;      
+                        if (inputValue === "") {     
+                         sweetAlert.showInputError("Passwords are never blank");     
+                         return false   
+                        } else {
+                            dewRcon.send('connect ' + ip + ' ' + inputValue);
+                            setTimeout(function() {
+                                if (dewRcon.lastMessage === "Incorrect password specified.") {
+                                    sweetAlert.showInputError(dewRcon.lastMessage);
+                                    return false
+                                }else {
+                                    sweetAlert.close();
+                                    closeBrowser();
+                                }
+                            }, "400");
+                        }
+                    });
+                } else {
+                    dewRcon.send('connect ' + ip);
+                    closeBrowser();
+                }
+            } else {
+                    sweetAlert({
+                    title:"Error", 
+                    text:"Host running different version.<br /> Unable to join!", 
+                    type:"error",
+                    html: true
+                    });
+            }
+        } else {
+                sweetAlert("Error", "Game is full or unavailable!", "error");
+        }
+    } else {
+        sweetAlert("Error", "dewRcon is not connected!", "error");        
+    }
+}
+
+function closeBrowser() {
+    setTimeout(function() {
+        dewRcon.send('menu.show');
+        dewRcon.send('Game.SetMenuEnabled 0');
+    }, "1000");
+}
+
+Mousetrap.bind('f11', function() {
+    closeBrowser();
+});
