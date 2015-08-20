@@ -192,7 +192,34 @@ function closeBrowser() {
     }, "1000");
 }
 
+function updateSelection(){
+	$('#serverTable tr.selected').removeClass('selected');
+	$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
+}
+	
 Mousetrap.bind('f11', function() {
     closeBrowser();
 });
 
+Mousetrap.bind('space', function() {
+	updateSelection();
+});
+
+Mousetrap.bind('up', function() {
+	if (selectedID > 1) {
+		selectedID--;
+		updateSelection();
+	}
+});
+
+Mousetrap.bind('down', function() {
+	if (selectedID < ($("#serverTable tbody tr").length)){
+		selectedID++;
+		updateSelection();
+	}
+});
+
+Mousetrap.bind('enter', function() {
+	//console.log($("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text());
+	joinServer($("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(8)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(9)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(10)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(11)').text());
+});
