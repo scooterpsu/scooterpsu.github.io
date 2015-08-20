@@ -243,6 +243,7 @@ Mousetrap.bind('f11', function() {
 });
 
 //Testing gamepad functions without a gamepad...
+/*
 Mousetrap.bind('space', function() {
 	//mimic gamepad connection
 	$('.controllerButton').show();
@@ -296,7 +297,7 @@ Mousetrap.bind('y', function() {
 		window.location.reload(); 	
 	}
 });
-
+*/
 /* Formatting function for row details - modify as you need */
 function format ( d ) {
 	//console.log(d[d.length - 1]);
@@ -320,4 +321,74 @@ function format ( d ) {
             '<td>'+serverList.servers[d[1]].variant+'</td>'+
         '</tr>'+
     '</table></div>';
+}
+
+var gamepad = new Gamepad();
+
+gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
+    console.log("a new gamepad connected");
+    setTimeout(function() {
+        $('.controllerButton').show();
+        updateSelection();
+        controllersOn = true;
+    }, "400");
+});
+
+gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
+    console.log("gamepad disconnected");
+    $('.controllerButton').hide();
+    $('#serverTable tr.selected').removeClass('selected');
+    controllersOn = false;
+});
+
+gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
+    //console.log("an unsupported gamepad connected (add new mapping)");
+});
+
+gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
+    if (controllersOn){
+        //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
+        if (e.control == "FACE_1"){
+            //console.log("A");
+            if($('.sweet-overlay').is(':visible')){
+                sweetAlert.close();   
+            } else {
+                joinSelected();
+            }
+        }else if (e.control == "FACE_2"){
+            //console.log("B");
+            sweetAlert.close();   
+        }else if (e.control == "FACE_3"){
+            //console.log("X");
+            $('#serverTable tr.selected td.details-control').trigger( "click" );
+        }else if (e.control == "FACE_4"){
+           //console.log("Y");
+           window.location.reload();
+        }else if (e.control == "DPAD_UP"){
+            //console.log("UP");
+            if (selectedID > 1) {
+                selectedID--;
+                updateSelection();
+            }
+        }else if (e.control == "DPAD_DOWN"){
+            //console.log("DOWN");
+            if (selectedID < ($("#serverTable tbody tr").length)){
+                selectedID++;
+                updateSelection();
+            }
+         }else if (e.control == "DPAD_LEFT"){
+            //console.log("LEFT");
+        }else if (e.control == "DPAD_RIGHT"){
+            //console.log("RIGHT");
+        }else if (e.control == "SELECT_BACK"){
+            //console.log("BACK");
+            closeBrowser();
+        }else if (e.control == "START_FORWARD"){
+            //console.log("START");
+        }  
+    }
+});
+
+if (!gamepad.init()) {
+    // Your browser does not support gamepads, get the latest Google Chrome or Firefox
 }
