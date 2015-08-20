@@ -284,13 +284,18 @@ Mousetrap.bind('b', function() {
 		sweetAlert.close();   	
 	}
 });
+Mousetrap.bind('x', function() {
+	if (controllersOn){
+		//X button
+        $('#serverTable tr.selected td.details-control').trigger( "click" );
+	}
+});
 Mousetrap.bind('y', function() {
 	if (controllersOn){
 		//Y button
 		window.location.reload(); 	
 	}
 });
-
 
 /* Formatting function for row details - modify as you need */
 function format ( d ) {
