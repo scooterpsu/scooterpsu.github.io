@@ -1,0 +1,166 @@
+#bg {
+    position: fixed;
+    /* Preserve aspect ratio */
+    min-width: 100%;
+    min-height: 100%;
+}
+.browserTitle{
+    color: white;
+    opacity: 0.8;
+    position: absolute;
+    top: -5px;
+    left: 80;
+}
+#logo{
+    position: absolute;
+    top: 8;
+    left: 15;
+    opacity: 0.8;
+    width: 50px;
+    height: 43px;
+}
+.refresh {
+    opacity: 0.8;
+    position: absolute;
+    top: 14;
+    left: 375;
+    color: white;
+    font-weight: bold;
+    background-color: black;
+    width: 115px;
+    height: 30px;
+    border-style: solid;
+    border: 1px solid white;
+	z-index:1000;
+}
+.refresh:hover{
+    background-color: #1a3d5a;
+}
+.serverStats {
+    color: white;
+	font-weight: bold;
+    opacity: 0.8;
+    position: absolute;
+    top: 10;
+    left: 515;
+}
+.closeButton {
+    opacity: 0.8;
+    position: absolute;
+    top: 16;
+    right: 10;
+    color: white;
+    font-weight: bold;
+    background-color: black;
+    width: 95px;
+    height: 30px;
+    border-style: solid;
+    border: 1px solid white;
+    display: none;
+}
+.closeButton:hover{
+    background-color: #1a3d5a;
+}
+.sorting{
+    background-color: #1a3d5a;
+    color: white;
+}
+.sorting:hover{
+    background-color: #1a3d5a;
+}
+#serverTable_wrapper{
+    opacity: 0.8;
+    top: 55;
+    padding-top: 0;
+}
+#serverTable tbody tr.odd td, tbody tr.even td{
+    background-color: black;
+    color: white;
+}
+#serverTable tbody tr.odd td:hover, tbody tr.even td:hover{
+    background-color: #1a3d5a;
+}
+#serverTable thead tr th.sorting_asc, thead tr th.sorting_desc {
+    background-color: black;
+    color: white;
+}
+#serverTable tbody tr td.sorting_1{
+    background-color: #1a3d5a;
+    color: white;
+}
+#serverTable_filter{
+    opacity: 0.8;
+    position: fixed;
+    top: 15;
+    right: 5;
+}
+#serverTable_filter label{
+    color: white;
+}
+#serverTable_filter input{
+    color: black;
+}
+#serverTable_length{
+    opacity: 0.8;
+    position: fixed;
+    bottom: 10; 
+    left: 5;    
+}
+#serverTable_length label{
+    color: white;
+}
+#serverTable_length select{
+    color: black;
+}
+#serverTable_paginate{
+    opacity: 0.8;
+    position: fixed;
+    bottom: 10; 
+    right: 5;
+}
+#serverTable_paginate label{
+    color: white;
+}
+#connectionStatus{
+	opacity: 0.8;
+	position:fixed; bottom:0; right: 0;
+	z-index:1000;
+	padding-right: 8;
+	padding-bottom: 7;
+    color: white;
+}
+#setBrowser{
+	opacity: 0.8;
+	position:fixed; bottom:17; right: 0;
+	z-index:1000;
+	padding-right: 8;
+	padding-bottom: 6;
+    display: none;
+}
+#setBrowser:a{
+    font-weight: normal;
+}
+img{
+    -webkit-user-drag: none;
+}
+.selected{
+    background-color: #1a3d5a;
+    color: white;
+}
+.selected .controllerButton{
+    opacity: 1;
+}
+.refresh .controllerButton{
+    opacity: 1;
+}
+.closeButton .controllerButton{
+    opacity: 1;
+}
+.controllerButton{
+    opacity: 0;
+    margin-top: -3;
+    margin-left: 5;
+    height: 28;
+    width: 28;
+    display: none;
+}
