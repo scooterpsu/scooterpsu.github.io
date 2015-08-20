@@ -85,9 +85,10 @@
     background-color: #1a3d5a;
     color: white;
 }
-#serverTable tbody tr.odd td:hover, tbody tr.even td:hover{
+#serverTable tbody tr:hover td{
     background-color: #1a3d5a;
 }
+
 #serverTable_filter{
     opacity: 0.8;
     position: fixed;
