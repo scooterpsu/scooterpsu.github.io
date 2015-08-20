@@ -176,6 +176,8 @@ function joinServer(ip, numplayers, maxplayers, passworded, version) {
 }
 
 function connectionTrigger(){
+    $('.closeButton').show();
+	$('#serverTable_filter').css("right","125");
     dewRcon.send('game.version');
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
@@ -196,30 +198,61 @@ function updateSelection(){
 	$('#serverTable tr.selected').removeClass('selected');
 	$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
 }
+
+function joinSelected(){
+	joinServer($("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(8)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(9)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(10)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(11)').text());
+}
 	
 Mousetrap.bind('f11', function() {
     closeBrowser();
 });
 
+//Testing gamepad functions without a gamepad...
 Mousetrap.bind('space', function() {
+	//mimic gamepad connection
+	$('.controllerButton').show();
+	//$('.closeButton').show();
 	updateSelection();
+	controllersOn = true;
 });
-
 Mousetrap.bind('up', function() {
-	if (selectedID > 1) {
-		selectedID--;
-		updateSelection();
+	if (controllersOn){
+		if (selectedID > 1) {
+			selectedID--;
+			updateSelection();
+		}
 	}
 });
-
 Mousetrap.bind('down', function() {
-	if (selectedID < ($("#serverTable tbody tr").length)){
-		selectedID++;
-		updateSelection();
+	if (controllersOn){
+		if (selectedID < ($("#serverTable tbody tr").length)){
+			selectedID++;
+			updateSelection();
+		}
 	}
 });
-
-Mousetrap.bind('enter', function() {
-	//console.log($("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text());
-	joinServer($("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(8)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(9)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(10)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(11)').text());
+Mousetrap.bind('a', function() {
+	if (controllersOn){
+		//A button
+		if($('.sweet-overlay').is(':visible')){
+			sweetAlert.close();   
+		} else {
+			setTimeout(function() {
+				console.log("Joining " + $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text());
+				joinSelected();
+			}, "400");
+		}
+	}
+});
+Mousetrap.bind('b', function() {
+	if (controllersOn){
+		//B button
+		sweetAlert.close();   	
+	}
+});
+Mousetrap.bind('y', function() {
+	if (controllersOn){
+		//Y button
+		window.location.reload(); 	
+	}
 });

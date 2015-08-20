@@ -22,7 +22,7 @@
 .refresh {
     opacity: 0.8;
     position: absolute;
-    top: 14;
+    top: 13;
     left: 375;
     color: white;
     font-weight: bold;
@@ -47,7 +47,7 @@
 .closeButton {
     opacity: 0.8;
     position: absolute;
-    top: 16;
+    top: 13;
     right: 10;
     color: white;
     font-weight: bold;
@@ -98,7 +98,7 @@
     opacity: 0.8;
     position: fixed;
     top: 15;
-    right: 5;
+    right: 10;
 }
 #serverTable_filter label{
     color: white;
