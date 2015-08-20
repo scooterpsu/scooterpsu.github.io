@@ -233,9 +233,10 @@ function updateSelection(){
 }
 
 function joinSelected(){
-	var ip = $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(1)').text();
-	console.log(ip);
-	}
+	var row = $('#serverTable').dataTable().fnGetData(selectedID-1);
+	//console.log(row[1]);
+	joinServer(row[1]);
+}
 
 Mousetrap.bind('f11', function() {
     closeBrowser();
