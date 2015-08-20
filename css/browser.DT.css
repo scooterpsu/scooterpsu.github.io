@@ -82,8 +82,8 @@
     color: black;
 }
 #serverTable thead tr th.sorting_asc, thead tr th.sorting_desc {
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: black;
 }
 #serverTable tbody tr td.sorting_1{
     background-color: #1a3d5a;
