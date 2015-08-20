@@ -61,13 +61,7 @@
 .closeButton:hover{
     background-color: #1a3d5a;
 }
-.sorting{
-    background-color: #1a3d5a;
-    color: white;
-}
-.sorting:hover{
-    background-color: #1a3d5a;
-}
+
 #serverTable_wrapper{
     opacity: 0.8;
     top: 55;
@@ -86,16 +80,20 @@
     color: black;
 }
 #serverTable thead tr th.sorting:hover{
-    background-color: white;
-    color: black;
+    background-color: #1a3d5a;
+    color: white;
+}
+#serverTable thead tr th.sorting{
+    background-color: #545454;
+    color: white;
 }
 #serverTable tbody tr td.sorting_1{
     background-color: #1a3d5a;
     color: white;
 }
 #serverTable tbody tr:hover td{
-    background-color: white;
-	color: black;
+    background-color: #1a3d5a;
+	color: white;
 }
 
 #serverTable_filter{

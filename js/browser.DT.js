@@ -242,63 +242,6 @@ Mousetrap.bind('f11', function() {
     closeBrowser();
 });
 
-//Testing gamepad functions without a gamepad...
-/*
-Mousetrap.bind('space', function() {
-	//mimic gamepad connection
-	$('.controllerButton').show();
-	updateSelection();
-	controllersOn = true;
-});
-Mousetrap.bind('up', function() {
-	if (controllersOn){
-		if (selectedID > 1) {
-			selectedID--;
-			updateSelection();
-		}
-	}
-});
-Mousetrap.bind('down', function() {
-	if (controllersOn){
-		if (selectedID < ($("#serverTable tbody tr").length)){
-			selectedID++;
-			updateSelection();
-		}
-	}
-});
-Mousetrap.bind('a', function() {
-	if (controllersOn){
-		//A button
-		if($('.sweet-overlay').is(':visible')){
-			sweetAlert.close();   
-		} else {
-			setTimeout(function() {
-				//console.log("Joining " + $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text());
-				joinSelected();
-			}, "200");
-		}
-	}
-});
-Mousetrap.bind('b', function() {
-	if (controllersOn){
-		//B button
-		sweetAlert.close();   	
-	}
-});
-Mousetrap.bind('x', function() {
-	if (controllersOn){
-		//X button
-        $('#serverTable tr.selected td.details-control').trigger( "click" );
-	}
-});
-Mousetrap.bind('y', function() {
-	if (controllersOn){
-		//Y button
-		window.location.reload(); 	
-	}
-});
-*/
-/* Formatting function for row details - modify as you need */
 function format ( d ) {
 	//console.log(d[d.length - 1]);
     // `d` is the original data object for the row
@@ -376,7 +319,7 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
                 selectedID++;
                 updateSelection();
             }
-         }else if (e.control == "DPAD_LEFT"){
+        }else if (e.control == "DPAD_LEFT"){
             //console.log("LEFT");
         }else if (e.control == "DPAD_RIGHT"){
             //console.log("RIGHT");
@@ -385,7 +328,11 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             closeBrowser();
         }else if (e.control == "START_FORWARD"){
             //console.log("START");
-        }  
+        }else if (e.control == "RIGHT_TOP_SHOULDER"){
+            //console.log("RIGHT BUMPER");   
+        }else if (e.control == "LEFT_TOP_SHOULDER "){
+            //console.log("LEFT BUMPER");
+        }          
     }
 });
 
