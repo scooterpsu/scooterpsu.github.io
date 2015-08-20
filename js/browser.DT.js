@@ -169,6 +169,16 @@ function joinServer(ip, numplayers, maxplayers, passworded, version) {
     }
 }
 
+function connectionTrigger(){
+    dewRcon.send('game.version');
+    setTimeout(function() {
+        if (dewRcon.lastMessage.length > 0) {
+            gameVersion = dewRcon.lastMessage;
+            console.log(gameVersion);
+        }
+    }, "400");
+}
+
 function closeBrowser() {
     setTimeout(function() {
         dewRcon.send('menu.show');
