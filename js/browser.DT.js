@@ -6,10 +6,11 @@ var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
 var selectedID = 1;
+var selectedIndex = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
-$('#serverTable').on('click', 'tr:not(:first)', function() {
+$('#serverTable').on('click', 'tr:not(:first) td:not(".details-control") ', function() {
 	/*
     console.log("ip: " + $(this).find('td:eq(0)').text());
     console.log("numplayers: " + $(this).find('td:eq(8)').text());
@@ -17,7 +18,12 @@ $('#serverTable').on('click', 'tr:not(:first)', function() {
 	console.log("private: " + $(this).find('td:eq(10)').text());
 	console.log("version: " + $(this).find('td:eq(11)').text());
 	*/
-	joinServer($(this).find('td:eq(0)').text(), $(this).find('td:eq(8)').text(), $(this).find('td:eq(9)').text(), $(this).find('td:eq(10)').text(), $(this).find('td:eq(11)').text());
+	//joinServer($(this).find('td:eq(0)').text(), $(this).find('td:eq(8)').text(), $(this).find('td:eq(9)').text(), $(this).find('td:eq(10)').text(), $(this).find('td:eq(11)').text());
+	var tr = $(this).closest('tr');
+	var row = table.row( tr );
+	if (row.data()){
+		joinServer(row.data()[1]);
+	}
 	selectedID = jQuery(this).closest('tr').index();
 	selectedID++;
 	$('#serverTable tr.selected').removeClass('selected');
@@ -26,12 +32,18 @@ $('#serverTable').on('click', 'tr:not(:first)', function() {
 var table = $('#serverTable').DataTable( {
     "autoWidth": true,
     columns: [
-        { title: "ID", visible: false},
+		{
+			"className":      'details-control',
+			"orderable":      false,
+			"data":           null,
+			"defaultContent": ''
+		},
+		{ title: "ID", visible: false},
         { title: "IP" },
         { title: "Name"},
         { title: "Host" },
         { title: "Map" },
-        { title: "Map File"},
+        { title: "Map File", visible: false},
         { title: "Variant" },
         { title: "Variant Type" },
         { title: "Status" },
@@ -39,8 +51,25 @@ var table = $('#serverTable').DataTable( {
         { title: "Max Players" },
         { title: "Private" },
         { title: "Version"}
-    ]
+    ],
+	"order": [[ 0 ]]
 } );
+    // Add event listener for opening and closing details
+    $('#serverTable tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
 var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
         .done(function( data ) {
                 for(var i = 0; i < data.result.servers.length; i++)
@@ -87,7 +116,8 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
                                                         serverInfo["passworded"] = false;
                                                     };
 													table.row.add([
-                                                        serverInfo.serverId,
+														null,
+														serverInfo.serverId,
                                                         serverInfo.serverIP,
                                                         serverInfo.name,
                                                         serverInfo.hostPlayer,
@@ -123,11 +153,12 @@ var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
 );
 } );
 
-function joinServer(ip, numplayers, maxplayers, passworded, version) {
+function joinServer(i) {
+	console.log(serverList.servers[i].serverIP);
     if(dewRconConnected){
-        if(numplayers < maxplayers) {
-            if(version === gameVersion) {
-                if(passworded){
+        if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
+            if(serverList.servers[i].eldewritoVersion === gameVersion) {
+                if(serverList.servers[i].passworded){
                     sweetAlert({   
                     title: "Private Server",   
                     text: "Please enter password",   
@@ -143,7 +174,7 @@ function joinServer(ip, numplayers, maxplayers, passworded, version) {
                          sweetAlert.showInputError("Passwords are never blank");     
                          return false   
                         } else {
-                            dewRcon.send('connect ' + ip + ' ' + inputValue);
+                            dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
                             setTimeout(function() {
                                 if (dewRcon.lastMessage === "Incorrect password specified.") {
                                     sweetAlert.showInputError(dewRcon.lastMessage);
@@ -156,7 +187,7 @@ function joinServer(ip, numplayers, maxplayers, passworded, version) {
                         }
                     });
                 } else {
-                    dewRcon.send('connect ' + ip);
+                    dewRcon.send('connect ' + serverList.servers[i].serverIP);
                     closeBrowser();
                 }
             } else {
@@ -200,14 +231,16 @@ function updateSelection(){
 }
 
 function joinSelected(){
-	joinServer($("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(8)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(9)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(10)').text(), $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(11)').text());
-}
-	
+	var ip = $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(1)').text();
+	console.log(ip);
+	}
+
 Mousetrap.bind('f11', function() {
     closeBrowser();
 });
 
 //Testing gamepad functions without a gamepad...
+/*
 Mousetrap.bind('space', function() {
 	//mimic gamepad connection
 	$('.controllerButton').show();
@@ -238,9 +271,9 @@ Mousetrap.bind('a', function() {
 			sweetAlert.close();   
 		} else {
 			setTimeout(function() {
-				console.log("Joining " + $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text());
+				//console.log("Joining " + $("#serverTable tr:eq(" + selectedID + ")").find('td:eq(0)').text());
 				joinSelected();
-			}, "400");
+			}, "200");
 		}
 	}
 });
@@ -256,3 +289,29 @@ Mousetrap.bind('y', function() {
 		window.location.reload(); 	
 	}
 });
+*/
+
+/* Formatting function for row details - modify as you need */
+function format ( d ) {
+	//console.log(d[d.length - 1]);
+    // `d` is the original data object for the row
+    return '<div id="leftside"><img src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>'+
+		'<div id="rightside"><table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Name:</td>'+
+            '<td>'+serverList.servers[d[1]].name+'</td>'+
+        '</tr>'+
+		        '<tr>'+
+            '<td>Host:</td>'+
+            '<td>'+serverList.servers[d[1]].hostPlayer+'</td>'+
+        '</tr>'+
+		        '<tr>'+
+            '<td>Map:</td>'+
+            '<td>'+serverList.servers[d[1]].map+'</td>'+
+        '</tr>'+
+		        '<tr>'+
+            '<td>Variant:</td>'+
+            '<td>'+serverList.servers[d[1]].variant+'</td>'+
+        '</tr>'+
+    '</table></div>';
+}
