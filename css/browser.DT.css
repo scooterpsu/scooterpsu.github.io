@@ -183,6 +183,18 @@ tr.shown td.details-control {
 #leftside{
 float: left;
 }
+#center{
+float: left;
+margin-left: 10;
+margin-right: 10;
+}
 #rightside{
-
+float: left;
+}
+.statLines{
+ font-size: 10pt;   
+}
+.tableHeader{
+ font-size: 10pt;
+padding: 0; 
 }

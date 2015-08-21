@@ -126,8 +126,8 @@ $(document).ready(function() {
 															serverInfo.hostPlayer,
 															serverInfo.map,
 															serverInfo.mapFile,
-															serverInfo.variant,
-															serverInfo.variantType,
+															capitalizeFirstLetter(serverInfo.variant),
+															capitalizeFirstLetter(serverInfo.variantType),
 															serverInfo.status,
 															serverInfo.numPlayers,
 															serverInfo.maxPlayers,
@@ -316,30 +316,38 @@ if (!gamepad.init()) {
     // Your browser does not support gamepads, get the latest Google Chrome or Firefox
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function format ( d ) {
-	//console.log(d[d.length - 1]);
-    // `d` is the original data object for the row
-    return '<div id="leftside"><img src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>'+
-		'<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-            '<td>Name:</td>'+
-            '<td>'+serverList.servers[d[1]].name+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Host:</td>'+
-            '<td>'+serverList.servers[d[1]].hostPlayer+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Map:</td>'+
-            '<td>'+serverList.servers[d[1]].map+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Variant:</td>'+
-            '<td>'+serverList.servers[d[1]].variant+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Status:</td>'+
-            '<td>'+serverList.servers[d[1]].status+'</td>'+
-        '</tr>'+
-    '</table></div>';
+    var mapPic = '<div id="leftside"><img src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>';
+    if(!serverList.servers[d[1]].passworded){ 
+        var tableHead = '<div id="center"><table class="statBreakdown"><thead class="tableHeader">'+
+            '<th>Name</th>'+
+            '<th>Score</th>'+
+            '<th>K</th>'+
+            '<th>D</th>'+
+            '<th>A</th>'+
+            '</thead><tbody>';
+        var tableBody = "";
+        var playerNum = 0;
+            while (playerNum < serverList.servers[d[1]].players.length) {
+                if(serverList.servers[d[1]].players[playerNum].name){
+                    tableBody +=  '<tr>'+
+                        '<td class="statLines">'+serverList.servers[d[1]].players[playerNum].name+'</td>'+
+                        '<td class="statLines"><center>'+serverList.servers[d[1]].players[playerNum].score+'</center></td>'+
+                        '<td class="statLines"><center>'+serverList.servers[d[1]].players[playerNum].kills+'</center></td>'+
+                        '<td class="statLines"><center>'+serverList.servers[d[1]].players[playerNum].deaths+'</center></td>'+
+                        '<td class="statLines"><center>'+serverList.servers[d[1]].players[playerNum].assists+'</center></td>'+
+                    '</tr>'
+                }
+                playerNum++;
+            }
+        var tableButt = '</tbody></table></div>';
+        var output = mapPic+tableHead+tableBody+tableButt;
+    } else {
+        var output = mapPic;      
+    }         
+    return output;
 }
