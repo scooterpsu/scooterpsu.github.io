@@ -46,7 +46,7 @@ $(document).ready(function() {
 			{ title: "Map File", visible: false},
 			{ title: "Variant" },
 			{ title: "Variant Type" },
-			{ title: "Status" },
+			{ title: "Status", visible: false},
 			{ title: "Num Players" },
 			{ title: "Max Players" },
 			{ title: "Private" },
@@ -242,30 +242,6 @@ Mousetrap.bind('f11', function() {
     closeBrowser();
 });
 
-function format ( d ) {
-	//console.log(d[d.length - 1]);
-    // `d` is the original data object for the row
-    return '<div id="leftside"><img src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>'+
-		'<div id="rightside"><table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-            '<td>Name:</td>'+
-            '<td>'+serverList.servers[d[1]].name+'</td>'+
-        '</tr>'+
-		        '<tr>'+
-            '<td>Host:</td>'+
-            '<td>'+serverList.servers[d[1]].hostPlayer+'</td>'+
-        '</tr>'+
-		        '<tr>'+
-            '<td>Map:</td>'+
-            '<td>'+serverList.servers[d[1]].map+'</td>'+
-        '</tr>'+
-		        '<tr>'+
-            '<td>Variant:</td>'+
-            '<td>'+serverList.servers[d[1]].variant+'</td>'+
-        '</tr>'+
-    '</table></div>';
-}
-
 var gamepad = new Gamepad();
 
 gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
@@ -338,4 +314,32 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
 
 if (!gamepad.init()) {
     // Your browser does not support gamepads, get the latest Google Chrome or Firefox
+}
+
+function format ( d ) {
+	//console.log(d[d.length - 1]);
+    // `d` is the original data object for the row
+    return '<div id="leftside"><img src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>'+
+		'<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Name:</td>'+
+            '<td>'+serverList.servers[d[1]].name+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Host:</td>'+
+            '<td>'+serverList.servers[d[1]].hostPlayer+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Map:</td>'+
+            '<td>'+serverList.servers[d[1]].map+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Variant:</td>'+
+            '<td>'+serverList.servers[d[1]].variant+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Status:</td>'+
+            '<td>'+serverList.servers[d[1]].status+'</td>'+
+        '</tr>'+
+    '</table></div>';
 }

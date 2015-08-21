@@ -80,11 +80,11 @@
     color: black;
 }
 #serverTable thead tr th.sorting:hover{
-    background-color: #1a3d5a;
+    background-color: #545454;
     color: white;
 }
 #serverTable thead tr th.sorting{
-    background-color: #545454;
+    background-color: #1a3d5a;
     color: white;
 }
 #serverTable tbody tr td.sorting_1{
@@ -94,6 +94,7 @@
 #serverTable tbody tr:hover td{
     background-color: #1a3d5a;
 	color: white;
+    cursor: pointer;
 }
 
 #serverTable_filter{
