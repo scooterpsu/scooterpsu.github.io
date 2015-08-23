@@ -330,8 +330,8 @@ function format ( d ) {
             '<th>Score</th>'+
             '<th>K</th>'+
             '<th>D</th>'+
+            '<th>A</th>'+
             '<th>Ratio</th>'+
-            //'<th>A</th>'+
             '</thead><tbody>';
         var playerNum = 0;
             while (playerNum < serverList.servers[d[1]].players.length) {
@@ -340,15 +340,16 @@ function format ( d ) {
                 var ratio = 0;
                 if(playerList[playerNum].name){
                     if(playerList[playerNum].kills>0){
-                        ratio = (playerList[playerNum].kills/playerList[playerNum].deaths).toFixed(2);
+                        ratio = ((playerList[playerNum].kills+(playerList[playerNum].assists/3))/playerList[playerNum].deaths).toFixed(2);
                     }
                     output +=  '<tr>'+
                         '<td class="statLines">'+playerList[playerNum].name+'</td>'+
                         '<td class="statLines"><center>'+playerList[playerNum].score+'</center></td>'+
                         '<td class="statLines"><center>'+playerList[playerNum].kills+'</center></td>'+
                         '<td class="statLines"><center>'+playerList[playerNum].deaths+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
                         '<td class="statLines"><center>'+ratio+'</center></td>'+
-                        //'<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
+
                     '</tr>';
                 }
                 playerNum++;
