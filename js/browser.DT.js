@@ -356,7 +356,7 @@ function format ( d ) {
             }
         output += '</tbody></table></div>';  
     }   else {
-    output += "<h3>Private Game</h3>";
+    output += "<div id='center'><h3>Private Game</h3></div>";
     }
     return output;
 }
