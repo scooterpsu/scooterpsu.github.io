@@ -322,36 +322,41 @@ function capitalizeFirstLetter(string) {
 }
 
 function format ( d ) {
-    var mapPic = '<div id="leftside"><img src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>';
+    var output = "";
+    output += '<div id="leftside"><img src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>';
     if(!serverList.servers[d[1]].passworded){ 
-        var tableHead = '<div id="center"><table class="statBreakdown"><thead class="tableHeader">'+
+        output += '<div id="center"><table class="statBreakdown"><thead class="tableHeader">'+
             '<th>Name</th>'+
             '<th>Score</th>'+
             '<th>K</th>'+
             '<th>D</th>'+
-            '<th>A</th>'+
+            '<th>Ratio</th>'+
+            //'<th>A</th>'+
             '</thead><tbody>';
-        var tableBody = "";
         var playerNum = 0;
             while (playerNum < serverList.servers[d[1]].players.length) {
                 var playerList = serverList.servers[d[1]].players;
                 playerList = sortByKey(playerList, 'score');
+                var ratio = 0;
                 if(playerList[playerNum].name){
-                    tableBody +=  '<tr>'+
+                    if(playerList[playerNum].kills>0){
+                        ratio = (playerList[playerNum].kills/playerList[playerNum].deaths).toFixed(2);
+                    }
+                    output +=  '<tr>'+
                         '<td class="statLines">'+playerList[playerNum].name+'</td>'+
                         '<td class="statLines"><center>'+playerList[playerNum].score+'</center></td>'+
                         '<td class="statLines"><center>'+playerList[playerNum].kills+'</center></td>'+
                         '<td class="statLines"><center>'+playerList[playerNum].deaths+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
-                    '</tr>'
+                        '<td class="statLines"><center>'+ratio+'</center></td>'+
+                        //'<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
+                    '</tr>';
                 }
                 playerNum++;
             }
-        var tableButt = '</tbody></table></div>';
-        var output = mapPic+tableHead+tableBody+tableButt;
-    } else {
-        var output = mapPic;      
-    }         
+        output += '</tbody></table></div>';  
+    }   else {
+    output += "<h3>Private Game</h3>";
+    }
     return output;
 }
 
