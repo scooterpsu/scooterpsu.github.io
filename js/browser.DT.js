@@ -31,6 +31,7 @@ $(document).ready(function() {
 	});  
 	var table = $('#serverTable').DataTable( {
 		"autoWidth": true,
+        "iDisplayLength": 25,
 		columns: [
 			{
 				"className":      'details-control',
@@ -333,13 +334,15 @@ function format ( d ) {
         var tableBody = "";
         var playerNum = 0;
             while (playerNum < serverList.servers[d[1]].players.length) {
-                if(serverList.servers[d[1]].players[playerNum].name){
+                    var playerList = serverList.servers[d[1]].players;
+                    playerList = sortByKey(playerList, 'score');
+            if(playerList[playerNum].name){
                     tableBody +=  '<tr>'+
-                        '<td class="statLines">'+serverList.servers[d[1]].players[playerNum].name+'</td>'+
-                        '<td class="statLines"><center>'+serverList.servers[d[1]].players[playerNum].score+'</center></td>'+
-                        '<td class="statLines"><center>'+serverList.servers[d[1]].players[playerNum].kills+'</center></td>'+
-                        '<td class="statLines"><center>'+serverList.servers[d[1]].players[playerNum].deaths+'</center></td>'+
-                        '<td class="statLines"><center>'+serverList.servers[d[1]].players[playerNum].assists+'</center></td>'+
+                        '<td class="statLines">'+playerList[playerNum].name+'</td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].score+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].kills+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].deaths+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
                     '</tr>'
                 }
                 playerNum++;
@@ -350,4 +353,11 @@ function format ( d ) {
         var output = mapPic;      
     }         
     return output;
+}
+
+function sortByKey(array, key) {
+    return array.sort(function(b, a) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
 }
