@@ -334,9 +334,9 @@ function format ( d ) {
         var tableBody = "";
         var playerNum = 0;
             while (playerNum < serverList.servers[d[1]].players.length) {
-                    var playerList = serverList.servers[d[1]].players;
-                    playerList = sortByKey(playerList, 'score');
-            if(playerList[playerNum].name){
+                var playerList = serverList.servers[d[1]].players;
+                playerList = sortByKey(playerList, 'score');
+                if(playerList[playerNum].name){
                     tableBody +=  '<tr>'+
                         '<td class="statLines">'+playerList[playerNum].name+'</td>'+
                         '<td class="statLines"><center>'+playerList[playerNum].score+'</center></td>'+
