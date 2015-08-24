@@ -10,6 +10,27 @@ var selectedIndex = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
+    buildTable();
+
+// Add event listener for opening and closing details
+$('#serverTable tbody').on('click', 'td.details-control', function () {
+    var tr = $(this).closest('tr');
+    var row = $('#serverTable').DataTable().row( tr );
+
+    if ( row.child.isShown() ) {
+        // This row is already open - close it
+        row.child.hide();
+        tr.removeClass('shown');
+    }
+    else {
+        // Open this row
+        row.child( format(row.data()) ).show();
+        tr.addClass('shown');
+    }
+} );
+} );
+        
+function buildTable(){
 	$('#serverTable').on('click', 'tr:not(:first) td:not(".details-control") ', function() {
 		/*
 		console.log("ip: " + $(this).find('td:eq(0)').text());
@@ -30,6 +51,7 @@ $(document).ready(function() {
 		}
 	});  
 	var table = $('#serverTable').DataTable( {
+        destroy: true,
 		"autoWidth": true,
         "iDisplayLength": 25,
 		columns: [
@@ -58,22 +80,7 @@ $(document).ready(function() {
 			"emptyTable": "No servers found"
 		}
 	} );
-		// Add event listener for opening and closing details
-		$('#serverTable tbody').on('click', 'td.details-control', function () {
-			var tr = $(this).closest('tr');
-			var row = table.row( tr );
-	 
-			if ( row.child.isShown() ) {
-				// This row is already open - close it
-				row.child.hide();
-				tr.removeClass('shown');
-			}
-			else {
-				// Open this row
-				row.child( format(row.data()) ).show();
-				tr.addClass('shown');
-			}
-		} );
+
 	var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
 			.done(function( data ) {
 					for(var i = 0; i < data.result.servers.length; i++)
@@ -154,7 +161,7 @@ $(document).ready(function() {
 			}
 		}
 	);
-} );
+}
 
 function joinServer(i) {
 	//console.log(serverList.servers[i].serverIP);
@@ -370,4 +377,15 @@ function sortByKey(array, key) {
         var x = a[key]; var y = b[key];
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     });
+}
+
+function refreshTable(){
+    serverList.length = 0;
+    serverTable.length = 0;
+    serverCount = 0;
+    playerCount = 0;
+    $('.serverCount').html(serverCount + " servers");
+    $('.playerCount').html(playerCount + " players");
+    $('#serverTable').DataTable().clear(); 
+    buildTable();   
 }
