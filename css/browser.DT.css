@@ -187,14 +187,21 @@ tr.shown td.details-control {
     float: left;
     margin-left: 10;
     margin-right: 10;
+    padding-right: 17;
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 #rightside{
     float: left;
 }
 .statLines{
-    font-size: 10pt;   
+    font-size: 10pt;
 }
 .tableHeader{
     font-size: 10pt;
     padding: 0; 
+}
+#mapPic{
+    height: 150px;
 }

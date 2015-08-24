@@ -12,22 +12,22 @@ var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|2
 $(document).ready(function() {
     buildTable();
 
-// Add event listener for opening and closing details
-$('#serverTable tbody').on('click', 'td.details-control', function () {
-    var tr = $(this).closest('tr');
-    var row = $('#serverTable').DataTable().row( tr );
+    // Add event listener for opening and closing details
+    $('#serverTable tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = $('#serverTable').DataTable().row( tr );
 
-    if ( row.child.isShown() ) {
-        // This row is already open - close it
-        row.child.hide();
-        tr.removeClass('shown');
-    }
-    else {
-        // Open this row
-        row.child( format(row.data()) ).show();
-        tr.addClass('shown');
-    }
-} );
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
 } );
         
 function buildTable(){
@@ -48,7 +48,12 @@ function buildTable(){
 			selectedID++;
 			$('#serverTable tr.selected').removeClass('selected');
 			$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
-		}
+		} else {
+            var trChild = $(this).closest('tr').prev();
+            var rowChild = table.row(trChild);
+            rowChild.child.hide();
+            trChild.removeClass('shown');
+        }
 	});  
 	var table = $('#serverTable').DataTable( {
         destroy: true,
@@ -334,7 +339,7 @@ function capitalizeFirstLetter(string) {
 
 function format ( d ) {
     var output = "";
-    output += '<div id="leftside"><img src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>';
+    output += '<div id="leftside"><img id="mapPic" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"></div>';
     if(!serverList.servers[d[1]].passworded){ 
         output += '<div id="center"><table class="statBreakdown"><thead class="tableHeader">'+
             '<th>Name</th>'+
@@ -380,8 +385,10 @@ function sortByKey(array, key) {
 }
 
 function refreshTable(){
-    serverList.length = 0;
-    serverTable.length = 0;
+    serverList = {
+        servers: []
+    };
+    serverTable = [];
     serverCount = 0;
     playerCount = 0;
     $('.serverCount').html(serverCount + " servers");
