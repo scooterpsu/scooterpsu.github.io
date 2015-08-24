@@ -267,7 +267,7 @@ gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
 
 gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
     if (controllersOn){
-        //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
+        console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
         if (e.control == "FACE_1"){
             //console.log("A");
             if($('.sweet-overlay').is(':visible')){
@@ -309,6 +309,10 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             //console.log("RIGHT BUMPER");   
         }else if (e.control == "LEFT_TOP_SHOULDER "){
             //console.log("LEFT BUMPER");
+        }else if (e.control == "LEFT_STICK"){
+            //console.log("LEFT STICK");
+            //Because I use weird mapping.
+            $('#serverTable tr.selected td.details-control').trigger( "click" );
         }          
     }
 });
