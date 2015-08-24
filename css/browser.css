@@ -181,13 +181,14 @@ tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
 #leftside{
+    margin-left: 10;
     float: left;
     width: 40%;
 }
 #rightside{
     float: left;
     margin-left: 10;
-    height: 300px;
+    height: 325px;
     overflow-y: auto;
     overflow-x: hidden;
     width: 58%;
@@ -206,9 +207,13 @@ tr.shown td.details-control {
     width: 75%;
 }
 #gameName{
-    color: #545454;
     font-weight: bold;
 }
-#hostName{
-
+#gameStatus{
+    font-weight: bold;
+}
+#privateGame{
+    opacity: 0.9;
+    color: #843534;
+    font-weight: bold;
 }
