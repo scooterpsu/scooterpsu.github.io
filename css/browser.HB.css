@@ -1,0 +1,196 @@
+#bg {
+    position: fixed;
+    /* Preserve aspect ratio */
+    min-width: 100%;
+    min-height: 100%;
+}
+#overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(37,37,37,0.6);
+    border: 5px solid #1a3d5a;
+}
+#serverlist {
+    position: absolute;
+    top: 30px;
+    bottom: 0;
+    left: 8px;
+    right: 0px;
+    width: 84%;
+    word-wrap: break-word;
+}
+#serverinfo {
+    position: absolute;
+    top: 15px;
+    bottom: 0;
+    right: 15;
+    width: 26.5%;
+}
+.gameCard{
+    opacity: 0.8;
+    margin-top: 45px;
+    padding: 15;
+    margin-right: 0;
+    padding-bottom: 30;
+    color: white;
+    background-color: black;
+    border-style: solid;
+    border: 3px solid #1a3d5a;
+}
+.gameCard img{
+    padding-bottom: 10;
+    margin-left: auto;
+    margin-right: auto;
+}
+.gameCard ul{
+    list-style-type: none;
+    padding-left:0;
+    font-size: 1.17em;
+    margin: 0;
+}
+.gamecard h3{
+    margin:0;
+    word-wrap: break-word;
+}
+.serverTable{
+    opacity: 0.8;
+    padding: 5;
+    color: white;
+    background: black;
+}
+.browserTitle{
+    color: white;
+    opacity: 0.8;
+    position: absolute;
+    top: -2px;
+    left: 80;
+}
+#logo{
+    position: absolute;
+    top: 10;
+    left: 15;
+    opacity: 0.8;
+    width: 50px;
+    height: 43px;
+}
+.refresh {
+    opacity: 0.8;
+    position: absolute;
+    top: 16;
+    left: 375;
+    color: white;
+    font-weight: bold;
+    background-color: black;
+    width: 115px;
+    height: 30px;
+    border-style: solid;
+    border: 1px solid white;
+}
+.refresh:hover{
+    background-color: #1a3d5a;
+}
+.closeButton {
+    opacity: 0.8;
+    position: absolute;
+    top: 16;
+    right: 10;
+    color: white;
+    font-weight: bold;
+    background-color: black;
+    width: 95px;
+    height: 30px;
+    border-style: solid;
+    border: 1px solid white;
+    display: none;
+}
+.closeButton:hover{
+    background-color: #1a3d5a;
+}
+.serverStats {
+    color: white;
+	font-weight: bold;
+    opacity: 0.8;
+    position: absolute;
+    top: 12;
+    left: 515;
+}
+.statBreakdown{
+    margin-top: 10;
+    background: black;
+    color:white;
+}
+.statLines{
+    border-style: solid;
+    border-bottom: 0;
+    border-top: 1px solid white;
+    border-left: 0;
+    border-right: 0;
+}
+#connectionStatus{
+	opacity: 0.8;
+	position:fixed; bottom:0; right: 0;
+	z-index:1000;
+	padding-right: 8;
+	padding-bottom: 7;
+    color: white;
+}
+#setBrowser{
+	opacity: 0.8;
+	position:fixed; bottom:17; right: 0;
+	z-index:1000;
+	padding-right: 8;
+	padding-bottom: 6;
+    display: none;
+}
+#setBrowser:a{
+    font-weight: normal;
+}
+body{
+    cursor: url('../images/cursor.png'), default;
+}
+a {
+    color: white !important;
+    cursor: url('../images/cursor.png'), default;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #1a3d5a;
+}
+.tableHeader{
+    background-color: #1a3d5a;
+}
+.heading {
+    color: grey; 
+}
+.version {
+    float: right;
+}
+img{
+    -webkit-user-drag: none;
+}
+html {
+    overflow-y:scroll;
+}
+button {
+    cursor: url('../images/cursor.png'), default;
+}
+.selected{
+    background-color: #1a3d5a;
+}
+.selected .controllerButton{
+    opacity: 1;
+}
+.refresh .controllerButton{
+    opacity: 1;
+}
+.closeButton .controllerButton{
+    opacity: 1;
+}
+.controllerButton{
+    opacity: 0;
+    margin-top: -3;
+    margin-left: 5;
+    height: 28;
+    width: 28;
+    display: none;
+}
