@@ -68,6 +68,7 @@ function buildTable(){
 			},
 			{ title: "ID", visible: false},
 			{ title: "IP" },
+            { title: "Ping", visible: false},
 			{ title: "Name"},
 			{ title: "Host" },
 			{ title: "Map" },
@@ -135,6 +136,7 @@ function buildTable(){
 															null,
 															serverInfo.serverId,
 															serverInfo.serverIP,
+                                                            null,
 															serverInfo.name,
 															serverInfo.hostPlayer,
 															serverInfo.map,
@@ -230,7 +232,7 @@ function connectionTrigger(){
             gameVersion = dewRcon.lastMessage;
             console.log(gameVersion);
         }
-    }, "400");
+    }, "200");
 }
 
 function closeBrowser() {
@@ -270,8 +272,32 @@ function toggleDetails(){
             
 }
 
+function pingList(){ 
+        $('#serverTable').dataTable().api().column( 3 ).visible( true );
+    var rowNum = 0;
+    var rowData = "";
+    var ip = "";
+    var ping = "";
+    //loop here
+    //while(rowNum < $("#serverTable tbody tr").length){
+        rowData = $('#serverTable').dataTable().fnGetData(rowNum);
+        ip = rowData[2].split(":")[0];
+        //console.log(ip);
+        dewRcon.send('ping ' + ip);
+        if (dewRcon.lastMessage.length > 0) {
+            ping = dewRcon.lastMessage;
+            $('#serverTable').dataTable().fnUpdate(ping, rowNum, 3);     
+        }
+        //row++
+    //}
+}
+
 Mousetrap.bind('f11', function() {
     closeBrowser();
+});
+
+Mousetrap.bind('space', function() {
+    pingList();
 });
 
 var gamepad = new Gamepad();
