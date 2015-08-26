@@ -278,17 +278,20 @@ function pingList(){
     var rowData = "";
     var ip = "";
     var ping = "";
-    //loop here
     while(rowNum <= $("#serverTable tbody tr").length){
         rowData = $('#serverTable').dataTable().fnGetData(rowNum);
         ip = rowData[2].split(":")[0];
         //console.log(ip);
-        dewRcon.send('ping ' + ip);
-        if (dewRcon.lastMessage.length > 0 && dewRcon.lastMessage.contains("PONG "+ip)) {
-            ping = dewRcon.lastMessage.split(" ")[3];
-        } else {
-            ping = "?";
-        }
+		if(dewRconConnected){
+			dewRcon.send('ping ' + ip);
+			if (dewRcon.lastMessage.length > 0) {
+				ping = dewRcon.lastMessage.split(" ")[3];
+			} else {
+				ping = "?";
+			}
+		} else {
+			ping = "?";
+		}
         $('#serverTable').dataTable().fnUpdate(ping, rowNum, 3);  
         rowNum++;
     }
