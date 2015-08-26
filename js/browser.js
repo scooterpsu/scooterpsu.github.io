@@ -230,7 +230,7 @@ function connectionTrigger(){
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
             gameVersion = dewRcon.lastMessage;
-            console.log(gameVersion);
+            //console.log(gameVersion);
         }
     }, "200");
 }
@@ -273,23 +273,25 @@ function toggleDetails(){
 }
 
 function pingList(){ 
-        $('#serverTable').dataTable().api().column( 3 ).visible( true );
+    $('#serverTable').dataTable().api().column( 3 ).visible( true );
     var rowNum = 0;
     var rowData = "";
     var ip = "";
     var ping = "";
     //loop here
-    //while(rowNum < $("#serverTable tbody tr").length){
+    while(rowNum <= $("#serverTable tbody tr").length){
         rowData = $('#serverTable').dataTable().fnGetData(rowNum);
         ip = rowData[2].split(":")[0];
         //console.log(ip);
         dewRcon.send('ping ' + ip);
-        if (dewRcon.lastMessage.length > 0) {
-            ping = dewRcon.lastMessage;
-            $('#serverTable').dataTable().fnUpdate(ping, rowNum, 3);     
+        if (dewRcon.lastMessage.length > 0 && dewRcon.lastMessage.contains("PONG "+ip)) {
+            ping = dewRcon.lastMessage.split(" ")[3];
+        } else {
+            ping = "?";
         }
-        //row++
-    //}
+        $('#serverTable').dataTable().fnUpdate(ping, rowNum, 3);  
+        rowNum++;
+    }
 }
 
 Mousetrap.bind('f11', function() {
@@ -444,3 +446,7 @@ function refreshTable(){
     $('#serverTable').DataTable().clear(); 
     buildTable();   
 }
+
+String.prototype.contains = function(it) {
+	return this.indexOf(it) != -1;
+};
