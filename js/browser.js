@@ -2,6 +2,7 @@ var serverList = {
 servers: []
 }; 
 var serverTable = [];
+var pingTable = [];
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
@@ -273,28 +274,49 @@ function toggleDetails(){
 }
 
 function pingList(){ 
+    //fakePongs();
+    pingTable.length = 0;
     $('#serverTable').dataTable().api().column( 3 ).visible( true );
     var rowNum = 0;
     var rowData = "";
     var ip = "";
     var ping = "";
-    while(rowNum <= $("#serverTable tbody tr").length){
+    while(rowNum <= $("#serverTable tbody tr").length-1){
         rowData = $('#serverTable').dataTable().fnGetData(rowNum);
-        ip = rowData[2].split(":")[0];
-        //console.log(ip);
+        if (rowData[2].contains(":")){
+            ip = rowData[2].split(":")[0];
+            //console.log(ip);
+        }
 		if(dewRconConnected){
 			dewRcon.send('ping ' + ip);
 			if (dewRcon.lastMessage.length > 0) {
-				ping = dewRcon.lastMessage.split(" ")[3];
-			} else {
-				ping = "?";
-			}
-		} else {
-			ping = "?";
+				storePong(dewRcon.lastMessage);
+			} 
 		}
-        $('#serverTable').dataTable().fnUpdate(ping, rowNum, 3);  
+        $('#serverTable').dataTable().fnUpdate(lookupPing(ip), rowNum, 3);  
         rowNum++;
     }
+    console.log(pingTable);
+}
+
+function storePong(reply){
+    if (reply.contains("PONG")){
+        pingTable.push(reply.split(" "));
+    }
+}
+
+function lookupPing(ip) {
+    for (var i=0; i<pingTable.length; i++)
+        if (pingTable[i][1] === ip && pingTable[i].length > 3)                    
+            return pingTable[i][3];
+    return "?";
+}
+
+function fakePongs(){
+    storePong("PONG 100.12.94.137 5849583405 14ms");
+    storePong("PONG 184.153.214.35 5849583405 26ms");
+    storePong("PONG 69.244.172.233 5849583405 4ms");
+    storePong("PONG 206.188.91.153 5849503859 20ms");
 }
 
 Mousetrap.bind('f11', function() {
