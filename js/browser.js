@@ -3,6 +3,7 @@ servers: []
 }; 
 var serverTable = [];
 var pingTable = [];
+
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
@@ -69,7 +70,7 @@ function buildTable(){
 			},
 			{ title: "ID", visible: false},
 			{ title: "IP" },
-            { title: "Ping", visible: false},
+            { title: "Location", visible: false},
 			{ title: "Name"},
 			{ title: "Host" },
 			{ title: "Map" },
@@ -129,7 +130,7 @@ function buildTable(){
 																	//console.log(playerCount);
 															}
 														}
-														console.log(serverInfo);
+														//console.log(serverInfo);
 														if(!serverInfo.hasOwnProperty("passworded")){
 															serverInfo["passworded"] = false;
 														};
@@ -137,7 +138,7 @@ function buildTable(){
 															null,
 															serverInfo.serverId,
 															serverInfo.serverIP,
-                                                            null,
+                                                            "Loading...",
 															serverInfo.name,
 															serverInfo.hostPlayer,
 															serverInfo.map,
@@ -151,6 +152,7 @@ function buildTable(){
 															serverInfo.eldewritoVersion
 														]).draw();
 														table.columns.adjust().draw();
+                                                        getLocations();
 													} else {
 														console.log(serverInfo.serverIP + " is glitched");
 													}
@@ -273,6 +275,31 @@ function toggleDetails(){
             
 }
 
+function getLocations(){ 
+    $('#serverTable').dataTable().api().column( 3 ).visible( true );
+    var rowNum = 0;
+    var rowData = "";
+    var ip = "";
+    var location = "";
+    while(rowNum <= $("#serverTable tbody tr").length-1){
+        rowData = $('#serverTable').dataTable().fnGetData(rowNum, 2);
+        if (rowData.contains(":")){
+            ip = rowData.split(":")[0];
+        }
+        var thisRow = rowNum;
+        var geoInfo = $.getJSON("http://www.telize.com/geoip/" + ip, null )
+        .done(function(data) {
+            if ($('#serverTable').dataTable().fnGetData(thisRow, 3)=="Loading..."){
+                location += "[" + data.continent_code + "] "
+                if(data.city){location += data.city + ", "} //since sometimes data.city is missing
+                location += data.country_code;
+                $('#serverTable').dataTable().fnUpdate(location, thisRow, 3, false, true);
+            }            
+        });
+        rowNum++;
+    }
+}
+
 function pingList(){ 
     //fakePongs();
     pingTable.length = 0;
@@ -282,10 +309,9 @@ function pingList(){
     var ip = "";
     var ping = "";
     while(rowNum <= $("#serverTable tbody tr").length-1){
-        rowData = $('#serverTable').dataTable().fnGetData(rowNum);
-        if (rowData[2].contains(":")){
-            ip = rowData[2].split(":")[0];
-            //console.log(ip);
+        rowData = $('#serverTable').dataTable().fnGetData(rowNum, 2);
+        if (rowData.contains(":")){
+            ip = rowData.split(":")[0];
         }
 		if(dewRconConnected){
 			dewRcon.send('ping ' + ip);
