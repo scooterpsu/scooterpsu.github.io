@@ -299,6 +299,7 @@ function getLocation(ip, rowNum){
     });
 }
 
+/*
 function pingList(){ 
     //fakePongs();
     pingTable.length = 0;
@@ -343,6 +344,7 @@ function fakePongs(){
     storePong("PONG 69.244.172.233 5849583405 4ms");
     storePong("PONG 206.188.91.153 5849503859 20ms");
 }
+*/
 
 Mousetrap.bind('f11', function() {
     closeBrowser();
