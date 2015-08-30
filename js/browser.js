@@ -348,10 +348,6 @@ Mousetrap.bind('f11', function() {
     closeBrowser();
 });
 
-Mousetrap.bind('space', function() {
-    pingList();
-});
-
 var gamepad = new Gamepad();
 
 gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
