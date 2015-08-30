@@ -59,29 +59,28 @@ function buildTable(){
 	});  
 	var table = $('#serverTable').DataTable( {
         destroy: true,
-		"autoWidth": true,
         "iDisplayLength": 25,
 		columns: [
 			{
 				"className":      'details-control',
 				"orderable":      false,
 				"data":           null,
-				"defaultContent": ''
+				"defaultContent": '',
 			},
 			{ title: "ID", visible: false},
 			{ title: "IP" },
-            { title: "Location"},
-			{ title: "Name"},
+            { title: "Location", "width": "15%" },
+			{ title: "Name", "width": "15%" },
 			{ title: "Host" },
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
 			{ title: "Variant" },
 			{ title: "Variant Type" },
 			{ title: "Status", visible: false},
-			{ title: "Num Players" },
-			{ title: "Max Players" },
-			{ title: "Private" },
-			{ title: "Version"}
+			{ title: "Num Players", "width": "1%" },
+			{ title: "Max Players", "width": "1%" },
+			{ title: "Private", "width": "1%" },
+			{ title: "Version", visible: false}
 		],
 		"order": [[ 0 ]],
 		"language": {
@@ -153,7 +152,7 @@ function buildTable(){
 															serverInfo.eldewritoVersion
 														]).draw();
 														table.columns.adjust().draw();
-                                                        getLocations();
+                                                        getLocation(serverInfo.serverIP, $("#serverTable tbody tr").length-1);
 													} else {
 														console.log(serverInfo.serverIP + " is glitched");
 													}
@@ -279,37 +278,25 @@ function toggleDetails(){
             
 }
 
-function getLocations(){ 
-    //$('#serverTable').dataTable().api().column( 3 ).visible( true );
-    var rowNum = 0;
-    var rowData = "";
-    var ip = "";
-    while(rowNum <= $("#serverTable tbody tr").length-1){
-        rowData = $('#serverTable').dataTable().fnGetData(rowNum, 2);
-        if (rowData.contains(":")){
-            ip = rowData.split(":")[0];
-        }
-        if ($('#serverTable').dataTable().fnGetData(rowNum-1, 3)=="Loading..."){
-            var thisRow = rowNum;
-            var geoInfo = $.getJSON("http://www.telize.com/geoip/" + ip, null )
-            .done(function(data) {
-                //console.log(thisRow + ": " + ip);
-                if ($('#serverTable').dataTable().fnGetData(thisRow, 3)=="Loading..."){
-                    var location = "[" + data.continent_code + "] "
-                    //if(data.city){location += data.city + ", "} //since sometimes data.city is missing
-                    if(data.region){location += data.region + ", "} //since sometimes data.city is missing
-                    if(location.length > 5){
-                        location += data.country_code3;
-                    } else {
-                        location += data.country;
-                    }
-                    //console.log(thisRow + ": " + location); 
-                    $('#serverTable').dataTable().fnUpdate(location, thisRow, 3);
-                }
-            });
-        }
-        rowNum++;
+function getLocation(ip, rowNum){ 
+    if (ip.contains(":")){
+        ip = ip.split(":")[0];
     }
+    var geoInfo = $.getJSON("http://www.telize.com/geoip/" + ip, null )
+    .done(function(data) {
+        if ($('#serverTable').dataTable().fnGetData(rowNum, 3)=="Loading..."){
+            var location = "[" + data.continent_code + "] "
+            //if(data.city){location += data.city + ", "} //since sometimes data.city is missing
+            if(data.region){location += data.region + ", "} //since sometimes data.city is missing
+            if(location.length > 5){
+                location += data.country_code3;
+            } else {
+                location += data.country;
+            }
+            $('#serverTable').dataTable().fnUpdate(location, rowNum, 3);
+            $('#serverTable').DataTable().columns.adjust().draw();
+        }
+    });
 }
 
 function pingList(){ 
