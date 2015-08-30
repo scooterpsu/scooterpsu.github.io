@@ -85,7 +85,8 @@ function buildTable(){
 		"order": [[ 0 ]],
 		"language": {
 			"emptyTable": "No servers found",
-            "zeroRecords": "No matching servers found"
+            "zeroRecords": "No matching servers found",
+            "info": "Showing servers _START_ to _END_ of _TOTAL_"
 		}
 	} );
 

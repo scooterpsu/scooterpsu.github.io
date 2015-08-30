@@ -113,7 +113,7 @@
     opacity: 0.8;
     position: fixed;
     bottom: 10; 
-    left: 5;    
+    left: 5;
 }
 #serverTable_length label{
     color: white;
@@ -126,9 +126,14 @@
     position: fixed;
     bottom: 10; 
     right: 5;
+    background-color: black;
 }
 #serverTable_paginate label{
+    color: white !important;
+}
+#serverTable_info{
     color: white;
+    opacity: 0.8;    
 }
 #connectionStatus{
 	opacity: 0.8;
