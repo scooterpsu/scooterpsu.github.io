@@ -291,9 +291,14 @@ function getLocations(){
         .done(function(data) {
             if ($('#serverTable').dataTable().fnGetData(thisRow, 3)=="Loading..."){
                 location += "[" + data.continent_code + "] "
-                if(data.city){location += data.city + ", "} //since sometimes data.city is missing
-                location += data.country_code;
-                $('#serverTable').dataTable().fnUpdate(location, thisRow, 3, false, true);
+                //if(data.city){location += data.city + ", "} //since sometimes data.city is missing
+                if(data.region){location += data.region + ", "} //since sometimes data.city is missing
+                if(location.length > 5){
+                    location += data.country_code3;
+                } else {
+                    location += data.country;
+                }
+                $('#serverTable').dataTable().fnUpdate(location, thisRow, 3);
             }            
         });
         rowNum++;
