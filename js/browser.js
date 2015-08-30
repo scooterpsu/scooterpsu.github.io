@@ -85,7 +85,8 @@ function buildTable(){
 		],
 		"order": [[ 0 ]],
 		"language": {
-			"emptyTable": "No servers found"
+			"emptyTable": "No servers found",
+            "zeroRecords": "No matching servers found"
 		}
 	} );
 
@@ -233,8 +234,6 @@ function connectionTrigger(){
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
             gameVersion = dewRcon.lastMessage;
-            //console.log(gameVersion);
-            //$('#serverTable').DataTable().search( gameVersion ).draw();
             $('#serverTable').dataTable().fnFilter( gameVersion, 14 );
             setTimeout(function() {
                 $('#serverTable').dataTable().api().column( 14 ).visible( false );
