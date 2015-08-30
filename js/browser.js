@@ -70,7 +70,7 @@ function buildTable(){
 			},
 			{ title: "ID", visible: false},
 			{ title: "IP" },
-            { title: "Location", visible: false},
+            { title: "Location"},
 			{ title: "Name"},
 			{ title: "Host" },
 			{ title: "Map" },
@@ -165,7 +165,7 @@ function buildTable(){
 							} else {
 								console.log("Invalid IP, skipping.");
 							}
-					}  
+					}                 
 			for (var j = 0; j < serverList.servers.length; j++)
 			{
 					//console.log(serverList.servers[j]);
@@ -280,31 +280,34 @@ function toggleDetails(){
 }
 
 function getLocations(){ 
-    $('#serverTable').dataTable().api().column( 3 ).visible( true );
+    //$('#serverTable').dataTable().api().column( 3 ).visible( true );
     var rowNum = 0;
     var rowData = "";
     var ip = "";
-    var location = "";
     while(rowNum <= $("#serverTable tbody tr").length-1){
         rowData = $('#serverTable').dataTable().fnGetData(rowNum, 2);
         if (rowData.contains(":")){
             ip = rowData.split(":")[0];
         }
-        var thisRow = rowNum;
-        var geoInfo = $.getJSON("http://www.telize.com/geoip/" + ip, null )
-        .done(function(data) {
-            if ($('#serverTable').dataTable().fnGetData(thisRow, 3)=="Loading..."){
-                location += "[" + data.continent_code + "] "
-                //if(data.city){location += data.city + ", "} //since sometimes data.city is missing
-                if(data.region){location += data.region + ", "} //since sometimes data.city is missing
-                if(location.length > 5){
-                    location += data.country_code3;
-                } else {
-                    location += data.country;
+        if ($('#serverTable').dataTable().fnGetData(rowNum-1, 3)=="Loading..."){
+            var thisRow = rowNum;
+            var geoInfo = $.getJSON("http://www.telize.com/geoip/" + ip, null )
+            .done(function(data) {
+                //console.log(thisRow + ": " + ip);
+                if ($('#serverTable').dataTable().fnGetData(thisRow, 3)=="Loading..."){
+                    var location = "[" + data.continent_code + "] "
+                    //if(data.city){location += data.city + ", "} //since sometimes data.city is missing
+                    if(data.region){location += data.region + ", "} //since sometimes data.city is missing
+                    if(location.length > 5){
+                        location += data.country_code3;
+                    } else {
+                        location += data.country;
+                    }
+                    //console.log(thisRow + ": " + location); 
+                    $('#serverTable').dataTable().fnUpdate(location, thisRow, 3);
                 }
-                $('#serverTable').dataTable().fnUpdate(location, thisRow, 3);
-            }            
-        });
+            });
+        }
         rowNum++;
     }
 }
