@@ -234,6 +234,11 @@ function connectionTrigger(){
         if (dewRcon.lastMessage.length > 0) {
             gameVersion = dewRcon.lastMessage;
             //console.log(gameVersion);
+            //$('#serverTable').DataTable().search( gameVersion ).draw();
+            $('#serverTable').dataTable().fnFilter( gameVersion, 14 );
+            setTimeout(function() {
+                $('#serverTable').dataTable().api().column( 14 ).visible( false );
+            }, "200");
         }
     }, "200");
 }
@@ -500,7 +505,10 @@ function refreshTable(){
     $('.serverCount').html(serverCount + " servers");
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
-    buildTable();   
+    buildTable();
+    if(dewRconConnected){
+        connectionTrigger();   
+    }
 }
 
 String.prototype.contains = function(it) {
