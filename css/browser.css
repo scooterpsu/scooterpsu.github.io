@@ -217,8 +217,14 @@ tr.shown td.details-control {
 	margin-right: 20;
 }
 .private{
-	background-color: white;
-    color: #843534;
+	background-color: black !important;
+    color: red;
+	border: 3px solid red;
+}
+.private h3{
+	font-weight: bold;
+	margin: 0;
+	padding-top: 60;
 }
 .statLines{
     font-size: 10pt;
