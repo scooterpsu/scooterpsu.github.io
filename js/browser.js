@@ -60,6 +60,7 @@ function buildTable(){
 	var table = $('#serverTable').DataTable( {
         destroy: true,
         "iDisplayLength": 10,
+		stateSave: true,
         columnDefs: [
             { type: 'ip-address', targets: 2 }
         ],
