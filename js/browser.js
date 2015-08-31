@@ -26,7 +26,7 @@ $(document).ready(function() {
         }
         else {
             // Open this row
-            row.child( format(row.data()) ).show();
+            row.child( expansionLine(row.data()) ).show();
             tr.addClass('shown');
         }
     } );
@@ -46,10 +46,12 @@ function buildTable(){
 		var row = table.row( tr );
 		if (row.data()){
 			joinServer(row.data()[1]);
-			selectedID = jQuery(this).closest('tr').index();
+			/*
+            selectedID = jQuery(this).closest('tr').index();
 			selectedID++;
 			$('#serverTable tr.selected').removeClass('selected');
 			$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
+            */
 		} else {
             var trChild = $(this).closest('tr').prev();
             var rowChild = table.row(trChild);
@@ -101,29 +103,15 @@ function buildTable(){
 					for(var i = 0; i < data.result.servers.length; i++)
 					{
 							var serverIP = data.result.servers[i];
-							//because sometimes jackasses inject into the server list
-
 							if(VerifyIPRegex.test(serverIP)){
 									serverList.servers.push({serverIP, i});
 									(function(i, serverIP) {
-										/*
-										var jqhxrGeoInfo = $.getJSON("http://www.telize.com/geoip/" + serverIP.substr(0, serverIP.indexOf(':')), null )
-										.done(function(data) {
-												if(data.region){
-												$("#region" + i).html(data.region + ", " + data.country);
-												}else{
-												$("#region" + i).html(data.country);
-												}                                                       
-											});
-										*/
 										var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
 										.done(function(serverInfo) {
 												serverInfo["serverId"] = i;
 												serverInfo["serverIP"] = serverIP;
 												if (serverInfo.maxPlayers <= 16 ) {
 													if(serverInfo.map.length > 0){ //blank map means glitched server entry
-														//var html = serverListInfoTemplate(serverInfo);
-														//$("#serverid" + i).html(html);
 														for (var j = 0; j < serverList.servers.length; j++)
 														{
 															if (serverList.servers[j]["i"] == i)
@@ -267,22 +255,7 @@ function joinSelected(){
 }
 
 function toggleDetails(){
-    //$('#serverTable tr.selected td.details-control').trigger( "click" );
-            //console.log(selectedID-1);
-            //if($('#serverTable tr td.').eq(row).hasClass('shown')){
-            //    console.log("yay");
-            //}
-            //if(selectedID > 1){
- 
-                //if($("#serverTable tr:eq(" + selectedID + ")").hasClass("shown")){
-                    $('#serverTable tr:eq(' + selectedID + ') td.details-control').trigger( "click" );
-                //} else if($("#serverTable tr:eq(" + selectedID-1 + ")").hasClass("shown")){
-                //     $('#serverTable tr:eq(' + selectedID-1 + ') td.details-control').trigger( "click" ); 
-                //}  else{ 
-                 // $('#serverTable tr.selected td.details-control').trigger( "click" );
-                //}                  
-            //}
-            
+    $('#serverTable tr:eq(' + selectedID + ') td.details-control').trigger( "click" );
 }
 
 function getLocation(ip, rowNum){ 
@@ -437,6 +410,7 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
     }
 });
 
+//initializes Gamepads (needed)
 if (!gamepad.init()) {
     // Your browser does not support gamepads, get the latest Google Chrome or Firefox
 }
@@ -445,7 +419,7 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function format ( d ) {
+function expansionLine(d) {
     var output = "";
     output += '<div id="gamecard"><img id="mapPic" class="img-responsive" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"><img id="gameTypePic" class="img-responsive" src="images/gametypes/' + capitalizeFirstLetter(serverList.servers[d[1]].variantType) + '.png">'+
     '<h3 id="hostName">'+serverList.servers[d[1]].hostPlayer+'</h3>'+
