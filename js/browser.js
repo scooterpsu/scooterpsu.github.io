@@ -63,6 +63,7 @@ function buildTable(){
         destroy: true,
         "iDisplayLength": 10,
 		//stateSave: true,
+        "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 }
         ],
@@ -394,14 +395,18 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             //console.log("START");
         }else if (e.control == "RIGHT_TOP_SHOULDER"){
             //console.log("RIGHT BUMPER");
-			$('#serverTable').DataTable().page( 'next' ).draw( 'page' ); 
-            selectedID = 1;
-            updateSelection();            
+            if(($('#serverTable').DataTable().page.info().page +1)<$('#serverTable').DataTable().page.info().pages){
+                $('#serverTable').DataTable().page( 'next' ).draw( 'page' ); 
+                selectedID = 1;
+                updateSelection();                
+            }            
         }else if (e.control == "LEFT_TOP_SHOULDER"){
             //console.log("LEFT BUMPER");
-			$('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
-            selectedID = 1;
-            updateSelection();
+            if($('#serverTable').DataTable().page.info().page > 0){
+                $('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
+                selectedID = 1;
+                updateSelection();
+            }
         }else if (e.control == "LEFT_STICK"){
             //console.log("LEFT STICK");
             //Because I use weird mapping.
