@@ -194,7 +194,7 @@ tr.shown td.details-control {
 	max-width: 450px;
 	background-color: white;
 	color: black;
-	height: 290px;
+	max-height: 264px;
 }
 #leftside h2, #leftside h3, #leftside h4, #leftside h5{
 	padding: 1;
@@ -202,7 +202,7 @@ tr.shown td.details-control {
 }
 #rightside{
     float: right;
-    height: 290px;
+    height: 264px;
     overflow-y: auto;
     overflow-x: hidden;
     width: 60%;
@@ -226,8 +226,8 @@ tr.shown td.details-control {
 	padding-right: 12;
 }
 #gameTypePic{
-	height: 75;
-	width: 75;
+	height: 70;
+	width: 70;
 	float: left;
 	border-style: solid;
 	margin-right: 10;
