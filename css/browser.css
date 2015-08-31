@@ -218,8 +218,8 @@ tr.shown td.details-control {
 }
 .private{
 	background-color: black !important;
-    color: red;
-	border: 3px solid red;
+    color: #843534;
+	border: 3px solid #843534;
 }
 .private h3{
 	font-weight: bold;
