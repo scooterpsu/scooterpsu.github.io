@@ -86,6 +86,7 @@
 #serverTable thead tr th.sorting{
     background-color: #1a3d5a;
     color: white;
+    border-bottom: 1px solid white;
 }
 #serverTable tbody tr td.sorting_1{
     background-color: #1a3d5a;
@@ -191,10 +192,10 @@ tr.shown td.details-control {
 	padding-right: 0;
     float: left;
     width: 35%;
-	max-width: 450px;
 	background-color: white;
 	color: black;
 	max-height: 264px;
+	max-width: 400px;
 }
 #leftside h2, #leftside h3, #leftside h4, #leftside h5{
 	padding: 1;
@@ -229,7 +230,6 @@ tr.shown td.details-control {
 	height: 70;
 	width: 70;
 	float: left;
-	border-style: solid;
 	margin-right: 10;
 	padding: 2;
 }
@@ -237,4 +237,11 @@ tr.shown td.details-control {
     opacity: 0.9;
     color: #843534;
     font-weight: bold;
+	background-color: white;
+}
+#gameStatus{
+	position: relative;
+	float: right;
+	bottom: 25;
+	right: 15;
 }
