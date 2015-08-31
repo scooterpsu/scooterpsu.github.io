@@ -70,6 +70,7 @@ function buildTable(){
 				"orderable":      false,
 				"data":           null,
 				"defaultContent": '',
+                "width": "0.5%",
 			},
 			{ title: "ID", visible: false},
 			{ title: "IP", "width": "1%"},

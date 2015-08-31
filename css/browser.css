@@ -194,15 +194,14 @@ tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
 #leftside{
-    margin-left: 3%;
+    margin-left: 5%;
 	padding: 10;
 	padding-right: 0;
     float: left;
-    width: 34%;
 	background-color: white;
 	color: black;
-	max-height: 264px;
-	max-width: 400px;
+	height: 264px;
+	width: 400px;
 }
 #leftside h2, #leftside h3, #leftside h4, #leftside h5{
 	padding: 1;
@@ -213,8 +212,8 @@ tr.shown td.details-control {
     height: 264px;
     overflow-y: auto;
     overflow-x: hidden;
-    width: 59%;
-	margin-right: 3%;
+    width: 56%;
+	margin-right: 5%;
 }
 .private{
 	background-color: black !important;
