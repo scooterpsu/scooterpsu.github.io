@@ -194,6 +194,7 @@ tr.shown td.details-control {
 	max-width: 450px;
 	background-color: white;
 	color: black;
+	height: 290px;
 }
 #leftside h2, #leftside h3, #leftside h4, #leftside h5{
 	padding: 1;
