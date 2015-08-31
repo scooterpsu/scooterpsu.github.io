@@ -438,9 +438,9 @@ function capitalizeFirstLetter(string) {
 
 function format ( d ) {
     var output = "";
-    output += '<div id="leftside"><img id="mapPic" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png">'+
-    '<h4 id="gameName">'+serverList.servers[d[1]].name+'</h3>'+
-    '<h3 id="hostName">'+serverList.servers[d[1]].hostPlayer+'</h2>'+
+    output += '<div id="leftside"><img id="mapPic" class="img-responsive" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"><img id="gameTypePic" class="img-responsive" src="images/gametypes/' + serverList.servers[d[1]].variantType + '.png">'+
+    '<h4 id="gameName">'+serverList.servers[d[1]].name+'</h4>'+
+    '<h3 id="hostName">'+serverList.servers[d[1]].hostPlayer+'</h3>'+
     '<h4 id="gameStatus">Status: '+serverList.servers[d[1]].status+'</h4></div>';
     if(!serverList.servers[d[1]].passworded){ 
         output += '<div id="rightside"><table class="statBreakdown"><thead class="tableHeader">'+

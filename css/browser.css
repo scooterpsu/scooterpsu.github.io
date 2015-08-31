@@ -186,20 +186,30 @@ tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
 #leftside{
-    margin-left: 10;
+    margin-left: 20;
+	padding: 10;
+	padding-right: 0;
     float: left;
-    width: 40%;
+    width: 35%;
+	max-width: 450px;
+	background-color: white;
+	color: black;
+}
+#leftside h2, #leftside h3, #leftside h4, #leftside h5{
+	padding: 1;
+	margin: 0;
 }
 #rightside{
-    float: left;
-    margin-left: 10;
-    height: 325px;
+    float: right;
+    height: 290px;
     overflow-y: auto;
     overflow-x: hidden;
-    width: 58%;
+    width: 60%;
+	margin-right: 20;
 }
 .statLines{
     font-size: 10pt;
+	background-color: black !important;
 }
 .tableHeader{
     font-size: 10pt;
@@ -209,13 +219,18 @@ tr.shown td.details-control {
     width: 100%;
 }
 #mapPic{
-    width: 75%;
+	float: none;
+	clear: right;
+	padding-bottom: 10;
+	padding-right: 12;
 }
-#gameName{
-    font-weight: bold;
-}
-#gameStatus{
-    font-weight: bold;
+#gameTypePic{
+	height: 75;
+	width: 75;
+	float: left;
+	border-style: solid;
+	margin-right: 10;
+	padding: 2;
 }
 #privateGame{
     opacity: 0.9;
