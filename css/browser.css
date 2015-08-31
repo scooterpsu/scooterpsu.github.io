@@ -176,6 +176,7 @@ img{
 }
 body {
 	background-color: black;
+    zoom: 95%;
 }
 td.details-control {
     background: url('../images/details_open.png') no-repeat center center;
