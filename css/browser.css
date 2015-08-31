@@ -1,3 +1,9 @@
+body {
+	background-color: black;
+}
+img{
+    -webkit-user-drag: none;
+}
 #bg {
     position: fixed;
     /* Preserve aspect ratio */
@@ -62,7 +68,23 @@
 .closeButton:hover{
     background-color: #1a3d5a;
 }
-
+.controllerButton{
+    opacity: 0;
+    margin-top: -3;
+    margin-left: 5;
+    height: 28;
+    width: 28;
+    display: none;
+}
+.selected .controllerButton{
+    opacity: 1;
+}
+.refresh .controllerButton{
+    opacity: 1;
+}
+.closeButton .controllerButton{
+    opacity: 1;
+}
 #serverTable_wrapper{
     opacity: 0.8;
     top: 55;
@@ -162,29 +184,6 @@
 	padding-bottom: 7;
     color: white;
 }
-img{
-    -webkit-user-drag: none;
-}
-.selected .controllerButton{
-    opacity: 1;
-}
-.refresh .controllerButton{
-    opacity: 1;
-}
-.closeButton .controllerButton{
-    opacity: 1;
-}
-.controllerButton{
-    opacity: 0;
-    margin-top: -3;
-    margin-left: 5;
-    height: 28;
-    width: 28;
-    display: none;
-}
-body {
-	background-color: black;
-}
 td.details-control {
     background: url('../images/details_open.png') no-repeat center center;
     cursor: pointer;
@@ -193,7 +192,7 @@ td.details-control {
 tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
-#leftside{
+#gamecard{
     margin-left: 5%;
 	padding: 10;
 	padding-right: 0;
@@ -203,38 +202,9 @@ tr.shown td.details-control {
 	height: 264px;
 	width: 400px;
 }
-#leftside h2, #leftside h3, #leftside h4, #leftside h5{
+#gamecard h2, #gamecard h3, #gamecard h4, #gamecard h5{
 	padding: 1;
 	margin: 0;
-}
-#rightside{
-    float: right;
-    height: 264px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    width: 56%;
-	margin-right: 5%;
-}
-.private{
-	background-color: black !important;
-    color: #843534;
-	border: 3px solid #843534;
-}
-.private h3{
-	font-weight: bold;
-	margin: 0;
-	padding-top: 60;
-}
-.statLines{
-    font-size: 10pt;
-	background-color: black !important;
-}
-.tableHeader{
-    font-size: 10pt;
-    padding: 0; 
-}
-.statBreakdown{
-    width: 100%;
 }
 #mapPic{
 	float: none;
@@ -257,4 +227,33 @@ tr.shown td.details-control {
 }
 #hostName{
 	font-weight: bold;
+}
+#scoreboard{
+    float: right;
+    height: 264px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 56%;
+	margin-right: 5%;
+}
+.statLines{
+    font-size: 10pt;
+	background-color: black !important;
+}
+.tableHeader{
+    font-size: 10pt;
+    padding: 0; 
+}
+.statBreakdown{
+    width: 100%;
+}
+.private{
+	background-color: black !important;
+    color: #843534;
+	border: 3px solid #843534;
+}
+.private h3{
+	font-weight: bold;
+	margin: 0;
+	padding-top: 60;
 }

@@ -451,12 +451,12 @@ function capitalizeFirstLetter(string) {
 
 function format ( d ) {
     var output = "";
-    output += '<div id="leftside"><img id="mapPic" class="img-responsive" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"><img id="gameTypePic" class="img-responsive" src="images/gametypes/' + capitalizeFirstLetter(serverList.servers[d[1]].variantType) + '.png">'+
+    output += '<div id="gamecard"><img id="mapPic" class="img-responsive" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"><img id="gameTypePic" class="img-responsive" src="images/gametypes/' + capitalizeFirstLetter(serverList.servers[d[1]].variantType) + '.png">'+
     '<h3 id="hostName">'+serverList.servers[d[1]].hostPlayer+'</h3>'+
     '<h4 id="gameStatus">In '+serverList.servers[d[1]].status.split("In")[1]+'</h4>'+
     '<h4 id="gameName">'+serverList.servers[d[1]].name+'</h4></div>';
     if(!serverList.servers[d[1]].passworded){ 
-        output += '<div id="rightside"><table class="statBreakdown"><thead class="tableHeader">'+
+        output += '<div id="scoreboard"><table class="statBreakdown"><thead class="tableHeader">'+
             '<th>Name</th>'+
             '<th><center>Score</center></th>'+
             '<th><center>K</center></th>'+
@@ -487,7 +487,7 @@ function format ( d ) {
             }
         output += '</tbody></table></div>';  
     }   else {
-    output += "<div id='rightside' class='private'><center><h3>Private Game</h3><br /><h3>Player Data Unavailable</h3></center></div>";
+    output += "<div id='scoreboard' class='private'><center><h3>Private Game</h3><br /><h3>Player Data Unavailable</h3></center></div>";
     }
     return output;
 }
