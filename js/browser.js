@@ -59,7 +59,7 @@ function buildTable(){
 	});  
 	var table = $('#serverTable').DataTable( {
         destroy: true,
-        "iDisplayLength": 25,
+        "iDisplayLength": 15,
         columnDefs: [
             { type: 'ip-address', targets: 2 }
         ],
@@ -351,6 +351,14 @@ function fakePongs(){
 }
 */
 
+function nextPage(){
+	$('#serverTable').DataTable().page( 'next' ).draw( 'page' );
+}
+
+function previousPage(){
+	$('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
+}
+
 Mousetrap.bind('f11', function() {
     closeBrowser();
 });
@@ -418,9 +426,11 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
         }else if (e.control == "START_FORWARD"){
             //console.log("START");
         }else if (e.control == "RIGHT_TOP_SHOULDER"){
-            //console.log("RIGHT BUMPER");   
+            //console.log("RIGHT BUMPER");
+			previousPage();	
         }else if (e.control == "LEFT_TOP_SHOULDER "){
             //console.log("LEFT BUMPER");
+			nextPage();
         }else if (e.control == "LEFT_STICK"){
             //console.log("LEFT STICK");
             //Because I use weird mapping.
