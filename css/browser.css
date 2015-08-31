@@ -209,6 +209,10 @@ tr.shown td.details-control {
     width: 60%;
 	margin-right: 20;
 }
+.private{
+	background-color: white;
+    color: #843534;
+}
 .statLines{
     font-size: 10pt;
 	background-color: black !important;
@@ -232,12 +236,6 @@ tr.shown td.details-control {
 	float: left;
 	margin-right: 10;
 	padding: 2;
-}
-#privateGame{
-    opacity: 0.9;
-    color: #843534;
-    font-weight: bold;
-	background-color: white;
 }
 #gameStatus{
 	position: relative;

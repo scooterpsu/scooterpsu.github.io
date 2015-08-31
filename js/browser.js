@@ -474,7 +474,7 @@ function format ( d ) {
             }
         output += '</tbody></table></div>';  
     }   else {
-    output += "<div id='rightside'><center><h3 id='privateGame'>Private Game</h3><br /><img id='privateGame' src='images/error.png'></center></div>";
+    output += "<div id='rightside' class='private'><center><h3>Private Game</h3><br /><img id='privateGame' src='images/error.png'></center></div>";
     }
     return output;
 }
