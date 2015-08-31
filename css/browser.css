@@ -245,3 +245,6 @@ tr.shown td.details-control {
 	bottom: 25;
 	right: 15;
 }
+#hostName{
+	font-weight: bold;
+}
