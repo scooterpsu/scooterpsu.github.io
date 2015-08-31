@@ -59,7 +59,7 @@ function buildTable(){
 	});  
 	var table = $('#serverTable').DataTable( {
         destroy: true,
-        "iDisplayLength": 15,
+        "iDisplayLength": 10,
         columnDefs: [
             { type: 'ip-address', targets: 2 }
         ],
