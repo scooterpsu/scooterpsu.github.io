@@ -60,7 +60,7 @@ function buildTable(){
 	var table = $('#serverTable').DataTable( {
         destroy: true,
         "iDisplayLength": 10,
-		stateSave: true,
+		//stateSave: true,
         columnDefs: [
             { type: 'ip-address', targets: 2 }
         ],
@@ -268,7 +268,7 @@ function joinSelected(){
 
 function toggleDetails(){
     //$('#serverTable tr.selected td.details-control').trigger( "click" );
-            console.log(selectedID-1);
+            //console.log(selectedID-1);
             //if($('#serverTable tr td.').eq(row).hasClass('shown')){
             //    console.log("yay");
             //}
@@ -353,14 +353,6 @@ function fakePongs(){
 }
 */
 
-function nextPage(){
-	$('#serverTable').DataTable().page( 'next' ).draw( 'page' );
-}
-
-function previousPage(){
-	$('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
-}
-
 Mousetrap.bind('f11', function() {
     closeBrowser();
 });
@@ -429,10 +421,14 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             //console.log("START");
         }else if (e.control == "RIGHT_TOP_SHOULDER"){
             //console.log("RIGHT BUMPER");
-			previousPage();	
-        }else if (e.control == "LEFT_TOP_SHOULDER "){
+			$('#serverTable').DataTable().page( 'next' ).draw( 'page' ); 
+            selectedID = 1;
+            updateSelection();            
+        }else if (e.control == "LEFT_TOP_SHOULDER"){
             //console.log("LEFT BUMPER");
-			nextPage();
+			$('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
+            selectedID = 1;
+            updateSelection();
         }else if (e.control == "LEFT_STICK"){
             //console.log("LEFT STICK");
             //Because I use weird mapping.
@@ -480,7 +476,6 @@ function format ( d ) {
                         '<td class="statLines"><center>'+playerList[playerNum].deaths+'</center></td>'+
                         '<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
                         '<td class="statLines"><center>'+ratio+'</center></td>'+
-
                     '</tr>';
                 }
                 playerNum++;
