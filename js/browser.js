@@ -99,7 +99,7 @@ function buildTable(){
 		}
 	} );
 
-	var jqhxr = $.getJSON( "https://samantha-master.halo.click/list", null)
+	var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
 			.done(function( data ) {
 					for(var i = 0; i < data.result.servers.length; i++)
 					{
