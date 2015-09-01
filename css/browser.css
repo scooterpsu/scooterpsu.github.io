@@ -225,6 +225,9 @@ tr.shown td.details-control {
 	bottom: 25;
 	right: 15;
 }
+#gameName{
+    line-height: 15px;
+}
 #hostName{
 	font-weight: bold;
 }
