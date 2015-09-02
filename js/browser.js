@@ -237,8 +237,8 @@ function connectionTrigger(){
 }
 
 function disconnectTrigger(){
-    $('.closeButton').hide();
-	$('#serverTable_filter').css("right","10");
+    //$('.closeButton').hide();
+	//$('#serverTable_filter').css("right","10");
 }
 
 function closeBrowser() {

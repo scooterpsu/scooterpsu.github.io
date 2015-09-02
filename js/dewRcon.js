@@ -10,15 +10,12 @@ jQuery(function() {
 StartRconConnection = function() {
     dewRcon = new dewRconHelper();
     dewRcon.dewWebSocket.onopen = function() {
-        //When we are connected do something
-        jQuery("#connectionStatus").text('Connected!');
-        //myCodeMirror.replaceRange('Connected to Eldewrito!', CodeMirror.Pos(myCodeMirror.lastLine()));
+        jQuery("#connectionStatus").text('Connected');
         dewRconConnected = true;
-        connectionTrigger(); //my addition
+        connectionTrigger();
     };
     dewRcon.dewWebSocket.onerror = function() {
-        //Something bad happened
-        jQuery("#connectionStatus").text('Not connected. Is the game running?!');
+        jQuery("#connectionStatus").text('Not connected. Is the game running?');
         dewRconConnected = false;
         if (!dewRconConnected) {
             if (DewRconPortIndex == 0) {
@@ -37,9 +34,10 @@ StartRconConnection = function() {
         console.log(message.data);
     };
 	dewRcon.dewWebSocket.onclose = function(message) {
+		//jQuery("#connectionStatus").text('Disconnected');
         //console.log(message.code);
 		dewRconConnected = false;
-		//disconnectTrigger();
+		disconnectTrigger();
     };
 }
 var DewRconPortIndex = 0;
