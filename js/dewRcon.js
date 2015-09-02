@@ -34,10 +34,12 @@ StartRconConnection = function() {
         dewRcon.lastMessage = message.data;
         console.log(dewRcon.lastMessage);
         console.log(dewRcon.lastCommand);
-        //We can display the latest messages from dew using the code below
         console.log(message.data);
-
-        //myCodeMirror.replaceRange(message.data, CodeMirror.Pos(myCodeMirror.lastLine()));
+    };
+	dewRcon.dewWebSocket.onclose = function(message) {
+        console.log(message.code);
+		dewRconConnected = false;
+		//disconnectTrigger();
     };
 }
 var DewRconPortIndex = 0;
@@ -50,7 +52,12 @@ dewRconHelper = function() {
     this.open = false;
 
     this.send = function(command) {
-        this.dewWebSocket.send(command);
-        this.lastCommand = command;
+        try {
+            this.dewWebSocket.send(command);
+            this.lastCommand = command;
+        } catch (e) {
+			console.log(e);
+            dewRconConnected = false;
+        }
     }
 }

@@ -13,7 +13,6 @@ var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
     buildTable();
-
     // Add event listener for opening and closing details
     $('#serverTable tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
@@ -237,11 +236,20 @@ function connectionTrigger(){
     }, "200");
 }
 
+function disconnectTrigger(){
+    $('.closeButton').hide();
+	$('#serverTable_filter').css("right","10");
+}
+
 function closeBrowser() {
-    setTimeout(function() {
-        dewRcon.send('menu.show');
-        dewRcon.send('Game.SetMenuEnabled 0');
-    }, "1000");
+	if(dewRconConnected){
+		setTimeout(function() {
+			dewRcon.send('menu.show');
+			dewRcon.send('Game.SetMenuEnabled 0');
+		}, "1000");
+	}else{
+		window.close();
+	}
 }
 
 function updateSelection(){
