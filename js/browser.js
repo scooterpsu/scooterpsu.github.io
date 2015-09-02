@@ -173,7 +173,7 @@ function joinServer(i) {
 	//console.log(serverList.servers[i].serverIP);
     if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
-            if(serverList.servers[i].eldewritoVersion === gameVersion) {
+            //if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(serverList.servers[i].passworded){
                     sweetAlert({   
                     title: "Private Server",   
@@ -206,14 +206,14 @@ function joinServer(i) {
                     dewRcon.send('connect ' + serverList.servers[i].serverIP);
                     closeBrowser();
                 }
-            } else {
-                    sweetAlert({
-                    title:"Error", 
-                    text:"Host running different version.<br /> Unable to join!", 
-                    type:"error",
-                    html: true
-                    });
-            }
+            /*} else {
+				sweetAlert({
+				title:"Error", 
+				text:"Host running different version.<br /> Unable to join!", 
+				type:"error",
+				html: true
+				});
+            }*/
         } else {
                 sweetAlert("Error", "Game is full or unavailable!", "error");
         }
