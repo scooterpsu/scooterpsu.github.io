@@ -37,7 +37,7 @@ StartRconConnection = function() {
         console.log(message.data);
     };
 	dewRcon.dewWebSocket.onclose = function(message) {
-        console.log(message.code);
+        //console.log(message.code);
 		dewRconConnected = false;
 		//disconnectTrigger();
     };
