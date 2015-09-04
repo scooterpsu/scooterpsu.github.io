@@ -61,14 +61,29 @@ function buildTable(){
 	var table = $('#serverTable').DataTable( {
 		"footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
-            visibleTotal = api
+            visiblePlayers = api
                 .column( 11, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return a + b;
                 }, 0 );
-			$('.playerCount').html(visibleTotal + " players");
-			$('.serverCount').html(this.fnSettings().fnRecordsDisplay() + " servers");
+			visibleServers = this.fnSettings().fnRecordsDisplay();
+			var playerOut = visiblePlayers + " players";
+			if(playerCount > visiblePlayers){
+				playerOut += " (" + playerCount + " total)";
+			}
+			var serverOut = visibleServers + " servers";
+			if(serverCount > visibleServers){
+				serverOut += " (" + serverCount + " total)";
+			}
+			$('.playerCount').html(playerOut);
+			$('.serverCount').html(serverOut);
+			setTimeout(function() {
+				var infoPos = (window.innerWidth*0.48 - $('#serverTable_info').text().length*3 - 10);
+				console.log($('#serverTable_info').text().length);
+				console.log(infoPos);
+				$('#serverTable_info').css("padding-left",infoPos);
+			}, "10");
         },
         destroy: true,
         "iDisplayLength": 10,
@@ -130,9 +145,9 @@ function buildTable(){
 																	serverList.servers[j] = serverInfo;
 																	serverCount++;
 																	playerCount+=serverInfo.numPlayers;
-																	$('.serverCount').html(serverCount + " servers");
+																	//$('.serverCount').html(serverCount + " servers");
 																	//console.log(serverCount);
-																	$('.playerCount').html(playerCount + " players");
+																	//$('.playerCount').html(playerCount + " players");
 																	//console.log(playerCount);
 															}
 														}
