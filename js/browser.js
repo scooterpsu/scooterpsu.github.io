@@ -29,6 +29,14 @@ $(document).ready(function() {
             tr.addClass('shown');
         }
     } );
+	window.addEventListener('resize', function(){
+		setTimeout(function() {
+			var infoPos = (window.innerWidth*0.48 - $('#serverTable_info').text().length*3 - 10);
+			console.log($('#serverTable_info').text().length);
+			console.log(infoPos);
+			$('#serverTable_info').css("padding-left",infoPos);
+		}, "10");	
+	}, true);
 } );
         
 function buildTable(){
