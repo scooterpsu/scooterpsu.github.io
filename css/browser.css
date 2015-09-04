@@ -235,8 +235,8 @@ tr.shown td.details-control {
     height: 264px;
     overflow-y: auto;
     overflow-x: hidden;
-    width: 56%;
-	margin-right: 5%;
+    width: 55%;
+	margin-right: 4%;
 }
 .statLines{
     font-size: 10pt;
