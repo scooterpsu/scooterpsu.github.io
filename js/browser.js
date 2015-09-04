@@ -59,6 +59,17 @@ function buildTable(){
         }
 	});  
 	var table = $('#serverTable').DataTable( {
+		"footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+            visibleTotal = api
+                .column( 11, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return a + b;
+                }, 0 );
+			$('.playerCount').html(visibleTotal + " players");
+			$('.serverCount').html(this.fnSettings().fnRecordsDisplay() + " servers");
+        },
         destroy: true,
         "iDisplayLength": 10,
 		//stateSave: true,
@@ -530,4 +541,10 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "ip-address-desc": function ( a, b ) {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
+} );
+
+$(document).ready(function() {
+    $('#example').DataTable( {
+
+    } );
 } );
