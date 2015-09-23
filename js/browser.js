@@ -132,7 +132,7 @@ function buildTable(){
 		}
 	} );
 
-	var jqhxr = $.getJSON( "http://192.99.124.162/list", null)
+	var jqhxr = $.getJSON( "http://kelly-master.halo.click/list", null)
 			.done(function( data ) {
 					for(var i = 0; i < data.result.servers.length; i++)
 					{
