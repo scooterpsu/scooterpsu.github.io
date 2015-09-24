@@ -200,6 +200,7 @@ tr.shown td.details-control {
 	color: black;
 	height: 264px;
 	width: 400px;
+    position: relative;
 }
 #gamecard h2, #gamecard h3, #gamecard h4, #gamecard h5{
 	padding: 1;
@@ -223,6 +224,23 @@ tr.shown td.details-control {
 	float: right;
 	bottom: 25;
 	right: 15;
+}
+#sprintVars{
+    color: black;
+	position: absolute;
+	float: right;
+    height: 45px;
+    width: 45px;
+	top: 5;
+	right: 10;
+}
+#voipIcon{
+	position: absolute;
+	float: right;
+    height: 34px;
+    width: 34px;
+	top: 10;
+	right: 48;
 }
 #gameName{
     line-height: 15px;
