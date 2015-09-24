@@ -244,6 +244,8 @@ tr.shown td.details-control {
 }
 #gameName{
     line-height: 15px;
+    height: 45px;
+    overflow: hidden;
 }
 #hostName{
 	font-weight: bold;
