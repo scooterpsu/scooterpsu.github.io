@@ -470,14 +470,11 @@ function capitalizeFirstLetter(string) {
 
 function expansionLine(d) {
     var output = "";
-    output += '<div id="gamecard"><img id="mapPic" class="img-responsive" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png"><img id="gameTypePic" class="img-responsive" src="images/gametypes/' + capitalizeFirstLetter(serverList.servers[d[1]].variantType) + '.png">'+
+    output += '<div id="gamecard"><img id="mapPic" class="img-responsive" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png">'+
+    '<img id="gameTypePic" class="img-responsive" src="images/gametypes/' + capitalizeFirstLetter(serverList.servers[d[1]].variantType) + '.png">'+
     '<h3 id="hostName">'+serverList.servers[d[1]].hostPlayer+'</h3>'+
-    '<h4 id="gameStatus">In '+serverList.servers[d[1]].status.split("In")[1]+'</h4>';
-    //if(serverList.servers[d[1]].name.length > 50){
-        output +='<h5 id="gameName">'+serverList.servers[d[1]].name+'</h5>';
-    /*} else {
-        output +='<h4 id="gameName">'+serverList.servers[d[1]].name+'</h4>'
-    };*/
+    '<h4 id="gameStatus">In '+serverList.servers[d[1]].status.split("In")[1]+'</h4>'+
+    '<h5 id="gameName">'+serverList.servers[d[1]].name+'</h5>';
     if (serverList.servers[d[1]].sprintEnabled == "1"){
         if (serverList.servers[d[1]].sprintUnlimitedEnabled == "1") {
             output +='<img id="sprintVars" src="images/infsprint.png">';
@@ -492,7 +489,6 @@ function expansionLine(d) {
     }   else {
        output +='<img id="voipIcon" src="images/nomic.png"></div>'; 
     }
-    //output +='<h5 id="sprintVars">'+serverList.servers[d[1]].sprintEnabled+serverList.servers[d[1]].sprintUnlimitedEnabled+'</h5></div>';
     if(!serverList.servers[d[1]].passworded){ 
         output += '<div id="scoreboard"><table class="statBreakdown"><thead class="tableHeader">'+
             '<th>Name</th>'+
