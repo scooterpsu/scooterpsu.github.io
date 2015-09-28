@@ -222,7 +222,7 @@ tr.shown td.details-control {
 #gameStatus{
 	position: relative;
 	float: right;
-	bottom: 25;
+	bottom: 20;
 	right: 15;
 }
 #sprintVars{
