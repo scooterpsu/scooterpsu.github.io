@@ -486,8 +486,8 @@ function expansionLine(d) {
     }
     if (serverList.servers[d[1]].VoIP) {
         output +='<img id="voipIcon" src="images/mic.png"></div>';
-    }   else {
-       output +='<img id="voipIcon" src="images/nomic.png"></div>'; 
+    } else {
+        output +='<img id="voipIcon" src="images/nomic.png"></div>'; 
     }
     if(!serverList.servers[d[1]].passworded){ 
         output += '<div id="scoreboard"><table class="statBreakdown"><thead class="tableHeader">'+
@@ -519,7 +519,7 @@ function expansionLine(d) {
                 playerNum++;
             }
         output += '</tbody></table></div>';  
-    }   else {
+    } else {
     output += "<div id='scoreboard' class='private'><center><h3>Private Game</h3><br /><h3>Player Data Unavailable</h3></center></div>";
     }
     return output;
@@ -566,7 +566,6 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
                 x += item;
             }
         }
- 
         return x;
     },
  
@@ -577,10 +576,4 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "ip-address-desc": function ( a, b ) {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
-} );
-
-$(document).ready(function() {
-    $('#example').DataTable( {
-
-    } );
 } );
