@@ -3,6 +3,8 @@ servers: []
 }; 
 var serverTable = [];
 var pingTable = [];
+var isThrottled = false;
+var throttleDuration = 1000; // ms
 
 var serverCount = 0;
 var playerCount = 0;
@@ -533,6 +535,10 @@ function sortByKey(array, key) {
 }
 
 function refreshTable(){
+    //Throttle refresh so people can't spam and break the count
+    if (isThrottled) { return; }
+    isThrottled = true;
+    setTimeout(function () { isThrottled = false; }, throttleDuration);
     serverList = {
         servers: []
     };
