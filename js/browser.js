@@ -96,7 +96,7 @@ function buildTable(){
 			}, "10");
         },
         destroy: true,
-        "iDisplayLength": 10,
+        "iDisplayLength": 25,
 		//stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
