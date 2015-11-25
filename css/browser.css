@@ -17,6 +17,8 @@ img{
     position: absolute;
     top: -5px;
     left: 80;
+	text-shadow: 1px 0 0 #1a3d5a, -1px 0 0 #1a3d5a, 0 1px 0 #1a3d5a, 0 -1px 0 #1a3d5a, 1px 1px #1a3d5a, -1px -1px 0 #1a3d5a, 1px -1px 0 #1a3d5a, -1px 1px 0 #1a3d5a;
+
 }
 #logo{
     position: absolute;
@@ -50,6 +52,7 @@ img{
     position: absolute;
     top: 10;
     left: 515;
+	text-shadow: 1px 0 0 #1a3d5a, -1px 0 0 #1a3d5a, 0 1px 0 #1a3d5a, 0 -1px 0 #1a3d5a, 1px 1px #1a3d5a, -1px -1px 0 #1a3d5a, 1px -1px 0 #1a3d5a, -1px 1px 0 #1a3d5a;
 }
 .closeButton {
     opacity: 0.8;
