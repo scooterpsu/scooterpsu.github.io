@@ -291,24 +291,24 @@ function pingMe(ip, rowNum) {
 }
 
 function fillGameCard(i){
-    $("#host").text("Host: " + serverList.servers[i].hostPlayer);
-    $("#name").text("Name: " + serverList.servers[i].name);
-    $("#title").text(capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map));
+    $("#host").html("<b>Host: </b>" + serverList.servers[i].hostPlayer);
+    $("#name").html("<b>Name: </b>" + serverList.servers[i].name);
+    $("#title").html("<b>" + capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map) + "</b>");
     $("#mappic").attr("src", "images/maps/" + serverList.servers[i].mapFile + ".png");
     $("#varpic").attr("src", "images/gametypes/" + capitalizeFirstLetter(serverList.servers[i].variantType) + ".png");
     if (serverList.servers[i].sprintEnabled == "1"){
         if (serverList.servers[i].sprintUnlimitedEnabled == "1") {
-            $("#sprint").text("Sprint: Unlimited");
+            $("#sprint").html("<b>Sprint:</b> Unlimited");
         } else {
-            $("#sprint").text("Sprint: Enabled");
+            $("#sprint").html("<b>Sprint:</b> Enabled");
         }
     }  else {
-            $("#sprint").text("Sprint: Disabled");
+            $("#sprint").html("<b>Sprint:</b> Disabled");
     }
     if (serverList.servers[i].VoIP) {
-            $("#voip").text("VoIP: Enabled");
+            $("#voip").html("<b>VoIP:</b> Enabled");
     } else {
-            $("#voip").text("VoIP: Disabled");
+            $("#voip").html("<b>VoIP:</b> Disabled");
     }
 }
 
