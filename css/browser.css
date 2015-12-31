@@ -14,7 +14,7 @@ img{
     opacity: 0.8;
     position: absolute;
     top: -10px;
-    left: 8px;
+    left: 15px;
     z-index: 1;
 }
 .refresh {
@@ -41,7 +41,7 @@ img{
     position: absolute;
     top: 3px;
     left: 350px;
-        z-index: 1;
+    z-index: 1;
 }
 .closeButton {
     opacity: 0.8;
@@ -79,9 +79,11 @@ img{
 .refresh .controllerButton{
     opacity: 1;
 }
+
 .closeButton .controllerButton{
     opacity: 1;
 }
+
 #serverTable_wrapper{
     opacity: 0.8;
     top: 55;
@@ -91,6 +93,7 @@ img{
     z-index: 1;
     -webkit-clip-path: polygon(100% 0, 100% 100%, 45px 100%, 0 -webkit-calc(100% - 50px), 0 0);
 }
+
 #serverTable tbody tr td{
     background-color: #13233d;
     color: white;
@@ -100,27 +103,31 @@ img{
 #serverTable tbody tr{
     -webkit-clip-path: polygon(0% 0%, 100% 0, 100% 65%, 99% 100%, 0% 100%);
 }
+
 #serverTable tbody tr.selected td{
     background-color: white;
     color: black;
 }
+
 #serverTable thead tr th.sorting_asc, thead tr th.sorting_desc {
     background-color: white;
     color: black;
 }
-#serverTable thead tr th.sorting:hover{
 
+#serverTable thead tr th.sorting:hover{
     color: white;
 }
+
 #serverTable thead tr th.sorting{
     padding-top: 0;
     color: white;
     border-bottom: 1px solid white;
 }
-#serverTable tbody tr td.sorting_1{
 
+#serverTable tbody tr td.sorting_1{
     color: white;
 }
+
 #serverTable tbody tr:hover td{
     background-color: #31415b;
 	color: white;
@@ -133,27 +140,35 @@ img{
     right: -4px;
     z-index: 3;
 }
+
 #serverTable_filter label{
     color: white;
 }
+
 #serverTable_filter input{
     color: black;
 }
+
 #serverTable_length{
     display: none;
 }
+
 #serverTable_paginate{
     display: none
 }
+
 #serverTable_paginate label{
     color: white !important;
 }
+
 #serverTable_info{
     display: none;
 }
+
 #serverTable{
 	border-bottom: 0;
 }
+
 #connectionStatus{
 	opacity: 0.8;
 	position:fixed; bottom:0; right: 0;
@@ -162,21 +177,23 @@ img{
 	padding-bottom: 7;
     color: white;
 }
+
 td.details-control {
     background: url('../images/details_open.png') no-repeat center center;
     cursor: pointer;
 	background-color: black !important;
 }
+
 tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
 
 #gamecardborder{
-        position: absolute;
+    position: absolute;
     bottom: 10px;
     right: 10px;
-    	height: 126px;
-	width: 532px;
+    height: 132px;
+	width: 552px;
     background-color: #404f70;
     -webkit-clip-path: polygon(4% 0, 100% 0, 100% 82%, 96% 100%, 0 100%, 0 20%);
     z-index: 1;
@@ -190,8 +207,8 @@ tr.shown td.details-control {
     padding: 1px;
     float: left;
 	color: white;
-	height: 124px;
-	width: 530px;
+	height: 130px;
+	width: 550px;
     position: relative;
     margin-bottom: 10px;
     padding-left: 10px;
@@ -201,7 +218,7 @@ tr.shown td.details-control {
 #mappic{
     right: 0px;
     margin-top: -30px;
-    height: 122px;
+    height: 128px;
     position: relative;
     float: right;
     border-left: 1px solid #404f70;
@@ -210,7 +227,7 @@ tr.shown td.details-control {
 
 #varpic{
     height: 75px;
-    right: 180px;
+    right: 185px;
     top: 25px;
     position: absolute;
     float: right;
@@ -229,6 +246,13 @@ tr.shown td.details-control {
 
 #map{
     float: right;
+}
+
+#name{
+    width: 248px;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    max-height: 38px;
 }
 
 #extBorder{
