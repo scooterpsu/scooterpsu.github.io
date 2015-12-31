@@ -19,14 +19,14 @@ img{
     color: white;
     opacity: 0.8;
     position: absolute;
-    top: -5px;
-    left: 10px;
+    top: -10px;
+    left: 8px;
 
 }
 .refresh {
     opacity: 0.8;
     position: absolute;
-    top: 13px;
+    top: 8px;
     left: 210px;
     color: white;
     font-weight: bold;
@@ -45,14 +45,14 @@ img{
 	font-weight: bold;
     opacity: 0.8;
     position: absolute;
-    top: 8px;
+    top: 3px;
     left: 350px;
 }
 .closeButton {
     opacity: 0.8;
     position: absolute;
-    top: 20px;
-    right: 10;
+    top: 8px;
+    right: 2px;
     color: white;
     font-weight: bold;
     background-color: black;
@@ -94,6 +94,7 @@ img{
     height: 80%;
     padding-left: 10px;
     padding-right: 10px;
+    margin-bottom: 10px;
 }
 #serverTable tbody tr td{
     background-color: #13233d;
@@ -134,7 +135,7 @@ img{
 #serverTable_filter{
     position: relative;
     top: -45px;
-    right: 0;
+    right: -4px;
     z-index: 1;
 }
 #serverTable_filter label{
@@ -220,14 +221,11 @@ tr.shown td.details-control {
 }
 
 #host{
-    position: absolute;
-    top: 35px;
-    float: left;
+
 }
 
 #name{
-    position: absolute;
-    top: 55px;
+
 }
 
 #title{
@@ -250,13 +248,11 @@ tr.shown td.details-control {
 }
 
 #voip{
-    position: absolute;
-    top: 75px;
+
 }
 
 #sprint{
-    position: absolute;
-    top: 95px;
+
 }
 
 #extBorder{
@@ -266,7 +262,7 @@ tr.shown td.details-control {
     height: 100%;
     width: 100%;
     padding: 1px;
-    -webkit-clip-path: polygon(575px 0%, 625px 45px, 100% 45px, 100% 100%, 40px 100%, 0 93%, 0 0);
+    -webkit-clip-path: polygon(535px 0%, 585px 45px, 100% 45px, 100% 100%, 40px 100%, 0 93%, 0 0);
     z-index: -1;
 }
 
@@ -276,5 +272,5 @@ tr.shown td.details-control {
     left: 1px;
     height: 100%;
     padding: 5px;
-    -webkit-clip-path: polygon(573px 0%, 623px 45px, 100% 45px, 100% 100%, 40px 100%, 0 93%, 0 0);
+    -webkit-clip-path: polygon(533px 0%, 583px 45px, 100% 45px, 100% 100%, 40px 100%, 0 93%, 0 0);
 }
