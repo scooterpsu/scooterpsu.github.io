@@ -1,5 +1,9 @@
 body {
-	background-color: black;
+	background-color: #05152f;
+    position: relative;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 img{
     -webkit-user-drag: none;
@@ -16,23 +20,14 @@ img{
     opacity: 0.8;
     position: absolute;
     top: -5px;
-    left: 80;
-	text-shadow: 1px 0 0 #1a3d5a, -1px 0 0 #1a3d5a, 0 1px 0 #1a3d5a, 0 -1px 0 #1a3d5a, 1px 1px #1a3d5a, -1px -1px 0 #1a3d5a, 1px -1px 0 #1a3d5a, -1px 1px 0 #1a3d5a;
+    left: 0;
 
-}
-#logo{
-    position: absolute;
-    top: 8;
-    left: 15;
-    opacity: 0.8;
-    width: 50px;
-    height: 43px;
 }
 .refresh {
     opacity: 0.8;
     position: absolute;
-    top: 13;
-    left: 375;
+    top: 13px;
+    left: 200px;
     color: white;
     font-weight: bold;
     background-color: black;
@@ -50,14 +45,13 @@ img{
 	font-weight: bold;
     opacity: 0.8;
     position: absolute;
-    top: 10;
-    left: 515;
-	text-shadow: 1px 0 0 #1a3d5a, -1px 0 0 #1a3d5a, 0 1px 0 #1a3d5a, 0 -1px 0 #1a3d5a, 1px 1px #1a3d5a, -1px -1px 0 #1a3d5a, 1px -1px 0 #1a3d5a, -1px 1px 0 #1a3d5a;
+    top: 8px;
+    left: 350px;
 }
 .closeButton {
     opacity: 0.8;
     position: absolute;
-    top: 13;
+    top: 20px;
     right: 10;
     color: white;
     font-weight: bold;
@@ -92,10 +86,12 @@ img{
     opacity: 0.8;
     top: 55;
     padding-top: 0;
+    border: 1px solid white;
 }
 #serverTable tbody tr td{
-    background-color: black;
+    background-color: #13233d;
     color: white;
+    border: 1px solid #05152f;
 }
 #serverTable tbody tr.selected td{
     background-color: white;
@@ -106,29 +102,29 @@ img{
     color: black;
 }
 #serverTable thead tr th.sorting:hover{
-    background-color: #545454;
+
     color: white;
 }
 #serverTable thead tr th.sorting{
-    background-color: #1a3d5a;
+    padding-top: 0;
     color: white;
     border-bottom: 1px solid white;
 }
 #serverTable tbody tr td.sorting_1{
-    background-color: #1a3d5a;
+
     color: white;
 }
 #serverTable tbody tr:hover td{
-    background-color: #1a3d5a;
+    background-color: #31415b;
 	color: white;
     cursor: pointer;
 }
 
 #serverTable_filter{
     opacity: 0.8;
-    position: fixed;
-    top: 15;
-    right: 10;
+    position: relative;
+    top: -40px;
+    right: 0;
 }
 #serverTable_filter label{
     color: white;
@@ -137,45 +133,18 @@ img{
     color: black;
 }
 #serverTable_length{
-    opacity: 0.8;
-    position: fixed;
-    bottom: 10; 
-    left: 15;
-	z-index: 1;
-}
-#serverTable_length label{
-    color: white;
-}
-#serverTable_length select{
-    color: black;
+    display: none;
 }
 #serverTable_paginate{
-    opacity: 0.8;
-    position: fixed;
-    bottom: 5; 
-    right: 15;
-    background-color: black;
-	z-index: 1;
+    display: none
 }
 #serverTable_paginate label{
     color: white !important;
 }
 #serverTable_info{
-	position: fixed;
-	font-weight: bold;
-    color: white;
-    background-color: #545454;
-	padding-top: 15;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	height: 50;
-	opacity: 0.8;
-	border: 1px solid black;
-	z-index: 0;
+    display: none;
 }
 #serverTable{
-	padding-bottom: 50;
 	border-bottom: 0;
 }
 #connectionStatus{
@@ -199,11 +168,14 @@ tr.shown td.details-control {
 	padding: 10;
 	padding-right: 0;
     float: left;
-	background-color: white;
 	color: black;
-	height: 264px;
-	width: 400px;
-    position: relative;
+	height: 200px;
+	width: 300px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 1px solid white;
+    margin-bottom: 10px;
 }
 #gamecard h2, #gamecard h3, #gamecard h4, #gamecard h5{
 	padding: 1;
@@ -262,11 +234,11 @@ tr.shown td.details-control {
 	margin-right: 4%;
 }
 .statLines{
-    font-size: 10pt;
+    font-size: 8pt;
 	background-color: black !important;
 }
 .tableHeader{
-    font-size: 10pt;
+    font-size: 8pt;
     padding: 0; 
 }
 .statBreakdown{

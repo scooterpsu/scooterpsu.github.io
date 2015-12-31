@@ -19,17 +19,19 @@ $(document).ready(function() {
     $('#serverTable tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
         var row = $('#serverTable').DataTable().row( tr );
-
+        /*
         if ( row.child.isShown() ) {
             // This row is already open - close it
             row.child.hide();
             tr.removeClass('shown');
         }
+
         else {
             // Open this row
             row.child( expansionLine(row.data()) ).show();
             tr.addClass('shown');
         }
+        */
     } );
 	window.addEventListener('resize', function(){
 		setTimeout(function() {
@@ -96,34 +98,27 @@ function buildTable(){
 			}, "10");
         },
         destroy: true,
-        "iDisplayLength": 25,
+        "iDisplayLength": -1,
 		//stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 }
         ],
 		columns: [
-			{
-				"className":      'details-control',
-				"orderable":      false,
-				"data":           null,
-				"defaultContent": '',
-                "width": "0.5%",
-			},
 			{ title: "ID", visible: false},
-			{ title: "IP", "width": "1%"},
-            { title: "Location"},
-			{ title: "Name", "width": "15%" },
+			{ title: "IP", "width": "1%", visible: false},
+            { title: "Location", visible: false},
+			{ title: "Name" },
 			{ title: "Host" },
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
+			{ title: "Gametype"},
 			{ title: "Variant" },
-			{ title: "Variant Type", "width": "1%"},
-			{ title: "Status", visible: false},
-			{ title: "Num Players", "width": "1%"},
-			{ title: "Max Players", "width": "1%"},
-			{ title: "Private", "width": "1%"},
-			{ title: "Version", "width": "1%"}
+			{ title: "Status", visible: false},    
+			{ title: "Players"},
+ 			{ title: "Num Players", visible: false},    
+			{ title: "Private"},
+			{ title: "Version", "width": "1%", visible: false}
 		],
 		"order": [[ 0 ]],
 		"language": {
@@ -166,7 +161,7 @@ function buildTable(){
 															serverInfo["passworded"] = false;
 														};
 														table.row.add([
-															null,
+															/*null,*/
 															serverInfo.serverId,
 															serverInfo.serverIP,
                                                             "Loading...",
@@ -174,11 +169,11 @@ function buildTable(){
 															serverInfo.hostPlayer,
 															serverInfo.map,
 															serverInfo.mapFile,
-															capitalizeFirstLetter(serverInfo.variant),
 															capitalizeFirstLetter(serverInfo.variantType),
+															capitalizeFirstLetter(serverInfo.variant),
 															serverInfo.status,
-															serverInfo.numPlayers,
-															serverInfo.maxPlayers,
+															serverInfo.numPlayers + "/" + serverInfo.maxPlayers,
+                                                            serverInfo.numPlayers,
 															serverInfo.passworded,
 															serverInfo.eldewritoVersion,
                                                             serverInfo.sprintEnabled,
@@ -470,6 +465,7 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+/*
 function expansionLine(d) {
     var output = "";
     output += '<div id="gamecard"><img id="mapPic" class="img-responsive" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png">'+
@@ -526,6 +522,7 @@ function expansionLine(d) {
     }
     return output;
 }
+*/
 
 function sortByKey(array, key) {
     return array.sort(function(b, a) {
