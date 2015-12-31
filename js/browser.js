@@ -19,17 +19,19 @@ $(document).ready(function() {
     $('#serverTable tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
         var row = $('#serverTable').DataTable().row( tr );
-
+        /*
         if ( row.child.isShown() ) {
             // This row is already open - close it
             row.child.hide();
             tr.removeClass('shown');
         }
+
         else {
             // Open this row
             row.child( expansionLine(row.data()) ).show();
             tr.addClass('shown');
         }
+        */
     } );
 	window.addEventListener('resize', function(){
 		setTimeout(function() {
@@ -42,7 +44,7 @@ $(document).ready(function() {
 } );
         
 function buildTable(){
-	$('#serverTable').on('click', 'tr:not(:first) td:not(".details-control") ', function() {
+	$('#serverTable').on('click', 'tr', function() {
 		/*
 		console.log("ip: " + $(this).find('td:eq(0)').text());
 		console.log("numplayers: " + $(this).find('td:eq(8)').text());
@@ -54,20 +56,24 @@ function buildTable(){
 		var tr = $(this).closest('tr');
 		var row = table.row( tr );
 		if (row.data()){
-			joinServer(row.data()[1]);
+			joinServer(row.data()[0]);
 			/*
             selectedID = jQuery(this).closest('tr').index();
 			selectedID++;
 			$('#serverTable tr.selected').removeClass('selected');
 			$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
             */
-		} else {
-            var trChild = $(this).closest('tr').prev();
-            var rowChild = table.row(trChild);
-            rowChild.child.hide();
-            trChild.removeClass('shown');
+		} 
+    });  
+    $('#serverTable').on('mouseover', 'tr', function() {
+		var tr = $(this).closest('tr');
+		var row = table.row( tr );
+		if (row.data()){
+			fillGameCard(row.data()[0]);
         }
-	});  
+    });
+  
+
 	var table = $('#serverTable').DataTable( {
 		"footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
@@ -96,34 +102,27 @@ function buildTable(){
 			}, "10");
         },
         destroy: true,
-        "iDisplayLength": 25,
+        "iDisplayLength": -1,
 		//stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 }
         ],
 		columns: [
-			{
-				"className":      'details-control',
-				"orderable":      false,
-				"data":           null,
-				"defaultContent": '',
-                "width": "0.5%",
-			},
 			{ title: "ID", visible: false},
-			{ title: "IP", "width": "1%"},
-            { title: "Location"},
-			{ title: "Name", "width": "15%" },
+			{ title: "IP", "width": "1%", visible: false},
+            { title: "", "width": "0.5%"},
+			{ title: "Name" },
 			{ title: "Host" },
+            { title: "Ping" , "width": "1%"},
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
+			{ title: "Gametype"},
 			{ title: "Variant" },
-			{ title: "Variant Type", "width": "1%"},
-			{ title: "Status", visible: false},
-			{ title: "Num Players", "width": "1%"},
-			{ title: "Max Players", "width": "1%"},
-			{ title: "Private", "width": "1%"},
-			{ title: "Version", "width": "1%"}
+			{ title: "Status", visible: false},    
+ 			{ title: "Num Players", visible: false},  
+			{ title: "Players", "width": "1%"},
+			{ title: "Version", "width": "1%", visible: false}
 		],
 		"order": [[ 0 ]],
 		"language": {
@@ -163,29 +162,36 @@ function buildTable(){
 														}
 														//console.log(serverInfo);
 														if(!serverInfo.hasOwnProperty("passworded")){
-															serverInfo["passworded"] = false;
-														};
+															serverInfo["passworded"] = "";
+														} else {
+                                                           serverInfo["passworded"] = "🔒";
+                                                        };
+                                                        if (serverInfo.name.length > 45){
+                                                            serverInfo.name = serverInfo.name.substring(0, 42) + "..."
+                                                        };
 														table.row.add([
-															null,
+															/*null,*/
 															serverInfo.serverId,
 															serverInfo.serverIP,
-                                                            "Loading...",
+                                                            serverInfo.passworded,
 															serverInfo.name,
 															serverInfo.hostPlayer,
+                                                            "000",
 															serverInfo.map,
 															serverInfo.mapFile,
-															capitalizeFirstLetter(serverInfo.variant),
 															capitalizeFirstLetter(serverInfo.variantType),
+															capitalizeFirstLetter(serverInfo.variant),
 															serverInfo.status,
-															serverInfo.numPlayers,
-															serverInfo.maxPlayers,
-															serverInfo.passworded,
+                                                            serverInfo.numPlayers,
+															serverInfo.numPlayers + "/" + serverInfo.maxPlayers,
 															serverInfo.eldewritoVersion,
                                                             serverInfo.sprintEnabled,
                                                             serverInfo.sprintUnlimitedEnabled
 														]).draw();
 														table.columns.adjust().draw();
-                                                        getLocation(serverInfo.serverIP, $("#serverTable tbody tr").length-1);
+                                                        pingMe(serverInfo.serverIP, $("#serverTable tbody tr").length-1);
+                                                        fillGameCard($("#serverTable tbody tr").length-1);
+                                                        
 													} else {
 														console.log(serverInfo.serverIP + " is glitched");
 													}
@@ -305,6 +311,7 @@ function toggleDetails(){
     $('#serverTable tr:eq(' + selectedID + ') td.details-control').trigger( "click" );
 }
 
+/*
 function getLocation(ip, rowNum){ 
     if (ip.contains(":")){
         ip = ip.split(":")[0];
@@ -325,8 +332,54 @@ function getLocation(ip, rowNum){
         }
     });
 }
+*/
 
-/*
+function pingMe(ip, rowNum) {
+    var startTime = Date.now();
+    var endTime;
+    var ping;
+    console.log(ip);
+    $.ajax({
+        type: "GET",
+        url: "http://" + ip + "/",
+        async: true,
+        timeout: 5000,
+        success: function() {
+            endTime = Date.now();
+            ping = Math.round((endTime - startTime) * .45);
+            $('#serverTable').dataTable().fnUpdate(ping, rowNum, 5);
+            $('#serverTable').DataTable().columns.adjust().draw();
+        }
+    });
+}
+
+function fillGameCard(i){
+    $("#host").text("Host: " + serverList.servers[i].hostPlayer);
+    if(serverList.servers[i].name.length > 30){
+        $("#name").text("Name: " + serverList.servers[i].name.substring(0,30));
+    } else {
+        $("#name").text("Name: " + serverList.servers[i].name);
+    }
+    $("#title").text(capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map));
+    $("#mappic").attr("src", "images/maps/" + serverList.servers[i].mapFile + ".png");
+    $("#varpic").attr("src", "images/gametypes/" + capitalizeFirstLetter(serverList.servers[i].variantType) + ".png");
+    if (serverList.servers[i].sprintEnabled == "1"){
+        if (serverList.servers[i].sprintUnlimitedEnabled == "1") {
+            $("#sprint").text("Sprint: Unlimited");
+        } else {
+            $("#sprint").text("Sprint: Enabled");
+        }
+    }  else {
+            $("#sprint").text("Sprint: Disabled");
+    }
+    if (serverList.servers[i].VoIP) {
+            $("#voip").text("VoIP: Enabled");
+    } else {
+            $("#voip").text("VoIP: Disabled");
+    }
+}
+
+/* Once you can pong via rcon
 function pingList(){ 
     //fakePongs();
     pingTable.length = 0;
@@ -470,6 +523,7 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+/*
 function expansionLine(d) {
     var output = "";
     output += '<div id="gamecard"><img id="mapPic" class="img-responsive" src="images/maps/' + serverList.servers[d[1]].mapFile + '.png">'+
@@ -526,6 +580,7 @@ function expansionLine(d) {
     }
     return output;
 }
+*/
 
 function sortByKey(array, key) {
     return array.sort(function(b, a) {
