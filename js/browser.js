@@ -355,11 +355,7 @@ function pingMe(ip, rowNum) {
 
 function fillGameCard(i){
     $("#host").text("Host: " + serverList.servers[i].hostPlayer);
-    if(serverList.servers[i].name.length > 30){
-        $("#name").text("Name: " + serverList.servers[i].name.substring(0,30));
-    } else {
-        $("#name").text("Name: " + serverList.servers[i].name);
-    }
+    $("#name").text("Name: " + serverList.servers[i].name);
     $("#title").text(capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map));
     $("#mappic").attr("src", "images/maps/" + serverList.servers[i].mapFile + ".png");
     $("#varpic").attr("src", "images/gametypes/" + capitalizeFirstLetter(serverList.servers[i].variantType) + ".png");
