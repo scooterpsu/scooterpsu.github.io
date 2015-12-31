@@ -267,7 +267,7 @@ function joinServer(i) {
 
 function connectionTrigger(){
     $('.closeButton').show();
-	$('#serverTable_filter').css("right","125");
+	$('#serverTable_filter').css("right","95");
     dewRcon.send('game.version');
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
