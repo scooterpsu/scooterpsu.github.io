@@ -1,7 +1,7 @@
 body {
 	background-color: #05152f;
     position: relative;
-    width: 98%;
+    width: -webkit-calc(100% - 30px);
     margin-left: auto;
     margin-right: auto;
 }
@@ -88,6 +88,8 @@ img{
     opacity: 0.8;
     top: 55;
     height: -webkit-calc(100% - 50px);
+    float: left;
+    width: -webkit-calc(100% - 260px);
     padding-left: 10px;
     padding-right: 10px;
     z-index: 1;
@@ -101,7 +103,7 @@ img{
 }
 
 #serverTable tbody tr{
-    -webkit-clip-path: polygon(0% 0%, 100% 0, 100% 65%, 99% 100%, 0% 100%);
+    -webkit-clip-path: polygon(0% 0%, 100% 0, 100% -webkit-calc(100% - 12px), -webkit-calc(100% - 12px) 100%, 0% 100%);
 }
 
 #serverTable tbody tr.selected td{
@@ -137,7 +139,7 @@ img{
 #serverTable_filter{
     position: relative;
     top: -45px;
-    right: -4px;
+    right: -264px;
     z-index: 3;
 }
 
@@ -188,73 +190,6 @@ tr.shown td.details-control {
     background: url('../images/details_close.png') no-repeat center center;
 }
 
-#gamecardborder{
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    height: 132px;
-	width: 552px;
-    background-color: #404f70;
-    -webkit-clip-path: polygon(4% 0, 100% 0, 100% 82%, 96% 100%, 0 100%, 0 20%);
-    z-index: 1;
-}
-
-#gamecard{
-    opacity: 0.8;
-    background-color:#13233d;
-    left: 1px;
-    top: 1px;
-    padding: 1px;
-    float: left;
-	color: white;
-	height: 130px;
-	width: 550px;
-    position: relative;
-    margin-bottom: 10px;
-    padding-left: 10px;
-    -webkit-clip-path: polygon(4% 0, 100% 0, 100% 82%, 96% 100%, 0 100%, 0 20%);
-}
-
-#mappic{
-    right: 0px;
-    margin-top: -30px;
-    height: 128px;
-    position: relative;
-    float: right;
-    border-left: 1px solid #404f70;
-    padding-left: 1px;
-}
-
-#varpic{
-    height: 75px;
-    right: 185px;
-    top: 25px;
-    position: absolute;
-    float: right;
-}
-
-#title{
-    background-color: black;
-    margin-left: -10px;
-    width: 256px;
-    height: 30px;
-    border-bottom: 1px solid #404f70;
-    color: white;
-    text-align: center;
-    line-height: 30px;
-}
-
-#map{
-    float: right;
-}
-
-#name{
-    width: 248px;
-    overflow-wrap: break-word;
-    overflow: hidden;
-    max-height: 38px;
-}
-
 #extBorder{
     position: absolute;
     top: 0px;
@@ -273,4 +208,108 @@ tr.shown td.details-control {
     height: 100%;
     padding: 5px;
     -webkit-clip-path: polygon(533px 0%, 583px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+}
+
+/*
+#gamecardborder{
+    background-color: #404f70;
+    width: 250px;
+    position: relative;
+    float: right;
+    z-index: 2;
+    margin-top: 60px;
+    margin-right: 10px;
+    padding-top: 2px;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 30px);
+}
+
+#gamecard{
+    position: relative;
+    margin-top: 2px;
+    bottom: 2px;
+    background-color: #13233d;
+    float: left;
+    margin-left: 2px;
+    margin-top: 2px;
+    width: 246px;  
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 30px);
+}
+*/
+
+#gamecard{
+    width: 250px;
+    position: relative;
+    float: right;
+    z-index: 2;
+    margin-top: 60px;
+    margin-right: 10px;
+}
+
+#cardheader{
+    position: relative;
+    top: 2px;
+    left: 2px;
+    width: 248px;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
+}
+
+#cardheaderborder{
+    background-color: #404f70;
+    width: 250px;
+    height: 144px;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
+}
+
+#title{
+    position: relative;
+    margin-top: 2px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    width: 247px;
+    background-color: black;
+    color: white;
+    border-bottom: 2px solid #404f70;
+}
+
+#mappic{
+    width: 247px;
+}
+
+#varpic{
+    margin-top: -100px;
+    margin-left: 10px;
+    height: 80px;
+}
+
+#scoreboard{
+    margin-top: 5px;
+    width: 250px;
+    height: 150px;
+    line-height: 30px;
+    text-align: center;
+    border: 2px solid #404f70;
+    background-color: #13233d;
+    color: white; 
+}
+
+#gameinfoborder{
+    background-color: #404f70;
+    width: 250px;
+    padding-bottom: 4px;
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
+}
+
+#gameinfo{
+    position: relative;
+    top: 2px;
+    left: 2px;
+    width: 247px;
+    margin-top: 8px;
+    padding-left: 10px;
+    line-height: 30px;
+    text-align: left;
+    background-color: #13233d;
+    color: white; 
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
 }

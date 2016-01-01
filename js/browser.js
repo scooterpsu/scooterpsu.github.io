@@ -241,7 +241,7 @@ function connectionTrigger(){
 
 function disconnectTrigger(){
     $('.closeButton').hide();
-	$('#serverTable_filter').css("right","10");
++	$('#serverTable_filter').css("right","-264px");
 }
 
 function closeBrowser() {
@@ -310,6 +310,7 @@ function fillGameCard(i){
     } else {
             $("#voip").html("<b>VoIP:</b> Disabled");
     }
+    $("#version").html("<b>Version: </b>" + serverList.servers[i].eldewritoVersion);
 }
 
 Mousetrap.bind('f11', function() {
