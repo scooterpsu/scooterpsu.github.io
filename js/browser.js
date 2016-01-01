@@ -241,7 +241,7 @@ function connectionTrigger(){
 
 function disconnectTrigger(){
     $('.closeButton').hide();
-	$('#serverTable_filter').css("right","10");
+	$('#serverTable_filter').css("right","-4px");
 }
 
 function closeBrowser() {
