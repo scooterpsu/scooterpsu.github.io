@@ -249,14 +249,15 @@ tr.shown td.details-control {
     position: relative;
     top: 2px;
     left: 2px;
-    width: 248px;
+    width: 246px;
+    background-color: #13233d;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
 }
 
 #cardheaderborder{
     background-color: #404f70;
     width: 250px;
-    height: 144px;
+    height: 143px;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
 }
 
@@ -266,24 +267,24 @@ tr.shown td.details-control {
     height: 30px;
     line-height: 30px;
     text-align: center;
-    width: 247px;
+    width: 246px;
     background-color: black;
     color: white;
     border-bottom: 2px solid #404f70;
 }
 
 #mappic{
-    width: 247px;
+    width: 246px;
 }
 
 #varpic{
-    margin-top: -100px;
+    margin-top: -95px;
     margin-left: 10px;
     height: 80px;
 }
 
 #scoreboard{
-    display:none;
+    display: none;
     margin-top: 5px;
     width: 250px;
     height: 150px;
