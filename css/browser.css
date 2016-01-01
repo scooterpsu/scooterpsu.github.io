@@ -283,6 +283,7 @@ tr.shown td.details-control {
 }
 
 #scoreboard{
+    display:none;
     margin-top: 5px;
     width: 250px;
     height: 150px;
