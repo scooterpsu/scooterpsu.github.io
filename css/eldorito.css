@@ -2,17 +2,17 @@
     background: rgba(10, 10, 10, 0.6); 
 }
 .sweet-alert {
-    background-color:black;
+    background-color:#13233d;
     padding: 24px;
     padding-top: 50px;
     padding-bottom: 13px;
     text-align: right;
     border-radius: 0;
     box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); 
-    border: 1px solid #1a3d5a;
+    border: 2px solid #404f70;
 }
 .sweet-alert h2 {
-    background-color:#1a3d5a;
+    background-color: black;
     margin-top: 0;
     position: absolute;
     top: 0;
@@ -28,7 +28,7 @@
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 24px;
-    border: 1px solid white;
+    border: 2px solid #404f70;
     border-left: 0;
     border-right: 0;
     border-top: 0;
@@ -52,6 +52,7 @@
     border:1px solid white;
     margin-top: 0; 
     border-radius: 0;
+    background-color: black !important;
 }
 .sweet-alert button:hover {   
     background-color: #1a3d5a !important; 
