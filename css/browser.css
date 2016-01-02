@@ -72,10 +72,6 @@ img{
     opacity: 1;
 }
 
-.selected{
-    background-color: #31415b;
-}
-
 .refresh .controllerButton{
     opacity: 1;
 }
@@ -107,8 +103,8 @@ img{
 }
 
 #serverTable tbody tr.selected td{
-    background-color: white;
-    color: black;
+    background-color: #31415b;
+    color: white;
 }
 
 #serverTable thead tr th.sorting_asc, thead tr th.sorting_desc {
