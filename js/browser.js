@@ -226,7 +226,7 @@ function joinServer(i) {
 
 function connectionTrigger(){
     $('.closeButton').show();
-	$('#serverTable_filter').css("right","95");
+	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version');
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
@@ -342,7 +342,7 @@ function fillGameCard(i){
             }
         output += '</tbody></table>';  
     } else {
-    var output = "<center>Private Game</center>";
+    var output = "<center><b>Private Game</b></center>";
     }
     $("#scoreboard").html(output);
 }

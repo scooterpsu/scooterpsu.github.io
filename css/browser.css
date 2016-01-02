@@ -210,32 +210,6 @@ tr.shown td.details-control {
     -webkit-clip-path: polygon(533px 0%, 583px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
 }
 
-/*
-#gamecardborder{
-    background-color: #404f70;
-    width: 250px;
-    position: relative;
-    float: right;
-    z-index: 2;
-    margin-top: 60px;
-    margin-right: 10px;
-    padding-top: 2px;
-    -webkit-clip-path: polygon(30px 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 30px);
-}
-
-#gamecard{
-    position: relative;
-    margin-top: 2px;
-    bottom: 2px;
-    background-color: #13233d;
-    float: left;
-    margin-left: 2px;
-    margin-top: 2px;
-    width: 246px;  
-    -webkit-clip-path: polygon(30px 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 30px);
-}
-*/
-
 #gamecard{
     width: 250px;
     position: relative;
