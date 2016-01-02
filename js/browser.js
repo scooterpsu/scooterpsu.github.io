@@ -312,6 +312,7 @@ function fillGameCard(i){
     } else {
             $("#voip").html("<b>VoIP:</b> Disabled");
     }
+    $("#status").html("<b>Status: </b>In " + serverList.servers[i].status.substring(2,serverList.servers[i].status.length));
     $("#version").html("<b>Version: </b>" + serverList.servers[i].eldewritoVersion);
     if(!serverList.servers[i].passworded){ 
         var output = '<table class="statBreakdown"><thead class="tableHeader">'+
@@ -344,7 +345,7 @@ function fillGameCard(i){
             }
         output += '</tbody></table>';  
     } else {
-    var output = "<center><b>Private Game</b></center>";
+        var output = "<center><b>Private Game</b></center>";
     }
     $("#scoreboard").html(output);
 }
