@@ -311,6 +311,40 @@ function fillGameCard(i){
             $("#voip").html("<b>VoIP:</b> Disabled");
     }
     $("#version").html("<b>Version: </b>" + serverList.servers[i].eldewritoVersion);
+    if(!serverList.servers[i].passworded){ 
+        var output = '<table class="statBreakdown"><thead class="tableHeader">'+
+            '<th>Name</th>'+
+            '<th><center>Score</center></th>'+
+            '<th><center>K</center></th>'+
+            '<th><center>D</center></th>'+
+            '<th><center>A</center></th>'+
+            '<th><center>Ratio</center></th>'+
+            '</thead><tbody>';
+        var playerNum = 0;
+            while (playerNum < serverList.servers[i].players.length) {
+                var playerList = serverList.servers[i].players;
+                playerList = sortByKey(playerList, 'score');
+                var ratio = 0;
+                if(playerList[playerNum].name){
+                    if(playerList[playerNum].kills>0){
+                        ratio = ((playerList[playerNum].kills+(playerList[playerNum].assists/3))/playerList[playerNum].deaths).toFixed(2);
+                    }
+                    output +=  '<tr>'+
+                        '<td class="statLines">'+playerList[playerNum].name+'</td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].score+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].kills+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].deaths+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
+                        '<td class="statLines"><center>'+ratio+'</center></td>'+
+                    '</tr>';
+                }
+                playerNum++;
+            }
+        output += '</tbody></table>';  
+    } else {
+    var output = "<center>Private Game</center>";
+    }
+    $("#scoreboard").html(output);
 }
 
 Mousetrap.bind('f11', function() {

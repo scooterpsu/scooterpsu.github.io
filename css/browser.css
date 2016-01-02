@@ -284,15 +284,35 @@ tr.shown td.details-control {
 }
 
 #scoreboard{
-    display: none;
     margin-top: 5px;
     width: 250px;
-    height: 150px;
     line-height: 30px;
     text-align: center;
     border: 2px solid #404f70;
     background-color: #13233d;
     color: white; 
+}
+
+.statBreakdown{
+    font-size: 10pt;
+    line-height: 20px;
+    color: white;
+    width: 246px;
+    border-collapse: collapse;
+}
+
+.statBreakdown td{
+    border: 1px solid black;
+    padding-left: 2px;
+}
+
+.tableHeader {
+    background-color: black;
+    color: white;
+}
+
+.tableHeader th{
+    padding-left: 2px;
 }
 
 #gameinfoborder{
