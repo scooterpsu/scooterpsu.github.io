@@ -258,15 +258,17 @@ function closeBrowser() {
 function updateSelection(){
 	$('#serverTable tr.selected').removeClass('selected');
 	$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
+	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
+    fillGameCard(row[0]);
 }
 
 function joinSelected(){
-	var row = $('#serverTable').dataTable().fnGetData(selectedID-1);
+	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
 	joinServer(row[0]);
 }
 
 function toggleDetails(){
-	var row = $('#serverTable').dataTable().fnGetData(selectedID-1);
+	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
     console.log(row);
 	fillGameCard(row[0]);
 }
@@ -351,7 +353,6 @@ Mousetrap.bind('f11', function() {
     closeBrowser();
 });
 
-/*
 var gamepad = new Gamepad();
 
 gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
@@ -389,7 +390,7 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             sweetAlert.close();   
         }else if (e.control == "FACE_3"){
             //console.log("X");
-            toggleDetails();
+            //toggleDetails();
         }else if (e.control == "FACE_4"){
            //console.log("Y");
            window.location.reload();
@@ -440,7 +441,7 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
 if (!gamepad.init()) {
     // Your browser does not support gamepads, get the latest Google Chrome or Firefox
 }
-*/
+
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -467,6 +468,7 @@ function refreshTable(){
     $('.serverCount').html(serverCount + " servers");
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
+    selectedID = 1;
     buildTable();
     if(dewRconConnected){
         connectionTrigger();   
