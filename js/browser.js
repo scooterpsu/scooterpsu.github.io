@@ -291,6 +291,7 @@ function fillGameCard(i){
     $("#name").html("<b>Name: </b>" + serverList.servers[i].name);
     $("#title").html("<b>" + capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map) + "</b>");
     $("#mappic").attr("src", "images/maps/" + serverList.servers[i].mapFile + ".png");
+    $('#mappic').error(function(){$(this).attr('src', 'images/maps/mainmenu.png');});   
     $("#varpic").attr("src", "images/gametypes/" + capitalizeFirstLetter(serverList.servers[i].variantType) + ".png");
     if (serverList.servers[i].sprintEnabled == "1"){
         if (serverList.servers[i].sprintUnlimitedEnabled == "1") {
