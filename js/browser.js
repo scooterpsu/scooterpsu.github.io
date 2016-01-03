@@ -309,6 +309,7 @@ function fillGameCard(i){
     }
     $("#status").html("<b>Status: </b>In " + serverList.servers[i].status.substring(2,serverList.servers[i].status.length));
     $("#version").html("<b>Version: </b>" + serverList.servers[i].eldewritoVersion);
+    $("#ip").html("<b>IP: </b>" + serverList.servers[i].serverIP);
     if(!serverList.servers[i].passworded){ 
         var output = '<table class="statBreakdown"><thead class="tableHeader">'+
             '<th>Name</th>'+
