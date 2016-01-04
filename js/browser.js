@@ -134,22 +134,22 @@ function buildTable(){
                                                            serverInfo["passworded"] = "🔒";
                                                         };
 														table.row.add([
-															serverInfo.serverId,
-															serverInfo.serverIP,
-                                                            serverInfo.passworded,
-															serverInfo.name,
-															serverInfo.hostPlayer,
+															sanitizeString(serverInfo.serverId),
+															sanitizeString(serverInfo.serverIP),
+                                                            sanitizeString(serverInfo.passworded),
+															sanitizeString(serverInfo.name),
+															sanitizeString(serverInfo.hostPlayer),
                                                             "000",
-															serverInfo.map,
-															serverInfo.mapFile,
-															capitalizeFirstLetter(serverInfo.variantType),
-															capitalizeFirstLetter(serverInfo.variant),
-															serverInfo.status,
-                                                            serverInfo.numPlayers,
-															serverInfo.numPlayers + "/" + serverInfo.maxPlayers,
-															serverInfo.eldewritoVersion,
-                                                            serverInfo.sprintEnabled,
-                                                            serverInfo.sprintUnlimitedEnabled
+															sanitizeString(serverInfo.map),
+															sanitizeString(serverInfo.mapFile),
+															sanitizeString(capitalizeFirstLetter(serverInfo.variantType)),
+															sanitizeString(capitalizeFirstLetter(serverInfo.variant)),
+															sanitizeString(serverInfo.status),
+                                                            sanitizeString(serverInfo.numPlayers),
+															sanitizeString(serverInfo.numPlayers) + "/" + sanitizeString(serverInfo.maxPlayers),
+															sanitizeString(serverInfo.eldewritoVersion),
+                                                            sanitizeString(serverInfo.sprintEnabled),
+                                                            sanitizeString(serverInfo.sprintUnlimitedEnabled)
 														]).draw();
 														table.columns.adjust().draw();
                                                         pingMe(serverInfo.serverIP, $("#serverTable tbody tr").length-1);
@@ -506,3 +506,12 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 } );
+
+function sanitizeString(str) {
+    return String(str).replace(/(<([^>]+)>)/ig,"")
+                      .replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;')
+                      .replace(/'/g, '&#39;')
+                      .replace(/"/g, '&quot;');
+}
