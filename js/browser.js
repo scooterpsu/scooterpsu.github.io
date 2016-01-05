@@ -153,7 +153,7 @@ function buildTable(){
 														]).draw();
 														table.columns.adjust().draw();
                                                         pingMe(serverInfo.serverIP, $("#serverTable tbody tr").length-1);
-                                                        fillGameCard($("#serverTable tbody tr").length-1);
+                                                        fillGameCard(serverInfo.serverId);
                                                         
 													} else {
 														console.log(serverInfo.serverIP + " is glitched");
@@ -388,7 +388,6 @@ if (!gamepad.init()) {
     // Your browser does not support gamepads, get the latest Google Chrome or Firefox
 }
 
-
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -460,7 +459,6 @@ Handlebars.registerHelper('eachByScore', function(context,options){
     }
     return output;
 });
-
 
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
   if(v1 === v2) {
