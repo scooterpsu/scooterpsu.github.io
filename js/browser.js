@@ -329,16 +329,24 @@ function fillGameCard(i){
                 var playerList = serverList.servers[i].players;
                 playerList = sortByKey(playerList, 'score');
                 var ratio = 0;
+                var score = 0;
+                var kills = 0;
+                var deaths = 0;
+                var assists = 0;
                 if(playerList[playerNum].name){
                     if(playerList[playerNum].kills>0){
-                        ratio = ((playerList[playerNum].kills+(playerList[playerNum].assists/3))/playerList[playerNum].deaths).toFixed(2);
+                        score = onlyNumbers(playerList[playerNum].score);
+                        kills = onlyNumbers(playerList[playerNum].kills);
+                        deaths = onlyNumbers(playerList[playerNum].deaths);
+                        assists = onlyNumbers(playerList[playerNum].assists)
+                        ratio = ((kills+(assists/3))/deaths).toFixed(2);
                     }
                     output +=  '<tr>'+
                         '<td class="statLines">'+cleanString(playerList[playerNum].name)+'</td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].score.replace(/\D/g,'')+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].kills.replace(/\D/g,'')+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].deaths.replace(/\D/g,'')+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].assists.replace(/\D/g,'')+'</center></td>'+
+                        '<td class="statLines"><center>'+score+'</center></td>'+
+                        '<td class="statLines"><center>'+kills+'</center></td>'+
+                        '<td class="statLines"><center>'+deaths+'</center></td>'+
+                        '<td class="statLines"><center>'+assists+'</center></td>'+
                         '<td class="statLines"><center>'+ratio+'</center></td>'+
                     '</tr>';
                 }
@@ -509,4 +517,8 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 
 function cleanString(str) {
     return String(str).replace(/(<([^>]+)>)|&|<|>|'|"/ig,"");
+}
+
+function onlyNumbers(str) {
+    return String(str).replace(/\D/g,'')
 }
