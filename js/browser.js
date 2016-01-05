@@ -133,6 +133,9 @@ function buildTable(){
 														} else {
                                                            serverInfo["passworded"] = "🔒";
                                                         };
+                                                        if(!serverInfo.variant){
+                                                            serverInfo["variant"] = "none";
+                                                        };
 														table.row.add([
 															serverInfo.serverId,
 															serverInfo.serverIP,
@@ -312,7 +315,11 @@ function fillGameCard(i){
     } else {
             $("#voip").text("VoIP: Disabled");
     }
-    $("#status").text("Status: In " + serverList.servers[i].status.substring(2,serverList.servers[i].status.length));
+    if (serverList.servers[i].status == "Loading"){
+        $("#status").text("Status: " + serverList.servers[i].status);
+    } else {
+        $("#status").text("Status: In " + serverList.servers[i].status.substring(2,serverList.servers[i].status.length));
+    }
     $("#version").text("Version: " + serverList.servers[i].eldewritoVersion);
     $("#ip").text("IP: " + serverList.servers[i].serverIP);
     if(!serverList.servers[i].passworded){ 
