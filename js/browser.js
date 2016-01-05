@@ -5,7 +5,6 @@ var serverTable = [];
 var pingTable = [];
 var isThrottled = false;
 var throttleDuration = 1000; // ms
-
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
@@ -164,7 +163,7 @@ function buildTable(){
 										});
 									})(i, serverIP);
 							} else {
-								console.log("Invalid IP, skipping.");
+								console.log(serverIP + " is invalid, skipping.");
 							}
 					}                 
 			for (var j = 0; j < serverList.servers.length; j++)
