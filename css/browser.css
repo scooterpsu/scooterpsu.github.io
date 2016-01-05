@@ -80,6 +80,17 @@ img{
     opacity: 1;
 }
 
+#serverTable{
+    position: relative;
+    top: -30px;
+}
+
+#serverTable thead tr th{
+    line-height: 20px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+}
+
 #serverTable_wrapper{
     opacity: 0.8;
     top: 55;
