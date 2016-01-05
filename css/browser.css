@@ -120,7 +120,7 @@ img{
 
 #serverTable thead tr th.sorting_asc, thead tr th.sorting_desc {
     background-color: white;
-    color: black;
+    color: #13233d;
 }
 
 #serverTable thead tr th.sorting:hover{
