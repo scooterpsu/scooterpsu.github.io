@@ -14,7 +14,7 @@ img{
     opacity: 0.8;
     position: absolute;
     top: -10px;
-    left: 15px;
+    left: 10px;
     z-index: 1;
 }
 .refresh {
@@ -148,13 +148,21 @@ img{
 }
 
 #serverTable_length{
-    display: none;
+    color: black;
+}
+
+#serverTable_length label{
+    color: white;
+}
+
+#serverTable_length label select{
+    color: black;
 }
 
 #serverTable_paginate{
     position: absolute;
     bottom: 10px;
-    right: 0px;
+    right: 8px;
     padding-bottom: 4px;
     padding-right: 2px;
     border: 1px solid #404f70;
