@@ -134,22 +134,22 @@ function buildTable(){
                                                            serverInfo["passworded"] = "🔒";
                                                         };
 														table.row.add([
-															sanitizeString(serverInfo.serverId),
-															sanitizeString(serverInfo.serverIP),
-                                                            sanitizeString(serverInfo.passworded),
-															sanitizeString(serverInfo.name),
-															sanitizeString(serverInfo.hostPlayer),
+															serverInfo.serverId,
+															serverInfo.serverIP,
+                                                            serverInfo.passworded,
+															serverInfo.name,
+															serverInfo.hostPlayer,
                                                             "000",
-															sanitizeString(serverInfo.map),
-															sanitizeString(serverInfo.mapFile),
-															sanitizeString(capitalizeFirstLetter(serverInfo.variantType)),
-															sanitizeString(capitalizeFirstLetter(serverInfo.variant)),
-															sanitizeString(serverInfo.status),
-                                                            sanitizeString(serverInfo.numPlayers),
-															sanitizeString(serverInfo.numPlayers) + "/" + sanitizeString(serverInfo.maxPlayers),
-															sanitizeString(serverInfo.eldewritoVersion),
-                                                            sanitizeString(serverInfo.sprintEnabled),
-                                                            sanitizeString(serverInfo.sprintUnlimitedEnabled)
+															serverInfo.map,
+															serverInfo.mapFile,
+															capitalizeFirstLetter(serverInfo.variantType),
+															capitalizeFirstLetter(serverInfo.variant),
+															serverInfo.status,
+                                                            serverInfo.numPlayers,
+															serverInfo.numPlayers + "/" + serverInfo.maxPlayers,
+															serverInfo.eldewritoVersion,
+                                                            serverInfo.sprintEnabled,
+                                                            serverInfo.sprintUnlimitedEnabled
 														]).draw();
 														table.columns.adjust().draw();
                                                         pingMe(serverInfo.serverIP, $("#serverTable tbody tr").length-1);
@@ -291,30 +291,30 @@ function pingMe(ip, rowNum) {
 }
 
 function fillGameCard(i){
-    $("#host").html("<b>Host: </b>" + serverList.servers[i].hostPlayer);
-    $("#name").html("<b>Name: </b>" + serverList.servers[i].name);
-    $("#title").html("<b>" + capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map) + "</b>");
-    $("#mappic").attr("src", "images/maps/" + serverList.servers[i].mapFile + ".png");
+    $("#host").text("Host: " + serverList.servers[i].hostPlayer);
+    $("#name").text("Name: " + serverList.servers[i].name);
+    $("#title").text(capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map));
+    $("#mappic").attr("src", "images/maps/" + cleanString(serverList.servers[i].mapFile) + ".png");
     $('#mappic').error(function(){$(this).attr('src', 'images/maps/mainmenu.png');}); 
     $("#mappic").css("visibility","visible");    
-    $("#varpic").attr("src", "images/gametypes/" + capitalizeFirstLetter(serverList.servers[i].variantType) + ".png");
+    $("#varpic").attr("src", "images/gametypes/" + capitalizeFirstLetter(cleanString(serverList.servers[i].variantType)) + ".png");
     if (serverList.servers[i].sprintEnabled == "1"){
         if (serverList.servers[i].sprintUnlimitedEnabled == "1") {
-            $("#sprint").html("<b>Sprint:</b> Unlimited");
+            $("#sprint").text("Sprint: Unlimited");
         } else {
-            $("#sprint").html("<b>Sprint:</b> Enabled");
+            $("#sprint").text("Sprint: Enabled");
         }
     }  else {
-            $("#sprint").html("<b>Sprint:</b> Disabled");
+            $("#sprint").text("Sprint: Disabled");
     }
     if (serverList.servers[i].VoIP) {
-            $("#voip").html("<b>VoIP:</b> Enabled");
+            $("#voip").text("VoIP: Enabled");
     } else {
-            $("#voip").html("<b>VoIP:</b> Disabled");
+            $("#voip").text("VoIP: Disabled");
     }
-    $("#status").html("<b>Status: </b>In " + serverList.servers[i].status.substring(2,serverList.servers[i].status.length));
-    $("#version").html("<b>Version: </b>" + serverList.servers[i].eldewritoVersion);
-    $("#ip").html("<b>IP: </b>" + serverList.servers[i].serverIP);
+    $("#status").text("Status: In " + serverList.servers[i].status.substring(2,serverList.servers[i].status.length));
+    $("#version").text("Version: " + serverList.servers[i].eldewritoVersion);
+    $("#ip").text("IP: " + serverList.servers[i].serverIP);
     if(!serverList.servers[i].passworded){ 
         var output = '<table class="statBreakdown"><thead class="tableHeader">'+
             '<th>Name</th>'+
@@ -334,11 +334,11 @@ function fillGameCard(i){
                         ratio = ((playerList[playerNum].kills+(playerList[playerNum].assists/3))/playerList[playerNum].deaths).toFixed(2);
                     }
                     output +=  '<tr>'+
-                        '<td class="statLines">'+playerList[playerNum].name+'</td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].score+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].kills+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].deaths+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
+                        '<td class="statLines">'+cleanString(playerList[playerNum].name)+'</td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].score.replace(/\D/g,'')+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].kills.replace(/\D/g,'')+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].deaths.replace(/\D/g,'')+'</center></td>'+
+                        '<td class="statLines"><center>'+playerList[playerNum].assists.replace(/\D/g,'')+'</center></td>'+
                         '<td class="statLines"><center>'+ratio+'</center></td>'+
                     '</tr>';
                 }
@@ -507,11 +507,6 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     }
 } );
 
-function sanitizeString(str) {
-    return String(str).replace(/(<([^>]+)>)/ig,"")
-                      .replace(/&/g, '&amp;')
-                      .replace(/</g, '&lt;')
-                      .replace(/>/g, '&gt;')
-                      .replace(/'/g, '&#39;')
-                      .replace(/"/g, '&quot;');
+function cleanString(str) {
+    return String(str).replace(/(<([^>]+)>)|&|<|>|'|"/ig,"");
 }
