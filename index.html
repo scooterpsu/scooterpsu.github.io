@@ -3,6 +3,7 @@
     <meta charset="utf-8" />
     <title>Server Browser</title>
 		<!-- Includes -->
+		<script src="js/handlebars.min.js"></script>
 		<script src="js/jquery-1.11.3.min.js"></script>
 		<!-- Bootstrap -->
 		<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -35,29 +36,86 @@
     <!--<div id="connectionStatus"></div>-->
     <table id="serverTable" class="display" width="100%"></table>
     <div id="gamecard">
-        <div id="cardheaderborder">
-            <div id="cardheader">
-                <div id="title"><b>No Server Selected</b></div>
-                <img id="mappic">
-                <img id="varpic">
-            </div>
-        </div>
-        <div id="scoreboard"><b>Scoreboard Unavailable</b></div>
-        <div id="gameinfoborder">
-            <div id="gameinfo">
-                <div id="host"><b>Host:</b> N/A</div>
-                <div id="name"><b>Name:</b> N/A</div>
-                <div id="voip"></div>
-                <div id="sprint"></div>
-                <div id="status"></div>
-                <div id="ip"></div>
-                <div id="version"></div>
-            </div>
-        </div>
     </div>
     <div id="extBorder">
     <div id="extBorder2">
     </div>
     </div>
+    
+    <script id="gameinfo-template" type="text/x-handlebars-template">
+        <div id="cardheaderborder">
+            <div id="cardheader">
+                <div id="title"><b>{{capitalize variantType}} on {{map}}</b></div>
+                <img id="mappic" src="images/maps/{{mapFile}}.png" onError="this.onerror=null;this.src='images/maps/mainmenu.png';">
+                <img id="varpic" src="images/gametypes/{{capitalize variantType}}.png">
+            </div>
+        </div>
+        <div id="scoreboard">
+            {{#if passworded}}
+                <b>Private Game</b>
+                {{else}}
+                    <table class="statBreakdown">
+                        <thead class="tableHeader">
+                            <th>Name</th>
+                            <th><center>Score</center></th>
+                            <th><center>K</center></th>
+                            <th><center>D</center></th>
+                            <th><center>A</center></th>
+                        </thead>
+                        <tbody>
+                            {{#eachByScore players}}
+                            {{#if name}}
+                            <tr>
+                                <td class="statLines">{{this.name}}</td>
+                                <td class="statLines"><center>{{score}}</center></td>
+                                <td class="statLines"><center>{{kills}}</center></td>
+                                <td class="statLines"><center>{{deaths}}</center></td>
+                                <td class="statLines"><center>{{assists}}</center></td>
+                            </tr>
+                            {{/if}}
+                            {{/eachByScore}}
+                        </tbody>
+                    </table>
+                {{/if}}
+        </div>
+        <div id="gameinfoborder">
+            <div id="gameinfo">
+                <div id="host"><b>Host: </b>{{hostPlayer}}</div>
+                <div id="name"><b>Name: </b>{{name}}</div>
+                <div id="voip"><b>VoIP: </b>
+                    {{#if VoIP}} 
+                        Enabled
+                    {{else}}
+                        Disabled
+                    {{/if}}                             
+                </div>
+                <div id="sprint"><b>Sprint: </b>
+                    {{#ifCond sprintEnabled "1"}}
+                        {{#ifCond sprintUnlimitedEnabled "1"}}
+                            Unlimited
+                        {{else}}
+                            Enabled
+                        {{/ifCond}}  
+                    {{else}}
+                        Disabled
+                    {{/ifCond}}  
+                </div>
+                <div id="status"><b>Status: </b>
+                    {{#ifCond status "InGame"}}
+                        In Game
+                    {{else}}
+                        In Lobby
+                    {{/ifCond}}   
+                </div>
+                <div id="ip"><b>IP: </b>{{serverIP}}</div>
+                <div id="version"><b>Version: </b>{{eldewritoVersion}}</div>
+            </div>
+        </div>
+	</script>
+    
+    <script>
+		var serverTemplateSource = $("#gameinfo-template").html();
+		var serverTemplate = Handlebars.compile(serverTemplateSource);
+	</script>    
 </body>
 </html>

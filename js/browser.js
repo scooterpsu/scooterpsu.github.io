@@ -153,7 +153,7 @@ function buildTable(){
 														]).draw();
 														table.columns.adjust().draw();
                                                         pingMe(serverInfo.serverIP, $("#serverTable tbody tr").length-1);
-                                                        fillGameCard($("#serverTable tbody tr").length-1);
+                                                        fillGameCard(serverInfo.serverId);
                                                         
 													} else {
 														console.log(serverInfo.serverIP + " is glitched");
@@ -291,64 +291,8 @@ function pingMe(ip, rowNum) {
 }
 
 function fillGameCard(i){
-    $("#host").html("<b>Host: </b>" + serverList.servers[i].hostPlayer);
-    $("#name").html("<b>Name: </b>" + serverList.servers[i].name);
-    $("#title").html("<b>" + capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map) + "</b>");
-    $("#mappic").attr("src", "images/maps/" + serverList.servers[i].mapFile + ".png");
-    $('#mappic').error(function(){$(this).attr('src', 'images/maps/mainmenu.png');}); 
-    $("#mappic").css("visibility","visible");    
-    $("#varpic").attr("src", "images/gametypes/" + capitalizeFirstLetter(serverList.servers[i].variantType) + ".png");
-    if (serverList.servers[i].sprintEnabled == "1"){
-        if (serverList.servers[i].sprintUnlimitedEnabled == "1") {
-            $("#sprint").html("<b>Sprint:</b> Unlimited");
-        } else {
-            $("#sprint").html("<b>Sprint:</b> Enabled");
-        }
-    }  else {
-            $("#sprint").html("<b>Sprint:</b> Disabled");
-    }
-    if (serverList.servers[i].VoIP) {
-            $("#voip").html("<b>VoIP:</b> Enabled");
-    } else {
-            $("#voip").html("<b>VoIP:</b> Disabled");
-    }
-    $("#status").html("<b>Status: </b>In " + serverList.servers[i].status.substring(2,serverList.servers[i].status.length));
-    $("#version").html("<b>Version: </b>" + serverList.servers[i].eldewritoVersion);
-    $("#ip").html("<b>IP: </b>" + serverList.servers[i].serverIP);
-    if(!serverList.servers[i].passworded){ 
-        var output = '<table class="statBreakdown"><thead class="tableHeader">'+
-            '<th>Name</th>'+
-            '<th><center>Score</center></th>'+
-            '<th><center>K</center></th>'+
-            '<th><center>D</center></th>'+
-            '<th><center>A</center></th>'+
-            '<th><center>Ratio</center></th>'+
-            '</thead><tbody>';
-        var playerNum = 0;
-            while (playerNum < serverList.servers[i].players.length) {
-                var playerList = serverList.servers[i].players;
-                playerList = sortByKey(playerList, 'score');
-                var ratio = 0;
-                if(playerList[playerNum].name){
-                    if(playerList[playerNum].kills>0){
-                        ratio = ((playerList[playerNum].kills+(playerList[playerNum].assists/3))/playerList[playerNum].deaths).toFixed(2);
-                    }
-                    output +=  '<tr>'+
-                        '<td class="statLines">'+playerList[playerNum].name+'</td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].score+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].kills+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].deaths+'</center></td>'+
-                        '<td class="statLines"><center>'+playerList[playerNum].assists+'</center></td>'+
-                        '<td class="statLines"><center>'+ratio+'</center></td>'+
-                    '</tr>';
-                }
-                playerNum++;
-            }
-        output += '</tbody></table>';  
-    } else {
-        var output = "<center><b>Private Game</b></center>";
-    }
-    $("#scoreboard").html(output);
+    var html = serverTemplate(serverList.servers[i]);
+    $("#gamecard").html(html)
 }
 
 Mousetrap.bind('f11', function() {
@@ -444,7 +388,6 @@ if (!gamepad.init()) {
     // Your browser does not support gamepads, get the latest Google Chrome or Firefox
 }
 
-
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -506,3 +449,24 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 } );
+
+Handlebars.registerHelper('eachByScore', function(context,options){
+    var output = '';
+    var contextSorted = context.concat()
+        .sort( function(a,b) { return b.score - a.score } );
+    for(var i=0, j=contextSorted.length; i<j; i++) {
+        output += options.fn(contextSorted[i]);
+    }
+    return output;
+});
+
+Handlebars.registerHelper('ifCond', function(v1, v2, options) {
+  if(v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
+Handlebars.registerHelper('capitalize', function(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }, 'string');
