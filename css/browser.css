@@ -155,7 +155,31 @@ img{
     position: absolute;
     bottom: 10px;
     right: 0px;
-    background-color: white;
+    padding-bottom: 4px;
+    padding-right: 2px;
+    border: 1px solid #404f70;
+    background-color: #13233d;    
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current{
+    border: 1px solid #404f70;
+    background: #404f70 !important;
+    color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+    border: 1px solid white;
+    color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled{
+    background: #13233d !important;
+    color: #404f70 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover{
+    border: 1px solid #404f70;
+    color: white !important;
 }
 
 #serverTable_paginate label{
