@@ -80,6 +80,11 @@ img{
     opacity: 1;
 }
 
+#serverTable{
+    position: relative;
+    top: -20px;
+}
+
 #serverTable_wrapper{
     opacity: 0.8;
     top: 55;
@@ -148,11 +153,16 @@ img{
 }
 
 #serverTable_length{
+    position: absolute;
+    float: left;
+    bottom: 15px;
+    left: 40px;
     color: black;
 }
 
 #serverTable_length label{
     color: white;
+    font-weight: normal;
 }
 
 #serverTable_length label select{
