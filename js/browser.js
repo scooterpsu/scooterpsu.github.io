@@ -133,9 +133,6 @@ function buildTable(){
 														} else {
                                                            serverInfo["passworded"] = "🔒";
                                                         };
-                                                        if(!serverInfo.variant){
-                                                            serverInfo["variant"] = "none";
-                                                        };
 														table.row.add([
 															serverInfo.serverId,
 															serverInfo.serverIP,
@@ -294,76 +291,8 @@ function pingMe(ip, rowNum) {
 }
 
 function fillGameCard(i){
-    $("#host").text("Host: " + serverList.servers[i].hostPlayer);
-    $("#name").text("Name: " + serverList.servers[i].name);
-    $("#title").text(capitalizeFirstLetter(serverList.servers[i].variantType) + " on " + capitalizeFirstLetter(serverList.servers[i].map));
-    $("#mappic").attr("src", "images/maps/" + cleanString(serverList.servers[i].mapFile) + ".png");
-    $('#mappic').error(function(){$(this).attr('src', 'images/maps/mainmenu.png');}); 
-    $("#mappic").css("visibility","visible");    
-    $("#varpic").attr("src", "images/gametypes/" + capitalizeFirstLetter(cleanString(serverList.servers[i].variantType)) + ".png");
-    if (serverList.servers[i].sprintEnabled == "1"){
-        if (serverList.servers[i].sprintUnlimitedEnabled == "1") {
-            $("#sprint").text("Sprint: Unlimited");
-        } else {
-            $("#sprint").text("Sprint: Enabled");
-        }
-    }  else {
-            $("#sprint").text("Sprint: Disabled");
-    }
-    if (serverList.servers[i].VoIP) {
-            $("#voip").text("VoIP: Enabled");
-    } else {
-            $("#voip").text("VoIP: Disabled");
-    }
-    if (serverList.servers[i].status == "Loading"){
-        $("#status").text("Status: " + serverList.servers[i].status);
-    } else {
-        $("#status").text("Status: In " + serverList.servers[i].status.substring(2,serverList.servers[i].status.length));
-    }
-    $("#version").text("Version: " + serverList.servers[i].eldewritoVersion);
-    $("#ip").text("IP: " + serverList.servers[i].serverIP);
-    if(!serverList.servers[i].passworded){ 
-        var output = '<table class="statBreakdown"><thead class="tableHeader">'+
-            '<th>Name</th>'+
-            '<th><center>Score</center></th>'+
-            '<th><center>K</center></th>'+
-            '<th><center>D</center></th>'+
-            '<th><center>A</center></th>'+
-            '<th><center>Ratio</center></th>'+
-            '</thead><tbody>';
-        var playerNum = 0;
-            while (playerNum < serverList.servers[i].players.length) {
-                var playerList = serverList.servers[i].players;
-                playerList = sortByKey(playerList, 'score');
-                var ratio = 0;
-                var score = 0;
-                var kills = 0;
-                var deaths = 0;
-                var assists = 0;
-                if(playerList[playerNum].name){
-                    if(playerList[playerNum].kills>0){
-                        score = onlyNumbers(playerList[playerNum].score);
-                        kills = onlyNumbers(playerList[playerNum].kills);
-                        deaths = onlyNumbers(playerList[playerNum].deaths);
-                        assists = onlyNumbers(playerList[playerNum].assists)
-                        ratio = ((kills+(assists/3))/deaths).toFixed(2);
-                    }
-                    output +=  '<tr>'+
-                        '<td class="statLines">'+cleanString(playerList[playerNum].name)+'</td>'+
-                        '<td class="statLines"><center>'+score+'</center></td>'+
-                        '<td class="statLines"><center>'+kills+'</center></td>'+
-                        '<td class="statLines"><center>'+deaths+'</center></td>'+
-                        '<td class="statLines"><center>'+assists+'</center></td>'+
-                        '<td class="statLines"><center>'+ratio+'</center></td>'+
-                    '</tr>';
-                }
-                playerNum++;
-            }
-        output += '</tbody></table>';  
-    } else {
-        var output = "<center><b>Private Game</b></center>";
-    }
-    $("#scoreboard").html(output);
+    var html = serverTemplate(serverList.servers[i]);
+    $("#gamecard").html(html)
 }
 
 Mousetrap.bind('f11', function() {
@@ -522,10 +451,24 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     }
 } );
 
-function cleanString(str) {
-    return String(str).replace(/(<([^>]+)>)|&|<|>|'|"/ig,"");
-}
+Handlebars.registerHelper('eachByScore', function(context,options){
+    var output = '';
+    var contextSorted = context.concat()
+        .sort( function(a,b) { return b.score - a.score } );
+    for(var i=0, j=contextSorted.length; i<j; i++) {
+        output += options.fn(contextSorted[i]);
+    }
+    return output;
+});
 
-function onlyNumbers(str) {
-    return String(str).replace(/\D/g,'')
-}
+
+Handlebars.registerHelper('ifCond', function(v1, v2, options) {
+  if(v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
+Handlebars.registerHelper('capitalize', function(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }, 'string');
