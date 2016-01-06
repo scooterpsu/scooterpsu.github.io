@@ -93,14 +93,15 @@ img{
 
 #serverTable_wrapper{
     opacity: 0.8;
-    top: 55;
-    height: -webkit-calc(100% - 50px);
     float: left;
+    top: 55;
+    height: -webkit-calc(100% - 55px);
     width: -webkit-calc(100% - 260px);
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 45px;
     z-index: 1;
-    -webkit-clip-path: polygon(100% 0, 100% 100%, 45px 100%, 0 -webkit-calc(100% - 50px), 0 0);
+    -webkit-clip-path: polygon(100% 0, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
 }
 
 #serverTable tbody tr td{
