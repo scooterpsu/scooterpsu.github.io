@@ -162,7 +162,7 @@ img{
 #serverTable_length{
     position: absolute;
     float: left;
-    bottom: 13px;
+    bottom: 10px;
     left: 40px;
     color: black;
 }
@@ -178,9 +178,8 @@ img{
 
 #serverTable_paginate{
     position: absolute;
-    bottom: 9px;
+    bottom: 4px;
     right: 16px;
-    border: 1px solid #404f70;
     background-color: #13233d;    
     height: 38px;
     padding: 0;
@@ -188,12 +187,24 @@ img{
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current{
     border: 1px solid #404f70;
-    background: #404f70 !important;
+    background: #404f70;
     color: white !important;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
     border: 1px solid white;
+    color: #13233d !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+    border: 1px solid white;
+    background: white;
+    color: #13233d !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+    border: 1px solid #404f70;
+    background: #404f70;
     color: white !important;
 }
 
@@ -214,7 +225,7 @@ img{
 #serverTable_info{
     text-align: center;
     position: absolute;
-    bottom: 5px;
+    bottom: 0px;
     left: 0px;
     color: white;
     border-top: 1px solid #404f70;
@@ -254,7 +265,7 @@ tr.shown td.details-control {
     height: 100%;
     width: 100%;
     padding: 1px;
-    -webkit-clip-path: polygon(535px 0%, 585px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(575px 0%, 625px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
     z-index: 0;
 }
 
@@ -264,7 +275,7 @@ tr.shown td.details-control {
     left: 1px;
     height: 100%;
     padding: 5px;
-    -webkit-clip-path: polygon(533px 0%, 583px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(573px 0%, 623px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
 }
 
 #gamecard{
