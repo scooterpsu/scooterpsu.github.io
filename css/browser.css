@@ -82,7 +82,13 @@ img{
 
 #serverTable{
     position: relative;
-    top: -20px;
+    top: -30px;
+}
+
+#serverTable thead tr th{
+    line-height: 20px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
 }
 
 #serverTable_wrapper{
@@ -114,7 +120,7 @@ img{
 
 #serverTable thead tr th.sorting_asc, thead tr th.sorting_desc {
     background-color: white;
-    color: black;
+    color: #13233d;
 }
 
 #serverTable thead tr th.sorting:hover{
