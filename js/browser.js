@@ -14,16 +14,6 @@ var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
     buildTable();
-    /*
-	window.addEventListener('resize', function(){
-		setTimeout(function() {
-			var infoPos = (window.innerWidth*0.48 - $('#serverTable_info').text().length*3 - 10);
-			console.log($('#serverTable_info').text().length);
-			console.log(infoPos);
-			$('#serverTable_info').css("padding-left",infoPos);
-		}, "10");	
-	}, true);
-    */
 } );
         
 function buildTable(){
@@ -44,6 +34,7 @@ function buildTable(){
   
 	var table = $('#serverTable').DataTable( {
 		"footerCallback": function ( row, data, start, end, display ) {
+            /*
             var api = this.api(), data;
             visiblePlayers = api
                 .column( 11, { page: 'current'} )
@@ -60,16 +51,11 @@ function buildTable(){
 			if(serverCount > visibleServers){
 				serverOut += " (" + serverCount + " total)";
 			}
+            */
+            var playerOut = playerCount + " players";
+			var serverOut = serverCount + " servers";
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
-            /*
-			setTimeout(function() {
-				var infoPos = (window.innerWidth*0.48 - $('#serverTable_info').text().length*3 - 10);
-				console.log($('#serverTable_info').text().length);
-				console.log(infoPos);
-				$('#serverTable_info').css("padding-left",infoPos);
-			}, "10");
-            */
         },
         destroy: true,
         "iDisplayLength": -1,
