@@ -80,16 +80,28 @@ img{
     opacity: 1;
 }
 
+#serverTable{
+    position: relative;
+    top: -30px;
+}
+
+#serverTable thead tr th{
+    line-height: 20px !important;
+    padding-bottom: 5px !important;
+    padding-top: 5px !important;
+}
+
 #serverTable_wrapper{
     opacity: 0.8;
-    top: 55;
-    height: -webkit-calc(100% - 50px);
     float: left;
+    top: 55;
+    height: -webkit-calc(100% - 55px);
     width: -webkit-calc(100% - 260px);
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 45px;
     z-index: 1;
-    -webkit-clip-path: polygon(100% 0, 100% 100%, 45px 100%, 0 -webkit-calc(100% - 50px), 0 0);
+    -webkit-clip-path: polygon(100% 0, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
 }
 
 #serverTable tbody tr td{
@@ -109,7 +121,7 @@ img{
 
 #serverTable thead tr th.sorting_asc, thead tr th.sorting_desc {
     background-color: white;
-    color: black;
+    color: #13233d;
 }
 
 #serverTable thead tr th.sorting:hover{
@@ -255,7 +267,7 @@ tr.shown td.details-control {
     top: 2px;
     left: 2px;
     width: 246px;
-    height: 139px;
+    min-height: 139px;
     background-color: #13233d;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
 }
@@ -263,16 +275,21 @@ tr.shown td.details-control {
 #cardheaderborder{
     background-color: #404f70;
     width: 250px;
-    height: 143px;
+    min-height: 143px;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
-}
+    padding-bottom: 4px;
+    }
 
 #title{
     position: relative;
     margin-top: 2px;
-    height: 30px;
-    line-height: 30px;
+    min-height: 30px;
     text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    line-height: 20px;
     width: 246px;
     background-color: black;
     color: white;
