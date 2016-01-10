@@ -455,3 +455,7 @@ Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 Handlebars.registerHelper('capitalize', function(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }, 'string');
+  
+Handlebars.registerHelper('lowerCase', function(str) {
+    return new Handlebars.SafeString(str.toLowerCase());
+});
