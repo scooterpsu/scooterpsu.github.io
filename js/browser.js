@@ -110,7 +110,7 @@ function buildTable(){
 															{
 																	serverList.servers[j] = serverInfo;
 																	serverCount++;
-																	playerCount+=onlyNumbers(serverInfo.numPlayers);
+																	playerCount+=parseInt(serverInfo.numPlayers);
 															}
 														}
 														//console.log(serverInfo);
@@ -131,8 +131,8 @@ function buildTable(){
 															capitalizeFirstLetter(serverInfo.variantType),
 															capitalizeFirstLetter(serverInfo.variant),
 															serverInfo.status,
-                                                            onlyNumbers(serverInfo.numPlayers),
-															onlyNumbers(serverInfo.numPlayers) + "/" + onlyNumbers(serverInfo.maxPlayers),
+                                                            parseInt(serverInfo.numPlayers),
+															parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
 															serverInfo.eldewritoVersion,
                                                             serverInfo.sprintEnabled,
                                                             serverInfo.sprintUnlimitedEnabled
@@ -460,11 +460,3 @@ Handlebars.registerHelper('capitalize', function(str) {
 Handlebars.registerHelper('lowerCase', function(str) {
     return new Handlebars.SafeString(str.toLowerCase());
 });
-
-function onlyNumbers(str) {
-    if (str.len < 2){
-        return String(str).replace(/\D/g,'')
-    } else {
-        return "0";
-    }
-};
