@@ -102,6 +102,7 @@ function buildTable(){
 												serverInfo["serverId"] = i;
 												serverInfo["serverIP"] = serverIP;
 												if (serverInfo.maxPlayers <= 16 ) {
+                                                    
 													if(serverInfo.map.length > 0){ //blank map means glitched server entry
 														for (var j = 0; j < serverList.servers.length; j++)
 														{
@@ -109,7 +110,7 @@ function buildTable(){
 															{
 																	serverList.servers[j] = serverInfo;
 																	serverCount++;
-																	playerCount+=serverInfo.numPlayers;
+																	playerCount+=onlyNumbers(serverInfo.numPlayers);
 															}
 														}
 														//console.log(serverInfo);
@@ -130,8 +131,8 @@ function buildTable(){
 															capitalizeFirstLetter(serverInfo.variantType),
 															capitalizeFirstLetter(serverInfo.variant),
 															serverInfo.status,
-                                                            serverInfo.numPlayers,
-															serverInfo.numPlayers + "/" + serverInfo.maxPlayers,
+                                                            onlyNumbers(serverInfo.numPlayers),
+															onlyNumbers(serverInfo.numPlayers) + "/" + onlyNumbers(serverInfo.maxPlayers),
 															serverInfo.eldewritoVersion,
                                                             serverInfo.sprintEnabled,
                                                             serverInfo.sprintUnlimitedEnabled
@@ -459,3 +460,11 @@ Handlebars.registerHelper('capitalize', function(str) {
 Handlebars.registerHelper('lowerCase', function(str) {
     return new Handlebars.SafeString(str.toLowerCase());
 });
+
+function onlyNumbers(str) {
+    if (str.len < 2){
+        return String(str).replace(/\D/g,'')
+    } else {
+        return "0";
+    }
+};
