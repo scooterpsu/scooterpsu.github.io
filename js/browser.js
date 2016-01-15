@@ -460,3 +460,10 @@ Handlebars.registerHelper('capitalize', function(str) {
 Handlebars.registerHelper('lowerCase', function(str) {
     return new Handlebars.SafeString(str.toLowerCase());
 });
+
+function switchBrowser(){
+    setTimeout(function() {
+        dewRcon.send('game.menuurl "http://halo.thefeeltra.in/"');
+        dewRcon.send('writeconfig');
+    }, "1000");  
+}
