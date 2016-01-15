@@ -77,7 +77,7 @@ function buildTable(){
 			{ title: "Variant" },
 			{ title: "Status", visible: false},    
  			{ title: "Num Players", visible: false},  
-			{ title: "Players", "width": "1%"},
+			{ title: "Players", "sType": "playerCount", "width": "1%"},
 			{ title: "Version", "width": "1%", visible: false}
 		],
 		"order": [[ 0 ]],
@@ -467,3 +467,18 @@ function switchBrowser(){
         dewRcon.send('writeconfig');
     }, "1000");  
 }
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "playerCount-pre": function ( a ) {
+        var pCount = a.split('/');
+        return (pCount[1] + pCount[0]) * 1;
+    },
+
+    "playerCount-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "playerCountdesc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
