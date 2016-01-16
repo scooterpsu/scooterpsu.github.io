@@ -166,6 +166,7 @@ function joinServer(i) {
     if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
+                ga('send', 'event', 'serverlist', 'connect');
                 if(serverList.servers[i].passworded){
                     sweetAlert({   
                     title: "Private Server",   
@@ -390,6 +391,7 @@ function refreshTable(){
     if (isThrottled) { return; }
     isThrottled = true;
     setTimeout(function () { isThrottled = false; }, throttleDuration);
+    ga('send', 'event', 'serverlist', 'refresh-list');
     serverList = {
         servers: []
     };
