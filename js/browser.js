@@ -4,7 +4,7 @@ servers: []
 var serverTable = [];
 var pingTable = [];
 var isThrottled = false;
-var throttleDuration = 3000; // ms
+var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
@@ -59,7 +59,7 @@ function buildTable(){
         },
         destroy: true,
         "iDisplayLength": -1,
-		//stateSave: true,
+		stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 }
