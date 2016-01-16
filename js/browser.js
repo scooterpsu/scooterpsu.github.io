@@ -4,7 +4,7 @@ servers: []
 var serverTable = [];
 var pingTable = [];
 var isThrottled = false;
-var throttleDuration = 1000; // ms
+var throttleDuration = 3000; // ms
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
