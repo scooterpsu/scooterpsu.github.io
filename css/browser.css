@@ -205,7 +205,7 @@ tr.shown td.details-control {
     height: 100%;
     width: 100%;
     padding: 1px;
-    -webkit-clip-path: polygon(535px 0%, 585px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(565px 0%, 615px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
     z-index: 0;
 }
 
@@ -215,7 +215,7 @@ tr.shown td.details-control {
     left: 1px;
     height: 100%;
     padding: 5px;
-    -webkit-clip-path: polygon(533px 0%, 583px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(563px 0%, 613px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
 }
 
 #gamecard{
