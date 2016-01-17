@@ -85,7 +85,8 @@ function buildTable(){
 			"emptyTable": "No servers found",
             "zeroRecords": "No matching servers found",
 			"infoEmpty": "No servers found",
-            "info": "Showing servers _START_ to _END_ of _TOTAL_"
+            "info": "Showing servers _START_ to _END_ of _TOTAL_",
+            "lengthMenu": "Displaying _MENU_ servers"
 		}
 	} );
 
