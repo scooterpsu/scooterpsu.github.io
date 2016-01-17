@@ -56,7 +56,6 @@ function buildTable(){
 			var serverOut = serverCount + " servers";
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
-        	$('.browserSwitch').css("top","-webkit-calc(100% - 38px)");
         },
         destroy: true,
         "iDisplayLength": 10,

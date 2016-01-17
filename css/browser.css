@@ -405,9 +405,7 @@ tr.shown td.details-control {
     border: 1px solid white;
     padding: 4px;
     position: absolute;
-    top: -webkit-calc(100% - 38px);
-    left: 190px;
-    margin-left: auto;
-    margin-right: auto;
+    top: 8px;
+    left: 630px;
     z-index: 10;
 }
