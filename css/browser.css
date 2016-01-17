@@ -93,14 +93,15 @@ img{
 
 #serverTable_wrapper{
     opacity: 0.8;
-    top: 55;
-    height: -webkit-calc(100% - 50px);
     float: left;
+    top: 55;
+    height: -webkit-calc(100% - 55px);
     width: -webkit-calc(100% - 260px);
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 45px;
     z-index: 1;
-    -webkit-clip-path: polygon(100% 0, 100% 100%, 45px 100%, 0 -webkit-calc(100% - 50px), 0 0);
+    -webkit-clip-path: polygon(100% 0, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
 }
 
 #serverTable tbody tr td{
@@ -253,7 +254,7 @@ tr.shown td.details-control {
     height: 100%;
     width: 100%;
     padding: 1px;
-    -webkit-clip-path: polygon(535px 0%, 585px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(565px 0%, 615px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
     z-index: 0;
 }
 
@@ -263,7 +264,7 @@ tr.shown td.details-control {
     left: 1px;
     height: 100%;
     padding: 5px;
-    -webkit-clip-path: polygon(533px 0%, 583px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(563px 0%, 613px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
 }
 
 #gamecard{
@@ -280,7 +281,7 @@ tr.shown td.details-control {
     top: 2px;
     left: 2px;
     width: 246px;
-    height: 139px;
+    min-height: 139px;
     background-color: #13233d;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
 }
@@ -288,16 +289,21 @@ tr.shown td.details-control {
 #cardheaderborder{
     background-color: #404f70;
     width: 250px;
-    height: 143px;
+    min-height: 143px;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
-}
+    padding-bottom: 4px;
+    }
 
 #title{
     position: relative;
     margin-top: 2px;
-    height: 30px;
-    line-height: 30px;
+    min-height: 30px;
     text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    line-height: 20px;
     width: 246px;
     background-color: black;
     color: white;
@@ -367,4 +373,18 @@ tr.shown td.details-control {
     background-color: #13233d;
     color: white; 
     -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
+}
+
+.browserSwitch{
+    opacity: 0.8;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    padding: 6px;
+    position: absolute;
+    bottom: 8px;
+    left: -webkit-calc(50% - 150px);
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 10;
 }

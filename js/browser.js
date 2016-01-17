@@ -4,7 +4,7 @@ servers: []
 var serverTable = [];
 var pingTable = [];
 var isThrottled = false;
-var throttleDuration = 1000; // ms
+var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
@@ -14,16 +14,6 @@ var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
     buildTable();
-    /*
-	window.addEventListener('resize', function(){
-		setTimeout(function() {
-			var infoPos = (window.innerWidth*0.48 - $('#serverTable_info').text().length*3 - 10);
-			console.log($('#serverTable_info').text().length);
-			console.log(infoPos);
-			$('#serverTable_info').css("padding-left",infoPos);
-		}, "10");	
-	}, true);
-    */
 } );
         
 function buildTable(){
@@ -44,6 +34,7 @@ function buildTable(){
   
 	var table = $('#serverTable').DataTable( {
 		"footerCallback": function ( row, data, start, end, display ) {
+            /*
             var api = this.api(), data;
             visiblePlayers = api
                 .column( 11, { page: 'current'} )
@@ -60,20 +51,15 @@ function buildTable(){
 			if(serverCount > visibleServers){
 				serverOut += " (" + serverCount + " total)";
 			}
+            */
+            var playerOut = playerCount + " players";
+			var serverOut = serverCount + " servers";
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
-            /*
-			setTimeout(function() {
-				var infoPos = (window.innerWidth*0.48 - $('#serverTable_info').text().length*3 - 10);
-				console.log($('#serverTable_info').text().length);
-				console.log(infoPos);
-				$('#serverTable_info').css("padding-left",infoPos);
-			}, "10");
-            */
         },
         destroy: true,
         "iDisplayLength": -1,
-		//stateSave: true,
+		stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 }
@@ -91,7 +77,7 @@ function buildTable(){
 			{ title: "Variant" },
 			{ title: "Status", visible: false},    
  			{ title: "Num Players", visible: false},  
-			{ title: "Players", "width": "1%"},
+			{ title: "Players", "sType": "playerCount", "width": "1%"},
 			{ title: "Version", "width": "1%", visible: false}
 		],
 		"order": [[ 0 ]],
@@ -116,6 +102,7 @@ function buildTable(){
 												serverInfo["serverId"] = i;
 												serverInfo["serverIP"] = serverIP;
 												if (serverInfo.maxPlayers <= 16 ) {
+                                                    
 													if(serverInfo.map.length > 0){ //blank map means glitched server entry
 														for (var j = 0; j < serverList.servers.length; j++)
 														{
@@ -123,7 +110,7 @@ function buildTable(){
 															{
 																	serverList.servers[j] = serverInfo;
 																	serverCount++;
-																	playerCount+=serverInfo.numPlayers;
+																	playerCount+=parseInt(serverInfo.numPlayers);
 															}
 														}
 														//console.log(serverInfo);
@@ -144,8 +131,8 @@ function buildTable(){
 															capitalizeFirstLetter(serverInfo.variantType),
 															capitalizeFirstLetter(serverInfo.variant),
 															serverInfo.status,
-                                                            serverInfo.numPlayers,
-															serverInfo.numPlayers + "/" + serverInfo.maxPlayers,
+                                                            parseInt(serverInfo.numPlayers),
+															parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
 															serverInfo.eldewritoVersion,
                                                             serverInfo.sprintEnabled,
                                                             serverInfo.sprintUnlimitedEnabled
@@ -179,6 +166,7 @@ function joinServer(i) {
     if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
+                ga('send', 'event', 'serverlist', 'connect');
                 if(serverList.servers[i].passworded){
                     sweetAlert({   
                     title: "Private Server",   
@@ -403,6 +391,7 @@ function refreshTable(){
     if (isThrottled) { return; }
     isThrottled = true;
     setTimeout(function () { isThrottled = false; }, throttleDuration);
+    ga('send', 'event', 'serverlist', 'refresh-list');
     serverList = {
         servers: []
     };
@@ -469,3 +458,29 @@ Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 Handlebars.registerHelper('capitalize', function(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }, 'string');
+  
+Handlebars.registerHelper('lowerCase', function(str) {
+    return new Handlebars.SafeString(str.toLowerCase());
+});
+
+function switchBrowser(){
+    setTimeout(function() {
+        dewRcon.send('game.menuurl "http://halo.thefeeltra.in/"');
+        dewRcon.send('writeconfig');
+    }, "1000");  
+}
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "playerCount-pre": function ( a ) {
+        var pCount = a.split('/');
+        return (pCount[1] + pCount[0]) * 1;
+    },
+
+    "playerCount-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "playerCountdesc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
