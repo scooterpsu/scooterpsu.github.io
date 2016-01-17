@@ -340,8 +340,18 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             }
         }else if (e.control == "DPAD_LEFT"){
             //console.log("LEFT");
+            if($('#serverTable').DataTable().page.info().page > 0){
+                $('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
+                selectedID = 1;
+                updateSelection();
+            }
         }else if (e.control == "DPAD_RIGHT"){
             //console.log("RIGHT");
+            if(($('#serverTable').DataTable().page.info().page +1)<$('#serverTable').DataTable().page.info().pages){
+                $('#serverTable').DataTable().page( 'next' ).draw( 'page' ); 
+                selectedID = 1;
+                updateSelection();                
+            }  
         }else if (e.control == "SELECT_BACK"){
             //console.log("BACK");
             closeBrowser();
