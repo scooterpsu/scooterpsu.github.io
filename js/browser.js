@@ -58,7 +58,7 @@ function buildTable(){
 			$('.serverCount').html(serverOut);
         },
         destroy: true,
-        "iDisplayLength": -1,
+        "iDisplayLength": 10,
 		stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
