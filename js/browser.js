@@ -138,9 +138,8 @@ function buildTable(){
                                                             serverInfo.sprintUnlimitedEnabled
 														]).draw();
 														table.columns.adjust().draw();
-                                                        pingMe(serverInfo.serverIP, $("#serverTable tbody tr").length-1);
+                                                        pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1);
                                                         fillGameCard(serverInfo.serverId);
-                                                        
 													} else {
 														console.log(serverInfo.serverIP + " is glitched");
 													}
