@@ -58,9 +58,9 @@ function buildTable(){
 			$('.serverCount').html(serverOut);
         },
         destroy: true,
-        "iDisplayLength": -1,
+        "iDisplayLength": 5,
 		stateSave: true,
-        "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
+        "lengthMenu": [[5 ,10, 15, 25, -1], [5, 10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 }
         ],

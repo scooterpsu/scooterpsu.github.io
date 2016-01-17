@@ -101,7 +101,7 @@ img{
     padding-right: 10px;
     padding-bottom: 45px;
     z-index: 1;
-    -webkit-clip-path: polygon(100% 0, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(100% 0, 100% 100%, 42px 100%, 0 -webkit-calc(100% - 47px), 0 0);
 }
 
 #serverTable tbody tr td{
@@ -162,9 +162,10 @@ img{
 #serverTable_length{
     position: absolute;
     float: left;
-    bottom: 13px;
+    bottom: 10px;
     left: 40px;
     color: black;
+    z-index: 3;
 }
 
 #serverTable_length label{
@@ -178,16 +179,26 @@ img{
 
 #serverTable_paginate{
     position: absolute;
-    bottom: 9px;
+    bottom: 5px;
     right: 16px;
-    border: 1px solid #404f70;
     background-color: #13233d;    
     height: 38px;
     padding: 0;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button.current{
+.dataTables_wrapper .dataTables_paginate .paginate_button{
     border: 1px solid #404f70;
+    background: white;
+    color: black !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+    background: white;
+    color: black !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current{
+    border: 1px solid white;
     background: #404f70 !important;
     color: white !important;
 }
@@ -203,8 +214,7 @@ img{
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover{
-    border: 1px solid #404f70;
-    color: white !important;
+    color: #404f70 !important;
 }
 
 #serverTable_paginate label{
@@ -219,9 +229,10 @@ img{
     color: white;
     border-top: 1px solid #404f70;
     border-right: 1px solid #404f70;
-    height: 46px;
+    height: 42px;
     width: -webkit-calc(100% - 10px);
     margin-bottom: 0;
+    background-color: #05152f;
 }
 
 #serverTable{
@@ -382,8 +393,8 @@ tr.shown td.details-control {
     border: 1px solid white;
     padding: 6px;
     position: absolute;
-    bottom: 8px;
-    left: -webkit-calc(50% - 150px);
+    bottom: 6px;
+    left: 250px;
     margin-left: auto;
     margin-right: auto;
     z-index: 10;
