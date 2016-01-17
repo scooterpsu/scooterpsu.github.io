@@ -15,7 +15,7 @@ img{
     position: absolute;
     top: -10px;
     left: 10px;
-    z-index: 1;
+    z-index: 2;
 }
 .refresh {
     opacity: 0.8;
@@ -23,7 +23,7 @@ img{
     top: 8px;
     left: 210px;
     color: white;
-    font-weight: bold;
+    font-weight: 700;
     background-color: black;
     width: 115px;
     height: 30px;
@@ -32,7 +32,7 @@ img{
 	z-index:1000;
 }
 .refresh:hover{
-    background-color: #1a3d5a;
+    background-color: #31415b;
 }
 .serverStats {
     color: white;
@@ -41,7 +41,7 @@ img{
     position: absolute;
     top: 3px;
     left: 350px;
-    z-index: 1;
+    z-index: 2;
 }
 .closeButton {
     opacity: 0.8;
@@ -100,7 +100,7 @@ img{
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 45px;
-    z-index: 1;
+    z-index: 2;
     -webkit-clip-path: polygon(100% 0, 100% 100%, 42px 100%, 0 -webkit-calc(100% - 47px), 0 0);
 }
 
@@ -278,7 +278,7 @@ tr.shown td.details-control {
     width: 100%;
     padding: 1px;
     -webkit-clip-path: polygon(575px 0%, 625px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
-    z-index: 0;
+    z-index: 1;
 }
 
 #extBorder2{
@@ -288,6 +288,7 @@ tr.shown td.details-control {
     height:100vh;
     padding: 5px;
     -webkit-clip-path: polygon(573px 0%, 623px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    z-index: 1;
 }
 
 #gamecard{
@@ -400,12 +401,21 @@ tr.shown td.details-control {
 
 .browserSwitch{
     opacity: 0.8;
-    background-color: black;
+    background-color: #13233d;
     color: white;
-    border: 1px solid white;
-    padding: 4px;
+    border: 1px solid #404f70;
+    border-left: 0;
+    border-bottom: 0;
+    padding: 3px;
+    padding-left: 35px;
+    padding-right: 10px;
+    padding-bottom: 8px;
     position: absolute;
-    top: 8px;
-    left: 630px;
-    z-index: 10;
+    top: 14px;
+    left: 588px;
+    z-index: 0;
+}
+
+.browserSwitch:hover{
+    background-color: #31415b;
 }
