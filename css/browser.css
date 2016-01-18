@@ -406,12 +406,11 @@ tr.shown td.details-control {
     border: 1px solid #404f70;
     border-left: 0;
     border-bottom: 0;
-    padding: 3px;
-    padding-left: 35px;
+    padding: 4px;
+    padding-left: 40px;
     padding-right: 10px;
-    padding-bottom: 8px;
     position: absolute;
-    top: 14px;
+    top: 16px;
     left: 588px;
     z-index: 0;
 }
