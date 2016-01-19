@@ -1,3 +1,4 @@
+var EDVersion = "0.5.0.0"
 var serverList = {
 servers: []
 }; 
@@ -494,3 +495,13 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 } );
+
+function forceUpdate(){
+    swal({   
+    title: "Version Outdated!",
+    text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for the update.",
+    html: true,
+    type: "error",   
+    allowEscapeKey: false
+});
+}
