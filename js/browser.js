@@ -1,4 +1,4 @@
-var EDVersion = "0.5.0.0"
+var EDVersion = 0;
 var serverList = {
 servers: []
 }; 
@@ -8,13 +8,14 @@ var isThrottled = false;
 var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
-var gameVersion = 0;
+var gameVersion = "0";
 var selectedID = 1;
 var selectedIndex = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
     buildTable();
+    getCurrentRelease();
 } );
         
 function buildTable(){
@@ -223,10 +224,11 @@ function connectionTrigger(){
     setTimeout(function() {
         if (dewRcon.lastMessage.length > 0) {
             gameVersion = dewRcon.lastMessage;
-            $('#serverTable').dataTable().fnFilter( gameVersion, 14 );
-            setTimeout(function() {
-                $('#serverTable').dataTable().api().column( 14 ).visible( false );
-            }, "200");
+            checkUpdate(gameVersion);
+            //$('#serverTable').dataTable().fnFilter( gameVersion, 14 );
+            //setTimeout(function() {
+            //    $('#serverTable').dataTable().api().column( 14 ).visible( false );
+            //}, "200");
         }
     }, "200");
 }
@@ -496,12 +498,21 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     }
 } );
 
-function forceUpdate(){
-    swal({   
-    title: "Version Outdated!",
-    text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for the update.",
-    html: true,
-    type: "error",   
-    allowEscapeKey: false
-});
+function checkUpdate(ver){
+    if (ver != EDVersion){
+        swal({   
+            title: "Version Outdated!",
+            text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+            html: true,
+            type: "error",   
+            allowEscapeKey: false
+        });
+    }
+}
+
+function getCurrentRelease(){
+	var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
+        .done(function( data ) {
+            EDVersion = Object.keys(data)[0];
+        })
 }
