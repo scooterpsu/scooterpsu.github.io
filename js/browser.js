@@ -73,7 +73,7 @@ function buildTable(){
             "info": "Showing servers _START_ to _END_ of _TOTAL_",
             "lengthMenu": "Show _MENU_ servers"
 		}
-	} );
+	});
 
 	var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
     .done(function( data ) {
@@ -95,7 +95,6 @@ function buildTable(){
                                         playerCount+=parseInt(serverInfo.numPlayers);
                                     }
                                 }
-                                //console.log(serverInfo);
                                 if(!serverInfo.hasOwnProperty("passworded")){
                                     serverInfo["passworded"] = "";
                                 } else {
@@ -208,7 +207,7 @@ function connectionTrigger(){
 
 function disconnectTrigger(){
     $('.closeButton').hide();
-+	$('#serverTable_filter').css("right","-264px");
+	$('#serverTable_filter').css("right","-264px");
 }
 
 function closeBrowser() {
