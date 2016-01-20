@@ -164,6 +164,7 @@ function buildTable(){
 }
 
 function joinServer(i) {
+    swal.setDefaults({ type:"error", html: true });
 	//console.log(serverList.servers[i].serverIP);
     if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
@@ -180,8 +181,8 @@ function joinServer(i) {
                         function(inputValue){
                             if (inputValue === false) return false;      
                             if (inputValue === "") {     
-                             sweetAlert.showInputError("Passwords are never blank");     
-                             return false   
+                                sweetAlert.showInputError("Passwords are never blank");     
+                                return false   
                             } else {
                                 dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
                                 setTimeout(function() {
@@ -200,23 +201,16 @@ function joinServer(i) {
                         closeBrowser();
                     }
                 } else {    
-                    sweetAlert({title:"Error", 
-                        text:"You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod.", 
-                        type:"error", html: true
-                    });
+                    sweetAlert({"Error","You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod."});
                 }
             } else {
-                sweetAlert({
-                title:"Error", 
-                text:"Host running different version.<br /> Unable to join!", 
-                type:"error", html: true
-                });
+                sweetAlert({"Error", "Host running different version.<br /> Unable to join!"});
             }
         } else {
-                sweetAlert("Error", "Game is full or unavailable!", "error");
+                sweetAlert("Error", "Game is full or unavailable!");
         }
     } else {
-        sweetAlert("Error", "dewRcon is not connected!", "error");        
+        sweetAlert("Error", "dewRcon is not connected!");        
     }
 }
 
@@ -510,9 +504,7 @@ function checkUpdate(ver){
         swal({   
             title: "Version Outdated!",
             text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
-            html: true,
-            type: "error",   
-            allowEscapeKey: false
+            html: true, type: "error", allowEscapeKey: false
         });
     }
 }
