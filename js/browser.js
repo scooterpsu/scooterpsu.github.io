@@ -434,10 +434,10 @@ Handlebars.registerHelper('eachByScore', function(context,options){
 });
 
 Handlebars.registerHelper('ifCond', function(v1, v2, options) {
-  if(v1 === v2) {
-    return options.fn(this);
-  }
-  return options.inverse(this);
+    if(v1 === v2) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
 });
 
 Handlebars.registerHelper('capitalize', function(str) {
@@ -482,9 +482,9 @@ function checkUpdate(ver){
 
 function getCurrentRelease(){
 	var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
-        .done(function( data ) {
-            EDVersion = Object.keys(data)[0];
-        })
+    .done(function( data ) {
+        EDVersion = Object.keys(data)[0];
+    })
 }
 
 function hasMap(map){
