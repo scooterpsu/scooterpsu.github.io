@@ -37,24 +37,6 @@ function buildTable(){
   
 	var table = $('#serverTable').DataTable( {
 		"footerCallback": function ( row, data, start, end, display ) {
-            /*
-            var api = this.api(), data;
-            visiblePlayers = api
-                .column( 11, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return a + b;
-                }, 0 );
-			visibleServers = this.fnSettings().fnRecordsDisplay();
-			var playerOut = visiblePlayers + " players";
-			if(playerCount > visiblePlayers){
-				playerOut += " (" + playerCount + " total)";
-			}
-			var serverOut = visibleServers + " servers";
-			if(serverCount > visibleServers){
-				serverOut += " (" + serverCount + " total)";
-			}
-            */
             var playerOut = playerCount + " players";
 			var serverOut = serverCount + " servers";
 			$('.playerCount').html(playerOut);
@@ -94,78 +76,69 @@ function buildTable(){
 	} );
 
 	var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
-			.done(function( data ) {
-					for(var i = 0; i < data.result.servers.length; i++)
-					{
-							var serverIP = data.result.servers[i];
-							if(VerifyIPRegex.test(serverIP)){
-									serverList.servers.push({serverIP, i});
-									(function(i, serverIP) {
-										var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
-										.done(function(serverInfo) {
-												serverInfo["serverId"] = i;
-												serverInfo["serverIP"] = serverIP;
-												if (serverInfo.maxPlayers <= 16 ) {
-													if(serverInfo.map.length > 0){ //blank map means glitched server entry
-														for (var j = 0; j < serverList.servers.length; j++)
-														{
-															if (serverList.servers[j]["i"] == i)
-															{
-																	serverList.servers[j] = serverInfo;
-																	serverCount++;
-																	playerCount+=parseInt(serverInfo.numPlayers);
-															}
-														}
-														//console.log(serverInfo);
-														if(!serverInfo.hasOwnProperty("passworded")){
-															serverInfo["passworded"] = "";
-														} else {
-                                                           serverInfo["passworded"] = "🔒";
-                                                        };
-														table.row.add([
-															serverInfo.serverId,
-															serverInfo.serverIP,
-                                                            serverInfo.passworded,
-															serverInfo.name,
-															serverInfo.hostPlayer,
-                                                            "000",
-															serverInfo.map,
-															serverInfo.mapFile,
-															capitalizeFirstLetter(serverInfo.variantType),
-															capitalizeFirstLetter(serverInfo.variant),
-															serverInfo.status,
-                                                            parseInt(serverInfo.numPlayers),
-															parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
-															serverInfo.eldewritoVersion,
-                                                            serverInfo.sprintEnabled,
-                                                            serverInfo.sprintUnlimitedEnabled
-														]).draw();
-														table.columns.adjust().draw();
-                                                        pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1);
-                                                        fillGameCard(serverInfo.serverId);
-													} else {
-														console.log(serverInfo.serverIP + " is glitched");
-													}
-												} else {
-													console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
-												}
-										});
-									})(i, serverIP);
-							} else {
-								console.log(serverIP + " is invalid, skipping.");
-							}
-					}                 
-			for (var j = 0; j < serverList.servers.length; j++)
-			{
-					//console.log(serverList.servers[j]);
-			}
-		}
-	);
+    .done(function( data ) {
+        for(var i = 0; i < data.result.servers.length; i++) {
+            var serverIP = data.result.servers[i];
+            if(VerifyIPRegex.test(serverIP)){
+                serverList.servers.push({serverIP, i});
+                (function(i, serverIP) {
+                    var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
+                    .done(function(serverInfo) {
+                        serverInfo["serverId"] = i;
+                        serverInfo["serverIP"] = serverIP;
+                        if (serverInfo.maxPlayers <= 16 ) {
+                            if(serverInfo.map.length > 0){ //blank map means glitched server entry
+                                for (var j = 0; j < serverList.servers.length; j++) {
+                                    if (serverList.servers[j]["i"] == i) {
+                                        serverList.servers[j] = serverInfo;
+                                        serverCount++;
+                                        playerCount+=parseInt(serverInfo.numPlayers);
+                                    }
+                                }
+                                //console.log(serverInfo);
+                                if(!serverInfo.hasOwnProperty("passworded")){
+                                    serverInfo["passworded"] = "";
+                                } else {
+                                   serverInfo["passworded"] = "🔒";
+                                };
+                                table.row.add([
+                                    serverInfo.serverId,
+                                    serverInfo.serverIP,
+                                    serverInfo.passworded,
+                                    serverInfo.name,
+                                    serverInfo.hostPlayer,
+                                    "000",
+                                    serverInfo.map,
+                                    serverInfo.mapFile,
+                                    capitalizeFirstLetter(serverInfo.variantType),
+                                    capitalizeFirstLetter(serverInfo.variant),
+                                    serverInfo.status,
+                                    parseInt(serverInfo.numPlayers),
+                                    parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
+                                    serverInfo.eldewritoVersion,
+                                    serverInfo.sprintEnabled,
+                                    serverInfo.sprintUnlimitedEnabled
+                                ]).draw();
+                                table.columns.adjust().draw();
+                                pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1);
+                                fillGameCard(serverInfo.serverId);
+                            } else {
+                                console.log(serverInfo.serverIP + " is glitched");
+                            }
+                        } else {
+                            console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
+                        }
+                    });
+                });
+            } else {
+                console.log(serverIP + " is invalid, skipping.");
+            }
+        }                 
+    });
 }
 
 function joinServer(i) {
     swal.setDefaults({ type:"error", html: true });
-	//console.log(serverList.servers[i].serverIP);
     if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
@@ -173,10 +146,9 @@ function joinServer(i) {
                     ga('send', 'event', 'serverlist', 'connect');
                     if(serverList.servers[i].passworded){
                         sweetAlert({   
-                        title: "Private Server",   
-                        text: "Please enter password",   
-                        type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
-                        inputPlaceholder: "Password goes here" 
+                            title: "Private Server", text: "Please enter password",   
+                            type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
+                            inputPlaceholder: "Password goes here" 
                         }, 
                         function(inputValue){
                             if (inputValue === false) return false;      
@@ -207,7 +179,7 @@ function joinServer(i) {
                 sweetAlert({"Error", "Host running different version.<br /> Unable to join!"});
             }
         } else {
-                sweetAlert("Error", "Game is full or unavailable!");
+            sweetAlert("Error", "Game is full or unavailable!");
         }
     } else {
         sweetAlert("Error", "dewRcon is not connected!");        
