@@ -11,26 +11,25 @@ var serverCount = 0;
 var playerCount = 0;
 var gameVersion = "0";
 var selectedID = 1;
-var selectedIndex = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
     buildTable();
     getCurrentRelease();
-} );
+});
         
-function buildTable(){
+function buildTable() {
 	$('#serverTable').on('click', 'tr', function() {
 		var tr = $(this).closest('tr');
 		var row = table.row( tr );
-		if (row.data()){
+		if (row.data()) {
 			joinServer(row.data()[0]);
 		} 
     });  
     $('#serverTable').on('mouseover', 'tr', function() {
 		var tr = $(this).closest('tr');
 		var row = table.row( tr );
-		if (row.data()){
+		if (row.data()) {
 			fillGameCard(row.data()[0]);
         }
     });
@@ -79,7 +78,7 @@ function buildTable(){
     .done(function( data ) {
         for(var i = 0; i < data.result.servers.length; i++) {
             var serverIP = data.result.servers[i];
-            if(VerifyIPRegex.test(serverIP)){
+            if(VerifyIPRegex.test(serverIP)) {
                 serverList.servers.push({serverIP, i});
                 (function(i, serverIP) {
                     var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
@@ -87,7 +86,7 @@ function buildTable(){
                         serverInfo["serverId"] = i;
                         serverInfo["serverIP"] = serverIP;
                         if (serverInfo.maxPlayers <= 16 ) {
-                            if(serverInfo.map.length > 0){ //blank map means glitched server entry
+                            if(serverInfo.map.length > 0) { //blank map means glitched server entry
                                 for (var j = 0; j < serverList.servers.length; j++) {
                                     if (serverList.servers[j]["i"] == i) {
                                         serverList.servers[j] = serverInfo;
@@ -95,10 +94,10 @@ function buildTable(){
                                         playerCount+=parseInt(serverInfo.numPlayers);
                                     }
                                 }
-                                if(!serverInfo.hasOwnProperty("passworded")){
+                                if(!serverInfo.hasOwnProperty("passworded")) {
                                     serverInfo["passworded"] = "";
                                 } else {
-                                   serverInfo["passworded"] = "🔒";
+                                    serverInfo["passworded"] = "🔒";
                                 };
                                 table.row.add([
                                     serverInfo.serverId,
@@ -138,18 +137,18 @@ function buildTable(){
 
 function joinServer(i) {
     swal.setDefaults({ type:"error", html: true });
-    if(dewRconConnected){
+    if(dewRconConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
-                if(hasMap(serverList.servers[i].mapFile)){
+                if(hasMap(serverList.servers[i].mapFile)) {
                     ga('send', 'event', 'serverlist', 'connect');
-                    if(serverList.servers[i].passworded){
+                    if(serverList.servers[i].passworded) {
                         sweetAlert({   
                             title: "Private Server", text: "Please enter password",   
                             type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
                             inputPlaceholder: "Password goes here" 
                         }, 
-                        function(inputValue){
+                        function(inputValue) {
                             if (inputValue === false) return false;      
                             if (inputValue === "") {     
                                 sweetAlert.showInputError("Passwords are never blank");     
@@ -185,50 +184,14 @@ function joinServer(i) {
     }
 }
 
-function connectionTrigger(){
-    $('.closeButton').show();
-	$('#serverTable_filter').css("right","-160px");
-    dewRcon.send('game.version');
-    setTimeout(function() {
-        if (dewRcon.lastMessage.length > 0) {
-            gameVersion = dewRcon.lastMessage;
-            checkUpdate(gameVersion);
-            if (gameVersion != "0.5.0.0"){
-                dewRcon.send('game.listmaps');
-                setTimeout(function() {
-                    if (dewRcon.lastMessage.length > 0) {
-                        mapList = new Array(dewRcon.lastMessage.split(','));
-                    }
-                }, "200");
-            }
-        }
-    }, "200");
-}
-
-function disconnectTrigger(){
-    $('.closeButton').hide();
-	$('#serverTable_filter').css("right","-264px");
-}
-
-function closeBrowser() {
-	if(dewRconConnected){
-		setTimeout(function() {
-			dewRcon.send('menu.show');
-			dewRcon.send('Game.SetMenuEnabled 0');
-		}, "1000");
-	}else{
-		window.close();
-	}
-}
-
-function updateSelection(){
+function updateSelection() {
 	$('#serverTable tr.selected').removeClass('selected');
 	$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
 	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
     fillGameCard(row[0]);
 }
 
-function joinSelected(){
+function joinSelected() {
 	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
 	joinServer(row[0]);
 }
@@ -237,7 +200,6 @@ function pingMe(ip, rowNum) {
     var startTime = Date.now();
     var endTime;
     var ping;
-    //console.log(ip);
     $.ajax({
         type: "GET",
         url: "http://" + ip + "/",
@@ -252,14 +214,122 @@ function pingMe(ip, rowNum) {
     });
 }
 
-function fillGameCard(i){
+function fillGameCard(i) {
     var html = serverTemplate(serverList.servers[i]);
     $("#gamecard").html(html)
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function refreshTable() {
+    //Throttle refresh so people can't spam and break the count
+    if (isThrottled) { return; }
+    isThrottled = true;
+    setTimeout(function () { isThrottled = false; }, throttleDuration);
+    ga('send', 'event', 'serverlist', 'refresh-list');
+    serverList = {
+        servers: []
+    };
+    serverTable = [];
+    serverCount = 0;
+    playerCount = 0;
+    $('.serverCount').html(serverCount + " servers");
+    $('.playerCount').html(playerCount + " players");
+    $('#serverTable').DataTable().clear(); 
+    selectedID = 1;
+    buildTable();
+    if(dewRconConnected) {
+        connectionTrigger();   
+    }
+}
+
+function switchBrowser() {
+    setTimeout(function() {
+        dewRcon.send('game.menuurl "http://halo.thefeeltra.in/"');
+        dewRcon.send('writeconfig');
+    }, "1000");  
+}
+
+function checkUpdate(ver) {
+    if (ver != EDVersion) {
+        swal({   
+            title: "Version Outdated!",
+            text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+            html: true, type: "error", allowEscapeKey: false
+        });
+    }
+}
+
+function getCurrentRelease() {
+	var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
+    .done(function( data ) {
+        EDVersion = Object.keys(data)[0];
+    })
+}
+
+function hasMap(map) {
+    if(mapList[0].length == 0) {
+        return true;
+    } else if($.inArray(serverList.servers[i].mapFile, mapList[0]) > -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function closeBrowser() {
+	if(dewRconConnected) {
+		setTimeout(function() {
+			dewRcon.send('menu.show');
+			dewRcon.send('Game.SetMenuEnabled 0');
+		}, "1000");
+	}else{
+		window.close();
+	}
+}
+
+//==========================
+//==== dewRcon triggers ====
+//==========================
+
+function connectionTrigger() {
+    $('.closeButton').show();
+	$('#serverTable_filter').css("right","-160px");
+    dewRcon.send('game.version');
+    setTimeout(function() {
+        if (dewRcon.lastMessage.length > 0) {
+            gameVersion = dewRcon.lastMessage;
+            checkUpdate(gameVersion);
+            if (gameVersion != "0.5.0.0") {
+                dewRcon.send('game.listmaps');
+                setTimeout(function() {
+                    if (dewRcon.lastMessage.length > 0) {
+                        mapList = new Array(dewRcon.lastMessage.split(','));
+                    }
+                }, "200");
+            }
+        }
+    }, "200");
+}
+
+function disconnectTrigger() {
+    $('.closeButton').hide();
+	$('#serverTable_filter').css("right","-264px");
+}
+
+//============================
+//==== Keyboard functions ====
+//============================
+
 Mousetrap.bind('f11', function() {
     closeBrowser();
 });
+
+//===========================
+//==== Gamepad functions ====
+//===========================
 
 var gamepad = new Gamepad();
 
@@ -284,70 +354,70 @@ gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
 });
 
 gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
-    if (controllersOn){
+    if (controllersOn) {
         //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
-        if (e.control == "FACE_1"){
+        if (e.control == "FACE_1") {
             //console.log("A");
-            if($('.sweet-overlay').is(':visible')){
+            if($('.sweet-overlay').is(':visible')) {
                 sweetAlert.close();   
             } else {
                 joinSelected();
             }
-        }else if (e.control == "FACE_2"){
+        } else if (e.control == "FACE_2") {
             //console.log("B");
             sweetAlert.close();   
-        }else if (e.control == "FACE_3"){
+        } else if (e.control == "FACE_3") {
             //console.log("X");
             //toggleDetails();
-        }else if (e.control == "FACE_4"){
+        } else if (e.control == "FACE_4") {
            //console.log("Y");
            window.location.reload();
-        }else if (e.control == "DPAD_UP"){
+        } else if (e.control == "DPAD_UP") {
             //console.log("UP");
             if (selectedID > 1) {
                 selectedID--;
                 updateSelection();
             }
-        }else if (e.control == "DPAD_DOWN"){
+        } else if (e.control == "DPAD_DOWN") {
             //console.log("DOWN");
-            if (selectedID < ($("#serverTable tbody tr").length)){
+            if (selectedID < ($("#serverTable tbody tr").length)) {
                 selectedID++;
                 updateSelection();
             }
-        }else if (e.control == "DPAD_LEFT"){
+        } else if (e.control == "DPAD_LEFT") {
             //console.log("LEFT");
-            if($('#serverTable').DataTable().page.info().page > 0){
+            if($('#serverTable').DataTable().page.info().page > 0) {
                 $('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
                 selectedID = 1;
                 updateSelection();
             }
-        }else if (e.control == "DPAD_RIGHT"){
+        } else if (e.control == "DPAD_RIGHT") {
             //console.log("RIGHT");
-            if(($('#serverTable').DataTable().page.info().page +1)<$('#serverTable').DataTable().page.info().pages){
+            if(($('#serverTable').DataTable().page.info().page +1)<$('#serverTable').DataTable().page.info().pages) {
                 $('#serverTable').DataTable().page( 'next' ).draw( 'page' ); 
                 selectedID = 1;
                 updateSelection();                
             }  
-        }else if (e.control == "SELECT_BACK"){
+        } else if (e.control == "SELECT_BACK") {
             //console.log("BACK");
             closeBrowser();
-        }else if (e.control == "START_FORWARD"){
+        } else if (e.control == "START_FORWARD") {
             //console.log("START");
-        }else if (e.control == "RIGHT_TOP_SHOULDER"){
+        } else if (e.control == "RIGHT_TOP_SHOULDER") {
             //console.log("RIGHT BUMPER");
-            if(($('#serverTable').DataTable().page.info().page +1)<$('#serverTable').DataTable().page.info().pages){
+            if(($('#serverTable').DataTable().page.info().page +1)<$('#serverTable').DataTable().page.info().pages) {
                 $('#serverTable').DataTable().page( 'next' ).draw( 'page' ); 
                 selectedID = 1;
                 updateSelection();                
             }            
-        }else if (e.control == "LEFT_TOP_SHOULDER"){
+        } else if (e.control == "LEFT_TOP_SHOULDER") {
             //console.log("LEFT BUMPER");
-            if($('#serverTable').DataTable().page.info().page > 0){
+            if($('#serverTable').DataTable().page.info().page > 0) {
                 $('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
                 selectedID = 1;
                 updateSelection();
             }
-        }else if (e.control == "LEFT_STICK"){
+        } else if (e.control == "LEFT_STICK") {
             //console.log("LEFT STICK");
             //Because I use weird mapping.
             toggleDetails();
@@ -355,47 +425,13 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
     }
 });
 
-//initializes Gamepads (needed)
+
 if (!gamepad.init()) {
-    // Your browser does not support gamepads, get the latest Google Chrome or Firefox
 }
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function sortByKey(array, key) {
-    return array.sort(function(b, a) {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
-}
-
-function refreshTable(){
-    //Throttle refresh so people can't spam and break the count
-    if (isThrottled) { return; }
-    isThrottled = true;
-    setTimeout(function () { isThrottled = false; }, throttleDuration);
-    ga('send', 'event', 'serverlist', 'refresh-list');
-    serverList = {
-        servers: []
-    };
-    serverTable = [];
-    serverCount = 0;
-    playerCount = 0;
-    $('.serverCount').html(serverCount + " servers");
-    $('.playerCount').html(playerCount + " players");
-    $('#serverTable').DataTable().clear(); 
-    selectedID = 1;
-    buildTable();
-    if(dewRconConnected){
-        connectionTrigger();   
-    }
-}
-
-String.prototype.contains = function(it) {
-	return this.indexOf(it) != -1;
-};
+//==========================
+//==== Datatable Sorts =====
+//==========================
 
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "ip-address-pre": function ( a ) {
@@ -421,12 +457,31 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "ip-address-desc": function ( a, b ) {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
-} );
+});
 
-Handlebars.registerHelper('eachByScore', function(context,options){
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "playerCount-pre": function ( a ) {
+        var pCount = a.split('/');
+        return (pCount[1] + pCount[0]) * 1;
+    },
+
+    "playerCount-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "playerCountdesc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+});
+
+//===========================
+//==== Handlebar Helpers ====
+//===========================
+
+Handlebars.registerHelper('eachByScore', function(context,options) {
     var output = '';
     var contextSorted = context.concat()
-        .sort( function(a,b) { return b.score - a.score } );
+        .sort( function(a,b) { return b.score - a.score });
     for(var i=0, j=contextSorted.length; i<j; i++) {
         output += options.fn(contextSorted[i]);
     }
@@ -442,57 +497,8 @@ Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 
 Handlebars.registerHelper('capitalize', function(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
-  }, 'string');
+}, 'string');
   
 Handlebars.registerHelper('lowerCase', function(str) {
     return new Handlebars.SafeString(str.toLowerCase());
 });
-
-function switchBrowser(){
-    setTimeout(function() {
-        dewRcon.send('game.menuurl "http://halo.thefeeltra.in/"');
-        dewRcon.send('writeconfig');
-    }, "1000");  
-}
-
-jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-    "playerCount-pre": function ( a ) {
-        var pCount = a.split('/');
-        return (pCount[1] + pCount[0]) * 1;
-    },
-
-    "playerCount-asc": function ( a, b ) {
-        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-    },
-
-    "playerCountdesc": function ( a, b ) {
-        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-    }
-} );
-
-function checkUpdate(ver){
-    if (ver != EDVersion){
-        swal({   
-            title: "Version Outdated!",
-            text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
-            html: true, type: "error", allowEscapeKey: false
-        });
-    }
-}
-
-function getCurrentRelease(){
-	var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
-    .done(function( data ) {
-        EDVersion = Object.keys(data)[0];
-    })
-}
-
-function hasMap(map){
-    if(mapList[0].length == 0){
-        return true;
-    }else if($.inArray(serverList.servers[i].mapFile, mapList[0]) > -1){
-        return true;
-    }else {
-        return false;
-    }
-}
