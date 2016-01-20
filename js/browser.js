@@ -1,4 +1,4 @@
-var maplist;
+var mapList = [[]];
 var EDVersion = 0;
 var serverList = {
 servers: []
@@ -235,13 +235,14 @@ function connectionTrigger(){
         if (dewRcon.lastMessage.length > 0) {
             gameVersion = dewRcon.lastMessage;
             checkUpdate(gameVersion);
-        }
-    }, "200");
-    dewRcon.send('game.listmaps');
-    setTimeout(function() {
-        if (dewRcon.lastMessage.length > 0) {
-            mapList = new Array(dewRcon.lastMessage.split(','));
-            checkUpdate(gameVersion);
+            if (gameVersion != "0.5.0.0"){
+                dewRcon.send('game.listmaps');
+                setTimeout(function() {
+                    if (dewRcon.lastMessage.length > 0) {
+                        mapList = new Array(dewRcon.lastMessage.split(','));
+                    }
+                }, "200");
+            }
         }
     }, "200");
 }
