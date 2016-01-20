@@ -4,12 +4,11 @@ var serverList = {
 servers: []
 }; 
 var serverTable = [];
-var pingTable = [];
 var isThrottled = false;
 var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
-var gameVersion = "0";
+var gameVersion = 0;
 var selectedID = 1;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
@@ -144,7 +143,7 @@ function buildTable() {
 }
 
 function joinServer(i) {
-    swal.setDefaults({ type:"error", html: true });
+    swal.setDefaults({ html: true });
     if(dewRconConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
@@ -179,16 +178,16 @@ function joinServer(i) {
                         closeBrowser();
                     }
                 } else {    
-                    swal("Error","You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod.");
+                    swal("Map File Missing","You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", "error");
                 }
             } else {
-                swal("Error", "Host running different version.<br /> Unable to join!");
+                swal("Version Mismatch", "Host running different version.<br /> Unable to join.", "error");
             }
         } else {
-            swal("Error", "Game is full or unavailable!");
+            swal("Full Game", "Game is full or unavailable.", "error");
         }
     } else {
-        swal("Error", "dewRcon is not connected!");        
+        swal("Communication Error", "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", "error");        
     }
 }
 
@@ -291,14 +290,14 @@ function connectionTrigger() {
         if (dewRcon.lastMessage.length > 0) {
             gameVersion = dewRcon.lastMessage;
             checkUpdate(gameVersion);
-            if (gameVersion != "0.5.0.0") {
-                dewRcon.send('game.listmaps');
-                setTimeout(function() {
-                    if (dewRcon.lastMessage.length > 0) {
+            dewRcon.send('game.listmaps');
+            setTimeout(function() {
+                if (dewRcon.lastMessage.length > 0) {
+                    if (dewRcon.lastMessage != "Command/Variable not found"){
                         mapList = new Array(dewRcon.lastMessage.split(','));
                     }
-                }, "200");
-            }
+                }
+            }, "200");
         }
     }, "200");
 }
@@ -369,7 +368,6 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             sweetAlert.close();   
         } else if (e.control == "FACE_3") {
             //console.log("X");
-            //toggleDetails();
         } else if (e.control == "FACE_4") {
            //console.log("Y");
            window.location.reload();
@@ -420,8 +418,6 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             }
         } else if (e.control == "LEFT_STICK") {
             //console.log("LEFT STICK");
-            //Because I use weird mapping.
-            toggleDetails();
         }          
     }
 });
