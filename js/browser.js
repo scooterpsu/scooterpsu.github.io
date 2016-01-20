@@ -1,3 +1,4 @@
+var maplist;
 var EDVersion = 0;
 var serverList = {
 servers: []
@@ -167,47 +168,56 @@ function joinServer(i) {
 	//console.log(serverList.servers[i].serverIP);
     if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
-            if(serverList.servers[i].eldewritoVersion === gameVersion) {
-                ga('send', 'event', 'serverlist', 'connect');
-                if(serverList.servers[i].passworded){
-                    sweetAlert({   
-                    title: "Private Server",   
-                    text: "Please enter password",   
-                    type: "input", 
-                    inputType: "password",
-                    showCancelButton: true,   
-                    closeOnConfirm: false,
-                    inputPlaceholder: "Password goes here" 
-                    }, 
-                    function(inputValue){
-                        if (inputValue === false) return false;      
-                        if (inputValue === "") {     
-                         sweetAlert.showInputError("Passwords are never blank");     
-                         return false   
-                        } else {
-                            dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
-                            setTimeout(function() {
-                                if (dewRcon.lastMessage === "Incorrect password specified.") {
-                                    sweetAlert.showInputError(dewRcon.lastMessage);
-                                    return false
-                                }else {
-                                    sweetAlert.close();
-                                    closeBrowser();
-                                }
-                            }, "400");
-                        }
-                    });
+            if($.inArray(serverList.servers[i].mapFile, mapList[0]) > -1){
+                if(serverList.servers[i].eldewritoVersion === gameVersion) {
+                    ga('send', 'event', 'serverlist', 'connect');
+                    if(serverList.servers[i].passworded){
+                        sweetAlert({   
+                        title: "Private Server",   
+                        text: "Please enter password",   
+                        type: "input", 
+                        inputType: "password",
+                        showCancelButton: true,   
+                        closeOnConfirm: false,
+                        inputPlaceholder: "Password goes here" 
+                        }, 
+                        function(inputValue){
+                            if (inputValue === false) return false;      
+                            if (inputValue === "") {     
+                             sweetAlert.showInputError("Passwords are never blank");     
+                             return false   
+                            } else {
+                                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
+                                setTimeout(function() {
+                                    if (dewRcon.lastMessage === "Incorrect password specified.") {
+                                        sweetAlert.showInputError(dewRcon.lastMessage);
+                                        return false
+                                    }else {
+                                        sweetAlert.close();
+                                        closeBrowser();
+                                    }
+                                }, "400");
+                            }
+                        });
+                    } else {
+                        dewRcon.send('connect ' + serverList.servers[i].serverIP);
+                        closeBrowser();
+                    }
                 } else {
-                    dewRcon.send('connect ' + serverList.servers[i].serverIP);
-                    closeBrowser();
+                    sweetAlert({
+                    title:"Error", 
+                    text:"Host running different version.<br /> Unable to join!", 
+                    type:"error",
+                    html: true
+                    });
                 }
-            } else {
-				sweetAlert({
-				title:"Error", 
-				text:"Host running different version.<br /> Unable to join!", 
-				type:"error",
-				html: true
-				});
+            } else {    
+                sweetAlert({
+                    title:"Error", 
+                    text:"You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod.", 
+                    type:"error",
+                    html: true
+                });
             }
         } else {
                 sweetAlert("Error", "Game is full or unavailable!", "error");
@@ -225,10 +235,13 @@ function connectionTrigger(){
         if (dewRcon.lastMessage.length > 0) {
             gameVersion = dewRcon.lastMessage;
             checkUpdate(gameVersion);
-            //$('#serverTable').dataTable().fnFilter( gameVersion, 14 );
-            //setTimeout(function() {
-            //    $('#serverTable').dataTable().api().column( 14 ).visible( false );
-            //}, "200");
+        }
+    }, "200");
+    dewRcon.send('game.listmaps');
+    setTimeout(function() {
+        if (dewRcon.lastMessage.length > 0) {
+            mapList = new Array(dewRcon.lastMessage.split(','));
+            checkUpdate(gameVersion);
         }
     }, "200");
 }
