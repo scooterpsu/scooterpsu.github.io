@@ -129,7 +129,7 @@ function buildTable(){
                             console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
                         }
                     });
-                });
+                })(i, serverIP);
             } else {
                 console.log(serverIP + " is invalid, skipping.");
             }
@@ -173,10 +173,10 @@ function joinServer(i) {
                         closeBrowser();
                     }
                 } else {    
-                    sweetAlert({"Error","You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod."});
+                    sweetAlert("Error","You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod.");
                 }
             } else {
-                sweetAlert({"Error", "Host running different version.<br /> Unable to join!"});
+                sweetAlert("Error", "Host running different version.<br /> Unable to join!");
             }
         } else {
             sweetAlert("Error", "Game is full or unavailable!");
