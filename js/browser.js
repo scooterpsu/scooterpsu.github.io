@@ -106,7 +106,6 @@ function buildTable(){
 												serverInfo["serverId"] = i;
 												serverInfo["serverIP"] = serverIP;
 												if (serverInfo.maxPlayers <= 16 ) {
-                                                    
 													if(serverInfo.map.length > 0){ //blank map means glitched server entry
 														for (var j = 0; j < serverList.servers.length; j++)
 														{
@@ -168,17 +167,14 @@ function joinServer(i) {
 	//console.log(serverList.servers[i].serverIP);
     if(dewRconConnected){
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
-            if($.inArray(serverList.servers[i].mapFile, mapList[0]) > -1){
-                if(serverList.servers[i].eldewritoVersion === gameVersion) {
+            if(serverList.servers[i].eldewritoVersion === gameVersion) {
+                if(hasMap(serverList.servers[i].mapFile)){
                     ga('send', 'event', 'serverlist', 'connect');
                     if(serverList.servers[i].passworded){
                         sweetAlert({   
                         title: "Private Server",   
                         text: "Please enter password",   
-                        type: "input", 
-                        inputType: "password",
-                        showCancelButton: true,   
-                        closeOnConfirm: false,
+                        type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
                         inputPlaceholder: "Password goes here" 
                         }, 
                         function(inputValue){
@@ -203,20 +199,17 @@ function joinServer(i) {
                         dewRcon.send('connect ' + serverList.servers[i].serverIP);
                         closeBrowser();
                     }
-                } else {
-                    sweetAlert({
-                    title:"Error", 
-                    text:"Host running different version.<br /> Unable to join!", 
-                    type:"error",
-                    html: true
+                } else {    
+                    sweetAlert({title:"Error", 
+                        text:"You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod.", 
+                        type:"error", html: true
                     });
                 }
-            } else {    
+            } else {
                 sweetAlert({
-                    title:"Error", 
-                    text:"You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod.", 
-                    type:"error",
-                    html: true
+                title:"Error", 
+                text:"Host running different version.<br /> Unable to join!", 
+                type:"error", html: true
                 });
             }
         } else {
@@ -529,4 +522,14 @@ function getCurrentRelease(){
         .done(function( data ) {
             EDVersion = Object.keys(data)[0];
         })
+}
+
+function hasMap(map){
+    if(mapList[0].length == 0){
+        return true;
+    }else if($.inArray(serverList.servers[i].mapFile, mapList[0]) > -1){
+        return true;
+    }else {
+        return false;
+    }
 }
