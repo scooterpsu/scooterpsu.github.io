@@ -14,9 +14,16 @@ var selectedID = 1;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
-    buildTable();
     getCurrentRelease();
+    buildTable();
 });
+
+function getCurrentRelease() {
+	var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
+    .done(function( data ) {
+        EDVersion = Object.keys(data)[0];
+    })
+}
         
 function buildTable() {
 	$('#serverTable').on('click', 'tr', function() {
@@ -46,7 +53,8 @@ function buildTable() {
 		stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
-            { type: 'ip-address', targets: 2 }
+            { type: 'ip-address', targets: 1 },
+            { type: "playerCount", targets: 12 }
         ],
 		columns: [
 			{ title: "ID", visible: false},
@@ -61,7 +69,7 @@ function buildTable() {
 			{ title: "Variant" },
 			{ title: "Status", visible: false},    
  			{ title: "Num Players", visible: false},  
-			{ title: "Players", "sType": "playerCount", "width": "1%"},
+			{ title: "Players", "width": "1%"},
 			{ title: "Version", "width": "1%", visible: false}
 		],
 		"order": [[ 0 ]],
@@ -143,7 +151,7 @@ function joinServer(i) {
                 if(hasMap(serverList.servers[i].mapFile)) {
                     ga('send', 'event', 'serverlist', 'connect');
                     if(serverList.servers[i].passworded) {
-                        sweetAlert({   
+                        swal({   
                             title: "Private Server", text: "Please enter password",   
                             type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
                             inputPlaceholder: "Password goes here" 
@@ -171,29 +179,17 @@ function joinServer(i) {
                         closeBrowser();
                     }
                 } else {    
-                    sweetAlert("Error","You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod.");
+                    swal("Error","You do not have the required map.<br /><br /> Please check reddit.com/r/HaloOnline for the required mod.");
                 }
             } else {
-                sweetAlert("Error", "Host running different version.<br /> Unable to join!");
+                swal("Error", "Host running different version.<br /> Unable to join!");
             }
         } else {
-            sweetAlert("Error", "Game is full or unavailable!");
+            swal("Error", "Game is full or unavailable!");
         }
     } else {
-        sweetAlert("Error", "dewRcon is not connected!");        
+        swal("Error", "dewRcon is not connected!");        
     }
-}
-
-function updateSelection() {
-	$('#serverTable tr.selected').removeClass('selected');
-	$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
-	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
-    fillGameCard(row[0]);
-}
-
-function joinSelected() {
-	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
-	joinServer(row[0]);
 }
 
 function pingMe(ip, rowNum) {
@@ -262,13 +258,6 @@ function checkUpdate(ver) {
     }
 }
 
-function getCurrentRelease() {
-	var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
-    .done(function( data ) {
-        EDVersion = Object.keys(data)[0];
-    })
-}
-
 function hasMap(map) {
     if(mapList[0].length == 0) {
         return true;
@@ -290,9 +279,9 @@ function closeBrowser() {
 	}
 }
 
-//==========================
-//==== dewRcon triggers ====
-//==========================
+//============================
+//===== dewRcon triggers =====
+//============================
 
 function connectionTrigger() {
     $('.closeButton').show();
@@ -319,17 +308,29 @@ function disconnectTrigger() {
 	$('#serverTable_filter').css("right","-264px");
 }
 
-//============================
-//==== Keyboard functions ====
-//============================
+//==============================
+//===== Keyboard functions =====
+//==============================
 
 Mousetrap.bind('f11', function() {
     closeBrowser();
 });
 
-//===========================
-//==== Gamepad functions ====
-//===========================
+//=============================
+//===== Gamepad functions =====
+//=============================
+
+function updateSelection() {
+	$('#serverTable tr.selected').removeClass('selected');
+	$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
+	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
+    fillGameCard(row[0]);
+}
+
+function joinSelected() {
+	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
+	joinServer(row[0]);
+}
 
 var gamepad = new Gamepad();
 
