@@ -6,6 +6,7 @@ body {
     margin-right: auto;
     overflow-y: hidden;
 }
+
 img{
     -webkit-user-drag: none;
 }
@@ -18,6 +19,7 @@ img{
     left: 10px;
     z-index: 2;
 }
+
 .refresh {
     opacity: 0.8;
     position: absolute;
@@ -32,9 +34,11 @@ img{
     border: 1px solid white;
 	z-index:1000;
 }
+
 .refresh:hover{
     background-color: #31415b;
 }
+
 .serverStats {
     color: white;
 	font-weight: bold;
@@ -44,6 +48,7 @@ img{
     left: 350px;
     z-index: 2;
 }
+
 .closeButton {
     opacity: 0.8;
     position: absolute;
@@ -58,9 +63,11 @@ img{
     border: 1px solid white;
     display: none;
 }
+
 .closeButton:hover{
     background-color: #1a3d5a;
 }
+
 .controllerButton{
     opacity: 0;
     margin-top: -3;
@@ -69,6 +76,7 @@ img{
     width: 28;
     display: none;
 }
+
 .selected .controllerButton{
     opacity: 1;
 }
@@ -119,21 +127,23 @@ img{
     color: #13233d;
 }
 
-.sorting:hover{
-    color: white;
-}
-
 .sorting{
     padding-top: 0;
-    color: white;
+    color: white !important;
 }
 
-.sorting_1{
-    color: white;
-}
-
-table.dataTable thead th, table.dataTable thead td {
+.dataTable thead th, .dataTable thead td {
     border-bottom: 1px solid white !important;
+}
+
+.dataTables_scroll{
+    position: relative;
+    top: -34px;
+}
+
+.dataTables_scrollBody{
+    padding-top: 29px;
+    margin-bottom: -38px;
 }
 
 #serverTable tbody tr:hover td{
@@ -173,77 +183,6 @@ table.dataTable thead th, table.dataTable thead td {
 
 #serverTable_length label select{
     color: black;
-}
-
-.dataTables_scroll{
-    position: relative;
-    top: -34px;
-}
-
-.dataTables_scrollBody{
-    padding-top: 29px;
-    margin-bottom: -38px;
-
-}
-
-#serverTable thead tr{
-    border-bottom: 1px solid white;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button{
-    border: 1px solid #404f70;
-    background: white;
-    color: black !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
-    background: white;
-    color: black !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current{
-    border: 1px solid white;
-    background: #404f70 !important;
-    color: white !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
-    border: 1px solid white;
-    color: #13233d !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button{
-    border: 1px solid white;
-    background: white;
-    color: #13233d !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
-    border: 1px solid #404f70;
-    background: #404f70;
-    color: white !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled{
-    background: #13233d !important;
-    color: #404f70 !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover{
-    color: #404f70 !important;
-}
-
-#serverTable_paginate{
-    position: absolute;
-    bottom: 4px;
-    right: 16px;
-    background-color: #13233d;    
-    height: 38px;
-    padding: 0;
-}
-
-#serverTable_paginate label{
-    color: white !important;
 }
 
 #serverTable_info{
