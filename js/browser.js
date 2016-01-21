@@ -271,7 +271,7 @@ function checkUpdate(ver) {
 function hasMap(map) {
     if(mapList[0].length == 0) {
         return true;
-    } else if($.inArray(serverList.servers[i].mapFile, mapList[0]) > -1) {
+    } else if($.inArray(map, mapList[0]) > -1) {
         return true;
     } else {
         return false;
