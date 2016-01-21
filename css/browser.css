@@ -56,6 +56,7 @@ img{
     border-style: solid;
     border: 1px solid white;
     display: none;
+    
 }
 .closeButton:hover{
     background-color: #1a3d5a;
