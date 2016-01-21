@@ -285,6 +285,7 @@ function closeBrowser() {
 //============================
 
 function connectionTrigger() {
+    StartConnection();
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version');
