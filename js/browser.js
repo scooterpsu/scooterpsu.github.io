@@ -164,16 +164,19 @@ function joinServer(i) {
                                 sweetAlert.showInputError("Passwords are never blank");     
                                 return false   
                             } else {
-                                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
-                                setTimeout(function() {
-                                    if (dewRcon.lastMessage === "Incorrect password specified.") {
-                                        sweetAlert.showInputError(dewRcon.lastMessage);
-                                        return false
-                                    }else {
-                                        sweetAlert.close();
-                                        closeBrowser();
+                                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
+                                    if (res.length > 0) {
+                                        if (res != "Command/Variable not found"){
+                                            if (res === "Incorrect password specified.") {
+                                                sweetAlert.showInputError(res);
+                                                return false
+                                            }else {
+                                                sweetAlert.close();
+                                                closeBrowser();
+                                            }
+                                        }
                                     }
-                                }, "400");
+                                });
                             }
                         });
                     } else {
@@ -296,14 +299,14 @@ function connectionTrigger() {
                 checkUpdate(gameVersion);
             }
         }
-        dewRcon.send('game.listmaps', function(res) {
-			if (res.length > 0) {
-                if (res != "Command/Variable not found"){
-                    mapList = new Array(res.split(','));
-                }
-            }
-		});
 	});
+    dewRcon.send('game.listmaps', function(res) {
+        if (res.length > 0) {
+            if (res != "Command/Variable not found"){
+                mapList = new Array(res.split(','));
+            }
+        }
+    });
 }
 
 function disconnectTrigger() {
@@ -338,7 +341,7 @@ function joinSelected() {
 var gamepad = new Gamepad();
 
 gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
-    console.log("a new gamepad connected");
+    //console.log("a new gamepad connected");
     setTimeout(function() {
         $('.controllerButton').show();
         updateSelection();
@@ -347,14 +350,14 @@ gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
 });
 
 gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
-    console.log("gamepad disconnected");
+    //console.log("gamepad disconnected");
     $('.controllerButton').hide();
     $('#serverTable tr.selected').removeClass('selected');
     controllersOn = false;
 });
 
 gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
-    console.log("an unsupported gamepad connected (add new mapping)");
+    //console.log("an unsupported gamepad connected (add new mapping)");
 });
 
 gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
