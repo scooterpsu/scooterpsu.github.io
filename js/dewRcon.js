@@ -15,7 +15,7 @@ StartRconConnection = function() {
         connectionTrigger();
     };
     dewRcon.dewWebSocket.onerror = function() {
-        jQuery("#connectionStatus").text('Not connected. Is the game running?');
+        //jQuery("#connectionStatus").text('Not connected. Is the game running?');
         dewRconConnected = false;
         if (!dewRconConnected) {
             if (DewRconPortIndex == 0) {

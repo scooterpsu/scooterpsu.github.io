@@ -285,23 +285,24 @@ function closeBrowser() {
 //============================
 
 function connectionTrigger() {
+    //StartConnection();
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
-    dewRcon.send('game.version');
-    setTimeout(function() {
-        if (dewRcon.lastMessage.length > 0) {
-            gameVersion = dewRcon.lastMessage;
-            checkUpdate(gameVersion);
-            dewRcon.send('game.listmaps');
-            setTimeout(function() {
-                if (dewRcon.lastMessage.length > 0) {
-                    if (dewRcon.lastMessage != "Command/Variable not found"){
-                        mapList = new Array(dewRcon.lastMessage.split(','));
-                    }
-                }
-            }, "200");
+    dewRcon.send('game.version', function(res) {
+		if (res.length > 0) {
+            if (res != "Command/Variable not found"){
+                gameVersion = dewRcon.lastMessage;
+        checkUpdate(gameVersion);
+            }
         }
-    }, "200");
+        dewRcon.send('game.listmaps', function(res) {
+			if (res.length > 0) {
+                if (res != "Command/Variable not found"){
+                    mapList = new Array(dewRcon.lastMessage.split(','));
+                }
+            }
+		});
+	});
 }
 
 function disconnectTrigger() {
