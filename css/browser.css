@@ -287,8 +287,8 @@ img{
 }
 
 .selected td{
-    background-color: #31415b;
-    color: white;
+    background-color: #31415b !important;
+    color: white !important;
 }
 
 .sorting_asc, .sorting_desc {
