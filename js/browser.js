@@ -47,8 +47,9 @@ function buildTable() {
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
         },
-        scrollY:        "-webkit-calc(100% - 137px)",
-        scroller:       true,
+        bPaginate: false,
+        scrollY: "-webkit-calc(100% - 137px)",
+        scroller: true,
         destroy: true,
         "iDisplayLength": 10,
 		stateSave: true,
@@ -291,14 +292,14 @@ function connectionTrigger() {
     dewRcon.send('game.version', function(res) {
 		if (res.length > 0) {
             if (res != "Command/Variable not found"){
-                gameVersion = dewRcon.lastMessage;
-        checkUpdate(gameVersion);
+                gameVersion = res;
+                checkUpdate(gameVersion);
             }
         }
         dewRcon.send('game.listmaps', function(res) {
 			if (res.length > 0) {
                 if (res != "Command/Variable not found"){
-                    mapList = new Array(dewRcon.lastMessage.split(','));
+                    mapList = new Array(res.split(','));
                 }
             }
 		});
