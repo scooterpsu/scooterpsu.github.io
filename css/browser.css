@@ -367,3 +367,18 @@ img{
     margin-bottom: 0;
     background-color: #05152f;
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+    background-color: #05152F;
+}
+ 
+::-webkit-scrollbar-thumb {
+    background-color: #344362;
+    border: 3px solid #05152F;
+    border-left-width: 7px;
+    border-right-width: 0px;
+}
