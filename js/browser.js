@@ -463,7 +463,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "playerCount-pre": function ( a ) {
         var pCount = a.split('/');
-        return (pCount[1] + pCount[0]) * 1;
+        return (pCount[0]) * 1;
     },
 
     "playerCount-asc": function ( a, b ) {
