@@ -28,16 +28,16 @@ StartConnection = function() {
 			});
 		});
         console.log('Connected to Friend Server!');
-		$('#notification')[0].currentTime = 0;
-		$('#notification')[0].play();
+		//$('#notification')[0].currentTime = 0;
+		//$('#notification')[0].play();
         friendServerConnected = true;
     };
     friendServer.friendsServerSocket.onerror = function() {
 		if(!snacking) {
 			console.log('Connection to Friend Server failed, retrying.');
 			if(!played) {
-				$('#notification')[0].currentTime = 0;
-				$('#notification')[0].play();
+				//$('#notification')[0].currentTime = 0;
+				//$('#notification')[0].play();
 				played = 1;
 			}
 			snacking = 1;
