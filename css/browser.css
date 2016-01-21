@@ -181,6 +181,7 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 .dataTables_scrollBody{
+    padding-top: 29px;
     margin-bottom: -38px;
 
 }
