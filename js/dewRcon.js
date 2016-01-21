@@ -28,6 +28,8 @@ StartRconConnection = function() {
         }
     };
     dewRcon.dewWebSocket.onmessage = function(message) {
+		if (typeof dewRcon.callback == 'function')
+			dewRcon.callback(message.data);
         dewRcon.lastMessage = message.data;
         //console.log(dewRcon.lastMessage);
         //console.log(dewRcon.lastCommand);
@@ -47,12 +49,14 @@ dewRconHelper = function() {
     this.dewWebSocket = new WebSocket('ws://127.0.0.1:' + DewRconPorts[DewRconPortIndex], 'dew-rcon');
     this.lastMessage = "";
     this.lastCommand = "";
+	this.callback = {};
     this.open = false;
 
-    this.send = function(command) {
+    this.send = function(command, cb) {
         try {
             this.dewWebSocket.send(command);
             this.lastCommand = command;
+			this.callback = cb;
         } catch (e) {
 			console.log(e);
             dewRconConnected = false;
