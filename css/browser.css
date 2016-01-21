@@ -151,7 +151,6 @@ table.dataTable thead th, table.dataTable thead td {
 
 #serverTable_filter label{
     color: white;
-    margin-bottom: -50px;
 }
 
 #serverTable_filter input{
@@ -174,10 +173,6 @@ table.dataTable thead th, table.dataTable thead td {
 
 #serverTable_length label select{
     color: black;
-}
-
-.display{
-    padding-top: 30px;
 }
 
 .dataTables_scroll{
@@ -411,11 +406,11 @@ table.dataTable thead th, table.dataTable thead td {
     border: 1px solid #404f70;
     border-left: 0;
     border-bottom: 0;
-    padding: 4px;
+    padding: 5px;
     padding-left: 40px;
     padding-right: 10px;
     position: absolute;
-    top: 16px;
+    top: 14px;
     left: 588px;
     z-index: 0;
 }
