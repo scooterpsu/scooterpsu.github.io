@@ -68,6 +68,30 @@ img{
     background-color: #1a3d5a;
 }
 
+.browserSwitch{
+    opacity: 0.8;
+    background-color: #13233d;
+    color: white;
+    border: 1px solid #404f70;
+    border-left: 0;
+    border-bottom: 0;
+    padding: 5px;
+    padding-left: 40px;
+    padding-right: 10px;
+    position: absolute;
+    top: 14px;
+    left: 588px;
+    z-index: 0;
+}
+
+.browserSwitch:hover{
+    background-color: #31415b;
+}
+
+/*==============================*/
+/*===== Controller buttons =====*/
+/*==============================*/
+
 .controllerButton{
     opacity: 0;
     margin-top: -3;
@@ -88,6 +112,150 @@ img{
 .closeButton .controllerButton{
     opacity: 1;
 }
+
+/*==============================*/
+/*======= Game Info Card =======*/
+/*==============================*/
+
+#gamecard{
+    width: 250px;
+    position: fixed;
+    top: 2px;
+    right: 16px;
+    float: right;
+    z-index: 2;
+    margin-top: 54px;
+    margin-right: 10px;
+}
+
+#cardheader{
+    position: relative;
+    top: 2px;
+    left: 2px;
+    width: 246px;
+    min-height: 139px;
+    background-color: #13233d;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
+}
+
+#cardheaderborder{
+    background-color: #404f70;
+    width: 250px;
+    min-height: 143px;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
+    padding-bottom: 4px;
+}
+
+#title{
+    position: relative;
+    margin-top: 2px;
+    min-height: 30px;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    line-height: 20px;
+    width: 246px;
+    background-color: black;
+    color: white;
+    border-bottom: 2px solid #404f70;
+}
+
+#mappic{
+    width: 246px;
+    height: 109px;
+}
+
+#varpic{
+    margin-top: -95px;
+    margin-left: 10px;
+    height: 80px;
+}
+
+#scoreboard{
+    margin-top: 5px;
+    width: 250px;
+    line-height: 30px;
+    text-align: center;
+    border: 2px solid #404f70;
+    background-color: #13233d;
+    color: white; 
+}
+
+.statBreakdown{
+    font-size: 10pt;
+    line-height: 20px;
+    color: white;
+    width: 245px;
+    border-collapse: collapse;
+}
+
+.statBreakdown td{
+    border: 1px solid black;
+    padding-left: 2px;
+}
+
+.tableHeader {
+    background-color: black;
+    color: white;
+}
+
+.tableHeader th{
+    padding-left: 2px;
+}
+
+#gameinfoborder{
+    margin-top: -2px;
+    background-color: #404f70;
+    width: 251px;
+    padding-bottom: 4px;
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
+}
+
+#gameinfo{
+    position: relative;
+    top: 2px;
+    left: 2px;
+    width: 247px;
+    margin-top: 6px;
+    padding-left: 4px;
+    line-height: 20px;
+    text-align: left;
+    background-color: #13233d;
+    color: white; 
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
+}
+
+/*=============================*/
+/*======= Outter border =======*/
+/*=============================*/
+
+#extBorder{
+    position: absolute;
+    top: 0px;
+    background-color: #404f70;
+    height:100vh;
+    width: 100%;
+    padding: 1px;
+    -webkit-clip-path: polygon(575px 0%, 625px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    z-index: 1;
+}
+
+#extBorder2{
+    background-color: #05152f;
+    top: 1px;
+    left: 1px;
+    height:100vh;
+    padding: 5px;
+    -webkit-clip-path: polygon(573px 0%, 623px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    z-index: 1;
+}
+
+
+/*===============================*/
+/*==== DataTable Fixes/Hacks ====*/
+/*===============================*/
 
 #serverTable{
     position: relative;
@@ -197,164 +365,4 @@ img{
     width: -webkit-calc(100% - 10px);
     margin-bottom: 0;
     background-color: #05152f;
-}
-
-#connectionStatus{
-	opacity: 0.8;
-	position:fixed; bottom:0; right: 0;
-	z-index:1000;
-	padding-right: 8;
-	padding-bottom: 7;
-    color: white;
-}
-
-#extBorder{
-    position: absolute;
-    top: 0px;
-    background-color: #404f70;
-    height:100vh;
-    width: 100%;
-    padding: 1px;
-    -webkit-clip-path: polygon(575px 0%, 625px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
-    z-index: 1;
-}
-
-#extBorder2{
-    background-color: #05152f;
-    top: 1px;
-    left: 1px;
-    height:100vh;
-    padding: 5px;
-    -webkit-clip-path: polygon(573px 0%, 623px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
-    z-index: 1;
-}
-
-#gamecard{
-    width: 250px;
-    position: fixed;
-    top: 2px;
-    right: 16px;
-    float: right;
-    z-index: 2;
-    margin-top: 54px;
-    margin-right: 10px;
-}
-
-#cardheader{
-    position: relative;
-    top: 2px;
-    left: 2px;
-    width: 246px;
-    min-height: 139px;
-    background-color: #13233d;
-    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
-}
-
-#cardheaderborder{
-    background-color: #404f70;
-    width: 250px;
-    min-height: 143px;
-    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
-    padding-bottom: 4px;
-    }
-
-#title{
-    position: relative;
-    margin-top: 2px;
-    min-height: 30px;
-    text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    line-height: 20px;
-    width: 246px;
-    background-color: black;
-    color: white;
-    border-bottom: 2px solid #404f70;
-}
-
-#mappic{
-    width: 246px;
-    height: 109px;
-}
-
-#varpic{
-    margin-top: -95px;
-    margin-left: 10px;
-    height: 80px;
-}
-
-#scoreboard{
-    margin-top: 5px;
-    width: 250px;
-    line-height: 30px;
-    text-align: center;
-    border: 2px solid #404f70;
-    background-color: #13233d;
-    color: white; 
-}
-
-.statBreakdown{
-    font-size: 10pt;
-    line-height: 20px;
-    color: white;
-    width: 245px;
-    border-collapse: collapse;
-}
-
-.statBreakdown td{
-    border: 1px solid black;
-    padding-left: 2px;
-}
-
-.tableHeader {
-    background-color: black;
-    color: white;
-}
-
-.tableHeader th{
-    padding-left: 2px;
-}
-
-#gameinfoborder{
-    margin-top: -2px;
-    background-color: #404f70;
-    width: 251px;
-    padding-bottom: 4px;
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
-}
-
-#gameinfo{
-    position: relative;
-    top: 2px;
-    left: 2px;
-    width: 247px;
-    margin-top: 6px;
-    padding-left: 4px;
-    line-height: 20px;
-    text-align: left;
-    background-color: #13233d;
-    color: white; 
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
-}
-
-.browserSwitch{
-    opacity: 0.8;
-    background-color: #13233d;
-    color: white;
-    border: 1px solid #404f70;
-    border-left: 0;
-    border-bottom: 0;
-    padding: 5px;
-    padding-left: 40px;
-    padding-right: 10px;
-    position: absolute;
-    top: 14px;
-    left: 588px;
-    z-index: 0;
-}
-
-.browserSwitch:hover{
-    background-color: #31415b;
 }
