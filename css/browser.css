@@ -260,6 +260,7 @@ img{
 #serverTable{
     position: relative;
     top: -30px;
+    margin-bottom: -30px;
 }
 
 #serverTable_wrapper{
