@@ -47,12 +47,14 @@ function buildTable() {
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
         },
+        scrollY:        "-webkit-calc(100% - 137px)",
+        scroller:       true,
         destroy: true,
         "iDisplayLength": 10,
 		stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
-            { type: 'ip-address', targets: 1 },
+            { type: 'ip-address', targets: 2 },
             { type: "playerCount", targets: 12 }
         ],
 		columns: [
