@@ -298,7 +298,9 @@ String.prototype.contains = function(it) {
 //============================
 
 function connectionTrigger() {
-    StartConnection();
+    if(!friendServerConnected){
+        StartConnection();
+    }
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version', function(res) {

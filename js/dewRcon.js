@@ -25,9 +25,9 @@ StartRconConnection = function() {
 		if (typeof dewRcon.callback == 'function')
 			dewRcon.callback(message.data);
         dewRcon.lastMessage = message.data;
-        console.log(dewRcon.lastMessage);
-        console.log(dewRcon.lastCommand);
-        console.log(message.data);
+        //console.log(dewRcon.lastMessage);
+        //console.log(dewRcon.lastCommand);
+        //console.log(message.data);
     };
 	dewRcon.dewWebSocket.onclose = function(message) {
 		//jQuery("#connectionStatus").text('Disconnected');
