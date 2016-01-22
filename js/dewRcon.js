@@ -42,11 +42,10 @@ StartRconConnection = function() {
 		disconnectTrigger();
     };
 }
-var DewRconPortIndex = 0;
-var DewRconPorts = [11764, 11776];
+
 dewRconHelper = function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    this.dewWebSocket = new WebSocket('ws://127.0.0.1:' + DewRconPorts[DewRconPortIndex], 'dew-rcon');
+    this.dewWebSocket = new WebSocket('ws://127.0.0.1:11776', 'dew-rcon');
     this.lastMessage = "";
     this.lastCommand = "";
 	this.callback = {};

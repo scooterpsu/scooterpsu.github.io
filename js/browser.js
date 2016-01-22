@@ -297,23 +297,19 @@ function connectionTrigger() {
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version', function(res) {
-        setTimeout(function() {
             if (res.length > 0) {
                 if (res != "Command/Variable not found"){
-                    gameVersion = dewRcon.lastMessage;
+                    gameVersion = res;
                     checkUpdate(gameVersion);
                     dewRcon.send('game.listmaps', function(res) {
-                        setTimeout(function() {
                             if (res.length > 0) {
                                 if (res != "Command/Variable not found"){
-                                    mapList = new Array(dewRcon.lastMessage.split(','));
+                                    mapList = new Array(res.split(','));
                                 }
                             }
-                        }, "400");
                     });
                 }
             }
-        }, "400");
     });
 }
 
