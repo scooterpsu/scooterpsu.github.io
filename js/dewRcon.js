@@ -18,11 +18,8 @@ StartRconConnection = function() {
         //jQuery("#connectionStatus").text('Not connected. Is the game running?');
         dewRconConnected = false;
         if (!dewRconConnected) {
-            if (DewRconPortIndex == 0) {
-                DewRconPortIndex = 1;
                 StartRconConnection();
             } else {
-                DewRconPortIndex = 0;
                 setTimeout(StartRconConnection, 1000);
             }
         }
