@@ -77,7 +77,7 @@
                             {{#eachByScore players}}
                             {{#if name}}
                             <tr>
-                                <td class="statLines">{{this.name}}</td>
+                                <td class="statLines">{{trimString this.name 0 100}}</td>
                                 <td class="statLines"><center>{{score}}</center></td>
                                 <td class="statLines"><center>{{kills}}</center></td>
                                 <td class="statLines"><center>{{deaths}}</center></td>
@@ -91,8 +91,8 @@
         </div>
         <div id="gameinfoborder">
             <div id="gameinfo">
-                <div id="host"><b>Host: </b>{{hostPlayer}}</div>
-                <div id="name"><b>Name: </b>{{name}}</div>
+                <div id="host"><b>Host: </b>{{trimString hostPlayer 0 100}}</div>
+                <div id="name"><b>Name: </b>{{trimString name 0 100}}</div>
                 <div id="voip"><b>VoIP: </b>
                     {{#if VoIP}} 
                         Enabled

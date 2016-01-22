@@ -225,6 +225,7 @@ img{
     text-align: left;
     background-color: #13233d;
     color: white; 
+    word-wrap:break-word;
     -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
 }
 
