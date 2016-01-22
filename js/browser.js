@@ -9,7 +9,7 @@ var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
-var selectedID = 1;
+var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
@@ -47,8 +47,9 @@ function buildTable() {
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
         },
-        scrollY:        "-webkit-calc(100% - 137px)",
-        scroller:       true,
+        bPaginate: false,
+        scrollY: "-webkit-calc(100% - 137px)",
+        scroller: true,
         destroy: true,
         "iDisplayLength": 10,
 		stateSave: true,
@@ -163,21 +164,29 @@ function joinServer(i) {
                                 sweetAlert.showInputError("Passwords are never blank");     
                                 return false   
                             } else {
-                                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue);
-                                setTimeout(function() {
-                                    if (dewRcon.lastMessage === "Incorrect password specified.") {
-                                        sweetAlert.showInputError(dewRcon.lastMessage);
-                                        return false
-                                    }else {
-                                        sweetAlert.close();
-                                        closeBrowser();
+                                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
+                                    if (res.length > 0) {
+                                        if (res != "Command/Variable not found"){
+                                            if (res === "Incorrect password specified.") {
+                                                sweetAlert.showInputError(res);
+                                                return false
+                                            }else {
+                                                sweetAlert.close();
+                                                closeBrowser();
+                                            }
+                                        }
                                     }
-                                }, "400");
+                                });
                             }
                         });
                     } else {
-                        dewRcon.send('connect ' + serverList.servers[i].serverIP);
-                        closeBrowser();
+                        dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
+                            if (res.length > 0) {
+                                if (res != "Command/Variable not found"){
+                                    closeBrowser();
+                                }
+                            }
+                        });
                     }
                 } else {    
                     swal("Map File Missing","You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", "error");
@@ -235,7 +244,7 @@ function refreshTable() {
     $('.serverCount').html(serverCount + " servers");
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
-    selectedID = 1;
+    selectedID = 0;
     buildTable();
     if(dewRconConnected) {
         connectionTrigger();   
@@ -262,7 +271,7 @@ function checkUpdate(ver) {
 function hasMap(map) {
     if(mapList[0].length == 0) {
         return true;
-    } else if($.inArray(serverList.servers[i].mapFile, mapList[0]) > -1) {
+    } else if($.inArray(map, mapList[0]) > -1) {
         return true;
     } else {
         return false;
@@ -280,6 +289,10 @@ function closeBrowser() {
 	}
 }
 
+String.prototype.contains = function(it) {
+	return this.indexOf(it) != -1;
+};
+
 //============================
 //===== dewRcon triggers =====
 //============================
@@ -288,21 +301,29 @@ function connectionTrigger() {
     StartConnection();
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
-    dewRcon.send('game.version');
-    setTimeout(function() {
-        if (dewRcon.lastMessage.length > 0) {
-            gameVersion = dewRcon.lastMessage;
-            checkUpdate(gameVersion);
-            dewRcon.send('game.listmaps');
-            setTimeout(function() {
-                if (dewRcon.lastMessage.length > 0) {
-                    if (dewRcon.lastMessage != "Command/Variable not found"){
-                        mapList = new Array(dewRcon.lastMessage.split(','));
+    dewRcon.send('game.version', function(res) {
+        setTimeout(function() { 
+            if (res.length > 0) {
+                if (res != "Command/Variable not found"){
+                    if (gameVersion === 0){
+                        gameVersion = res;
+                        checkUpdate(gameVersion);
                     }
+                    setTimeout(function() {                    
+                        dewRcon.send('game.listmaps', function(res) {
+                            if (res.length > 0) {
+                                if (res != "Command/Variable not found"){
+                                    if (res.contains(",") && mapList[0].length == 0){
+                                        mapList = new Array(res.split(','));
+                                    }
+                                }
+                            }
+                        });
+                    }, "800");
                 }
-            }, "200");
-        }
-    }, "200");
+            }
+        }, "500");  
+    });
 }
 
 function disconnectTrigger() {
@@ -323,9 +344,9 @@ Mousetrap.bind('f11', function() {
 //=============================
 
 function updateSelection() {
-	$('#serverTable tr.selected').removeClass('selected');
-	$("#serverTable tr:eq(" + selectedID + ")").addClass("selected");
-	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
+	$('#serverTable tbody tr.selected').removeClass('selected');
+	$("#serverTable tbody tr:eq(" + selectedID + ")").addClass("selected");
+	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
     fillGameCard(row[0]);
 }
 
@@ -337,7 +358,7 @@ function joinSelected() {
 var gamepad = new Gamepad();
 
 gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
-    console.log("a new gamepad connected");
+    //console.log("a new gamepad connected");
     setTimeout(function() {
         $('.controllerButton').show();
         updateSelection();
@@ -346,14 +367,14 @@ gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
 });
 
 gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
-    console.log("gamepad disconnected");
+    //console.log("gamepad disconnected");
     $('.controllerButton').hide();
     $('#serverTable tr.selected').removeClass('selected');
     controllersOn = false;
 });
 
 gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
-    console.log("an unsupported gamepad connected (add new mapping)");
+    //console.log("an unsupported gamepad connected (add new mapping)");
 });
 
 gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
@@ -376,49 +397,29 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
            window.location.reload();
         } else if (e.control == "DPAD_UP") {
             //console.log("UP");
-            if (selectedID > 1) {
+            if (selectedID > 0) {
                 selectedID--;
                 updateSelection();
             }
         } else if (e.control == "DPAD_DOWN") {
             //console.log("DOWN");
-            if (selectedID < ($("#serverTable tbody tr").length)) {
+            if (selectedID < ($("#serverTable tbody tr").length-1)) {
                 selectedID++;
                 updateSelection();
             }
         } else if (e.control == "DPAD_LEFT") {
             //console.log("LEFT");
-            if($('#serverTable').DataTable().page.info().page > 0) {
-                $('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
-                selectedID = 1;
-                updateSelection();
-            }
         } else if (e.control == "DPAD_RIGHT") {
             //console.log("RIGHT");
-            if(($('#serverTable').DataTable().page.info().page +1)<$('#serverTable').DataTable().page.info().pages) {
-                $('#serverTable').DataTable().page( 'next' ).draw( 'page' ); 
-                selectedID = 1;
-                updateSelection();                
-            }  
         } else if (e.control == "SELECT_BACK") {
             //console.log("BACK");
             closeBrowser();
         } else if (e.control == "START_FORWARD") {
             //console.log("START");
         } else if (e.control == "RIGHT_TOP_SHOULDER") {
-            //console.log("RIGHT BUMPER");
-            if(($('#serverTable').DataTable().page.info().page +1)<$('#serverTable').DataTable().page.info().pages) {
-                $('#serverTable').DataTable().page( 'next' ).draw( 'page' ); 
-                selectedID = 1;
-                updateSelection();                
-            }            
+            //console.log("RIGHT BUMPER");        
         } else if (e.control == "LEFT_TOP_SHOULDER") {
             //console.log("LEFT BUMPER");
-            if($('#serverTable').DataTable().page.info().page > 0) {
-                $('#serverTable').DataTable().page( 'previous' ).draw( 'page' );
-                selectedID = 1;
-                updateSelection();
-            }
         } else if (e.control == "LEFT_STICK") {
             //console.log("LEFT STICK");
         }          
@@ -462,7 +463,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "playerCount-pre": function ( a ) {
         var pCount = a.split('/');
-        return (pCount[1] + pCount[0]) * 1;
+        return (pCount[0]) * 1;
     },
 
     "playerCount-asc": function ( a, b ) {
@@ -501,4 +502,9 @@ Handlebars.registerHelper('capitalize', function(str) {
   
 Handlebars.registerHelper('lowerCase', function(str) {
     return new Handlebars.SafeString(str.toLowerCase());
+});
+
+Handlebars.registerHelper('trimString', function(passedString, startstring, endstring) {
+   var theString = passedString.substring( startstring, endstring );
+   return new Handlebars.SafeString(theString)
 });

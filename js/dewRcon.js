@@ -15,16 +15,10 @@ StartRconConnection = function() {
         connectionTrigger();
     };
     dewRcon.dewWebSocket.onerror = function() {
-        jQuery("#connectionStatus").text('Not connected. Is the game running?');
+        //jQuery("#connectionStatus").text('Not connected. Is the game running?');
         dewRconConnected = false;
         if (!dewRconConnected) {
-            if (DewRconPortIndex == 0) {
-                DewRconPortIndex = 1;
-                StartRconConnection();
-            } else {
-                DewRconPortIndex = 0;
-                setTimeout(StartRconConnection, 1000);
-            }
+            StartRconConnection();
         }
     };
     dewRcon.dewWebSocket.onmessage = function(message) {
@@ -42,11 +36,10 @@ StartRconConnection = function() {
 		disconnectTrigger();
     };
 }
-var DewRconPortIndex = 0;
-var DewRconPorts = [11764, 11776];
+
 dewRconHelper = function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    this.dewWebSocket = new WebSocket('ws://127.0.0.1:' + DewRconPorts[DewRconPortIndex], 'dew-rcon');
+    this.dewWebSocket = new WebSocket('ws://127.0.0.1:11776', 'dew-rcon');
     this.lastMessage = "";
     this.lastCommand = "";
 	this.callback = {};
