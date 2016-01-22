@@ -9,13 +9,9 @@
 
 var friendServer,
 	friendServerConnected = false,
-	snacking = 0,
-	played = 0;
 jQuery(function() {
 	if(dewRconConnected) {
-        if(!friendServerConnected){
-            StartConnection();
-        }
+		StartConnection();
 	}
 });
 
@@ -28,23 +24,10 @@ StartConnection = function() {
 			});
 		});
         console.log('Connected to Friend Server!');
-		//$('#notification')[0].currentTime = 0;
-		//$('#notification')[0].play();
         friendServerConnected = true;
     };
     friendServer.friendsServerSocket.onerror = function() {
-		if(!snacking) {
-			console.log('Connection to Friend Server failed, retrying.');
-			if(!played) {
-				//$('#notification')[0].currentTime = 0;
-				//$('#notification')[0].play();
-				played = 1;
-			}
-			snacking = 1;
-			setTimeout(function() {
-				snacking = 0;
-			},9000);
-		}
+        console.log('Connection to Friend Server failed, retrying.');
         friendServerConnected = false;
         if(!friendServerConnected) {
     		setTimeout(StartConnection, 1000);
@@ -53,7 +36,7 @@ StartConnection = function() {
     friendServer.friendsServerSocket.onmessage = function(message) {
 		try {
 			var result = JSON.parse(message.data);
-			switch (result.type) {
+			switch (result.type.ToString()) {
 				case "pm":
 					console.log(result.message);
 				break;
@@ -66,14 +49,14 @@ StartConnection = function() {
 		}
 		
 		if (typeof friendServer.callback == 'function')
-			friendServer.callback(message.data);
+            friendServer.callback(message.data);
         friendServer.lastMessage = message.data;
 				//console.log(friendServer.lastMessage);
     };
 }
 friendServerHelper = function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    this.friendsServerSocket = new WebSocket('ws://58.7.236.17:55555', 'friendServer');
+    this.friendsServerSocket = new WebSocket('ws://192.99.124.166:55555', 'friendServer');
     this.lastMessage = "";
     this.lastCommand = "";
     this.open = false;
