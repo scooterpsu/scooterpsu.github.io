@@ -289,6 +289,10 @@ function closeBrowser() {
 	}
 }
 
+String.prototype.contains = function(it) {
+	return this.indexOf(it) != -1;
+};
+
 //============================
 //===== dewRcon triggers =====
 //============================
@@ -297,19 +301,27 @@ function connectionTrigger() {
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version', function(res) {
-        if (res.length > 0) {
-            if (res != "Command/Variable not found"){
-                gameVersion = res;
-                checkUpdate(gameVersion);
+        setTimeout(function() { 
+            if (res.length > 0) {
+                if (res != "Command/Variable not found"){
+                    if (gameVersion === 0){
+                        gameVersion = res;
+                        checkUpdate(gameVersion);
+                    }
+                    setTimeout(function() {                    
+                        dewRcon.send('game.listmaps', function(res) {
+                            if (res.length > 0) {
+                                if (res != "Command/Variable not found"){
+                                    if (res.contains(",") && mapList[0].length == 0){
+                                        mapList = new Array(res.split(','));
+                                    }
+                                }
+                            }
+                        });
+                    }, "800");
+                }
             }
-        }
-    });
-    dewRcon.send('game.listmaps', function(res) {
-        if (res.length > 0) {
-            if (res != "Command/Variable not found"){
-                mapList = new Array(res.split(','));
-            }
-        }
+        }, "500");  
     });
 }
 
