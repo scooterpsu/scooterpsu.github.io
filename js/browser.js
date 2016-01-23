@@ -56,7 +56,11 @@ function buildTable() {
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
-            { type: "playerCount", targets: 12 }
+            { type: "playerCount", targets: 12},
+            {"mRender": function (data, type, row) {
+                img_str = data.split(':')[0] + '  <img src="images/' + data.split(':')[1] + '"/>';
+                return img_str;
+            }, "aTargets":[ 5 ]}
         ],
 		columns: [
 			{ title: "ID", visible: false},
@@ -64,8 +68,7 @@ function buildTable() {
             { title: "", "width": "0.5%"},
 			{ title: "Name" },
 			{ title: "Host" },
-            { title: "Ping" , "width": "1%"},
-            { title: "PingNum" , "width": "1%", visible: false},
+            { title: "Ping" , "width": "50px"},
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
 			{ title: "Gametype"},
@@ -116,8 +119,7 @@ function buildTable() {
                                     serverInfo.passworded,
                                     serverInfo.name,
                                     serverInfo.hostPlayer,
-                                    "000",
-                                    "000",
+                                    "blank.png",
                                     serverInfo.map,
                                     serverInfo.mapFile,
                                     capitalizeFirstLetter(serverInfo.variantType),
@@ -219,16 +221,15 @@ function pingMe(ip, rowNum) {
                 endTime = Date.now();
                 ping = Math.round((endTime - startTime) * .45);
                 if (ping > 0 && ping <= 80) {
-                    pingPic = "3 bars";
+                    pingPic = "3bars.png";
                 }   else if(ping > 80 && ping <= 160) {
-                    pingPic = "2 bars";
+                    pingPic = "2bars.png";
                 }   else if(ping > 160 && ping <= 240) {
-                    pingPic = "1 bars";  
+                    pingPic = "1bars.png";  
                 }   else {
-                    pingPic = "0 bars";
+                    pingPic = "0bars.png";
                 }
-                $('#serverTable').dataTable().fnUpdate(pingPic, rowNum, 5);
-                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
+                $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
