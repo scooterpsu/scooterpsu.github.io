@@ -65,6 +65,7 @@ function buildTable() {
 			{ title: "Name" },
 			{ title: "Host" },
             { title: "Ping" , "width": "1%"},
+            { title: "PingNum" , "width": "1%", visible: false},
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
 			{ title: "Gametype"},
@@ -115,6 +116,7 @@ function buildTable() {
                                     serverInfo.passworded,
                                     serverInfo.name,
                                     serverInfo.hostPlayer,
+                                    "000",
                                     "000",
                                     serverInfo.map,
                                     serverInfo.mapFile,
@@ -226,6 +228,7 @@ function pingMe(ip, rowNum) {
                     pingPic = "0 bars";
                 }
                 $('#serverTable').dataTable().fnUpdate(pingPic, rowNum, 5);
+                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
