@@ -56,7 +56,7 @@ function buildTable() {
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
-            { type: "playerCount", targets: 12},
+            { type: "playerCount", targets: 13 },
             { targets: [ 5 ], orderData: [ 6 ]},
             { "mRender": function (data, type, row) {
                 img_str = '<img style="float: left; margin-right: 5px;" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
