@@ -279,12 +279,18 @@ function switchBrowser() {
 }
 
 function checkUpdate(ver) {
-    if (ver != EDVersion) {
-        swal({   
-            title: "Version Outdated!",
-            text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
-            html: true, type: "error", allowEscapeKey: false
-        });
+    if (EDVersion == 0) {
+        setTimeout(function() {
+            checkUpdate(ver);
+        }, "500");  
+    } else {
+        if (ver != EDVersion) {
+            swal({   
+                title: "Version Outdated!",
+                text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+                html: true, type: "error", allowEscapeKey: false
+            });
+        }
     }
 }
 
