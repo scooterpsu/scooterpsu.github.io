@@ -5,13 +5,13 @@
  *
  **/
  
-var PlayerName;
-var PlayerUID;
+
 
 var friendServer,
 	friendServerConnected = false,
-	snacking = 0,
-	played = 0;
+	pname,
+	puid;
+	party = [];
 jQuery(function() {
 	if(dewRconConnected) {
 		StartConnection();
@@ -23,101 +23,69 @@ StartConnection = function() {
     friendServer.friendsServerSocket.onopen = function() {
 		dewRcon.send('player.name', function(res) {
 			dewRcon.send('player.printUID', function(ret) {
-                PlayerName = res;
-                PlayerUID = ret.split(' ')[2];
+				pname = res;
+				puid = ret.split(' ')[2];
 				friendServer.send("{'type':'connection', 'message':'" + res + ":" + ret.split(' ')[2] + " has connected.'}");
+				
+				console.log({
+					type: 'acceptparty',
+					player: pname,
+					guid: puid
+				})
 			});
 		});
         console.log('Connected to Friend Server!');
-		//$('#notification')[0].currentTime = 0;
-		//$('#notification')[0].play();
         friendServerConnected = true;
     };
     friendServer.friendsServerSocket.onerror = function() {
-			console.log('Connection to Friend Server failed, retrying.');
+        console.log('Connection to Friend Server failed, retrying.');
         friendServerConnected = false;
         if(!friendServerConnected) {
     		setTimeout(StartConnection, 1000);
 		}
     };
     friendServer.friendsServerSocket.onmessage = function(message) {
-        swal.setDefaults({ 
-            html: true,
-            imageUrl: "images/eldorito.png",  
-            showCancelButton: true,   
-            confirmButtonText: "Yes",   
-            cancelButtonText: "No",   
-            closeOnConfirm: false,   
-            closeOnCancel: true 
-        });
 		try {
 			var result = JSON.parse(JSON.stringify(eval('(' + message.data + ')')));
 			switch (result.type) {
+				case "disconnected":
+					if ($.inArray(result.player + ":" + result.guid, party) != -1) {
+						party = $.grep(party, function(value) {
+						  return value != (result.player + ":" + result.guid);
+						});
+						
+						console.log(result.player + ' has left your party.');
+					}
+				break;
 				case "pm":
-					console.log(result.message);
-                    swal({   
-                        title: "Private Message",   
-                        text: result.player + ": " + result.message,   
-                        confirmButtonText: "Reply",   
-                        cancelButtonText: "Close",   
-                    }, function(isConfirm){
-                        if (isConfirm) {
-                        //Reply window   
-                            swal({   
-                                title: "Reply",   
-                                text: "To " + result.player +":",   
-                                type: "input",   
-                                confirmButtonText: "Send",   
-                                cancelButtonText: "Close",   
-                                showCancelButton: true,   
-                                closeOnConfirm: false,   
-                                }, function(inputValue){   
-                                if (inputValue === false) return false;      
-                                if (inputValue === "") {     
-                                swal.showInputError("You need to write something!");     
-                                return false}
-                                var response ={
-                                    type:'pm', 
-                                    player:PlayerName, 
-                                    senderguid:PlayerUID, 
-                                    message:inputValue, 
-                                    guid:result.senderguid
-                                    }
-                                friendServer.send(JSON.stringify(response));
-                                sweetAlert.close();
-                            });
-                        } else {
-                            
-                        }
-                    });
+					console.log(result.player + ": " + result.message);
 				break;
 				case "partyinvite":
-					//Party invite accept/decline screen
-					console.log('Party invite from ' + result.player);
-                    swal({   
-                        title: "Party Invite",   
-                        text: result.player + " has sent you a party invite. <br /><br /> Would you like to join?",   
-                    }, function(isConfirm){
-                        if (isConfirm) {
-                            
-                        } else {
-                            
-                        }
-                    });
+					dewAlert({
+						title: "Party Invitation",
+						content: result.player + " has invited you to a party",
+						cancel: true,
+						cancelText: "Decline"
+					});
 				break;
 				case "gameinvite":
-					//Game invite accept/decline screen
-					console.log('Game invite from ' + result.player);
-                    swal({   
-                        title: "Game Invite",   
-                        text: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
-                    }, function(isConfirm){
-                        if (isConfirm) {
-                            
-                        } else {
-                            
-                        }
-                    });
+					dewAlert({
+						title: "Game Invitation",
+						content: result.player + " has invited you join " + result.server,
+						cancel: true,
+						cancelText: "Decline",
+						callback: "gameInvite"
+					});
+				break;
+				case "acceptparty":
+					console.log(result.player + ' has joined your party.');
+					party.push(result.player + ":" + result.pguid);
+				break;
+				case "acceptgame":
+					
+				break;
+				case "connect":
+					jumpToServer(result.address);
 				break;
 				default:
 					console.log("Unhandled packet: " + result.type);
@@ -136,11 +104,29 @@ StartConnection = function() {
 }
 
 function partyInvite(accepted) {
+	if (accepted) {
+		friendServer.send({
+			type: 'acceptparty',
+			player: pname,
+			guid: puid
+		});
+	}
 	console.log(accepted);
 }
 
 function gameInvite(accepted) {
+	if (accepted) {
+		friendServer.send({
+			type: 'acceptgame',
+			player: pname,
+			guid: puid
+		});
+	}
 	console.log(accepted);
+}
+
+function jumpToServer(address){
+    dewRcon.send('connect ' + address);
 }
 
 friendServerHelper = function() {
@@ -156,5 +142,3 @@ friendServerHelper = function() {
         this.lastCommand = command;
     }
 }
-
-function after(ms, fn){ setTimeout(fn, ms); }
