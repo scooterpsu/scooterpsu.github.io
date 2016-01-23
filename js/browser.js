@@ -57,8 +57,9 @@ function buildTable() {
         columnDefs: [
             { type: 'ip-address', targets: 2 },
             { type: "playerCount", targets: 12},
-            { type: "pingSort", "mRender": function (data, type, row) {
-                img_str = data.split(':')[0] + '    <img style="float: right;" src="images/' + data.split(':')[1] + 'bars.png"/>';
+            { targets: [ 5 ], orderData: [ 6 ]},
+            { "mRender": function (data, type, row) {
+                img_str = '<img style="float: left; margin-right: 5px;" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
             }, "aTargets":[ 5 ]}
         ],
@@ -69,6 +70,7 @@ function buildTable() {
 			{ title: "Name" },
 			{ title: "Host" },
             { title: "Ping" , "width": "1%"},
+            { title: "PingNum" , visible: false},           
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
 			{ title: "Gametype"},
@@ -120,6 +122,7 @@ function buildTable() {
                                     serverInfo.name,
                                     serverInfo.hostPlayer,
                                     ":",
+                                    "000",
                                     serverInfo.map,
                                     serverInfo.mapFile,
                                     capitalizeFirstLetter(serverInfo.variantType),
@@ -230,10 +233,11 @@ function pingMe(ip, rowNum) {
                     pingPic = "0";
                 }
                 $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
+                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
-    }, "500");  
+    }, "600");  
 }
 
 function fillGameCard(i) {
@@ -317,27 +321,23 @@ function connectionTrigger() {
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version', function(res) {
-        setTimeout(function() { 
-            if (res.length > 0) {
-                if (res != "Command/Variable not found"){
-                    if (gameVersion === 0){
-                        gameVersion = res;
-                        checkUpdate(gameVersion);
-                    }
-                    setTimeout(function() {                    
-                        dewRcon.send('game.listmaps', function(res) {
-                            if (res.length > 0) {
-                                if (res != "Command/Variable not found"){
-                                    if (res.contains(",") && mapList[0].length == 0){
-                                        mapList = new Array(res.split(','));
-                                    }
-                                }
+        if (res.length > 0) {
+            if (res != "Command/Variable not found"){
+                if (gameVersion === 0){
+                    gameVersion = res;
+                    checkUpdate(gameVersion);
+                }                 
+                dewRcon.send('game.listmaps', function(ret) {
+                    if (ret.length > 0) {
+                        if (ret != "Command/Variable not found"){
+                            if (ret.contains(",") && mapList[0].length == 0){
+                                mapList = new Array(ret.split(','));
                             }
-                        });
-                    }, "800");
-                }
+                        }
+                    }
+                });
             }
-        }, "500");  
+        }
     });
 }
 
@@ -486,21 +486,6 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     },
 
     "playerCount-desc": function ( a, b ) {
-        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-    }
-});
-
-jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-    "pingSort-pre": function ( a ) {
-        var pCount = a.split(':');
-        return (pCount[0]);
-    },
-
-    "pingSort-asc": function ( a, b ) {
-        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-    },
-
-    "pingSort-desc": function ( a, b ) {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 });
