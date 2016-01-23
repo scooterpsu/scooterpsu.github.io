@@ -372,7 +372,7 @@ function updateSelection() {
 }
 
 function joinSelected() {
-	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tr:eq(" + selectedID + ")"));
+	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
 	joinServer(row[0]);
 }
 
