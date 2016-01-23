@@ -271,11 +271,24 @@ function refreshTable() {
     }
 }
 
-function switchBrowser() {
-    setTimeout(function() {
-        dewRcon.send('game.menuurl "http://halo.thefeeltra.in/"');
-        dewRcon.send('writeconfig');
-    }, "1000");  
+function switchBrowser(browser) {
+    swal({   
+        title: "Change Server Browser",   
+        text: "Would you like to change your default server browser to "+browser+"?",   
+        showCancelButton: true,   
+        confirmButtonText: "Yes, change it!",   
+        closeOnConfirm: false   
+    }, function(){        
+        if (browser == "theFeelTrain"){
+            var browserURL = "http://halo.thefeeltra.in/";
+        } else if (browser == "DewMenu"){
+            var browserURL = "http://dewmenu.click/";
+        }
+        setTimeout(function() {
+            dewRcon.send('game.menuurl ' + browserURL);
+            dewRcon.send('writeconfig');
+        }, "1000");  
+    });
 }
 
 function checkUpdate(ver) {

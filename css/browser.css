@@ -71,18 +71,27 @@ img{
 
 .browserSwitch{
     opacity: 0.8;
+    font-size: 9pt;
     background-color: #13233d;
     color: white;
     border: 1px solid #404f70;
     border-left: 0;
     border-bottom: 0;
-    padding: 5px;
+    padding: 2px;
     padding-left: 40px;
     padding-right: 10px;
     position: absolute;
-    top: 14px;
     left: 588px;
     z-index: 0;
+}
+
+.dewmenu{
+    left: 565px;
+    top: 1px;
+}
+
+.feeltrain{
+    top: 23px;
 }
 
 .browserSwitch:hover{
