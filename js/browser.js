@@ -56,7 +56,12 @@ function buildTable() {
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
-            { type: "playerCount", targets: 12 }
+            { type: "playerCount", targets: 12},
+            { targets: [ 5 ], orderData: [ 6 ]},
+            { "mRender": function (data, type, row) {
+                img_str = '<img style="float: left; margin-right: 5px;" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
+                return img_str;
+            }, "aTargets":[ 5 ]}
         ],
 		columns: [
 			{ title: "ID", visible: false},
@@ -65,6 +70,7 @@ function buildTable() {
 			{ title: "Name" },
 			{ title: "Host" },
             { title: "Ping" , "width": "1%"},
+            { title: "PingNum" , visible: false},           
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
 			{ title: "Gametype"},
@@ -115,6 +121,7 @@ function buildTable() {
                                     serverInfo.passworded,
                                     serverInfo.name,
                                     serverInfo.hostPlayer,
+                                    ":",
                                     "000",
                                     serverInfo.map,
                                     serverInfo.mapFile,
@@ -203,10 +210,11 @@ function joinServer(i) {
 }
 
 function pingMe(ip, rowNum) {
-    setTimeout(function() {
+    setTimeout(function() { 
         var startTime = Date.now();
         var endTime;
         var ping;
+        var pingPic
         $.ajax({
             type: "GET",
             url: "http://" + ip + "/",
@@ -215,11 +223,21 @@ function pingMe(ip, rowNum) {
             success: function() {
                 endTime = Date.now();
                 ping = Math.round((endTime - startTime) * .45);
-                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 5);
+                if (ping > 0 && ping <= 80) {
+                    pingPic = "3";
+                }   else if(ping > 80 && ping <= 160) {
+                    pingPic = "2";
+                }   else if(ping > 160 && ping <= 240) {
+                    pingPic = "1";  
+                }   else {
+                    pingPic = "0";
+                }
+                $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
+                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
-    }, "500"); 
+    }, "600");  
 }
 
 function fillGameCard(i) {
@@ -303,27 +321,23 @@ function connectionTrigger() {
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version', function(res) {
-        setTimeout(function() { 
-            if (res.length > 0) {
-                if (res != "Command/Variable not found"){
-                    if (gameVersion === 0){
-                        gameVersion = res;
-                        checkUpdate(gameVersion);
-                    }
-                    setTimeout(function() {                    
-                        dewRcon.send('game.listmaps', function(res) {
-                            if (res.length > 0) {
-                                if (res != "Command/Variable not found"){
-                                    if (res.contains(",") && mapList[0].length == 0){
-                                        mapList = new Array(res.split(','));
-                                    }
-                                }
+        if (res.length > 0) {
+            if (res != "Command/Variable not found"){
+                if (gameVersion === 0){
+                    gameVersion = res;
+                    checkUpdate(gameVersion);
+                }                 
+                dewRcon.send('game.listmaps', function(ret) {
+                    if (ret.length > 0) {
+                        if (ret != "Command/Variable not found"){
+                            if (ret.contains(",") && mapList[0].length == 0){
+                                mapList = new Array(ret.split(','));
                             }
-                        });
-                    }, "800");
-                }
+                        }
+                    }
+                });
             }
-        }, "500");  
+        }
     });
 }
 
@@ -471,7 +485,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return ((a < b) ? -1 : ((a > b) ? 1 : 0));
     },
 
-    "playerCountdesc": function ( a, b ) {
+    "playerCount-desc": function ( a, b ) {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 });
