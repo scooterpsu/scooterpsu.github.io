@@ -203,21 +203,23 @@ function joinServer(i) {
 }
 
 function pingMe(ip, rowNum) {
-    var startTime = Date.now();
-    var endTime;
-    var ping;
-    $.ajax({
-        type: "GET",
-        url: "http://" + ip + "/",
-        async: true,
-        timeout: 5000,
-        success: function() {
-            endTime = Date.now();
-            ping = Math.round((endTime - startTime) * .45);
-            $('#serverTable').dataTable().fnUpdate(ping, rowNum, 5);
-            $('#serverTable').DataTable().columns.adjust().draw();
-        }
-    });
+    setTimeout(function() {
+        var startTime = Date.now();
+        var endTime;
+        var ping;
+        $.ajax({
+            type: "GET",
+            url: "http://" + ip + "/",
+            async: true,
+            timeout: 5000,
+            success: function() {
+                endTime = Date.now();
+                ping = Math.round((endTime - startTime) * .45);
+                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 5);
+                $('#serverTable').DataTable().columns.adjust().draw();
+            }
+        });
+    }, "500"); 
 }
 
 function fillGameCard(i) {
