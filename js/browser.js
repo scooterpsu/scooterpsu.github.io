@@ -57,8 +57,8 @@ function buildTable() {
         columnDefs: [
             { type: 'ip-address', targets: 2 },
             { type: "playerCount", targets: 12},
-            {"mRender": function (data, type, row) {
-                img_str = data.split(':')[0] + '  <img src="images/' + data.split(':')[1] + '"/>';
+            { type: "pingSort", "mRender": function (data, type, row) {
+                img_str = data.split(':')[0] + '    <img style="float: right;" src="images/' + data.split(':')[1] + 'bars.png"/>';
                 return img_str;
             }, "aTargets":[ 5 ]}
         ],
@@ -68,7 +68,7 @@ function buildTable() {
             { title: "", "width": "0.5%"},
 			{ title: "Name" },
 			{ title: "Host" },
-            { title: "Ping" , "width": "50px"},
+            { title: "Ping" , "width": "1%"},
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
 			{ title: "Gametype"},
@@ -119,7 +119,7 @@ function buildTable() {
                                     serverInfo.passworded,
                                     serverInfo.name,
                                     serverInfo.hostPlayer,
-                                    "blank.png",
+                                    ":",
                                     serverInfo.map,
                                     serverInfo.mapFile,
                                     capitalizeFirstLetter(serverInfo.variantType),
@@ -221,13 +221,13 @@ function pingMe(ip, rowNum) {
                 endTime = Date.now();
                 ping = Math.round((endTime - startTime) * .45);
                 if (ping > 0 && ping <= 80) {
-                    pingPic = "3bars.png";
+                    pingPic = "3";
                 }   else if(ping > 80 && ping <= 160) {
-                    pingPic = "2bars.png";
+                    pingPic = "2";
                 }   else if(ping > 160 && ping <= 240) {
-                    pingPic = "1bars.png";  
+                    pingPic = "1";  
                 }   else {
-                    pingPic = "0bars.png";
+                    pingPic = "0";
                 }
                 $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
                 $('#serverTable').DataTable().columns.adjust().draw();
@@ -485,7 +485,22 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         return ((a < b) ? -1 : ((a > b) ? 1 : 0));
     },
 
-    "playerCountdesc": function ( a, b ) {
+    "playerCount-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+});
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "pingSort-pre": function ( a ) {
+        var pCount = a.split(':');
+        return (pCount[0]);
+    },
+
+    "pingSort-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "pingSort-desc": function ( a, b ) {
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 });
