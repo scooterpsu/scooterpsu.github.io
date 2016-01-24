@@ -46,6 +46,9 @@ function buildTable() {
 			var serverOut = serverCount + " servers";
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
+            if (playerCount == 420){
+                $('.playerCount').css("color", "#007700");
+            }
         },
         bPaginate: false,
         scrollY: "-webkit-calc(100% - 137px)",
