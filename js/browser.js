@@ -56,7 +56,7 @@ function buildTable() {
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
-            { type: "playerCount", targets: 12},
+            { type: "playerCount", targets: 13 },
             { targets: [ 5 ], orderData: [ 6 ]},
             { "mRender": function (data, type, row) {
                 img_str = '<img style="float: left; margin-right: 5px;" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
@@ -223,11 +223,11 @@ function pingMe(ip, rowNum) {
             success: function() {
                 endTime = Date.now();
                 ping = Math.round((endTime - startTime) * .45);
-                if (ping > 0 && ping <= 80) {
+                if (ping > 0 && ping <= 100) {
                     pingPic = "3";
-                }   else if(ping > 80 && ping <= 160) {
+                }   else if(ping > 100 && ping <= 200) {
                     pingPic = "2";
-                }   else if(ping > 160 && ping <= 240) {
+                }   else if(ping > 200 && ping <= 500) {
                     pingPic = "1";  
                 }   else {
                     pingPic = "0";
@@ -237,7 +237,7 @@ function pingMe(ip, rowNum) {
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
-    }, "600");  
+    }, "750");  
 }
 
 function fillGameCard(i) {
