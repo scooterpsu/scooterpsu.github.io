@@ -226,7 +226,7 @@ function pingMe(ip, rowNum, delay) {
             type: "GET",
             url: "http://" + ip + "/",
             async: true,
-            timeout: 5000,
+            timeout: 1000,
             success: function() {
                 endTime = Date.now();
                 ping = Math.round((endTime - startTime) * .45);
