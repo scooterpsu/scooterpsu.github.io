@@ -43,7 +43,7 @@
 	<h3 class="browserTitle"><b>Server Browser</b></h3>
 	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
     <button class="refresh" onclick="refreshTable();">Refresh<img class="controllerButton" src="images/XboxOne_Y.png"></button>
-	<button class="closeButton" onclick="closeBrowser();">Close<img class="controllerButton" src="images/XboxOne_Windows.png"></button>
+	<button class="closeButton" onclick="closeBrowser();">Close<img class="controllerButton" src="images/360_Back.png"></button>
     <!--<div id="connectionStatus"></div>-->
     <table id="serverTable" class="display" width="100%"></table>
     <div id="gamecard">
@@ -52,8 +52,9 @@
     <div id="extBorder2">
     </div>
     </div>
-    <button class="browserSwitch" onclick="switchBrowser();">Switch to theFeelTrain</button>
-        
+    <button class="browserSwitch feeltrain" onclick="switchBrowser('theFeelTrain');">Switch to theFeelTrain</button>
+    <button class="browserSwitch dewmenu" onclick="switchBrowser('DewMenu');">Switch to DewMenu</button>
+    
     <script id="gameinfo-template" type="text/x-handlebars-template">
         <div id="cardheaderborder">
             <div id="cardheader">
