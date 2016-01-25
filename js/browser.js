@@ -46,7 +46,7 @@ function buildTable() {
 			var serverOut = serverCount + " servers";
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
-            if (playerCount == 420){
+            if (playerCount >= 420 && playerCount < 430){
                 $('.playerCount').css("color", "#007700");
             }
         },
