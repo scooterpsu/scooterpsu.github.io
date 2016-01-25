@@ -22,7 +22,9 @@ $(document).ready(function() {
 
 function fixResolution(){
     zoomRatio = screen.width/1920;
-    $('body').css("zoom", zoomRatio);  
+    if (zoomRatio > 1){
+        $('body').css("zoom", zoomRatio);  
+    }
 }
 
 function getCurrentRelease() {
