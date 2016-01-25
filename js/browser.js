@@ -273,6 +273,7 @@ function refreshTable() {
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
     selectedID = 0;
+    pingDelay = 750;
     buildTable();
     if(dewRconConnected) {
         connectionTrigger();   
