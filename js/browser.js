@@ -48,6 +48,8 @@ function buildTable() {
 			$('.serverCount').html(serverOut);
             if (playerCount >= 420 && playerCount < 426){
                 $('.playerCount').css("color", "#007700");
+            } else {
+                $('.playerCount').css("color", "white");
             }
         },
         bPaginate: false,
