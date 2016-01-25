@@ -3,6 +3,7 @@ var EDVersion = 0;
 var serverList = {
 servers: []
 }; 
+var pingDelay = 750;
 var serverTable = [];
 var isThrottled = false;
 var throttleDuration = 30000; // ms
@@ -140,7 +141,8 @@ function buildTable() {
                                     serverInfo.sprintUnlimitedEnabled
                                 ]).draw();
                                 table.columns.adjust().draw();
-                                pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1);
+                                pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, pingDelay);
+                                pingDelay+=100;
                                 fillGameCard(serverInfo.serverId);
                             } else {
                                 console.log(serverInfo.serverIP + " is glitched");
@@ -214,7 +216,7 @@ function joinServer(i) {
     }
 }
 
-function pingMe(ip, rowNum) {
+function pingMe(ip, rowNum, delay) {
     setTimeout(function() { 
         var startTime = Date.now();
         var endTime;
@@ -242,7 +244,8 @@ function pingMe(ip, rowNum) {
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
-    }, "750");  
+    }, delay); 
+    
 }
 
 function fillGameCard(i) {
