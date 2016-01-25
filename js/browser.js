@@ -74,7 +74,7 @@ function buildTable() {
             { type: "playerCount", targets: 13 },
             { targets: [ 5 ], orderData: [ 6 ]},
             { "mRender": function (data, type, row) {
-                img_str = '<img style="float: left; margin-right: 5px;" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
+                img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
             }, "aTargets":[ 5 ]}
         ],
@@ -84,7 +84,7 @@ function buildTable() {
             { title: "", "width": "0.5%"},
 			{ title: "Name" },
 			{ title: "Host" },
-            { title: "Ping" , "width": "1%"},
+            { title: "Ping" , "width": "45px"},
             { title: "PingNum" , visible: false},           
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
