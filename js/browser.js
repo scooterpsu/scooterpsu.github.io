@@ -299,8 +299,11 @@ function switchBrowser(browser) {
     }, function(){        
         if (browser == "theFeelTrain"){
             var browserURL = "http://halo.thefeeltra.in/";
+            ga('send', 'event', 'change-menu', 'thefeeltrain');
+
         } else if (browser == "DewMenu"){
             var browserURL = "http://dewmenu.click/";
+            ga('send', 'event', 'change-menu', 'dewmenu');
         }
         setTimeout(function() {
             dewRcon.send('game.menuurl ' + browserURL);
@@ -315,7 +318,9 @@ function checkUpdate(ver) {
             checkUpdate(ver);
         }, "500");  
     } else {
+        ga('send', 'event', 'version', ver);
         if (ver != EDVersion) {
+
             swal({   
                 title: "Version Outdated!",
                 text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
@@ -336,6 +341,8 @@ function hasMap(map) {
 }
 
 function closeBrowser() {
+    ga('send', 'event', 'close-menu');
+
 	if(dewRconConnected) {
 		setTimeout(function() {
 			dewRcon.send('menu.show');
