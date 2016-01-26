@@ -139,19 +139,92 @@ img{
 /*======== Friends List ========*/
 /*==============================*/
 
-#party{
-    width: 500px;
-    height: 500px;
-    z-index: 100;
-    position: absolute;
-    top: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
+.friend{
+    font-size: 14pt;
+}
+
+.friend[title="Party Leader"]{
+    color: gold;
+}
+
+.pmButton{
+    float: right;
+    height: 25px;
+    width: 25px;
+    font-size: 8pt;
+    padding-left: 5px;
+    background: none;
+    border: 1px solid #404f70;
     color: white;
 }
 
+.pmButton:hover{
+    background-color: #404f70;
+}
 
+.addPartyMember{
+    position: relative;
+    top: 2px;
+    right: 4px;
+    height: 24px;
+    line-height: 18px;
+    padding: 4px;
+    padding-left: 6px;
+    padding-top: 1px;
+    width: 25px;
+    background-color: #13233d;
+    color: white;
+    float: right;
+    border: 1px solid #404f70;
+}
+
+.addPartyMember:hover{
+    background-color: #404f70;
+}
+
+#partyBorder{
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    background-color: #404f70;
+    width: 300px;
+    height: 500px;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
+    padding-bottom: 4px;
+    z-index: 100;
+}
+
+#partyHeader{
+    font-family: 'BlenderPro-Bold';
+    position: relative;
+    top: 2px;
+    left: 4px;
+    width: 293px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    -webkit-clip-path: polygon(28px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 28px);
+    z-index: 100;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16pt;
+}
+
+#party{
+    position: relative;
+    top: 5px;
+    left: 0px;
+    width: 294px;
+    height: 464px;
+    z-index: 100;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #13233d;
+    color: white;
+    padding:6px;
+    padding-left: 10px;
+    padding-right: 4px;
+}
 
 /*==============================*/
 /*===== Controller buttons =====*/

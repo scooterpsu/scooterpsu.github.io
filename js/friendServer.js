@@ -103,14 +103,7 @@ StartConnection = function() {
                                     if (inputValue === "") {     
                                     swal.showInputError("You need to write something!");     
                                     return false}
-                                    var response ={
-                                        type:'pm', 
-                                        player:pname, 
-                                        senderguid:puid, 
-                                        message:inputValue, 
-                                        guid:result.senderguid
-                                        }
-                                    friendServer.send(JSON.stringify(response));
+                                    sendPM(senderguid, inputValue);
                                     sweetAlert.close();
                                 });
                         } else {
@@ -239,6 +232,17 @@ function gameInvite(accepted, guid) {
 	console.log(accepted);
 }
 
+function sendPM(targetGuid, messageText){
+    var response ={
+        type:'pm', 
+        player:pname, 
+        senderguid:puid, 
+        message:messageText, 
+        guid:targetGuid
+        }
+    friendServer.send(JSON.stringify(response));
+}
+
 friendServerHelper = function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     this.friendsServerSocket = new WebSocket('ws://192.99.124.166:55555', 'friendServer');
@@ -257,7 +261,7 @@ function loadParty() {
 	$('#party').empty();
 	if(party.length > 0) {
 		for(var i=0; i < party.length; i++) {
-			$('#party').append("<div class='friend'>"+party[i].split(":")[0]+"</div>");
+			$('#party').append("<div class='friend'>"+party[i].split(":")[0]+"<button class='pmButton' onClick='console.log("+party[i].split(":")[1]+")'>PM</button></div>");
 		}
 		$('#party .friend:first-of-type').attr('title','Party Leader');
 	} else {
