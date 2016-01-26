@@ -1,3 +1,28 @@
+@font-face {
+    font-family: 'BlenderPro-Book'; 
+    src: url('../fonts/BlenderPro-Book.otf'); 
+}
+
+@font-face {
+    font-family: 'BlenderPro-Medium'; 
+    src: url('../fonts/BlenderPro-Medium.otf'); 
+}
+
+@font-face {
+    font-family: 'BlenderPro-Bold'; 
+    src: url('../fonts/BlenderPro-Bold.otf'); 
+}
+
+@font-face {
+    font-family: 'BlenderPro-Heavy'; 
+    src: url('../fonts/BlenderPro-Heavy.otf'); 
+}
+
+b, strong{
+    font-family: 'BlenderPro-Medium';
+    font-weight: normal;
+}
+
 body {
 	background-color: #05152f;
     position: relative;
@@ -5,6 +30,8 @@ body {
     margin-left: auto;
     margin-right: auto;
     overflow-y: hidden;
+    font-family: 'BlenderPro-Book'; 
+    letter-spacing: 1px;
 }
 
 img{
@@ -12,6 +39,7 @@ img{
 }
 
 .browserTitle{
+    font-family: 'BlenderPro-Bold';
     color: white;
     opacity: 0.8;
     position: absolute;
@@ -21,12 +49,13 @@ img{
 }
 
 .refresh {
+    font-family: 'BlenderPro-Medium';
     opacity: 0.8;
     position: absolute;
     top: 10px;
-    left: 210px;
+    left: 200px;
     color: white;
-    font-weight: 700;
+    font-size: 12pt;
     background-color: black;
     width: 115px;
     height: 30px;
@@ -41,7 +70,7 @@ img{
 
 .serverStats {
     color: white;
-	font-weight: bold;
+    font-family: 'BlenderPro-Bold';
     opacity: 0.8;
     position: absolute;
     top: 5px;
@@ -55,14 +84,13 @@ img{
     top: 8px;
     right: 2px;
     color: white;
-    font-weight: bold;
+    font-weight: Medium;
     background-color: black;
     width: 95px;
     height: 30px;
     border-style: solid;
     border: 1px solid white;
     display: none;
-    
 }
 
 .closeButton:hover{
@@ -78,8 +106,9 @@ img{
     padding: 8px;
     position: absolute;
     left: 588px;
-    bottom: 6px;
+    bottom: 4px;
     z-index: 3;
+    font-family: 'BlenderPro-Book';
 }
 
 .dewmenu{
@@ -92,6 +121,18 @@ img{
 
 .browserSwitch:hover{
     background-color: #31415b;
+}
+
+.pingbars{
+    float: left; 
+    margin-right: 5px; 
+    padding-top: 1px; 
+    height: 15px; 
+    width: 15px;
+}
+
+::selection{
+  background-color: #13233d;
 }
 
 /*==============================*/
@@ -124,6 +165,7 @@ img{
 /*==============================*/
 
 #gamecard{
+    opacity: 0.9;
     width: 250px;
     position: relative;
     top: 2px;
@@ -153,6 +195,7 @@ img{
 }
 
 #title{
+    font-family: 'BlenderPro-Medium';
     position: relative;
     margin-top: 2px;
     min-height: 30px;
@@ -306,6 +349,9 @@ img{
 .sorting{
     padding-top: 0;
     color: white !important;
+    font-family: 'BlenderPro-Medium';
+    font-weight: normal !important;
+    padding-left: 10px !important;
 }
 
 .dataTable thead th, .dataTable thead td {

@@ -1,3 +1,4 @@
+var zoomRatio;
 var mapList = [[]];
 var EDVersion = 0;
 var serverList = {
@@ -14,9 +15,17 @@ var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
+    fixResolution();
     getCurrentRelease();
     buildTable();
 });
+
+function fixResolution(){
+    zoomRatio = screen.width/1920;
+    if (zoomRatio > 1){
+        $('body').css("zoom", zoomRatio);  
+    }
+}
 
 function getCurrentRelease() {
 	var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
@@ -65,7 +74,7 @@ function buildTable() {
             { type: "playerCount", targets: 13 },
             { targets: [ 5 ], orderData: [ 6 ]},
             { "mRender": function (data, type, row) {
-                img_str = '<img style="float: left; margin-right: 5px;" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
+                img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
             }, "aTargets":[ 5 ]}
         ],
@@ -75,7 +84,7 @@ function buildTable() {
             { title: "", "width": "0.5%"},
 			{ title: "Name" },
 			{ title: "Host" },
-            { title: "Ping" , "width": "1%"},
+            { title: "Ping" , "width": "45px"},
             { title: "PingNum" , visible: false},           
 			{ title: "Map" },
 			{ title: "Map File", visible: false},
@@ -84,6 +93,7 @@ function buildTable() {
 			{ title: "Status", visible: false},    
  			{ title: "Num Players", visible: false},  
 			{ title: "Players", "width": "1%"},
+            { title: "IsFull", "width": "1%", visible: false},
 			{ title: "Version", "width": "1%", visible: false}
 		],
 		"order": [[ 0 ]],
@@ -121,6 +131,10 @@ function buildTable() {
                                 } else {
                                     serverInfo["passworded"] = "🔒";
                                 };
+                                var isFull = "full";
+                                if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0){
+                                    isFull = "open";
+                                }
                                 table.row.add([
                                     serverInfo.serverId,
                                     serverInfo.serverIP,
@@ -136,6 +150,7 @@ function buildTable() {
                                     serverInfo.status,
                                     parseInt(serverInfo.numPlayers),
                                     parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
+                                    isFull,
                                     serverInfo.eldewritoVersion,
                                     serverInfo.sprintEnabled,
                                     serverInfo.sprintUnlimitedEnabled
@@ -290,8 +305,11 @@ function switchBrowser(browser) {
     }, function(){        
         if (browser == "theFeelTrain"){
             var browserURL = "http://halo.thefeeltra.in/";
+            ga('send', 'event', 'change-menu', 'thefeeltrain');
+
         } else if (browser == "DewMenu"){
             var browserURL = "http://dewmenu.click/";
+            ga('send', 'event', 'change-menu', 'dewmenu');
         }
         setTimeout(function() {
             dewRcon.send('game.menuurl ' + browserURL);
@@ -306,7 +324,9 @@ function checkUpdate(ver) {
             checkUpdate(ver);
         }, "500");  
     } else {
+        ga('send', 'event', 'version', ver);
         if (ver != EDVersion) {
+
             swal({   
                 title: "Version Outdated!",
                 text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
@@ -327,6 +347,8 @@ function hasMap(map) {
 }
 
 function closeBrowser() {
+    ga('send', 'event', 'close-menu');
+
 	if(dewRconConnected) {
 		setTimeout(function() {
 			dewRcon.send('menu.show');
