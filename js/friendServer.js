@@ -127,7 +127,7 @@ StartConnection = function() {
                             sweetAlert.close();                             
                         }
                     });
-						callback: partyInvite
+						//callback: partyInvite
 
 				break;
 				case "gameinvite":
@@ -145,7 +145,7 @@ StartConnection = function() {
                             sweetAlert.close();                             
                         }
                     });
-						callback: gameInvite
+						//callback: gameInvite
 
 				break;
 				case "acceptparty":
@@ -263,15 +263,37 @@ function loadParty() {
 	$('#party').empty();
 	if(party.length > 0) {
 		for(var i=0; i < party.length; i++) {
-            var partyEntry = "<div class='friend'>"+party[i].split(":")[0]
-            if (party[i].split(":")[1] == puid){
-                partyEntry += "<button class='pmButton' onClick='console.log("+party[i].split(":")[1]+")'>PM</button>"
-            }
-            partyEntry += "</div>"
-			$('#party').append(partyEntry);
+			$('#party').append("<div class='friend'>"+party[i].split(":")[0]+"</div>");
 		}
 		$('#party .friend:first-of-type').attr('title','Party Leader');
 	} else {
 		$('#party').append("<div class='nofriends'>You're not partying :(</div>");
 	}
+}
+
+$(function() {
+    $("#messageBox").keypress(function (e) {
+        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+            $('#submitButton').click();
+            return false;
+        } else {
+            return true;
+        }
+    });
+});
+
+function chatInput(text){
+    if(friendServerConnected){
+        if(text.length > 0){
+            $("#chat").append(new Date().timeNow()+ "<b> "+ pname + ":</b> " + text + "<br/>");
+            $("#messageBox").val("");
+        }
+    } else {
+        console.log("not connected");
+        $("#messageBox").val("");
+    }
+}
+
+Date.prototype.timeNow = function () {
+     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes();
 }

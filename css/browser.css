@@ -188,7 +188,7 @@ img{
     left: 100px;
     background-color: #404f70;
     width: 300px;
-    height: 500px;
+    height: 400px;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
     padding-bottom: 4px;
     z-index: 100;
@@ -215,7 +215,7 @@ img{
     top: 5px;
     left: 0px;
     width: 294px;
-    height: 464px;
+    height: 364px;
     z-index: 100;
     margin-left: auto;
     margin-right: auto;
@@ -224,6 +224,92 @@ img{
     padding:6px;
     padding-left: 10px;
     padding-right: 4px;
+}
+
+/*===============================*/
+/*========= Chat Window =========*/
+/*===============================*/
+
+.closeChat{
+    position: relative;
+    top: 2px;
+    right: 4px;
+    height: 24px;
+    line-height: 18px;
+    padding: 4px;
+    padding-left: 6px;
+    padding-top: 1px;
+    background-color: #13233d;
+    color: white;
+    float: right;
+    border: 1px solid #404f70;
+}
+
+.closeChat:hover{
+    background-color: #404f70;
+}
+
+#chatBorder{
+    position: absolute;
+    top: 100px;
+    left: 600px;
+    background-color: #404f70;
+    width: 400px;
+    height: 400px;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
+    padding-bottom: 4px;
+    z-index: 100;
+}
+
+#chatHeader{
+    font-family: 'BlenderPro-Bold';
+    position: relative;
+    top: 2px;
+    left: 4px;
+    width: 393px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    -webkit-clip-path: polygon(28px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 28px);
+    z-index: 100;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16pt;
+}
+
+#chat{
+    position: relative;
+    top: 5px;
+    left: 0px;
+    width: 394px;
+    height: 334px;
+    z-index: 100;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #13233d;
+    color: white;
+    padding:6px;
+    padding-left: 10px;
+    padding-right: 4px;
+}
+
+#messageBox{
+    margin-top: 8px;
+    margin-left: 3px;
+    width: 338px;
+    padding-left: 10px;
+}
+
+#submitButton{
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    height: 26px;
+    width: 52px;
+}
+
+#submitButton:hover{
+    background-color: #31415b;
 }
 
 /*==============================*/
