@@ -261,7 +261,12 @@ function loadParty() {
 	$('#party').empty();
 	if(party.length > 0) {
 		for(var i=0; i < party.length; i++) {
-			$('#party').append("<div class='friend'>"+party[i].split(":")[0]+"<button class='pmButton' onClick='console.log("+party[i].split(":")[1]+")'>PM</button></div>");
+            var partyEntry = "<div class='friend'>"+party[i].split(":")[0]
+            if (party[i].split(":")[1] == puid){
+                partyEntry += "<button class='pmButton' onClick='console.log("+party[i].split(":")[1]+")'>PM</button>"
+            }
+            partyEntry += "</div>"
+			$('#party').append(partyEntry);
 		}
 		$('#party .friend:first-of-type').attr('title','Party Leader');
 	} else {
