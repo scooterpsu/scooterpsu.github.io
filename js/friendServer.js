@@ -138,9 +138,11 @@ StartConnection = function() {
                         cancelButtonText: "Decline",   
                      }, function(isConfirm){
                         if (isConfirm) {
-                         
+                            gameInvite(true, result.senderguid);
+                            sweetAlert.close();
                         } else {
-                         
+                            gameInvite(false, result.senderguid);  
+                            sweetAlert.close();                             
                         }
                     });
 						callback: gameInvite
