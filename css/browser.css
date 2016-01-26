@@ -136,6 +136,24 @@ img{
 }
 
 /*==============================*/
+/*======== Friends List ========*/
+/*==============================*/
+
+#party{
+    width: 500px;
+    height: 500px;
+    z-index: 100;
+    position: absolute;
+    top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+    color: white;
+}
+
+
+
+/*==============================*/
 /*===== Controller buttons =====*/
 /*==============================*/
 

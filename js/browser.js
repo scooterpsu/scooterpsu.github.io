@@ -410,7 +410,7 @@ Mousetrap.bind('f11', function() {
 //=============================
 //===== Gamepad functions =====
 //=============================
-
+/*
 function updateSelection() {
 	$('#serverTable tbody tr.selected').removeClass('selected');
 	$("#serverTable tbody tr:eq(" + selectedID + ")").addClass("selected");
@@ -497,7 +497,7 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
 
 if (!gamepad.init()) {
 }
-
+*/
 //==========================
 //==== Datatable Sorts =====
 //==========================
