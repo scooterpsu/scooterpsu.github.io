@@ -77,6 +77,7 @@ StartConnection = function() {
 
 						console.log(result.player + ' has left your party.');
 						$("#chat").append(result.player + " has left your party.<br/>");
+                        updateScroll();
 						loadParty();
 					}
 				break;
@@ -114,6 +115,7 @@ StartConnection = function() {
                     });
                     } else {
                         $("#chat").append(new Date().timeNow()+ "<b> "+ result.player + ":</b> " + result.message + "<br/>");
+                        updateScroll();
                         $("#chatBorder").css("display", "block");
                     }
 				break;
@@ -157,6 +159,7 @@ StartConnection = function() {
 				case "acceptparty":
                     console.log(result.player + ' has joined your party.');
                     $("#chat").append(result.player + " has joined your party.<br/>");
+                    updateScroll();
                     party.push(result.player + ":" + result.pguid);
                     
                     for (var i = 0; i < party.length; i++) {
@@ -257,10 +260,10 @@ function inviteToParty(targetGuid){
         type:'partyinvite', 
         player:pname, 
         senderguid:puid, 
-        message:messageText, 
         guid:targetGuid
     }
     friendServer.send(JSON.stringify(response));
+    showOnline();
 }
 
 friendServerHelper = function() {
@@ -273,6 +276,7 @@ friendServerHelper = function() {
     this.send = function(command, cb) {
 		this.callback = cb;
         this.friendsServerSocket.send(command);
+        console.log(command);
         this.lastCommand = command;
     }
 }
@@ -295,7 +299,7 @@ function loadOnline() {
 		for(var i=0; i < onlinePlayers.length; i++) {
             if($.inArray(onlinePlayers[i], party) == -1){
                 if (onlinePlayers[i].split(":")[1] != "not"){
-                    $('#allOnline').append("<div class='friend'>"+onlinePlayers[i].split(":")[0]+"<button class='addToParty' onClick='inviteToParty("+onlinePlayers[i].split(":")[1]+");'>+</button></div>");
+                    $('#allOnline').append("<div class='friend'>"+onlinePlayers[i].split(":")[0]+"<button class='addToParty' onClick=\"inviteToParty('"+onlinePlayers[i].split(":")[1]+"');\">+</button></div>");
                 }
             }
 		}
@@ -317,6 +321,7 @@ function chatInput(text){
     if(friendServerConnected){
         if(text.length > 0){
             $("#chat").append(new Date().timeNow()+ "<b> "+ pname + ":</b> " + text + "<br/>");
+            updateScroll();
             if(party.length > 0) {
                 for(var i=0; i < party.length; i++) {
                     if(party[i].split(":")[1] != puid){
@@ -349,7 +354,7 @@ function showOnline(){
     }
 }
 
-var chatShown = true;
+var chatShown = false;
 function showChat(){
     if (!chatShown){
         $("#chatBorder").css("display", "block");
@@ -359,3 +364,26 @@ function showChat(){
         chatShown = false;
     }
 }
+
+var partyListShown = false;
+function showPartyList(){
+    if (!partyListShown){
+        $("#partyBorder").css("display", "block");
+        partyListShown = true;
+    } else {
+        $("#partyBorder").css("display", "none");
+        partyListShown = false;
+    }
+}
+
+var scrolled = false;
+function updateScroll(){
+    if(!scrolled){
+        var element = document.getElementById("chat");
+        element.scrollTop = element.scrollHeight;
+    }
+}
+
+$("#chat").on('scroll', function(){
+    scrolled=true;
+});

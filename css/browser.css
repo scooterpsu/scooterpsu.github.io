@@ -139,6 +139,12 @@ img{
 /*======== Friends List ========*/
 /*==============================*/
 
+.togglePartyList{
+    position: absolute;
+    top: 10px;
+    left: 650px;
+}
+
 .friend{
     font-size: 14pt;
 }
@@ -208,6 +214,7 @@ img{
 }
 
 #partyBorder{
+    display: none;
     position: absolute;
     top: 100px;
     left: 100px;
@@ -296,6 +303,7 @@ img{
 }
 
 #chatBorder{
+    display: none;
     position: absolute;
     top: 100px;
     left: 600px;
