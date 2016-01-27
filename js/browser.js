@@ -107,11 +107,13 @@ function buildTable() {
 
 	var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
     .done(function( data ) {
+        var pingDelay = 110;
         for(var i = 0; i < data.result.servers.length; i++) {
             var serverIP = data.result.servers[i];
             if(VerifyIPRegex.test(serverIP)) {
                 serverList.servers.push({serverIP, i});
                 (function(i, serverIP) {
+                    setTimeout(function() {
                     var startTime = Date.now();
                     var endTime;
                     var ping;
@@ -179,6 +181,7 @@ function buildTable() {
                             console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
                         }
                     });
+                  }, (i * pingDelay));  
                 })(i, serverIP);
             } else {
                 console.log(serverIP + " is invalid, skipping.");
@@ -269,7 +272,6 @@ function refreshTable() {
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
     selectedID = 0;
-    pingDelay = 750;
     buildTable();
     if(dewRconConnected) {
         connectionTrigger();   
