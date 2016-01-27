@@ -240,6 +240,7 @@ img{
     height: 28px;
     line-height: 28px;
     font-size: 16pt;
+    padding-left: 50px;
 }
 
 #party{
@@ -274,6 +275,10 @@ img{
     padding-left: 10px;
     padding-right: 4px;
     overflow-y: auto;
+}
+
+#statusLine{
+    color: grey;
 }
 
 /*===============================*/
@@ -329,6 +334,7 @@ img{
     height: 28px;
     line-height: 28px;
     font-size: 16pt;
+    padding-left: 10px;
 }
 
 #chat{

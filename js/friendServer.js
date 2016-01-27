@@ -76,7 +76,7 @@ StartConnection = function() {
 						}
 
 						console.log(result.player + ' has left your party.');
-						$("#chat").append(result.player + " has left your party.<br/>");
+						$("#chat").append("<p id='statusLine'>"+ result.player + " has left your party.</p><br/>");
                         updateScroll();
 						loadParty();
 					}
@@ -84,7 +84,7 @@ StartConnection = function() {
 				case "pm":
                 //console.log(message);
 					console.log(result.player + ": " + result.message);
-                    if($.inArray(result.player + ":" + result.senderguid, party) == -1){
+
                     swal({   
                         title: "Private Message",   
                         text: result.player + ": " + result.message,   
@@ -113,11 +113,14 @@ StartConnection = function() {
                             
                         }
                     });
-                    } else {
+                break;
+                case "partymessage":
+                    console.log(result.player + ": " + result.message);
+                    //if($.inArray(result.player + ":" + result.senderguid, party) == -1){
                         $("#chat").append(new Date().timeNow()+ "<b> "+ result.player + ":</b> " + result.message + "<br/>");
                         updateScroll();
                         $("#chatBorder").css("display", "block");
-                    }
+                    //}
 				break;
 				case "partyinvite":
                     swal({   
@@ -158,7 +161,7 @@ StartConnection = function() {
 				break;
 				case "acceptparty":
                     console.log(result.player + ' has joined your party.');
-                    $("#chat").append(result.player + " has joined your party.<br/>");
+                   $("#chat").append("<p id='statusLine'>"+ result.player + " has joined your party.</p><br/>");
                     updateScroll();
                     party.push(result.player + ":" + result.pguid);
                     
@@ -276,7 +279,7 @@ friendServerHelper = function() {
     this.send = function(command, cb) {
 		this.callback = cb;
         this.friendsServerSocket.send(command);
-        console.log(command);
+        //console.log(command);
         this.lastCommand = command;
     }
 }
@@ -325,7 +328,7 @@ function chatInput(text){
             if(party.length > 0) {
                 for(var i=0; i < party.length; i++) {
                     if(party[i].split(":")[1] != puid){
-                        sendPM(party[i].split(":")[1], text);
+                        sendPartyMessage(text);
                     }
                 }
             }
@@ -339,6 +342,16 @@ function chatInput(text){
 
 Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes();
+}
+
+function sendPartyMessage(message){
+    friendServer.send(JSON.stringify({
+        type: "partymessage",
+        message: message,
+        player: pname,
+        senderguid: puid,
+        partymembers: party
+    }));  
 }
 
 var onlineShown = false;
