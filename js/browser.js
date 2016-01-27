@@ -4,7 +4,6 @@ var EDVersion = 0;
 var serverList = {
 servers: []
 }; 
-var pingDelay = 750;
 var serverTable = [];
 var isThrottled = false;
 var throttleDuration = 30000; // ms
@@ -108,13 +107,31 @@ function buildTable() {
 
 	var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
     .done(function( data ) {
+        var pingDelay = 110;
         for(var i = 0; i < data.result.servers.length; i++) {
             var serverIP = data.result.servers[i];
             if(VerifyIPRegex.test(serverIP)) {
                 serverList.servers.push({serverIP, i});
                 (function(i, serverIP) {
+                    setTimeout(function() {
+                    var startTime = Date.now();
+                    var endTime;
+                    var ping;
+                    var pingDisplay;
                     var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                     .done(function(serverInfo) {
+                        endTime = Date.now();
+                        ping = Math.round((endTime - startTime) * .45);
+                        if (ping > 0 && ping <= 100) {
+                            pingDisplay = ping+":3";
+                        }   else if(ping > 100 && ping <= 200) {
+                            pingDisplay = ping+":2";
+                        }   else if(ping > 200 && ping <= 500) {
+                            pingDisplay = ping+":1";  
+                        }   else {
+                            pingDisplay = "???:0";
+                            ping = "501";
+                        }
                         serverInfo["serverId"] = i;
                         serverInfo["serverIP"] = serverIP;
                         if (serverInfo.maxPlayers <= 16 ) {
@@ -141,8 +158,8 @@ function buildTable() {
                                     serverInfo.passworded,
                                     serverInfo.name,
                                     serverInfo.hostPlayer,
-                                    ":",
-                                    "000",
+                                    pingDisplay,
+                                    ping,
                                     serverInfo.map,
                                     serverInfo.mapFile,
                                     capitalizeFirstLetter(serverInfo.variantType),
@@ -156,8 +173,6 @@ function buildTable() {
                                     serverInfo.sprintUnlimitedEnabled
                                 ]).draw();
                                 table.columns.adjust().draw();
-                                pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, pingDelay);
-                                pingDelay+=100;
                                 fillGameCard(serverInfo.serverId);
                             } else {
                                 console.log(serverInfo.serverIP + " is glitched");
@@ -166,6 +181,7 @@ function buildTable() {
                             console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
                         }
                     });
+                  }, (i * pingDelay));  
                 })(i, serverIP);
             } else {
                 console.log(serverIP + " is invalid, skipping.");
@@ -231,38 +247,6 @@ function joinServer(i) {
     }
 }
 
-function pingMe(ip, rowNum, delay) {
-    setTimeout(function() { 
-        var startTime = Date.now();
-        var endTime;
-        var ping;
-        var pingPic
-        $.ajax({
-            type: "GET",
-            url: "http://" + ip + "/",
-            async: true,
-            timeout: 1000,
-            success: function() {
-                endTime = Date.now();
-                ping = Math.round((endTime - startTime) * .45);
-                if (ping > 0 && ping <= 100) {
-                    pingPic = "3";
-                }   else if(ping > 100 && ping <= 200) {
-                    pingPic = "2";
-                }   else if(ping > 200 && ping <= 500) {
-                    pingPic = "1";  
-                }   else {
-                    pingPic = "0";
-                }
-                $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
-                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
-                $('#serverTable').DataTable().columns.adjust().draw();
-            }
-        });
-    }, delay); 
-    
-}
-
 function fillGameCard(i) {
     var html = serverTemplate(serverList.servers[i]);
     $("#gamecard").html(html)
@@ -288,7 +272,6 @@ function refreshTable() {
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
     selectedID = 0;
-    pingDelay = 750;
     buildTable();
     if(dewRconConnected) {
         connectionTrigger();   
