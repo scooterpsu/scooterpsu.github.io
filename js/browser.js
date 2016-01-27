@@ -115,19 +115,20 @@ function buildTable() {
                     var startTime = Date.now();
                     var endTime;
                     var ping;
-                    var pingPic;
+                    var pingDisplay;
                     var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                     .done(function(serverInfo) {
                         endTime = Date.now();
                         ping = Math.round((endTime - startTime) * .45);
                         if (ping > 0 && ping <= 100) {
-                            pingPic = "3";
+                            pingDisplay = ping+":3";
                         }   else if(ping > 100 && ping <= 200) {
-                            pingPic = "2";
+                            pingDisplay = ping+":2";
                         }   else if(ping > 200 && ping <= 500) {
-                            pingPic = "1";  
+                            pingDisplay = ping+":1";  
                         }   else {
-                            pingPic = "0";
+                            pingDisplay = "???:0";
+                            ping = "501";
                         }
                         serverInfo["serverId"] = i;
                         serverInfo["serverIP"] = serverIP;
@@ -155,7 +156,7 @@ function buildTable() {
                                     serverInfo.passworded,
                                     serverInfo.name,
                                     serverInfo.hostPlayer,
-                                    ping + ":" + pingPic,
+                                    pingDisplay,
                                     ping,
                                     serverInfo.map,
                                     serverInfo.mapFile,
