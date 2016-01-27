@@ -66,10 +66,7 @@
     <div id="partyBorder">
         <div id="partyHeader">Party List<button class="addPartyMember" onClick="showOnline();">+</button><button class="toggleChat" onClick="showChat();">Chat</button></div>
         <div id="allOnline"></div>
-        <div id="party"><!--
-        <div class='friend' title="Party Leader">Orion</div>
-        <div class='friend'>ScooterPSU</div>
-        <div class='friend'>shockfire</div>-->
+        <div id="party">
         </div>
     </div>
     
@@ -78,8 +75,8 @@
         <div id="chat">
         </div>        
         <form name="message" action="">
-            <input name="usermsg" type="text" id="messageBox" size="63" />
-            <input name="submitmsg" type="button"  id="submitButton" value="Send" onclick="chatInput(this.form.messageBox.value)"/>
+            <input name="usermsg" type="text" autocomplete="off" id="messageBox" size="63" />
+            <input name="submitmsg" type="button" id="submitButton" value="Send" onclick="chatInput(this.form.messageBox.value)"/>
         </form>
     </div>
     
