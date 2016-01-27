@@ -17,7 +17,7 @@ var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|2
 $(document).ready(function() {
     fixResolution();
     getCurrentRelease();
-    //buildTable();
+    buildTable();
 });
 
 function fixResolution(){

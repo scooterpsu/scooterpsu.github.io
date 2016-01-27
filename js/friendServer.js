@@ -7,7 +7,7 @@ var friendServer,
 jQuery(function() {
 	if(dewRconConnected) {
 		StartConnection();
-	}
+	} 
 });
 
 StartConnection = function() {
@@ -76,12 +76,14 @@ StartConnection = function() {
 						}
 
 						console.log(result.player + ' has left your party.');
-						
+						$("#chat").append(result.player + " has left your party.<br/>");
 						loadParty();
 					}
 				break;
 				case "pm":
+                //console.log(message);
 					console.log(result.player + ": " + result.message);
+                    if($.inArray(result.player + ":" + result.senderguid, party) == -1){
                     swal({   
                         title: "Private Message",   
                         text: result.player + ": " + result.message,   
@@ -110,6 +112,10 @@ StartConnection = function() {
                             
                         }
                     });
+                    } else {
+                        $("#chat").append(new Date().timeNow()+ "<b> "+ result.player + ":</b> " + result.message + "<br/>");
+                        $("#chatBorder").css("display", "block");
+                    }
 				break;
 				case "partyinvite":
                     swal({   
@@ -150,7 +156,7 @@ StartConnection = function() {
 				break;
 				case "acceptparty":
                     console.log(result.player + ' has joined your party.');
-                    
+                    $("#chat").append(result.player + " has joined your party.<br/>");
                     party.push(result.player + ":" + result.pguid);
                     
                     for (var i = 0; i < party.length; i++) {
@@ -191,6 +197,7 @@ StartConnection = function() {
 				case "updateplayers":
 					onlinePlayers = JSON.parse(result.players);
 					console.log(onlinePlayers);
+                    loadOnline();
 					//updateFriends();
 					//loadFriends();
 				break;
@@ -245,6 +252,17 @@ function sendPM(targetGuid, messageText){
     friendServer.send(JSON.stringify(response));
 }
 
+function inviteToParty(targetGuid){
+    var response ={
+        type:'partyinvite', 
+        player:pname, 
+        senderguid:puid, 
+        message:messageText, 
+        guid:targetGuid
+    }
+    friendServer.send(JSON.stringify(response));
+}
+
 friendServerHelper = function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     this.friendsServerSocket = new WebSocket('ws://192.99.124.166:55555', 'friendServer');
@@ -271,6 +289,19 @@ function loadParty() {
 	}
 }
 
+function loadOnline() {
+	$('#allOnline').empty();
+	if(onlinePlayers.length > 0) {
+		for(var i=0; i < onlinePlayers.length; i++) {
+            if($.inArray(onlinePlayers[i], party) == -1){
+                if (onlinePlayers[i].split(":")[1] != "not"){
+                    $('#allOnline').append("<div class='friend'>"+onlinePlayers[i].split(":")[0]+"<button class='addToParty' onClick='inviteToParty("+onlinePlayers[i].split(":")[1]+");'>+</button></div>");
+                }
+            }
+		}
+	}
+}
+
 $(function() {
     $("#messageBox").keypress(function (e) {
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
@@ -286,6 +317,13 @@ function chatInput(text){
     if(friendServerConnected){
         if(text.length > 0){
             $("#chat").append(new Date().timeNow()+ "<b> "+ pname + ":</b> " + text + "<br/>");
+            if(party.length > 0) {
+                for(var i=0; i < party.length; i++) {
+                    if(party[i].split(":")[1] != puid){
+                        sendPM(party[i].split(":")[1], text);
+                    }
+                }
+            }
             $("#messageBox").val("");
         }
     } else {
@@ -296,4 +334,28 @@ function chatInput(text){
 
 Date.prototype.timeNow = function () {
      return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes();
+}
+
+var onlineShown = false;
+function showOnline(){
+    if (!onlineShown){
+        $("#allOnline").css("display", "block");
+        $("#party").css("display", "none");
+        onlineShown = true;
+    } else {
+        $("#allOnline").css("display", "none");
+        $("#party").css("display", "block");
+        onlineShown = false;
+    }
+}
+
+var chatShown = true;
+function showChat(){
+    if (!chatShown){
+        $("#chatBorder").css("display", "block");
+        chatShown = true;
+    } else {
+        $("#chatBorder").css("display", "none");
+        chatShown = false;
+    }
 }
