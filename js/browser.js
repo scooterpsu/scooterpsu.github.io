@@ -4,7 +4,6 @@ var EDVersion = 0;
 var serverList = {
 servers: []
 }; 
-var pingDelay = 750;
 var serverTable = [];
 var isThrottled = false;
 var throttleDuration = 30000; // ms
@@ -113,8 +112,23 @@ function buildTable() {
             if(VerifyIPRegex.test(serverIP)) {
                 serverList.servers.push({serverIP, i});
                 (function(i, serverIP) {
+                    var startTime = Date.now();
+                    var endTime;
+                    var ping;
+                    var pingPic;
                     var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                     .done(function(serverInfo) {
+                        endTime = Date.now();
+                        ping = Math.round((endTime - startTime) * .45);
+                        if (ping > 0 && ping <= 100) {
+                            pingPic = "3";
+                        }   else if(ping > 100 && ping <= 200) {
+                            pingPic = "2";
+                        }   else if(ping > 200 && ping <= 500) {
+                            pingPic = "1";  
+                        }   else {
+                            pingPic = "0";
+                        }
                         serverInfo["serverId"] = i;
                         serverInfo["serverIP"] = serverIP;
                         if (serverInfo.maxPlayers <= 16 ) {
@@ -141,8 +155,8 @@ function buildTable() {
                                     serverInfo.passworded,
                                     serverInfo.name,
                                     serverInfo.hostPlayer,
-                                    ":",
-                                    "000",
+                                    ping + ":" + pingPic,
+                                    ping,
                                     serverInfo.map,
                                     serverInfo.mapFile,
                                     capitalizeFirstLetter(serverInfo.variantType),
@@ -156,8 +170,6 @@ function buildTable() {
                                     serverInfo.sprintUnlimitedEnabled
                                 ]).draw();
                                 table.columns.adjust().draw();
-                                pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, pingDelay);
-                                pingDelay+=100;
                                 fillGameCard(serverInfo.serverId);
                             } else {
                                 console.log(serverInfo.serverIP + " is glitched");
@@ -229,38 +241,6 @@ function joinServer(i) {
     } else {
         swal("Communication Error", "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", "error");        
     }
-}
-
-function pingMe(ip, rowNum, delay) {
-    setTimeout(function() { 
-        var startTime = Date.now();
-        var endTime;
-        var ping;
-        var pingPic
-        $.ajax({
-            type: "GET",
-            url: "http://" + ip + "/",
-            async: true,
-            timeout: 1000,
-            success: function() {
-                endTime = Date.now();
-                ping = Math.round((endTime - startTime) * .45);
-                if (ping > 0 && ping <= 100) {
-                    pingPic = "3";
-                }   else if(ping > 100 && ping <= 200) {
-                    pingPic = "2";
-                }   else if(ping > 200 && ping <= 500) {
-                    pingPic = "1";  
-                }   else {
-                    pingPic = "0";
-                }
-                $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
-                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
-                $('#serverTable').DataTable().columns.adjust().draw();
-            }
-        });
-    }, delay); 
-    
 }
 
 function fillGameCard(i) {
