@@ -202,72 +202,8 @@ function joinServer(i) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
-                    if(friendServerConnected && party.length > 1){
-                        if((serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) >= party.length){
-                            console.log("ok we fit");
-                            if(serverList.servers[i].passworded) {
-                                swal({   
-                                    title: "Private Server", text: "Please enter password",   
-                                    type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
-                                    inputPlaceholder: "Password goes here" 
-                                }, 
-                                function(inputValue) {
-                                    if (inputValue === false) return false;      
-                                    if (inputValue === "") {     
-                                        sweetAlert.showInputError("Passwords are never blank");     
-                                        return false   
-                                    } else {
-                                        dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
-                                            if (res.length > 0) {
-                                                if (res != "Command/Variable not found"){
-                                                    if (res === "Incorrect password specified.") {
-                                                        sweetAlert.showInputError(res);
-                                                        return false
-                                                    }else {
-                                                        if (party[0].split(':')[1] == puid) {
-                                                            for (var p = 0; p < party.length; p++ ) {
-                                                                if (party[p].split(':')[1] == puid){
-                                                                    friendServer.send(JSON.stringify({
-                                                                        type: 'connect',
-                                                                        guid: party[p].split(':')[1],
-                                                                        address: serverList.servers[i].serverIP,
-                                                                        password: inputValue
-                                                                    }));
-                                                                }
-                                                            }
-                                                        }
-                                                        sweetAlert.close();
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            } else {
-                                dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
-                                    if (res.length > 0) {
-                                        if (res != "Command/Variable not found"){
-                                            if (party[0].split(':')[1] == puid) {
-                                                for (var p = 0; p < party.length; p++ ) {
-                                                    if (party[p].split(':')[1] == puid){
-                                                        friendServer.send(JSON.stringify({
-                                                            type: 'connect',
-                                                            guid: party[p].split(':')[1],
-                                                            address: serverList.servers[i].serverIP,
-                                                            password: ''
-                                                        }));
-                                                    }
-                                                }
-                                            }
-
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
+                    if(friendServerConnected && (serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) < party.length){
                             swal("Party Too Large","You have too many people in your party to join this game.", "error");
-                        }
-                            
                     } else {
                         ga('send', 'event', 'serverlist', 'connect');
                         if(serverList.servers[i].passworded) {
@@ -289,8 +225,12 @@ function joinServer(i) {
                                                     sweetAlert.showInputError(res);
                                                     return false
                                                 }else {
+                                                    if (friendServerConnected) {
+                                                        partyConnect(serverList.servers[i].serverIP, inputValue);                                                    
+                                                    } else {
+                                                        closeBrowser();                                                       
+                                                    }
                                                     sweetAlert.close();
-                                                    closeBrowser();
                                                 }
                                             }
                                         }
@@ -301,7 +241,11 @@ function joinServer(i) {
                             dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
                                 if (res.length > 0) {
                                     if (res != "Command/Variable not found"){
-                                        closeBrowser();
+                                        if (friendServerConnected) {
+                                            partyConnect(serverList.servers[i].serverIP, '');                                                    
+                                        } else {
+                                            closeBrowser();                                                       
+                                        }
                                     }
                                 }
                             });
@@ -481,6 +425,21 @@ function closeBrowser() {
 String.prototype.contains = function(it) {
 	return this.indexOf(it) != -1;
 };
+
+funtion partyConnect(ip, password){
+    if (party[0].split(':')[1] == puid) {
+        for (var p = 0; p < party.length; p++ ) {
+            if (party[p].split(':')[1] == puid){
+                friendServer.send(JSON.stringify({
+                    type: 'connect',
+                    guid: party[p].split(':')[1],
+                    address: ip,
+                    password: password
+                }));
+            }
+        }
+    }
+}
 
 //============================
 //===== dewRcon triggers =====
