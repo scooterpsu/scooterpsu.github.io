@@ -4,6 +4,11 @@
 }
 
 @font-face {
+    font-family: 'BlenderPro-BookItalic'; 
+    src: url('../fonts/BlenderPro-BookItalic.otf'); 
+}
+
+@font-face {
     font-family: 'BlenderPro-Medium'; 
     src: url('../fonts/BlenderPro-Medium.otf'); 
 }
@@ -298,9 +303,8 @@ button {
 }
 
 #statusLine{
-    padding-bottom: 0;
-    margin-bottom: 0;
     color: grey;
+    font-family: 'BlenderPro-BookItalic';
 }
 
 /*===============================*/

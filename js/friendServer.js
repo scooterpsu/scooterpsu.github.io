@@ -68,7 +68,7 @@ StartConnection = function() {
 						}
 
 						console.log(result.player + ' has left your party.');
-						$("#chat").append("<p id='statusLine'>"+ result.player + " has left your party.</p><br/>");
+						$("#chat").append("<span id='statusLine'>"+ result.player + " has left your party.</span><br/>");
                         updateScroll();
 						loadParty();
 					}
@@ -171,7 +171,7 @@ StartConnection = function() {
 				break;
 				case "acceptparty":
                     //console.log(result.player + ' has joined your party.');
-                    $("#chat").append("<p id='statusLine'>"+ result.player + " has joined your party.</p><br/>");
+                    $("#chat").append("<span id='statusLine'>"+ result.player + " has joined your party.</span><br/>");
                     updateScroll();
                     party.push(result.player + ":" + result.pguid);
                     
