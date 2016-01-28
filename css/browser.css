@@ -144,6 +144,17 @@ button {
   background-color: #13233d;
 }
 
+#message{
+background-color: purple;
+color: white;
+position: absolute;
+top: 20px;
+left: 20px;
+width: 200px;
+height: 50px;
+z-index: 10;
+}
+
 /*==============================*/
 /*======== Friends List ========*/
 /*==============================*/

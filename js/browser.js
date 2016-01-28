@@ -17,6 +17,7 @@ $(document).ready(function() {
     fixResolution();
     getCurrentRelease();
     buildTable();
+    setInterval( CheckPageFocus, 200 );
 });
 
 function fixResolution() {
@@ -397,11 +398,22 @@ String.prototype.contains = function(it) {
 	return this.indexOf(it) != -1;
 };
 
+function CheckPageFocus() {
+  var info = document.getElementById("message");
+
+  if ( document.hasFocus() ) {
+    info.innerHTML = "The document has the focus.";
+  } else {
+    info.innerHTML = "The document doesn't have the focus.";
+  }
+}
+
+
 //==================================
 //===== Friendserver Functions =====
 //==================================
 
-funtion partyConnect(ip, password) {
+function partyConnect(ip, password) {
     if (party[0].split(':')[1] == puid) {
         for (var p = 0; p < party.length; p++ ) {
             if (party[p].split(':')[1] == puid) {
