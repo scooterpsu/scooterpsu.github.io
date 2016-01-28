@@ -1,3 +1,4 @@
+var pageFocus = false;
 var zoomRatio;
 var mapList = [[]];
 var EDVersion = 0;
@@ -399,12 +400,12 @@ String.prototype.contains = function(it) {
 };
 
 function CheckPageFocus() {
-  var info = document.getElementById("message");
+  //var info = document.getElementById("message");
 
   if ( document.hasFocus() ) {
-    info.innerHTML = "The document has the focus.";
+    pageFocus = true;
   } else {
-    info.innerHTML = "The document doesn't have the focus.";
+    pageFocus = false;
   }
 }
 
@@ -580,7 +581,7 @@ Mousetrap.bind('f11', function() {
 //=============================
 //===== Gamepad functions =====
 //=============================
-/*
+
 function updateSelection() {
 	$('#serverTable tbody tr.selected').removeClass('selected');
 	$("#serverTable tbody tr:eq(" + selectedID + ")").addClass("selected");
@@ -616,58 +617,59 @@ gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
 });
 
 gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
-    if (controllersOn) {
-        //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
-        if (e.control == "FACE_1") {
-            //console.log("A");
-            if($('.sweet-overlay').is(':visible')) {
+    if (pageFocus) {
+        if (controllersOn) {
+            //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
+            if (e.control == "FACE_1") {
+                //console.log("A");
+                if($('.sweet-overlay').is(':visible')) {
+                    sweetAlert.close();   
+                } else {
+                    joinSelected();
+                }
+            } else if (e.control == "FACE_2") {
+                //console.log("B");
                 sweetAlert.close();   
-            } else {
-                joinSelected();
-            }
-        } else if (e.control == "FACE_2") {
-            //console.log("B");
-            sweetAlert.close();   
-        } else if (e.control == "FACE_3") {
-            //console.log("X");
-        } else if (e.control == "FACE_4") {
-           //console.log("Y");
-           window.location.reload();
-        } else if (e.control == "DPAD_UP") {
-            //console.log("UP");
-            if (selectedID > 0) {
-                selectedID--;
-                updateSelection();
-            }
-        } else if (e.control == "DPAD_DOWN") {
-            //console.log("DOWN");
-            if (selectedID < ($("#serverTable tbody tr").length-1)) {
-                selectedID++;
-                updateSelection();
-            }
-        } else if (e.control == "DPAD_LEFT") {
-            //console.log("LEFT");
-        } else if (e.control == "DPAD_RIGHT") {
-            //console.log("RIGHT");
-        } else if (e.control == "SELECT_BACK") {
-            //console.log("BACK");
-            closeBrowser();
-        } else if (e.control == "START_FORWARD") {
-            //console.log("START");
-        } else if (e.control == "RIGHT_TOP_SHOULDER") {
-            //console.log("RIGHT BUMPER");        
-        } else if (e.control == "LEFT_TOP_SHOULDER") {
-            //console.log("LEFT BUMPER");
-        } else if (e.control == "LEFT_STICK") {
-            //console.log("LEFT STICK");
-        }          
+            } else if (e.control == "FACE_3") {
+                //console.log("X");
+            } else if (e.control == "FACE_4") {
+               //console.log("Y");
+               window.location.reload();
+            } else if (e.control == "DPAD_UP") {
+                //console.log("UP");
+                if (selectedID > 0) {
+                    selectedID--;
+                    updateSelection();
+                }
+            } else if (e.control == "DPAD_DOWN") {
+                //console.log("DOWN");
+                if (selectedID < ($("#serverTable tbody tr").length-1)) {
+                    selectedID++;
+                    updateSelection();
+                }
+            } else if (e.control == "DPAD_LEFT") {
+                //console.log("LEFT");
+            } else if (e.control == "DPAD_RIGHT") {
+                //console.log("RIGHT");
+            } else if (e.control == "SELECT_BACK") {
+                //console.log("BACK");
+                closeBrowser();
+            } else if (e.control == "START_FORWARD") {
+                //console.log("START");
+            } else if (e.control == "RIGHT_TOP_SHOULDER") {
+                //console.log("RIGHT BUMPER");        
+            } else if (e.control == "LEFT_TOP_SHOULDER") {
+                //console.log("LEFT BUMPER");
+            } else if (e.control == "LEFT_STICK") {
+                //console.log("LEFT STICK");
+            }          
+        }
     }
 });
 
-
 if (!gamepad.init()) {
 }
-*/
+
 //==========================
 //==== Datatable Sorts =====
 //==========================
