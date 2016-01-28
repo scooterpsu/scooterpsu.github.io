@@ -45,20 +45,21 @@ StartConnection = function() {
 			switch (result.type) {
 				case "disconnected":
 					if ($.inArray(result.player + ":" + result.guid, party) != -1) {
+											
 						party = $.grep(party, function(value) {
 						  return value != (result.player + ":" + result.guid);
 						});
-						
+
 						for (var i = 0; i < party.length; i++) {
 							friendServer.send(JSON.stringify({
 								type: "updateparty",
 								party: JSON.stringify(party),
 								guid: party[i].split(':')[1]
 							}));
-							
-							if (party[i].split(':')[1] == result.pguid || party[i].split(':')[1] == puid)
+
+							if (party[0].split(':')[1] == puid)
 								continue;
-							
+
 							friendServer.send(JSON.stringify({
 								type: "notification",
 								message: result.player + " has left the party.",
@@ -102,11 +103,12 @@ StartConnection = function() {
                                     cancelButtonText: "Close",   
                                     showCancelButton: true,   
                                     closeOnConfirm: false,   
-                                    }, function(inputValue){   
+                                }, function(inputValue){   
                                     if (inputValue === false) return false;      
                                     if (inputValue === "") {     
-                                    swal.showInputError("You need to write something!");     
-                                    return false}
+                                        swal.showInputError("You need to write something!");     
+                                        return false
+                                    }
                                     sendPM(senderguid, inputValue);
                                     sweetAlert.close();
                                 });
@@ -116,11 +118,11 @@ StartConnection = function() {
                     });
                 break;
                 case "partymessage":
-                    console.log(result.player + ": " + result.message);
+                    //console.log(result.player + ": " + result.message);
                     //if($.inArray(result.player + ":" + result.senderguid, party) == -1){
-                        $("#chat").append(new Date().timeNow()+ "<b> "+ result.player + ":</b> " + result.message + "<br/>");
-                        updateScroll();
-                        $("#chatBorder").css("display", "block");
+                    $("#chat").append(new Date().timeNow()+ "<b> "+ result.player + ":</b> " + result.message + "<br/>");
+                    updateScroll();
+                    $("#chatBorder").css("display", "block");
                     //}
 				break;
 				case "partyinvite":
@@ -135,7 +137,7 @@ StartConnection = function() {
                         confirmButtonText: "Accept",   
                         cancelButtonText: "Decline",   
                         showCancelButton: true, 
-                     }, function(isConfirm){
+                    }, function(isConfirm){
                         if (isConfirm) {
                             partyInvite(true, result.senderguid);
                             sweetAlert.close();
@@ -158,7 +160,7 @@ StartConnection = function() {
                         text: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
                         cancelButtonText: "Decline",   
-                     }, function(isConfirm){
+                    }, function(isConfirm){
                         if (isConfirm) {
                             gameInvite(true, result.senderguid);
                             sweetAlert.close();
@@ -171,8 +173,8 @@ StartConnection = function() {
 
 				break;
 				case "acceptparty":
-                    console.log(result.player + ' has joined your party.');
-                   $("#chat").append("<p id='statusLine'>"+ result.player + " has joined your party.</p><br/>");
+                    //console.log(result.player + ' has joined your party.');
+                    $("#chat").append("<p id='statusLine'>"+ result.player + " has joined your party.</p><br/>");
                     updateScroll();
                     party.push(result.player + ":" + result.pguid);
                     
