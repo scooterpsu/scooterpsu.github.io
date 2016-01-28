@@ -202,6 +202,7 @@ function joinServer(i) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
+                    var serverIP = serverList.servers[i].serverIP;
                     if(friendServerConnected && party.length > 1){
                         if((serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) >= party.length){
                             console.log("ok we fit");
@@ -217,7 +218,7 @@ function joinServer(i) {
                                         sweetAlert.showInputError("Passwords are never blank");     
                                         return false   
                                     } else {
-                                        dewRcon.send('connect ' + ip + ' ' + inputValue, function(res) {
+                                        dewRcon.send('connect ' + serverIP + ' ' + inputValue, function(res) {
                                             if (res.length > 0) {
                                                 if (res != "Command/Variable not found"){
                                                     if (res === "Incorrect password specified.") {
@@ -225,12 +226,12 @@ function joinServer(i) {
                                                         return false
                                                     }else {
                                                         if (party[0].split(':')[1] == puid) {
-                                                            for (var i = 0; i < party.length; i++ ) {
-                                                                if (party[i].split(':')[1] == puid){
+                                                            for (var p = 0; p < party.length; p++ ) {
+                                                                if (party[p].split(':')[1] == puid){
                                                                     friendServer.send(JSON.stringify({
                                                                         type: 'connect',
-                                                                        guid: party[i].split(':')[1],
-                                                                        address: ip,
+                                                                        guid: party[p].split(':')[1],
+                                                                        address: serverIP,
                                                                         password: inputValue
                                                                     }));
                                                                 }
@@ -244,21 +245,22 @@ function joinServer(i) {
                                     }
                                 });
                             } else {
-                                var ip = serverList.servers[i].serverIP
-                                dewRcon.send('connect ' + ip, function(res) {
+                                dewRcon.send('connect ' + serverIP, function(res) {
                                     if (res.length > 0) {
                                         if (res != "Command/Variable not found"){
                                             if (party[0].split(':')[1] == puid) {
-                                                for (var i = 0; i < party.length; i++ ) {
-                                                    if (party[i].split(':')[1] == puid)
-                                                            continue;
-                                                    friendServer.send(JSON.stringify({
-                                                        type: 'connect',
-                                                        guid: party[i].split(':')[1],
-                                                        address: ip
-                                                    }));
+                                                for (var p = 0; p < party.length; p++ ) {
+                                                    if (party[p].split(':')[1] == puid){
+                                                        friendServer.send(JSON.stringify({
+                                                            type: 'connect',
+                                                            guid: party[p].split(':')[1],
+                                                            address: serverIP,
+                                                            password: ''
+                                                        }));
+                                                    }
                                                 }
                                             }
+
                                         }
                                     }
                                 });
@@ -281,7 +283,7 @@ function joinServer(i) {
                                     sweetAlert.showInputError("Passwords are never blank");     
                                     return false   
                                 } else {
-                                    dewRcon.send('connect ' + ip + ' ' + inputValue, function(res) {
+                                    dewRcon.send('connect ' + serverIP + ' ' + inputValue, function(res) {
                                         if (res.length > 0) {
                                             if (res != "Command/Variable not found"){
                                                 if (res === "Incorrect password specified.") {
@@ -297,7 +299,7 @@ function joinServer(i) {
                                 }
                             });
                         } else {
-                            dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
+                            dewRcon.send('connect ' + serverIP, function(res) {
                                 if (res.length > 0) {
                                     if (res != "Command/Variable not found"){
                                         closeBrowser();
