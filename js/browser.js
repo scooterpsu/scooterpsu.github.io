@@ -202,42 +202,109 @@ function joinServer(i) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
-                    ga('send', 'event', 'serverlist', 'connect');
-                    if(serverList.servers[i].passworded) {
-                        swal({   
-                            title: "Private Server", text: "Please enter password",   
-                            type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
-                            inputPlaceholder: "Password goes here" 
-                        }, 
-                        function(inputValue) {
-                            if (inputValue === false) return false;      
-                            if (inputValue === "") {     
-                                sweetAlert.showInputError("Passwords are never blank");     
-                                return false   
+                    if(friendServerConnected && party.length > 1){
+                        if((serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) >= party.length){
+                            console.log("ok we fit");
+                            if(serverList.servers[i].passworded) {
+                                swal({   
+                                    title: "Private Server", text: "Please enter password",   
+                                    type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
+                                    inputPlaceholder: "Password goes here" 
+                                }, 
+                                function(inputValue) {
+                                    if (inputValue === false) return false;      
+                                    if (inputValue === "") {     
+                                        sweetAlert.showInputError("Passwords are never blank");     
+                                        return false   
+                                    } else {
+                                        dewRcon.send('connect ' + ip + ' ' + inputValue, function(res) {
+                                            if (res.length > 0) {
+                                                if (res != "Command/Variable not found"){
+                                                    if (res === "Incorrect password specified.") {
+                                                        sweetAlert.showInputError(res);
+                                                        return false
+                                                    }else {
+                                                        if (party[0].split(':')[1] == puid) {
+                                                            for (var i = 0; i < party.length; i++ ) {
+                                                                if (party[i].split(':')[1] == puid){
+                                                                    friendServer.send(JSON.stringify({
+                                                                        type: 'connect',
+                                                                        guid: party[i].split(':')[1],
+                                                                        address: ip,
+                                                                        password: inputValue
+                                                                    }));
+                                                                }
+                                                            }
+                                                        }
+                                                        sweetAlert.close();
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
                             } else {
-                                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
+                                var ip = serverList.servers[i].serverIP
+                                dewRcon.send('connect ' + ip, function(res) {
                                     if (res.length > 0) {
                                         if (res != "Command/Variable not found"){
-                                            if (res === "Incorrect password specified.") {
-                                                sweetAlert.showInputError(res);
-                                                return false
-                                            }else {
-                                                sweetAlert.close();
-                                                closeBrowser();
+                                            if (party[0].split(':')[1] == puid) {
+                                                for (var i = 0; i < party.length; i++ ) {
+                                                    if (party[i].split(':')[1] == puid)
+                                                            continue;
+                                                    friendServer.send(JSON.stringify({
+                                                        type: 'connect',
+                                                        guid: party[i].split(':')[1],
+                                                        address: ip
+                                                    }));
+                                                }
                                             }
                                         }
                                     }
                                 });
                             }
-                        });
+                        } else {
+                            swal("Party Too Large","You have too many people in your party to join this game.", "error");
+                        }
+                            
                     } else {
-                        dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
-                            if (res.length > 0) {
-                                if (res != "Command/Variable not found"){
-                                    closeBrowser();
+                        ga('send', 'event', 'serverlist', 'connect');
+                        if(serverList.servers[i].passworded) {
+                            swal({   
+                                title: "Private Server", text: "Please enter password",   
+                                type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
+                                inputPlaceholder: "Password goes here" 
+                            }, 
+                            function(inputValue) {
+                                if (inputValue === false) return false;      
+                                if (inputValue === "") {     
+                                    sweetAlert.showInputError("Passwords are never blank");     
+                                    return false   
+                                } else {
+                                    dewRcon.send('connect ' + ip + ' ' + inputValue, function(res) {
+                                        if (res.length > 0) {
+                                            if (res != "Command/Variable not found"){
+                                                if (res === "Incorrect password specified.") {
+                                                    sweetAlert.showInputError(res);
+                                                    return false
+                                                }else {
+                                                    sweetAlert.close();
+                                                    closeBrowser();
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
+                                if (res.length > 0) {
+                                    if (res != "Command/Variable not found"){
+                                        closeBrowser();
+                                    }
+                                }
+                            });
+                        }
                     }
                 } else {    
                     swal("Map File Missing","You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", "error");
@@ -251,6 +318,35 @@ function joinServer(i) {
     } else {
         swal("Communication Error", "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", "error");        
     }
+}
+
+function joinPassworded(ip){
+    swal({   
+        title: "Private Server", text: "Please enter password",   
+        type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
+        inputPlaceholder: "Password goes here" 
+    }, 
+    function(inputValue) {
+        if (inputValue === false) return false;      
+        if (inputValue === "") {     
+            sweetAlert.showInputError("Passwords are never blank");     
+            return false   
+        } else {
+            dewRcon.send('connect ' + ip + ' ' + inputValue, function(res) {
+                if (res.length > 0) {
+                    if (res != "Command/Variable not found"){
+                        if (res === "Incorrect password specified.") {
+                            sweetAlert.showInputError(res);
+                            return false
+                        }else {
+                            sweetAlert.close();
+                            closeBrowser();
+                        }
+                    }
+                }
+            });
+        }
+    });
 }
 
 function pingMe(ip, rowNum, delay) {
@@ -336,6 +432,7 @@ function switchBrowser(browser) {
             dewRcon.send('game.menuurl ' + browserURL);
             dewRcon.send('writeconfig');
         }, "1000");  
+        sweetAlert.close();
     });
 }
 

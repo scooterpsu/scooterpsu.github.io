@@ -11,30 +11,21 @@ jQuery(function() {
 });
 
 StartConnection = function() {
-    swal.setDefaults({ 
-        html: true,
-        imageUrl: "images/eldorito.png",  
-        showCancelButton: true,   
-        confirmButtonText: "Yes",   
-        cancelButtonText: "No",   
-        closeOnConfirm: false,   
-        closeOnCancel: true 
-    });
     friendServer = new friendServerHelper();
     friendServer.friendsServerSocket.onopen = function() {
-		dewRcon.send('player.name', function(res) {
-			dewRcon.send('player.printUID', function(ret) {
-				pname = res;
-				puid = ret.split(' ')[2];
+		dewRcon.send('player.name', function(rez) {
+			dewRcon.send('player.printUID', function(rey) {
+				pname = rez;
+				puid = rey.split(' ')[2];
 				
 				friendServer.send(JSON.stringify({
 					type: "connection",
 					message: " has connected.",
-					guid: ret.split(' ')[2],
-					player: res
+					guid: rey.split(' ')[2],
+					player: rez
 				}));
 
-				party.push(res + ":" + ret.split(' ')[2]);
+				party.push(rez + ":" + rey.split(' ')[2]);
 				loadParty();
 			});
 		});
@@ -86,6 +77,11 @@ StartConnection = function() {
 					console.log(result.player + ": " + result.message);
 
                     swal({   
+                        html: true,
+                        imageUrl: "images/eldorito.png",  
+                        showCancelButton: true,   
+                        closeOnConfirm: false,   
+                        closeOnCancel: true, 
                         title: "Private Message",   
                         text: result.player + ": " + result.message,   
                         confirmButtonText: "Reply",   
@@ -94,6 +90,11 @@ StartConnection = function() {
                             if (isConfirm) {
                             //Reply window   
                                 swal({   
+                                    html: true,
+                                    imageUrl: "images/eldorito.png",  
+                                    showCancelButton: true,   
+                                    closeOnConfirm: false,   
+                                    closeOnCancel: true, 
                                     title: "Reply",   
                                     text: "To " + result.player +":",   
                                     type: "input",   
@@ -124,6 +125,11 @@ StartConnection = function() {
 				break;
 				case "partyinvite":
                     swal({   
+                        html: true,
+                        imageUrl: "images/eldorito.png",  
+                        showCancelButton: true,   
+                        closeOnConfirm: false,   
+                        closeOnCancel: true, 
                         title: "Party Invite",   
                         text: result.player + " has sent you a party invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
@@ -143,6 +149,11 @@ StartConnection = function() {
 				break;
 				case "gameinvite":
                     swal({   
+                        html: true,
+                        imageUrl: "images/eldorito.png",  
+                        showCancelButton: true,   
+                        closeOnConfirm: false,   
+                        closeOnCancel: true, 
                         title: "Game Invite",   
                         text: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
@@ -172,7 +183,7 @@ StartConnection = function() {
                             guid: party[i].split(':')[1]
                         }));
                         
-                        if(party[i].split(':')[1] == puid || party[i].split(':')[1] == result.guid)
+                        if(party[i].split(':')[1] == puid || party[i].split(':')[1] == result.pguid)
                             continue;
                         
                         friendServer.send(JSON.stringify({
@@ -188,10 +199,7 @@ StartConnection = function() {
 
 				break;
 				case "connect":
-					jumpToServer(result.address);
-					setTimeout(function() {
-						startgame(result.address, 'JOIN GAME'.split(' '));
-					}, 500);
+					dewRcon.send('connect ' + result.address + ' ' + result.password);
 				break;
 				case "notification":
 					console.log(result.message);
@@ -202,7 +210,7 @@ StartConnection = function() {
 				break;
 				case "updateplayers":
 					onlinePlayers = JSON.parse(result.players);
-					console.log(onlinePlayers);
+					//console.log(onlinePlayers);
                     loadOnline();
 					//updateFriends();
 					//loadFriends();
@@ -279,7 +287,7 @@ friendServerHelper = function() {
     this.send = function(command, cb) {
 		this.callback = cb;
         this.friendsServerSocket.send(command);
-        //console.log(command);
+        console.log(command);
         this.lastCommand = command;
     }
 }

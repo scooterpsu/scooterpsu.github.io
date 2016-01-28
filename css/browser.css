@@ -145,7 +145,7 @@ button {
 
 .togglePartyList{
     opacity: 0.8;
-    font-size: 11pt;
+    font-size: 12pt;
     background-color: #13233d;
     color: white;
     border: 2px solid #404f70;
@@ -157,7 +157,7 @@ button {
     padding-left: 50px;
     padding-right: 20px;
     z-index: 0;
-    font-family: 'BlenderPro-Book';
+    font-family: 'BlenderPro-Medium';
 }
 
 .togglePartyList:hover{
@@ -298,6 +298,8 @@ button {
 }
 
 #statusLine{
+    padding-bottom: 0;
+    margin-bottom: 0;
     color: grey;
 }
 
