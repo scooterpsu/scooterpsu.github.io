@@ -107,7 +107,7 @@ function buildTable() {
 
 	var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
     .done(function( data ) {
-        var pingDelay = 110;
+        var pingDelay = 120;
         for(var i = 0; i < data.result.servers.length; i++) {
             var serverIP = data.result.servers[i];
             if(VerifyIPRegex.test(serverIP)) {
@@ -118,6 +118,7 @@ function buildTable() {
                     var endTime;
                     var ping;
                     var pingDisplay;
+                    var rePing = false;
                     var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                     .done(function(serverInfo) {
                         endTime = Date.now();
@@ -128,9 +129,10 @@ function buildTable() {
                             pingDisplay = ping+":2";
                         }   else if(ping > 200 && ping <= 500) {
                             pingDisplay = ping+":1";  
+                            rePing = true;
                         }   else {
-                            pingDisplay = "???:0";
-                            ping = "501";
+                            pingDisplay = ping+":0";
+                            rePing = true;
                         }
                         serverInfo["serverId"] = i;
                         serverInfo["serverIP"] = serverIP;
@@ -174,6 +176,10 @@ function buildTable() {
                                 ]).draw();
                                 table.columns.adjust().draw();
                                 fillGameCard(serverInfo.serverId);
+                                if(rePing){
+                                    console.log("repinging "+serverInfo.serverIP);
+                                    pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
+                                }
                             } else {
                                 console.log(serverInfo.serverIP + " is glitched");
                             }
@@ -245,6 +251,38 @@ function joinServer(i) {
     } else {
         swal("Communication Error", "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", "error");        
     }
+}
+
+function pingMe(ip, rowNum, delay) {
+    setTimeout(function() { 
+        var startTime = Date.now();
+        var endTime;
+        var ping;
+        var pingPic
+        $.ajax({
+            type: "GET",
+            url: "http://" + ip + "/",
+            async: true,
+            timeout: 1000,
+            success: function() {
+                endTime = Date.now();
+                ping = Math.round((endTime - startTime) * .45);
+                if (ping > 0 && ping <= 100) {
+                    pingPic = "3";
+                }   else if(ping > 100 && ping <= 200) {
+                    pingPic = "2";
+                }   else if(ping > 200 && ping <= 500) {
+                    pingPic = "1";  
+                }   else {
+                    pingPic = "0";
+                }
+                $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
+                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
+                $('#serverTable').DataTable().columns.adjust().draw();
+            }
+        });
+    }, delay); 
+    
 }
 
 function fillGameCard(i) {
