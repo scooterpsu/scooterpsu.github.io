@@ -202,7 +202,6 @@ function joinServer(i) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
-                    var serverIP = serverList.servers[i].serverIP;
                     if(friendServerConnected && party.length > 1){
                         if((serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) >= party.length){
                             console.log("ok we fit");
@@ -218,7 +217,7 @@ function joinServer(i) {
                                         sweetAlert.showInputError("Passwords are never blank");     
                                         return false   
                                     } else {
-                                        dewRcon.send('connect ' + serverIP + ' ' + inputValue, function(res) {
+                                        dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
                                             if (res.length > 0) {
                                                 if (res != "Command/Variable not found"){
                                                     if (res === "Incorrect password specified.") {
@@ -231,7 +230,7 @@ function joinServer(i) {
                                                                     friendServer.send(JSON.stringify({
                                                                         type: 'connect',
                                                                         guid: party[p].split(':')[1],
-                                                                        address: serverIP,
+                                                                        address: serverList.servers[i].serverIP,
                                                                         password: inputValue
                                                                     }));
                                                                 }
@@ -245,7 +244,7 @@ function joinServer(i) {
                                     }
                                 });
                             } else {
-                                dewRcon.send('connect ' + serverIP, function(res) {
+                                dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
                                     if (res.length > 0) {
                                         if (res != "Command/Variable not found"){
                                             if (party[0].split(':')[1] == puid) {
@@ -254,7 +253,7 @@ function joinServer(i) {
                                                         friendServer.send(JSON.stringify({
                                                             type: 'connect',
                                                             guid: party[p].split(':')[1],
-                                                            address: serverIP,
+                                                            address: serverList.servers[i].serverIP,
                                                             password: ''
                                                         }));
                                                     }
@@ -283,7 +282,7 @@ function joinServer(i) {
                                     sweetAlert.showInputError("Passwords are never blank");     
                                     return false   
                                 } else {
-                                    dewRcon.send('connect ' + serverIP + ' ' + inputValue, function(res) {
+                                    dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
                                         if (res.length > 0) {
                                             if (res != "Command/Variable not found"){
                                                 if (res === "Incorrect password specified.") {
@@ -299,7 +298,7 @@ function joinServer(i) {
                                 }
                             });
                         } else {
-                            dewRcon.send('connect ' + serverIP, function(res) {
+                            dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
                                 if (res.length > 0) {
                                     if (res != "Command/Variable not found"){
                                         closeBrowser();
