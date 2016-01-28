@@ -78,7 +78,6 @@ StartConnection = function() {
 					console.log(result.player + ": " + result.message);
 
                     swal({   
-                        html: true,
                         imageUrl: "images/eldorito.png",  
                         showCancelButton: true,   
                         closeOnConfirm: false,   
@@ -127,7 +126,6 @@ StartConnection = function() {
 				break;
 				case "partyinvite":
                     swal({   
-                        html: true,
                         imageUrl: "images/eldorito.png",  
                         showCancelButton: true,   
                         closeOnConfirm: false,   
@@ -151,7 +149,6 @@ StartConnection = function() {
 				break;
 				case "gameinvite":
                     swal({   
-                        html: true,
                         imageUrl: "images/eldorito.png",  
                         showCancelButton: true,   
                         closeOnConfirm: false,   

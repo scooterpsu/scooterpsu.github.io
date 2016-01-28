@@ -265,35 +265,6 @@ function joinServer(i) {
     }
 }
 
-function joinPassworded(ip) {
-    swal({   
-        title: "Private Server", text: "Please enter password",   
-        type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
-        inputPlaceholder: "Password goes here" 
-    }, 
-    function(inputValue) {
-        if (inputValue === false) return false;      
-        if (inputValue === "") {     
-            sweetAlert.showInputError("Passwords are never blank");     
-            return false   
-        } else {
-            dewRcon.send('connect ' + ip + ' ' + inputValue, function(res) {
-                if (res.length > 0) {
-                    if (res != "Command/Variable not found") {
-                        if (res === "Incorrect password specified.") {
-                            sweetAlert.showInputError(res);
-                            return false
-                        } else {
-                            sweetAlert.close();
-                            closeBrowser();
-                        }
-                    }
-                }
-            });
-        }
-    });
-}
-
 function pingMe(ip, rowNum, delay) {
     setTimeout(function() { 
         var startTime = Date.now();
