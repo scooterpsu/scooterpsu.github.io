@@ -1,6 +1,5 @@
 var friendServer,
 	friendServerConnected = false,
-
 	onlinePlayers = {},
 	party = [];
 
@@ -18,9 +17,9 @@ StartConnection = function() {
             party.push(pname + ":" + puid);
             loadParty();
             console.log('Connected to Friend Server!');
-        friendServerConnected = true;
+            friendServerConnected = true;
         } else {
-            console.log('Missing pname, something's wrong');
+            console.log('Missing pname, somethings wrong');
         }
     };
     friendServer.friendsServerSocket.onerror = function() {

@@ -553,7 +553,7 @@ function connectionTrigger() {
                         checkUpdate(gameVersion);
                     }               
                     if (resb.contains(",") && mapList[0].length == 0) {
-                        mapList = new Array(ret.split(','));
+                        mapList = new Array(resb.split(','));
                     }
                     pname = resc;
                     puid = resd.split(' ')[2];
