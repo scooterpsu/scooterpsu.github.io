@@ -297,13 +297,12 @@ function pingMe(ip, rowNum, delay) {
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
-    }, delay); 
-    
+    }, delay);   
 }
 
 function fillGameCard(i) {
     var html = serverTemplate(serverList.servers[i]);
-    $("#gamecard").html(html)
+    $("#gamecard").html(html);
 }
 
 function capitalizeFirstLetter(string) {
