@@ -6,7 +6,7 @@ var friendServer,
 StartConnection = function() {
     friendServer = new friendServerHelper();
     friendServer.friendsServerSocket.onopen = function() {
-        if (pname != ""){
+        if (!friendServerConnected){
             friendServer.send(JSON.stringify({
                 type: "connection",
                 message: " has connected.",
@@ -18,10 +18,9 @@ StartConnection = function() {
             loadParty();
             console.log('Connected to Friend Server!');
             friendServerConnected = true;
-        } else {
-            console.log('Missing pname, somethings wrong');
         }
     };
+    
     friendServer.friendsServerSocket.onerror = function() {
 		console.log('Connection to Friend Server failed, retrying.');
         friendServerConnected = false;
@@ -29,6 +28,7 @@ StartConnection = function() {
     		setTimeout(StartConnection, 1000);
 		}
     };
+    
     friendServer.friendsServerSocket.onmessage = function(message) {
 		try {
 			var result = JSON.parse(JSON.stringify(eval('(' + message.data + ')')));
@@ -64,10 +64,9 @@ StartConnection = function() {
 						loadParty();
 					}
 				break;
-				case "pm":
-                //console.log(message);
-					console.log(result.player + ": " + result.message);
 
+				case "pm":
+ 					console.log(result.player + ": " + result.message);
                     swal({   
                         imageUrl: "images/eldorito.png",  
                         showCancelButton: true,   
@@ -80,41 +79,41 @@ StartConnection = function() {
                         }, function(isConfirm){
                             if (isConfirm) {
                             //Reply window   
-                                swal({   
-                                    html: true,
-                                    imageUrl: "images/eldorito.png",  
-                                    showCancelButton: true,   
-                                    closeOnConfirm: false,   
-                                    closeOnCancel: true, 
-                                    title: "Reply",   
-                                    text: "To " + result.player +":",   
-                                    type: "input",   
-                                    confirmButtonText: "Send",   
-                                    cancelButtonText: "Close",   
-                                    showCancelButton: true,   
-                                    closeOnConfirm: false,   
-                                }, function(inputValue){   
-                                    if (inputValue === false) return false;      
-                                    if (inputValue === "") {     
-                                        swal.showInputError("You need to write something!");     
-                                        return false
-                                    }
-                                    sendPM(senderguid, inputValue);
-                                    sweetAlert.close();
-                                });
+                            swal({   
+                                html: true,
+                                imageUrl: "images/eldorito.png",  
+                                showCancelButton: true,   
+                                closeOnConfirm: false,   
+                                closeOnCancel: true, 
+                                title: "Reply",   
+                                text: "To " + result.player +":",   
+                                type: "input",   
+                                confirmButtonText: "Send",   
+                                cancelButtonText: "Close",   
+                                showCancelButton: true,   
+                                closeOnConfirm: false,   
+                            }, function(inputValue){   
+                                if (inputValue === false) return false;      
+                                if (inputValue === "") {     
+                                    swal.showInputError("You need to write something!");     
+                                    return false
+                                }
+                                sendPM(senderguid, inputValue);
+                                sweetAlert.close();
+                            });
                         } else {
                             
                         }
                     });
                 break;
+
                 case "partymessage":
                     //console.log(result.player + ": " + result.message);
-                    //if($.inArray(result.player + ":" + result.senderguid, party) == -1){
                     $("#chat").append(new Date().timeNow()+ "<b> "+ result.player + ":</b> " + result.message + "<br/>");
                     updateScroll();
                     $("#chatBorder").css("display", "block");
-                    //}
 				break;
+
 				case "partyinvite":
                     swal({   
                         imageUrl: "images/eldorito.png",  
@@ -135,9 +134,8 @@ StartConnection = function() {
                             sweetAlert.close();                             
                         }
                     });
-						//callback: partyInvite
-
 				break;
+
 				case "gameinvite":
                     swal({   
                         imageUrl: "images/eldorito.png",  
@@ -157,11 +155,9 @@ StartConnection = function() {
                             sweetAlert.close();                             
                         }
                     });
-						//callback: gameInvite
-
 				break;
+
 				case "acceptparty":
-                    //console.log(result.player + ' has joined your party.');
                     $("#chat").append("<span id='statusLine'>"+ result.player + " has joined your party.</span><br/>");
                     updateScroll();
                     party.push(result.player + ":" + result.pguid);
@@ -185,26 +181,30 @@ StartConnection = function() {
                     
                     loadParty();
 				break;
+
 				case "acceptgame":
 
 				break;
+
 				case "connect":
 					dewRcon.send('connect ' + result.address + ' ' + result.password);
 				break;
+
 				case "notification":
 					console.log(result.message);
 				break;
+
 				case "updateparty":
 					party = JSON.parse(result.party);
 					loadParty();
 				break;
+
 				case "updateplayers":
-					onlinePlayers = JSON.parse(result.players);
+					onlinePlayers = JSON.parse(result.players).sort();
 					//console.log(onlinePlayers);
                     loadOnline();
-					//updateFriends();
-					//loadFriends();
 				break;
+
 				default:
 					console.log("Unhandled packet: " + result.type);
 				break;
