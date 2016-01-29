@@ -229,7 +229,7 @@ function joinServer(i) {
                                                     sweetAlert.showInputError(res);
                                                     return false
                                                 } else {
-                                                    if (friendServerConnected) {
+                                                    if (friendServerConnected && party.length > 1) {
                                                         partyConnect(serverList.servers[i].serverIP, inputValue);                                                    
                                                     } else {
                                                         closeBrowser();                                                       
@@ -245,10 +245,10 @@ function joinServer(i) {
                             dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
                                 if (res.length > 0) {
                                     if (res != "Command/Variable not found") {
-                                        if (friendServerConnected) {
+                                        if (friendServerConnected && party.length > 1) {
                                             partyConnect(serverList.servers[i].serverIP, null);                                                    
                                         } else {
-                                            closeBrowser();                                                       
+                                            closeBrowser();                                           
                                         }
                                     }
                                 }
