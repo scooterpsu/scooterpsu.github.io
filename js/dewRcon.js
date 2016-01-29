@@ -50,6 +50,7 @@ dewRconHelper = function() {
             this.dewWebSocket.send(command);
             this.lastCommand = command;
 			this.callback = cb;
+            //console.log(command);
         } catch (e) {
 			console.log(e);
             dewRconConnected = false;

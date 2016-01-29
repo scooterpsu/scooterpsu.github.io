@@ -13,7 +13,7 @@ var playerCount = 0;
 var gameVersion = 0;
 var selectedID = 0;
 var controllersOn = false;
-var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.) {3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 $(document).ready(function() {
     fixResolution();
     getCurrentRelease();
@@ -133,7 +133,8 @@ function buildTable() {
                             pingDisplay = ping+":1";  
                             rePing = true;
                         }   else {
-                            pingDisplay = ping+":0";
+                            pingDisplay = "???:0";
+                            ping = 501;
                             rePing = true;
                         }
                         serverInfo["serverId"] = i;
@@ -244,7 +245,7 @@ function joinServer(i) {
                                 if (res.length > 0) {
                                     if (res != "Command/Variable not found") {
                                         if (friendServerConnected) {
-                                            partyConnect(serverList.servers[i].serverIP, '');                                                    
+                                            partyConnect(serverList.servers[i].serverIP, null);                                                    
                                         } else {
                                             closeBrowser();                                                       
                                         }
@@ -272,7 +273,7 @@ function pingMe(ip, rowNum, delay) {
         var startTime = Date.now();
         var endTime;
         var ping;
-        var pingPic
+        var pingDisplay
         $.ajax({
             type: "GET",
             url: "http://" + ip + "/",
@@ -282,15 +283,16 @@ function pingMe(ip, rowNum, delay) {
                 endTime = Date.now();
                 ping = Math.round((endTime - startTime) * .45);
                 if (ping > 0 && ping <= 100) {
-                    pingPic = "3";
+                    pingDisplay = ping+":3";
                 }   else if(ping > 100 && ping <= 200) {
-                    pingPic = "2";
+                    pingDisplay = ping+":2";
                 }   else if(ping > 200 && ping <= 500) {
-                    pingPic = "1";  
+                    pingDisplay = ping+":1";  
                 }   else {
-                    pingPic = "0";
+                    pingDisplay = "???:0";
+                    ping = 501;
                 }
-                $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
+                $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 5);
                 $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
@@ -414,16 +416,18 @@ function CheckPageFocus() {
 //===== Friendserver Functions =====
 //==================================
 
-function partyConnect(ip, password) {
+function partyConnect(ip, pass) {
     if (party[0].split(':')[1] == puid) {
-        for (var p = 0; p < party.length; p++ ) {
-            if (party[p].split(':')[1] == puid) {
-                friendServer.send(JSON.stringify({
-                    type: 'connect',
-                    guid: party[p].split(':')[1],
-                    address: ip,
-                    password: password
-                }));
+        if(party.length > 1){
+            for (var p = 0; p < party.length; p++ ) {
+                if (party[p].split(':')[1] != puid) {
+                    friendServer.send(JSON.stringify({
+                        type: 'connect',
+                        guid: party[p].split(':')[1],
+                        address: ip,
+                        password: pass
+                    }));
+                }
             }
         }
     }
@@ -459,11 +463,7 @@ function chatInput(text){
             $("#chat").append(new Date().timeNow()+ "<b> "+ pname + ":</b> " + text + "<br/>");
             updateScroll();
             if(party.length > 0) {
-                for(var i=0; i < party.length; i++) {
-                    if(party[i].split(":")[1] != puid){
-                        sendPartyMessage(text);
-                    }
-                }
+                sendPartyMessage(text);
             }
             $("#messageBox").val("");
         }

@@ -286,7 +286,7 @@ friendServerHelper = function() {
     this.send = function(command, cb) {
 		this.callback = cb;
         this.friendsServerSocket.send(command);
-        console.log(command);
+        //console.log(command);
         this.lastCommand = command;
     }
 }
