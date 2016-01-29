@@ -11,6 +11,8 @@ var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
 var gameVersion = 0;
+var pname = "";
+var puid = "";
 var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
@@ -542,24 +544,22 @@ function connectionTrigger() {
     }
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
-    dewRcon.send('game.version', function(res) {
-        if (res.length > 0) {
-            if (res != "Command/Variable not found") {
-                if (gameVersion === 0) {
-                    gameVersion = res;
-                    checkUpdate(gameVersion);
-                }                 
-                dewRcon.send('game.listmaps', function(ret) {
-                    if (ret.length > 0) {
-                        if (ret != "Command/Variable not found") {
-                            if (ret.contains(",") && mapList[0].length == 0) {
-                                mapList = new Array(ret.split(','));
-                            }
-                        }
+    dewRcon.send('game.version', function(resa) { 
+        dewRcon.send('game.listmaps', function(resb) {
+            dewRcon.send('player.name', function(resc) {
+                dewRcon.send('player.printUID', function(resd) {
+                    if (gameVersion === 0) {
+                        gameVersion = resa;
+                        checkUpdate(gameVersion);
+                    }               
+                    if (resb.contains(",") && mapList[0].length == 0) {
+                        mapList = new Array(ret.split(','));
                     }
+                    pname = resc;
+                    puid = resd.split(' ')[2];
                 });
-            }
-        }
+            });
+        });
     });
 }
 
