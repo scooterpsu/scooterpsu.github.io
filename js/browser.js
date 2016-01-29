@@ -538,7 +538,7 @@ $("#chat").on('scroll', function(){
 
 function connectionTrigger() {
     if(!friendServerConnected) {
-        setTimeout(StartConnection, 1000);
+        setTimeout(StartConnection, 2000);
     }
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
