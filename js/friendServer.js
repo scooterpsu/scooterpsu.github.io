@@ -4,13 +4,6 @@ var friendServer,
 	puid,
 	onlinePlayers = {},
 	party = [];
-    /*
-jQuery(function() {
-	if(dewRconConnected) {
-		StartConnection();
-	} 
-});
-*/
 
 StartConnection = function() {
     friendServer = new friendServerHelper();
@@ -27,6 +20,7 @@ StartConnection = function() {
 					player: rez
 				}));
 
+                party = [];
 				party.push(rez + ":" + rey.split(' ')[2]);
 				loadParty();
 			});
