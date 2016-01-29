@@ -1,32 +1,26 @@
 var friendServer,
 	friendServerConnected = false,
-	pname,
-	puid,
 	onlinePlayers = {},
 	party = [];
 
 StartConnection = function() {
     friendServer = new friendServerHelper();
     friendServer.friendsServerSocket.onopen = function() {
-		dewRcon.send('player.name', function(rez) {
-			dewRcon.send('player.printUID', function(rey) {
-				pname = rez;
-				puid = rey.split(' ')[2];
-				
-				friendServer.send(JSON.stringify({
-					type: "connection",
-					message: " has connected.",
-					guid: rey.split(' ')[2],
-					player: rez
-				}));
-
-                party = [];
-				party.push(rez + ":" + rey.split(' ')[2]);
-				loadParty();
-			});
-		});
-        console.log('Connected to Friend Server!');
-        friendServerConnected = true;
+        if (pname != ""){
+            friendServer.send(JSON.stringify({
+                type: "connection",
+                message: " has connected.",
+                guid: puid,
+                player: pname
+            }));
+            party = [];
+            party.push(pname + ":" + puid);
+            loadParty();
+            console.log('Connected to Friend Server!');
+            friendServerConnected = true;
+        } else {
+            console.log('Missing pname, somethings wrong');
+        }
     };
     friendServer.friendsServerSocket.onerror = function() {
 		console.log('Connection to Friend Server failed, retrying.');
