@@ -437,7 +437,7 @@ function loadOnline() {
 	if(onlinePlayers.length > 0) {
 		for(var i=0; i < onlinePlayers.length; i++) {
             if($.inArray(onlinePlayers[i], party) == -1){
-                if (onlinePlayers[i].split(":")[1] != "not"){
+                if (onlinePlayers[i].split(":")[1] != "not" && onlinePlayers[i].split(":")[0].length > 0 && onlinePlayers[i].split(":")[1].length > 0){
                     $('#allOnline').append("<div class='friend'>"+onlinePlayers[i].split(":")[0]+"<button class='addToParty' onClick=\"inviteToParty('"+onlinePlayers[i].split(":")[1]+"');\">+</button></div>");
                 }
             }
