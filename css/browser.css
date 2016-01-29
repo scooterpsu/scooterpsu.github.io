@@ -4,6 +4,11 @@
 }
 
 @font-face {
+    font-family: 'BlenderPro-BookItalic'; 
+    src: url('../fonts/BlenderPro-BookItalic.otf'); 
+}
+
+@font-face {
     font-family: 'BlenderPro-Medium'; 
     src: url('../fonts/BlenderPro-Medium.otf'); 
 }
@@ -36,6 +41,10 @@ body {
 
 img{
     -webkit-user-drag: none;
+}
+
+button {
+    outline: none;
 }
 
 .browserTitle{
@@ -133,6 +142,272 @@ img{
 
 ::selection{
   background-color: #13233d;
+}
+
+#message{
+background-color: purple;
+color: white;
+position: absolute;
+top: 20px;
+left: 20px;
+width: 200px;
+height: 50px;
+z-index: 10;
+}
+
+/*==============================*/
+/*======== Friends List ========*/
+/*==============================*/
+
+.togglePartyList{
+    opacity: 0.8;
+    font-size: 12pt;
+    background-color: #13233d;
+    color: white;
+    border: 2px solid #404f70;
+    padding-top: 3px;
+    padding-bottom: 9px;
+    position: absolute;
+    left: 580px;
+    top: 10px;
+    padding-left: 50px;
+    padding-right: 20px;
+    z-index: 0;
+    font-family: 'BlenderPro-Medium';
+}
+
+.togglePartyList:hover{
+    background-color: #31415b;
+}
+
+
+.friend{
+    font-size: 14pt;
+}
+
+.friend[title="Party Leader"]{
+    color: gold;
+}
+
+.addPartyMember{
+    position: relative;
+    top: 2px;
+    right: 4px;
+    height: 24px;
+    line-height: 18px;
+    padding: 4px;
+    padding-left: 6px;
+    padding-top: 1px;
+    width: 25px;
+    background-color: #13233d;
+    color: white;
+    float: right;
+    border: 1px solid #404f70;
+}
+
+.addPartyMember:hover{
+    background-color: #404f70;
+}
+
+.toggleChat{
+    margin-right: 4px;
+    font-size: 10pt;
+    position: relative;
+    top: 2px;
+    right: 4px;
+    height: 24px;
+    line-height: 18px;
+    padding: 4px;
+    padding-top: 1px;
+    background-color: #13233d;
+    color: white;
+    float: right;
+    border: 1px solid #404f70;
+}
+
+.toggleChat:hover{
+    background-color: #404f70;
+}
+
+.addToParty{
+    position: relative;
+    top: 2px;
+    right: 0px;
+    height: 24px;
+    line-height: 18px;
+    padding: 4px;
+    padding-left: 6px;
+    padding-top: 1px;
+    width: 25px;
+    background-color: #13233d;
+    color: white;
+    float: right;
+    border: 1px solid #404f70;
+}
+
+.addToParty:hover{
+    background-color: #404f70;
+}
+
+#partyBorder{
+    display: none;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    background-color: #404f70;
+    width: 300px;
+    height: 400px;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
+    padding-bottom: 4px;
+    z-index: 100;
+}
+
+#partyHeader{
+    font-family: 'BlenderPro-Bold';
+    position: relative;
+    top: 2px;
+    left: 4px;
+    width: 293px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    -webkit-clip-path: polygon(28px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 28px);
+    z-index: 100;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16pt;
+    padding-left: 50px;
+}
+
+#party{
+    position: absolute;
+    top: 33px;
+    left: 3px;
+    width: 294px;
+    height: 364px;
+    z-index: 100;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #13233d;
+    color: white;
+    padding:6px;
+    padding-left: 10px;
+    padding-right: 4px;
+}
+
+#allOnline{
+    display:none;
+    position: absolute;
+    top: 33px;
+    left: 3px;
+    width: 294px;
+    height: 364px;
+    z-index: 100;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+    color: white;
+    padding:6px;
+    padding-left: 10px;
+    padding-right: 4px;
+    overflow-y: auto;
+}
+
+#statusLine{
+    color: grey;
+    font-family: 'BlenderPro-BookItalic';
+}
+
+/*===============================*/
+/*========= Chat Window =========*/
+/*===============================*/
+
+.closeChat{
+    position: relative;
+    top: 2px;
+    right: 4px;
+    height: 24px;
+    line-height: 18px;
+    padding: 4px;
+    text-align: center;
+    width: 24px;
+    padding-top: 2px;
+    padding-left: 6px;
+    background-color: #13233d;
+    color: white;
+    float: right;
+    border: 1px solid #404f70;
+    font-size: 11pt;
+}
+
+.closeChat:hover{
+    background-color: #404f70;
+}
+
+#chatBorder{
+    display: none;
+    position: absolute;
+    top: 100px;
+    left: 600px;
+    background-color: #404f70;
+    width: 400px;
+    height: 400px;
+    -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
+    padding-bottom: 4px;
+    z-index: 100;
+}
+
+#chatHeader{
+    font-family: 'BlenderPro-Bold';
+    position: relative;
+    top: 2px;
+    left: 4px;
+    width: 393px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    -webkit-clip-path: polygon(28px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 28px);
+    z-index: 100;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16pt;
+    padding-left: 10px;
+}
+
+#chat{
+    position: relative;
+    top: 5px;
+    left: 0px;
+    width: 394px;
+    height: 334px;
+    z-index: 100;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #13233d;
+    color: white;
+    padding:6px;
+    padding-left: 10px;
+    padding-right: 4px;
+    overflow-y: auto;
+}
+
+#messageBox{
+    margin-top: 8px;
+    margin-left: 3px;
+    width: 338px;
+    padding-left: 10px;
+}
+
+#submitButton{
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    height: 26px;
+    width: 52px;
+}
+
+#submitButton:hover{
+    background-color: #31415b;
 }
 
 /*==============================*/

@@ -1,3 +1,4 @@
+var pageFocus = false;
 var zoomRatio;
 var mapList = [[]];
 var EDVersion = 0;
@@ -17,11 +18,12 @@ $(document).ready(function() {
     fixResolution();
     getCurrentRelease();
     buildTable();
+    setInterval( CheckPageFocus, 200 );
 });
 
-function fixResolution(){
+function fixResolution() {
     zoomRatio = screen.width/1920;
-    if (zoomRatio > 1){
+    if (zoomRatio > 1) {
         $('body').css("zoom", zoomRatio);  
     }
 }
@@ -55,7 +57,7 @@ function buildTable() {
 			var serverOut = serverCount + " servers";
 			$('.playerCount').html(playerOut);
 			$('.serverCount').html(serverOut);
-            if (playerCount >= 420 && playerCount < 426){
+            if (playerCount >= 420 && playerCount < 426) {
                 $('.playerCount').css("color", "#007700");
             } else {
                 $('.playerCount').css("color", "white");
@@ -131,7 +133,8 @@ function buildTable() {
                             pingDisplay = ping+":1";  
                             rePing = true;
                         }   else {
-                            pingDisplay = ping+":0";
+                            pingDisplay = "???:0";
+                            ping = 501;
                             rePing = true;
                         }
                         serverInfo["serverId"] = i;
@@ -151,7 +154,7 @@ function buildTable() {
                                     serverInfo["passworded"] = "🔒";
                                 };
                                 var isFull = "full";
-                                if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0){
+                                if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
                                     isFull = "open";
                                 }
                                 table.row.add([
@@ -176,7 +179,7 @@ function buildTable() {
                                 ]).draw();
                                 table.columns.adjust().draw();
                                 fillGameCard(serverInfo.serverId);
-                                if(rePing){
+                                if(rePing) {
                                     console.log("repinging "+serverInfo.serverIP);
                                     pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
                                 }
@@ -202,42 +205,54 @@ function joinServer(i) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
-                    ga('send', 'event', 'serverlist', 'connect');
-                    if(serverList.servers[i].passworded) {
-                        swal({   
-                            title: "Private Server", text: "Please enter password",   
-                            type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
-                            inputPlaceholder: "Password goes here" 
-                        }, 
-                        function(inputValue) {
-                            if (inputValue === false) return false;      
-                            if (inputValue === "") {     
-                                sweetAlert.showInputError("Passwords are never blank");     
-                                return false   
-                            } else {
-                                dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
-                                    if (res.length > 0) {
-                                        if (res != "Command/Variable not found"){
-                                            if (res === "Incorrect password specified.") {
-                                                sweetAlert.showInputError(res);
-                                                return false
-                                            }else {
-                                                sweetAlert.close();
-                                                closeBrowser();
+                    if(friendServerConnected && (serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) < party.length) {
+                        swal("Party Too Large","You have too many people in your party to join this game.", "error");
+                    } else {
+                        ga('send', 'event', 'serverlist', 'connect');
+                        if(serverList.servers[i].passworded) {
+                            swal({   
+                                title: "Private Server", text: "Please enter password",   
+                                type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
+                                inputPlaceholder: "Password goes here" 
+                            }, 
+                            function(inputValue) {
+                                if (inputValue === false) return false;      
+                                if (inputValue === "") {     
+                                    sweetAlert.showInputError("Passwords are never blank");     
+                                    return false   
+                                } else {
+                                    dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
+                                        if (res.length > 0) {
+                                            if (res != "Command/Variable not found") {
+                                                if (res === "Incorrect password specified.") {
+                                                    sweetAlert.showInputError(res);
+                                                    return false
+                                                } else {
+                                                    if (friendServerConnected) {
+                                                        partyConnect(serverList.servers[i].serverIP, inputValue);                                                    
+                                                    } else {
+                                                        closeBrowser();                                                       
+                                                    }
+                                                    sweetAlert.close();
+                                                }
                                             }
                                         }
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
-                            if (res.length > 0) {
-                                if (res != "Command/Variable not found"){
-                                    closeBrowser();
+                                    });
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
+                                if (res.length > 0) {
+                                    if (res != "Command/Variable not found") {
+                                        if (friendServerConnected) {
+                                            partyConnect(serverList.servers[i].serverIP, null);                                                    
+                                        } else {
+                                            closeBrowser();                                                       
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     }
                 } else {    
                     swal("Map File Missing","You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", "error");
@@ -258,7 +273,7 @@ function pingMe(ip, rowNum, delay) {
         var startTime = Date.now();
         var endTime;
         var ping;
-        var pingPic
+        var pingDisplay
         $.ajax({
             type: "GET",
             url: "http://" + ip + "/",
@@ -268,15 +283,16 @@ function pingMe(ip, rowNum, delay) {
                 endTime = Date.now();
                 ping = Math.round((endTime - startTime) * .45);
                 if (ping > 0 && ping <= 100) {
-                    pingPic = "3";
+                    pingDisplay = ping+":3";
                 }   else if(ping > 100 && ping <= 200) {
-                    pingPic = "2";
+                    pingDisplay = ping+":2";
                 }   else if(ping > 200 && ping <= 500) {
-                    pingPic = "1";  
+                    pingDisplay = ping+":1";  
                 }   else {
-                    pingPic = "0";
+                    pingDisplay = "???:0";
+                    ping = 501;
                 }
-                $('#serverTable').dataTable().fnUpdate(ping + ":" + pingPic, rowNum, 5);
+                $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 5);
                 $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
@@ -323,12 +339,12 @@ function switchBrowser(browser) {
         showCancelButton: true,   
         confirmButtonText: "Yes, change it!",   
         closeOnConfirm: false   
-    }, function(){        
-        if (browser == "theFeelTrain"){
+    }, function() {        
+        if (browser == "theFeelTrain") {
             var browserURL = "http://halo.thefeeltra.in/";
             ga('send', 'event', 'change-menu', 'thefeeltrain');
 
-        } else if (browser == "DewMenu"){
+        } else if (browser == "DewMenu") {
             var browserURL = "http://dewmenu.click/";
             ga('send', 'event', 'change-menu', 'dewmenu');
         }
@@ -336,6 +352,7 @@ function switchBrowser(browser) {
             dewRcon.send('game.menuurl ' + browserURL);
             dewRcon.send('writeconfig');
         }, "1000");  
+        sweetAlert.close();
     });
 }
 
@@ -375,7 +392,7 @@ function closeBrowser() {
 			dewRcon.send('menu.show');
 			dewRcon.send('Game.SetMenuEnabled 0');
 		}, "1000");
-	}else{
+	} else{
 		window.close();
 	}
 }
@@ -384,24 +401,160 @@ String.prototype.contains = function(it) {
 	return this.indexOf(it) != -1;
 };
 
+function CheckPageFocus() {
+  //var info = document.getElementById("message");
+
+  if ( document.hasFocus() ) {
+    pageFocus = true;
+  } else {
+    pageFocus = false;
+  }
+}
+
+
+//==================================
+//===== Friendserver Functions =====
+//==================================
+
+function partyConnect(ip, pass) {
+    if (party[0].split(':')[1] == puid) {
+        if(party.length > 1){
+            for (var p = 0; p < party.length; p++ ) {
+                if (party[p].split(':')[1] != puid) {
+                    friendServer.send(JSON.stringify({
+                        type: 'connect',
+                        guid: party[p].split(':')[1],
+                        address: ip,
+                        password: pass
+                    }));
+                }
+            }
+        }
+    }
+}
+
+function loadOnline() {
+	$('#allOnline').empty();
+	if(onlinePlayers.length > 0) {
+		for(var i=0; i < onlinePlayers.length; i++) {
+            if($.inArray(onlinePlayers[i], party) == -1){
+                if (onlinePlayers[i].split(":")[1] != "not"){
+                    $('#allOnline').append("<div class='friend'>"+onlinePlayers[i].split(":")[0]+"<button class='addToParty' onClick=\"inviteToParty('"+onlinePlayers[i].split(":")[1]+"');\">+</button></div>");
+                }
+            }
+		}
+	}
+}
+
+$(function() {
+    $("#messageBox").keypress(function (e) {
+        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+            $('#submitButton').click();
+            return false;
+        } else {
+            return true;
+        }
+    });
+});
+
+function chatInput(text){
+    if(friendServerConnected){
+        if(text.length > 0){
+            $("#chat").append(new Date().timeNow()+ "<b> "+ pname + ":</b> " + text + "<br/>");
+            updateScroll();
+            if(party.length > 0) {
+                sendPartyMessage(text);
+            }
+            $("#messageBox").val("");
+        }
+    } else {
+        console.log("not connected");
+        $("#messageBox").val("");
+    }
+}
+
+Date.prototype.timeNow = function () {
+     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes();
+}
+
+function sendPartyMessage(message){
+    friendServer.send(JSON.stringify({
+        type: "partymessage",
+        message: message,
+        player: pname,
+        senderguid: puid,
+        partymembers: party
+    }));  
+}
+
+var onlineShown = false;
+function showOnline(){
+    if (!onlineShown){
+        $("#allOnline").css("display", "block");
+        $("#party").css("display", "none");
+        onlineShown = true;
+    } else {
+        $("#allOnline").css("display", "none");
+        $("#party").css("display", "block");
+        onlineShown = false;
+    }
+}
+
+var chatShown = false;
+function showChat(){
+    if (!chatShown){
+        $("#chatBorder").css("display", "block");
+        chatShown = true;
+    } else {
+        $("#chatBorder").css("display", "none");
+        chatShown = false;
+    }
+}
+
+var partyListShown = false;
+function showPartyList(){
+    if (!partyListShown){
+        $("#partyBorder").css("display", "block");
+        partyListShown = true;
+    } else {
+        $("#partyBorder").css("display", "none");
+        partyListShown = false;
+    }
+}
+
+var scrolled = false;
+function updateScroll(){
+    if(!scrolled){
+        var element = document.getElementById("chat");
+        element.scrollTop = element.scrollHeight;
+    }
+}
+
+$("#chat").on('scroll', function(){
+    scrolled=true;
+});
+
 //============================
 //===== dewRcon triggers =====
 //============================
 
 function connectionTrigger() {
+    if(!friendServerConnected) {
+        StartConnection();
+    }
     $('.closeButton').show();
 	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version', function(res) {
         if (res.length > 0) {
-            if (res != "Command/Variable not found"){
-                if (gameVersion === 0){
+            if (res != "Command/Variable not found") {
+                if (gameVersion === 0) {
                     gameVersion = res;
                     checkUpdate(gameVersion);
                 }                 
                 dewRcon.send('game.listmaps', function(ret) {
                     if (ret.length > 0) {
-                        if (ret != "Command/Variable not found"){
-                            if (ret.contains(",") && mapList[0].length == 0){
+                        if (ret != "Command/Variable not found") {
+                            if (ret.contains(",") && mapList[0].length == 0) {
                                 mapList = new Array(ret.split(','));
                             }
                         }
@@ -464,54 +617,55 @@ gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
 });
 
 gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
-    if (controllersOn) {
-        //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
-        if (e.control == "FACE_1") {
-            //console.log("A");
-            if($('.sweet-overlay').is(':visible')) {
+    if (pageFocus) {
+        if (controllersOn) {
+            //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
+            if (e.control == "FACE_1") {
+                //console.log("A");
+                if($('.sweet-overlay').is(':visible')) {
+                    sweetAlert.close();   
+                } else {
+                    joinSelected();
+                }
+            } else if (e.control == "FACE_2") {
+                //console.log("B");
                 sweetAlert.close();   
-            } else {
-                joinSelected();
-            }
-        } else if (e.control == "FACE_2") {
-            //console.log("B");
-            sweetAlert.close();   
-        } else if (e.control == "FACE_3") {
-            //console.log("X");
-        } else if (e.control == "FACE_4") {
-           //console.log("Y");
-           window.location.reload();
-        } else if (e.control == "DPAD_UP") {
-            //console.log("UP");
-            if (selectedID > 0) {
-                selectedID--;
-                updateSelection();
-            }
-        } else if (e.control == "DPAD_DOWN") {
-            //console.log("DOWN");
-            if (selectedID < ($("#serverTable tbody tr").length-1)) {
-                selectedID++;
-                updateSelection();
-            }
-        } else if (e.control == "DPAD_LEFT") {
-            //console.log("LEFT");
-        } else if (e.control == "DPAD_RIGHT") {
-            //console.log("RIGHT");
-        } else if (e.control == "SELECT_BACK") {
-            //console.log("BACK");
-            closeBrowser();
-        } else if (e.control == "START_FORWARD") {
-            //console.log("START");
-        } else if (e.control == "RIGHT_TOP_SHOULDER") {
-            //console.log("RIGHT BUMPER");        
-        } else if (e.control == "LEFT_TOP_SHOULDER") {
-            //console.log("LEFT BUMPER");
-        } else if (e.control == "LEFT_STICK") {
-            //console.log("LEFT STICK");
-        }          
+            } else if (e.control == "FACE_3") {
+                //console.log("X");
+            } else if (e.control == "FACE_4") {
+               //console.log("Y");
+               window.location.reload();
+            } else if (e.control == "DPAD_UP") {
+                //console.log("UP");
+                if (selectedID > 0) {
+                    selectedID--;
+                    updateSelection();
+                }
+            } else if (e.control == "DPAD_DOWN") {
+                //console.log("DOWN");
+                if (selectedID < ($("#serverTable tbody tr").length-1)) {
+                    selectedID++;
+                    updateSelection();
+                }
+            } else if (e.control == "DPAD_LEFT") {
+                //console.log("LEFT");
+            } else if (e.control == "DPAD_RIGHT") {
+                //console.log("RIGHT");
+            } else if (e.control == "SELECT_BACK") {
+                //console.log("BACK");
+                closeBrowser();
+            } else if (e.control == "START_FORWARD") {
+                //console.log("START");
+            } else if (e.control == "RIGHT_TOP_SHOULDER") {
+                //console.log("RIGHT BUMPER");        
+            } else if (e.control == "LEFT_TOP_SHOULDER") {
+                //console.log("LEFT BUMPER");
+            } else if (e.control == "LEFT_STICK") {
+                //console.log("LEFT STICK");
+            }          
+        }
     }
 });
-
 
 if (!gamepad.init()) {
 }
