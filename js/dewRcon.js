@@ -10,9 +10,11 @@ jQuery(function() {
 StartRconConnection = function() {
     dewRcon = new dewRconHelper();
     dewRcon.dewWebSocket.onopen = function() {
-        jQuery("#connectionStatus").text('Connected');
-        dewRconConnected = true;
-        connectionTrigger();
+        if(!dewRconConnected){
+            jQuery("#connectionStatus").text('Connected');
+            dewRconConnected = true;
+            connectionTrigger();
+        }
     };
     dewRcon.dewWebSocket.onerror = function() {
         //jQuery("#connectionStatus").text('Not connected. Is the game running?');
