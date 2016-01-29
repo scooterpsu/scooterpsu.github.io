@@ -133,8 +133,7 @@ function buildTable() {
                             pingDisplay = ping+":1";  
                             rePing = true;
                         }   else {
-                            pingDisplay = "???:0";
-                            ping = 501;
+                            pingDisplay = ping+":0";
                             rePing = true;
                         }
                         serverInfo["serverId"] = i;
@@ -289,8 +288,7 @@ function pingMe(ip, rowNum, delay) {
                 }   else if(ping > 200 && ping <= 500) {
                     pingDisplay = ping+":1";  
                 }   else {
-                    pingDisplay = "???:0";
-                    ping = 501;
+                    pingDisplay = ping+":0";
                 }
                 $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 5);
                 $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
