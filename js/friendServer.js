@@ -44,6 +44,7 @@ StartConnection = function() {
     friendServer.friendsServerSocket.onmessage = function(message) {
 		try {
 			var result = JSON.parse(JSON.stringify(eval('(' + message.data + ')')));
+            swal.setDefaults({ html: true });
 			switch (result.type) {
 				case "disconnected":
 					if ($.inArray(result.player + ":" + result.guid, party) != -1) {
