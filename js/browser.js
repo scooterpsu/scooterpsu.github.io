@@ -66,11 +66,12 @@ function buildTable() {
             }
         },
         bPaginate: false,
-        scrollY: "-webkit-calc(100% - 137px)",
+        scrollY: "-webkit-calc(100% - 115px)",
         scroller: true,
         destroy: true,
         "iDisplayLength": 10,
 		stateSave: true,
+        bInfo: false,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
@@ -541,8 +542,6 @@ function connectionTrigger() {
     if(!friendServerConnected) {
         setTimeout(StartConnection, 2000);
     }
-    $('.closeButton').show();
-	$('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version', function(resa) { 
         dewRcon.send('game.listmaps', function(resb) {
             dewRcon.send('player.name', function(resc) {
@@ -563,8 +562,7 @@ function connectionTrigger() {
 }
 
 function disconnectTrigger() {
-    $('.closeButton').hide();
-	$('#serverTable_filter').css("right","-264px");
+
 }
 
 //==============================

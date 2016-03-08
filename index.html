@@ -6,10 +6,6 @@
 		<script src="js/handlebars.min.js"></script>
 		<script src="js/jquery-1.11.3.min.js"></script>
         <script src="js/jquery-ui.js"></script>
-		<!-- Bootstrap -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-		<script src="js/bootstrap.min.js"></script>
 		<!-- DataTables -->
 		<link rel="stylesheet" href="css/jquery.dataTables.min.css">
 		<script src="js/jquery.dataTables.min.js"></script>
@@ -49,19 +45,16 @@
 <body>
 	<h3 class="browserTitle">Server Browser</h3>
 	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
-    <button class="refresh" onclick="refreshTable();">Refresh<img class="controllerButton" src="images/XboxOne_Y.png"></button>
-	<button class="closeButton" onclick="closeBrowser();">Close<img class="controllerButton" src="images/360_Back.png"></button>
-    <button class="togglePartyList" onClick="showPartyList();">Party</button>
+    <button class="refresh" onclick="refreshTable();">Refresh</button>
+	<button class="closeButton" onclick="closeBrowser();">X</button>
+    <!--<button class="togglePartyList" onClick="showPartyList();">Party</button>-->
     <!--<div id="connectionStatus"></div>-->
     <table id="serverTable" class="display" width="100%"></table>
     <div id="gamecard">
     </div>
-    <div id="extBorder">
-    <div id="extBorder2">
+    <div id="backgroundFrame">
+    <div id="backgroundFrameInsert"></div>
     </div>
-    </div>
-    <button class="browserSwitch feeltrain" onclick="switchBrowser('theFeelTrain');">Switch to theFeelTrain</button>
-    <button class="browserSwitch dewmenu" onclick="switchBrowser('DewMenu');">Switch to DewMenu</button>
     
     <div id="partyBorder">
         <div id="partyHeader">Party List<button class="addPartyMember" onClick="showOnline();">+</button><button class="toggleChat" onClick="showChat();">Chat</button></div>
