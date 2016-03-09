@@ -32,8 +32,8 @@ button {
     background-color: black;
     left: -15px;
     width: -webkit-calc(100% + 30px);
-    height: -webkit-calc(100% - 150px);
-    top: 75px;
+    height: -webkit-calc(100% + 20px);
+    top: -10px;
     opacity: 0.8;
 }
 
@@ -48,7 +48,7 @@ button {
     color: white;
     opacity: 0.8;
     position: absolute;
-    top: 105px;
+    top: -27px;
     left: 12px;
     z-index: 2;
     font-size: 18pt;
@@ -57,27 +57,28 @@ button {
 .refresh {
     opacity: 0.8;
     position: absolute;
-    top: 130px;
+    top: -4px;
     left: 200px;
     color: white;
     font-size: 12pt;
     background-color: black;
     width: 95px;
-    height: 30px;
-    border-style: solid;
+    height: 28px;
+    line-height: 23px;
     border: 1px solid white;
 	z-index:1000;
+    border-radius: 5px;
 }
 
 .refresh:hover{
-    background-color: #31415b;
+    background-color: #B1572A;
 }
 
 .serverStats {
     color: white;
     opacity: 0.8;
     position: absolute;
-    top: 108px;
+    top: -27px;
     left: 350px;
     z-index: 2;
     font-size: 14pt;
@@ -86,46 +87,49 @@ button {
 .closeButton {
     opacity: 0.8;
     position: absolute;
-    top: 128px;
+    top: -4px;
     right: -5px;
     color: white;
     font-weight: Medium;
     background-color: black;
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
+    line-height: 22px;
     border-style: solid;
     border: 1px solid white;
     border-radius: 5px;
     z-index: 4;
+    font-size: 12pt;
 }
 
 .closeButton:hover{
-    background-color: #1a3d5a;
+    background-color: #B1572A;
 }
 
 .browserSwitch{
     opacity: 0.8;
     font-size: 9pt;
-    background-color: #13233d;
+    background-color: black;
     color: white;
-    border: 1px solid #404f70;
-    padding: 8px;
+    border: 1px solid white;
+    padding: 6px;
     position: absolute;
     left: 588px;
-    bottom: 4px;
+    bottom: -4px;
     z-index: 3;
+    border-radius: 5px;
 }
 
 .dewmenu{
-    left: 45px;
+    left: 0px;
 }
 
 .feeltrain{
-    left: -webkit-calc(100% - 440px);
+    left: 105px;
 }
 
 .browserSwitch:hover{
-    background-color: #31415b;
+    background-color: #B1572A;
 }
 
 .pingbars{
@@ -157,27 +161,28 @@ z-index: 10;
 
 .togglePartyList{
     opacity: 0.8;
-    font-size: 12pt;
-    background-color: #13233d;
-    color: white;
-    border: 2px solid #404f70;
-    padding-top: 3px;
-    padding-bottom: 9px;
     position: absolute;
+    top: -4px;
     left: 580px;
-    top: 10px;
-    padding-left: 50px;
-    padding-right: 20px;
-    z-index: 0;
+    color: white;
+    font-size: 12pt;
+    background-color: black;
+    width: 95px;
+    height: 28px;
+    line-height: 23px;
+    border: 1px solid white;
+	z-index:1000;
+    border-radius: 5px;
 }
 
 .togglePartyList:hover{
-    background-color: #31415b;
+    background-color: #B1572A;
 }
 
 
 .friend{
     font-size: 14pt;
+    line-height: 25px;
 }
 
 .friend[title="Party Leader"]{
@@ -201,7 +206,7 @@ z-index: 10;
 }
 
 .addPartyMember:hover{
-    background-color: #404f70;
+    background-color: #B1572A;
 }
 
 .toggleChat{
@@ -221,19 +226,19 @@ z-index: 10;
 }
 
 .toggleChat:hover{
-    background-color: #404f70;
+    background-color: #B1572A;
 }
 
 .addToParty{
     position: relative;
     top: 2px;
     right: 0px;
-    height: 24px;
-    line-height: 18px;
+    height: 20px;
+    line-height: 14px;
     padding: 4px;
     padding-left: 6px;
     padding-top: 1px;
-    width: 25px;
+    width: 24px;
     background-color: #13233d;
     color: white;
     float: right;
@@ -241,7 +246,7 @@ z-index: 10;
 }
 
 .addToParty:hover{
-    background-color: #404f70;
+    background-color: #B1572A;
 }
 
 #partyBorder{
@@ -249,7 +254,7 @@ z-index: 10;
     position: absolute;
     top: 100px;
     left: 100px;
-    background-color: #404f70;
+    background-color: #608085;
     width: 300px;
     height: 400px;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
@@ -261,7 +266,7 @@ z-index: 10;
     position: relative;
     top: 2px;
     left: 4px;
-    width: 293px;
+    width: 243px;
     text-align: center;
     background-color: black;
     color: white;
@@ -277,8 +282,8 @@ z-index: 10;
     position: absolute;
     top: 33px;
     left: 3px;
-    width: 294px;
-    height: 364px;
+    width: 280px;
+    height: 354px;
     z-index: 100;
     margin-left: auto;
     margin-right: auto;
@@ -294,8 +299,8 @@ z-index: 10;
     position: absolute;
     top: 33px;
     left: 3px;
-    width: 294px;
-    height: 364px;
+    width: 280px;
+    height: 354px;
     z-index: 100;
     margin-left: auto;
     margin-right: auto;
@@ -323,7 +328,7 @@ z-index: 10;
     line-height: 18px;
     padding: 4px;
     text-align: center;
-    width: 24px;
+    width: 28px;
     padding-top: 2px;
     padding-left: 6px;
     background-color: #13233d;
@@ -334,7 +339,7 @@ z-index: 10;
 }
 
 .closeChat:hover{
-    background-color: #404f70;
+    background-color: #B1572A;
 }
 
 #chatBorder{
@@ -342,7 +347,7 @@ z-index: 10;
     position: absolute;
     top: 100px;
     left: 600px;
-    background-color: #404f70;
+    background-color: #608085;
     width: 400px;
     height: 400px;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
@@ -354,7 +359,7 @@ z-index: 10;
     position: relative;
     top: 2px;
     left: 4px;
-    width: 393px;
+    width: 383px;
     text-align: center;
     background-color: black;
     color: white;
@@ -370,8 +375,8 @@ z-index: 10;
     position: relative;
     top: 5px;
     left: 0px;
-    width: 394px;
-    height: 334px;
+    width: 378px;
+    height: 330px;
     z-index: 100;
     margin-left: auto;
     margin-right: auto;
@@ -385,7 +390,7 @@ z-index: 10;
 
 #messageBox{
     margin-top: 8px;
-    margin-left: 3px;
+    margin-left: 4px;
     width: 338px;
     padding-left: 10px;
 }
@@ -393,13 +398,13 @@ z-index: 10;
 #submitButton{
     background-color: black;
     color: white;
-    border: 1px solid white;
-    height: 26px;
-    width: 52px;
+    border: 0;
+    height: 21px;
+    width: 50px;
 }
 
 #submitButton:hover{
-    background-color: #31415b;
+    background-color: #B1572A;
 }
 
 /*==============================*/
@@ -435,7 +440,7 @@ z-index: 10;
     opacity: 0.9;
     width: 254px;
     position: absolute;
-    top: 118px;
+    top: -15px;
     right: 2px;
     float: right;
     z-index: 2;
@@ -449,12 +454,12 @@ z-index: 10;
     left: 2px;
     width: 235px;
     min-height: 137px;
-    background-color: white;
+    background-color: #608085;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
 }
 
 #cardheaderborder{
-    background-color: white;
+    background-color: #608085;
     width: 250px;
     min-height: 140px;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
@@ -474,7 +479,7 @@ z-index: 10;
     width: 226px;
     background-color: black;
     color: white;
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid #608085;
 }
 
 #mappic{
@@ -493,7 +498,7 @@ z-index: 10;
     width: 247px;
     line-height: 30px;
     text-align: center;
-    border: 2px solid white;
+    border: 2px solid #608085;
     background-color: #13233d;
     color: white; 
 }
@@ -522,14 +527,13 @@ z-index: 10;
 
 #gameinfoborder{
     margin-top: -2px;
-    background-color: white;
+    background-color: #608085;
     width: 251px;
     padding-bottom: 4px;
     -webkit-clip-path: polygon(0 0, 100% 0, 100% -webkit-calc(100% - 30px), -webkit-calc(100% - 30px) 100%, 0 100%, 0 0);
 }
 
 #gameinfo{
-    font-size: 10pt;
     position: relative;
     top: 2px;
     left: 2px;
@@ -557,7 +561,7 @@ z-index: 10;
 #serverTable_wrapper{
     opacity: 0.8;
     float: left;
-    top: 190px;
+    top: 47px;
     margin-left: -10px;
     min-height: -webkit-calc(100% - 55px);
     width: -webkit-calc(100% - 260px);
@@ -572,6 +576,7 @@ z-index: 10;
     background-color: #13233d;
     color: white;
     border: 1px solid #05152f;
+    padding: 8px;
 }
 
 #serverTable tbody tr{
@@ -584,7 +589,7 @@ z-index: 10;
 }
 
 .sorting_asc, .sorting_desc {
-    background-color: white;
+    background-color: #608085;
     color: #13233d;
 }
 
@@ -593,6 +598,11 @@ z-index: 10;
     color: white !important;
     font-weight: normal !important;
     padding-left: 10px !important;
+}
+
+.sorting:hover{
+    background-color: #B1572A;
+	color: white;
 }
 
 .dataTable thead th, .dataTable thead td {
@@ -611,14 +621,14 @@ z-index: 10;
 }
 
 #serverTable tbody tr:hover td{
-    background-color: #31415b;
+    background-color: #B1572A;
 	color: white;
     cursor: pointer;
 }
 
 #serverTable_filter{
     position: relative;
-    top: -57px;
+    top: -47px;
     right: -224px;
     z-index: 3;
 }
@@ -668,12 +678,9 @@ z-index: 10;
 }
  
 ::-webkit-scrollbar-track {
-    background-color: #05152F;
+    background-color: transparent;
 }
  
 ::-webkit-scrollbar-thumb {
-    background-color: #344362;
-    border: 3px solid #05152F;
-    border-left-width: 7px;
-    border-right-width: 0px;
+    background-color: #608085;
 }

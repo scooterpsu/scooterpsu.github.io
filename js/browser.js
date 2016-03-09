@@ -66,7 +66,7 @@ function buildTable() {
             }
         },
         bPaginate: false,
-        scrollY: "-webkit-calc(100% - 115px)",
+        scrollY: "-webkit-calc(100% - 132px)",
         scroller: true,
         destroy: true,
         "iDisplayLength": 10,
