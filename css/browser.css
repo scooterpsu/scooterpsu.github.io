@@ -412,26 +412,20 @@ z-index: 10;
 /*==============================*/
 
 .controllerButton{
-    opacity: 0;
-    margin-top: -3;
-    margin-left: 5;
-    height: 28;
-    width: 28;
-    display: none;
+    position: relative;
+    top: 10px;
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
 }
 
-.selected .controllerButton{
-    opacity: 1;
+#xboxLabel{
+    position: absolute;
+    right: 10px;
+    bottom: 2px;
+    z-index: 1000;
+    color: white;
 }
-
-.refresh .controllerButton{
-    opacity: 1;
-}
-
-.closeButton .controllerButton{
-    opacity: 1;
-}
-
 /*==============================*/
 /*======= Game Info Card =======*/
 /*==============================*/
@@ -584,7 +578,8 @@ z-index: 10;
 }
 
 .selected td{
-    background-color: #31415b !important;
+    background: -webkit-linear-gradient(left, #B1572A 0%, rgba(199, 109, 41, 0.85) 95%);
+    background-attachment:fixed;
     color: white !important;
 }
 
@@ -621,7 +616,8 @@ z-index: 10;
 }
 
 #serverTable tbody tr:hover td{
-    background-color: #B1572A;
+    background: -webkit-linear-gradient(left, #B1572A 0%, rgba(199, 109, 41, 0.85) 95%);
+    background-attachment:fixed;
 	color: white;
     cursor: pointer;
 }
