@@ -1,10 +1,5 @@
 @font-face{font-family:"Conduit ITC";src:url(../fonts/Conduit-ITC.woff);}
 
-b, strong{
-    font-family: "Conduit ITC";
-    font-weight: normal;
-}
-
 body {
 	background-color: transparent;
     position: relative;
@@ -135,7 +130,7 @@ button {
 .pingbars{
     float: left; 
     margin-right: 5px; 
-    padding-top: 1px; 
+    padding-top: 2px; 
     height: 15px; 
     width: 15px;
 }
@@ -314,6 +309,7 @@ z-index: 10;
 
 #statusLine{
     color: grey;
+    font-style: italic;
 }
 
 /*===============================*/
@@ -613,6 +609,7 @@ z-index: 10;
 .dataTables_scrollBody{
     padding-top: 29px;
     margin-bottom: -38px;
+    border-bottom: 0 !important;
 }
 
 #serverTable tbody tr:hover td{
