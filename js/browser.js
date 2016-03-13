@@ -410,6 +410,13 @@ function CheckPageFocus() {
   }
 }
 
+function mapMatch(thing, mapFile) {
+    if (thing.src.contains("_ver")){
+        thing.src='images/maps/' + mapFile.toLowerCase().split("_ver")[0] + '.png';
+    } else {
+        thing.src='images/maps/unknown.png';
+    }
+}
 
 //==================================
 //===== Friendserver Functions =====
