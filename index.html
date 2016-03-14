@@ -79,7 +79,7 @@
         <div id="cardheaderborder">
             <div id="cardheader">
                 <div id="title"><b>{{capitalize variantType}} on {{map}}</b></div>
-                <img id="mappic" src="images/maps/{{lowerCase mapFile}}.png" onError="this.onerror=null;this.src='images/maps/unknown.png';">
+                <img id="mappic" src="images/maps/{{lowerCase mapFile}}.png" onError="mapMatch(this, '{{mapFile}}');">
                 <img id="varpic" src="images/gametypes/{{lowerCase variantType}}.png">
             </div>
         </div>
