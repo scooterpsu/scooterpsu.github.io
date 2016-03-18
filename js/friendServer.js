@@ -269,7 +269,7 @@ function inviteToParty(targetGuid){
 
 friendServerHelper = function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    this.friendsServerSocket = new WebSocket('ws://192.99.124.166:55555', 'friendServer');
+    this.friendsServerSocket = new WebSocket('ws://158.69.166.144:55555', 'friendServer');
     this.lastMessage = "";
     this.lastCommand = "";
     this.open = false;
