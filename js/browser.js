@@ -109,7 +109,7 @@ function buildTable() {
 		}
 	});
 
-	var jqhxr = $.getJSON( "http://158.69.166.144:8080/list", null)
+	var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
     .done(function( data ) {
         var pingDelay = 120;
         for(var i = 0; i < data.result.servers.length; i++) {
