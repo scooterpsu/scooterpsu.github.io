@@ -554,18 +554,31 @@ function connectionTrigger() {
         dewRcon.send('game.listmaps', function(resb) {
             dewRcon.send('player.name', function(resc) {
                 dewRcon.send('player.printUID', function(resd) {
-                    if (gameVersion === 0) {
-                        gameVersion = resa;
-                        checkUpdate(gameVersion);
-                    }               
-                    if (resb.contains(",") && mapList[0].length == 0) {
-                        mapList = new Array(resb.split(','));
-                    }
-                    pname = resc;
-                    puid = resd.split(' ')[2];
+                    dewRcon.send('Game.LogName', function(rese) {
+                        if (gameVersion === 0) {
+                            gameVersion = resa;
+                            checkUpdate(gameVersion);
+                        }               
+                        if (resb.contains(",") && mapList[0].length == 0) {
+                            mapList = new Array(resb.split(','));
+                        }
+                        pname = resc;
+                        puid = resd.split(' ')[2];
+                        if (rese == "nosteam.log"){
+                            noSTEAMLockout();
+                        }
+                    });
                 });
             });
         });
+    });
+}
+
+function noSTEAMLockout(){
+    swal({   
+        title: "noSTEAM Release Detected",
+        text: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
+        html: true, type: "error", allowEscapeKey: false, showConfirmButton: false
     });
 }
 
