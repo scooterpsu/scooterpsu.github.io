@@ -10,6 +10,8 @@ var isThrottled = false;
 var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
+var totalSlotCount = 0;
+var openSlotCount = 0;
 var gameVersion = 0;
 var pname = "";
 var puid = "";
@@ -151,6 +153,11 @@ function buildTable() {
                                 }
                                 if(!serverInfo.hasOwnProperty("passworded")) {
                                     serverInfo["passworded"] = "";
+                                    var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
+                                    totalSlotCount += serverInfo.maxPlayers;
+                                    openSlotCount += openSlots;
+                                    $(".serverPool").attr('value', openSlotCount);
+                                    $(".serverPool").attr('max', totalSlotCount);
                                 } else {
                                     serverInfo["passworded"] = "🔒";
                                 };

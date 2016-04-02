@@ -155,6 +155,15 @@ height: 50px;
 z-index: 10;
 }
 
+.serverPool{
+    position: absolute;
+    width: 600px;
+    height: 5px;
+    left: 10px;
+    top: 45px;
+    z-index: 10;
+}
+
 /*==============================*/
 /*======== Friends List ========*/
 /*==============================*/
