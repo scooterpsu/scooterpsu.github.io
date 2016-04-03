@@ -18,6 +18,12 @@ var puid = "";
 var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+swal.setDefaults({
+    customClass: "alertWindow",
+    confirmButtonClass: "alertConfirm",
+    cancelButtonClass: "alertCancel",
+    buttonsStyling: false
+})
 $(document).ready(function() {
     fixResolution();
     getCurrentRelease();
@@ -208,7 +214,6 @@ function buildTable() {
 }
 
 function joinServer(i) {
-    swal.setDefaults({ html: true });
     if(dewRconConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
@@ -263,16 +268,28 @@ function joinServer(i) {
                         }
                     }
                 } else {    
-                    swal("Map File Missing","You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", "error");
+                    swal({
+                        title: "Map File Missing",
+                        html: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
+                        type: "error"
+                    });
                 }
             } else {
-                swal("Version Mismatch", "Host running different version.<br /> Unable to join.", "error");
+                swal({
+                    title: "Version Mismatch", 
+                    html: "Host running different version.<br /> Unable to join.", 
+                    type: "error"
+                });
             }
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
     } else {
-        swal("Communication Error", "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", "error");        
+        swal({
+        title: "Communication Error", 
+        html: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
+        type: "error"
+        });        
     }
 }
 
@@ -373,8 +390,8 @@ function checkUpdate(ver) {
 
             swal({   
                 title: "Version Outdated!",
-                text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
-                html: true, type: "error", allowEscapeKey: false
+                html: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+                type: "error", allowEscapeKey: false
             });
         }
     }
@@ -423,6 +440,30 @@ function mapMatch(thing, mapFile) {
     } else {
         thing.src='images/maps/unknown.png';
     }
+}
+
+function noSTEAMLockout(){
+    swal({   
+        title: "noSTEAM Release Detected",
+        html: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
+        type: "error", allowEscapeKey: false, showConfirmButton: false, allowOutsideClick: false
+    });
+}
+
+function howToServe(){
+    swal({   
+        title: "How to Host a Server",
+        html: 
+        "You will first want to forward the ports on your router. The following guide is helpful is doing this. You will <b>not</b> be able to host without doing so. <br />"+
+        "http://portforward.com/english/routers/port_forwarding/ <br /><br />"+
+        "<center>The below ports need to be forwarded:<br /><br />"+
+        "11775 - TCP<br />"+
+        "11774 - UDP<br />"+
+        "9987 - UDP</center><br />"+
+        "Once these ports are forwarded. Open your game and select <b>Multiplayer</b> or <b>Forge</b>. Change the Network type to 'Online' and select 'Host Game'. <br /><br />"+
+        "Congrats your server is now online!",
+        width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
+    });
 }
 
 //==================================
@@ -578,14 +619,6 @@ function connectionTrigger() {
                 });
             });
         });
-    });
-}
-
-function noSTEAMLockout(){
-    swal({   
-        title: "noSTEAM Release Detected",
-        text: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
-        html: true, type: "error", allowEscapeKey: false, showConfirmButton: false
     });
 }
 
