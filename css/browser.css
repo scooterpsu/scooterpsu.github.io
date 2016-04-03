@@ -77,13 +77,33 @@ button {
     background-color: #31415b;
 }
 
+.quickMatch {
+    font-family: 'BlenderPro-Medium';
+    opacity: 0.8;
+    position: absolute;
+    top: 10px;
+    left: 350px;
+    color: white;
+    font-size: 12pt;
+    background-color: black;
+    width: 115px;
+    height: 30px;
+    border-style: solid;
+    border: 1px solid white;
+	z-index:1000;
+}
+
+.quickMatch:hover{
+    background-color: #31415b;
+}
+
 .serverStats {
     color: white;
     font-family: 'BlenderPro-Bold';
     opacity: 0.8;
     position: absolute;
     top: 5px;
-    left: 350px;
+    left: 500px;
     z-index: 2;
 }
 

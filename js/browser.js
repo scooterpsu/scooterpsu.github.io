@@ -331,6 +331,11 @@ function refreshTable() {
     }
 }
 
+function quickMatch() {
+    var possibleServers = $('#serverTable').DataTable().order([13, 'desc'], [6,'desc']).draw();
+    console.log(possibleServers.data());
+}
+
 function switchBrowser(browser) {
     swal({   
         title: "Change Server Browser",   
