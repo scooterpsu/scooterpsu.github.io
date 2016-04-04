@@ -39,8 +39,8 @@
         </script>
         <script>
             $(function() {
-                $( "#chatBorder" ).draggable();
-                $( "#partyBorder" ).draggable();
+                $( "#chatBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#chatHeader", cancel: "button" });
+                $( "#partyBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#partyHeader", cancel: "button" });
             });
         </script>
 
