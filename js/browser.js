@@ -332,8 +332,14 @@ function refreshTable() {
 }
 
 function quickMatch() {
-    var possibleServers = $('#serverTable').DataTable().order([13, 'desc'], [6,'desc']).draw();
-    console.log(possibleServers.data());
+    var possibleServers = $('#serverTable').DataTable().order([13, 'desc'], [6,'asc']).draw();
+    console.log(possibleServers.rows( function (index, data, node){
+                                            if (eval(data[13]) == 1){
+                                                return false;
+                                            }
+                                            return true;
+                                      }
+                                    ).data());
 }
 
 function switchBrowser(browser) {
