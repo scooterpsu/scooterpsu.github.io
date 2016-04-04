@@ -246,7 +246,7 @@ function joinServer(i) {
                                                     } else {
                                                         closeBrowser();                                                       
                                                     }
-                                                    sweetAlert.close();
+                                                    sweetAlert.closeModal();
                                                 }
                                             }
                                         }
@@ -375,7 +375,7 @@ function switchBrowser(browser) {
             dewRcon.send('game.menuurl ' + browserURL);
             dewRcon.send('writeconfig');
         }, "1000");  
-        sweetAlert.close();
+        sweetAlert.closeModal();
     });
 }
 
@@ -454,14 +454,10 @@ function howToServe(){
     swal({   
         title: "How to Host a Server",
         html: 
-        "You will first want to forward the ports on your router. The following guide is helpful is doing this. You will <b>not</b> be able to host without doing so. <br />"+
-        "http://portforward.com/english/routers/port_forwarding/ <br /><br />"+
-        "<center>The below ports need to be forwarded:<br /><br />"+
-        "11775 - TCP<br />"+
-        "11774 - UDP<br />"+
-        "9987 - UDP</center><br />"+
-        "Once these ports are forwarded. Open your game and select <b>Multiplayer</b> or <b>Forge</b>. Change the Network type to 'Online' and select 'Host Game'. <br /><br />"+
-        "Congrats your server is now online!",
+        "Hosting a server requires UDP port 9987 and TCP ports 11774 & 11775 to be forwarded on your router to your server's private IP address.<br/>"+
+        "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
+        "<a href='http://portforward.com/english/routers/port_forwarding/' target='_blank'>http://portforward.com/english/routers/port_forwarding/</a><br/><br/>"+
+        "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
         width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
     });
 }
@@ -680,13 +676,13 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             if (e.control == "FACE_1") {
                 //console.log("A");
                 if($('.sweet-overlay').is(':visible')) {
-                    sweetAlert.close();   
+                    sweetAlert.closeModal();   
                 } else {
                     joinSelected();
                 }
             } else if (e.control == "FACE_2") {
                 //console.log("B");
-                sweetAlert.close();   
+                sweetAlert.closeModal();   
             } else if (e.control == "FACE_3") {
                 //console.log("X");
             } else if (e.control == "FACE_4") {

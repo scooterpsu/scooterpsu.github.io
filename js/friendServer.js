@@ -131,10 +131,10 @@ StartConnection = function() {
                     }, function(isConfirm){
                         if (isConfirm) {
                             partyInvite(true, result.senderguid);
-                            sweetAlert.close();
+                            sweetAlert.closeModal();
                         } else {
                             partyInvite(false, result.senderguid);  
-                            sweetAlert.close();                             
+                            sweetAlert.closeModal();                             
                         }
                     });
 				break;
@@ -154,10 +154,10 @@ StartConnection = function() {
                     }, function(isConfirm){
                         if (isConfirm) {
                             gameInvite(true, result.senderguid);
-                            sweetAlert.close();
+                            sweetAlert.closeModal();
                         } else {
                             gameInvite(false, result.senderguid);  
-                            sweetAlert.close();                             
+                            sweetAlert.closeModal();                             
                         }
                     });
 				break;
