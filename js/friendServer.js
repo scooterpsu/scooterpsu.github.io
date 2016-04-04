@@ -80,13 +80,14 @@ StartConnection = function() {
                             if (isConfirm) {
                             //Reply window   
                             swal({   
-                                html: true,
                                 imageUrl: "images/eldorito.png",  
+                                imageWidth: "102", 
+                                imageHeight: "88",
                                 showCancelButton: true,   
                                 closeOnConfirm: false,   
                                 closeOnCancel: true, 
                                 title: "Reply",   
-                                text: "To " + result.player +":",   
+                                html: "To " + result.player +":",   
                                 type: "input",   
                                 confirmButtonText: "Send",   
                                 cancelButtonText: "Close",   
@@ -117,21 +118,23 @@ StartConnection = function() {
 				case "partyinvite":
                     swal({   
                         imageUrl: "images/eldorito.png",  
+                        imageWidth: "102", 
+                        imageHeight: "88",
                         showCancelButton: true,   
                         closeOnConfirm: false,   
                         closeOnCancel: true, 
                         title: "Party Invite",   
-                        text: result.player + " has sent you a party invite. <br /><br /> Would you like to join?",   
+                        html: result.player + " has sent you a party invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
                         cancelButtonText: "Decline",   
                         showCancelButton: true, 
                     }, function(isConfirm){
                         if (isConfirm) {
                             partyInvite(true, result.senderguid);
-                            sweetAlert.close();
+                            sweetAlert.closeModal();
                         } else {
                             partyInvite(false, result.senderguid);  
-                            sweetAlert.close();                             
+                            sweetAlert.closeModal();                             
                         }
                     });
 				break;
@@ -139,20 +142,22 @@ StartConnection = function() {
 				case "gameinvite":
                     swal({   
                         imageUrl: "images/eldorito.png",  
+                        imageWidth: "102", 
+                        imageHeight: "88",
                         showCancelButton: true,   
                         closeOnConfirm: false,   
                         closeOnCancel: true, 
                         title: "Game Invite",   
-                        text: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
+                        html: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
                         cancelButtonText: "Decline",   
                     }, function(isConfirm){
                         if (isConfirm) {
                             gameInvite(true, result.senderguid);
-                            sweetAlert.close();
+                            sweetAlert.closeModal();
                         } else {
                             gameInvite(false, result.senderguid);  
-                            sweetAlert.close();                             
+                            sweetAlert.closeModal();                             
                         }
                     });
 				break;

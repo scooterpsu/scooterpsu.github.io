@@ -144,15 +144,82 @@ button {
   background-color: #13233d;
 }
 
-#message{
-background-color: purple;
-color: white;
-position: absolute;
-top: 20px;
-left: 20px;
-width: 200px;
-height: 50px;
-z-index: 10;
+.serverPool{
+    position: absolute;
+    width: 600px;
+    height: 5px;
+    left: 10px;
+    top: 45px;
+    z-index: 10;
+}
+
+.howToServe{
+    opacity: 0.8;
+    position: absolute;
+    top: 10px;
+    left: 700px;
+    padding: 3px 20px;
+    padding-bottom: 50px;
+    background-color: #13233d;
+    border: 2px solid #404f70;
+    color: white;
+    font-size: 12pt;
+    font-family: 'BlenderPro-Medium';
+}
+
+.howToServe:hover{
+    background-color: #31415b;
+}
+
+.alertWindow, .howToServeWindow{
+    border-radius: 0;
+    background-color: #13233d !important;
+    color: white; 
+    font-family: 'BlenderPro-Book'; 
+    padding-top: 50px !important;
+    font-size: 18pt;
+    border: 2px solid #404f70;
+    outline: 0;
+    line-height: 1em;
+}
+
+.alertWindow .icon, .alertWindow .sweet-image{
+    margin-top: 10px;
+}
+
+.alertWindow .sweet-spacer, .howToServeWindow .sweet-spacer{
+    margin: 0 !important;
+    height: 20px !important;
+}
+
+.alertWindow h2, .howToServeWindow h2{
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    background-color: black;
+    font-size: 18pt;
+    border-bottom: 2px solid #404f70;
+}
+
+.alertConfirm, .alertCancel{
+    border-style: solid;
+    border: 1px solid white;
+    background-color: black;
+    font-family: 'BlenderPro-Book'; 
+    font-size: 14pt;
+    padding: 3px 20px;
+}
+
+.alertConfirm:hover, .alertCancel:hover{
+    background-color: #31415b;    
+}
+
+.howToServeWindow .sweet-content{
+    text-align: left;
 }
 
 /*==============================*/

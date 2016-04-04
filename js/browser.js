@@ -10,12 +10,20 @@ var isThrottled = false;
 var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
+var totalSlotCount = 0;
+var openSlotCount = 0;
 var gameVersion = 0;
 var pname = "";
 var puid = "";
 var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+swal.setDefaults({
+    customClass: "alertWindow",
+    confirmButtonClass: "alertConfirm",
+    cancelButtonClass: "alertCancel",
+    buttonsStyling: false
+})
 $(document).ready(function() {
     fixResolution();
     getCurrentRelease();
@@ -151,6 +159,11 @@ function buildTable() {
                                 }
                                 if(!serverInfo.hasOwnProperty("passworded")) {
                                     serverInfo["passworded"] = "";
+                                    var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
+                                    totalSlotCount += serverInfo.maxPlayers;
+                                    openSlotCount += openSlots;
+                                    $(".serverPool").attr('value', openSlotCount);
+                                    $(".serverPool").attr('max', totalSlotCount);
                                 } else {
                                     serverInfo["passworded"] = "🔒";
                                 };
@@ -201,7 +214,6 @@ function buildTable() {
 }
 
 function joinServer(i) {
-    swal.setDefaults({ html: true });
     if(dewRconConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
@@ -234,7 +246,7 @@ function joinServer(i) {
                                                     } else {
                                                         closeBrowser();                                                       
                                                     }
-                                                    sweetAlert.close();
+                                                    sweetAlert.closeModal();
                                                 }
                                             }
                                         }
@@ -256,16 +268,28 @@ function joinServer(i) {
                         }
                     }
                 } else {    
-                    swal("Map File Missing","You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", "error");
+                    swal({
+                        title: "Map File Missing",
+                        html: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
+                        type: "error"
+                    });
                 }
             } else {
-                swal("Version Mismatch", "Host running different version.<br /> Unable to join.", "error");
+                swal({
+                    title: "Version Mismatch", 
+                    html: "Host running different version.<br /> Unable to join.", 
+                    type: "error"
+                });
             }
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
     } else {
-        swal("Communication Error", "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", "error");        
+        swal({
+        title: "Communication Error", 
+        html: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
+        type: "error"
+        });        
     }
 }
 
@@ -351,7 +375,7 @@ function switchBrowser(browser) {
             dewRcon.send('game.menuurl ' + browserURL);
             dewRcon.send('writeconfig');
         }, "1000");  
-        sweetAlert.close();
+        sweetAlert.closeModal();
     });
 }
 
@@ -366,8 +390,8 @@ function checkUpdate(ver) {
 
             swal({   
                 title: "Version Outdated!",
-                text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
-                html: true, type: "error", allowEscapeKey: false
+                html: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+                type: "error", allowEscapeKey: false
             });
         }
     }
@@ -416,6 +440,26 @@ function mapMatch(thing, mapFile) {
     } else {
         thing.src='images/maps/unknown.png';
     }
+}
+
+function noSTEAMLockout(){
+    swal({   
+        title: "noSTEAM Release Detected",
+        html: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
+        type: "error", allowEscapeKey: false, showConfirmButton: false, allowOutsideClick: false
+    });
+}
+
+function howToServe(){
+    swal({   
+        title: "How to Host a Server",
+        html: 
+        "Hosting a server requires UDP port 9987 and TCP ports 11774 & 11775 to be forwarded on your router to your server's private IP address.<br/>"+
+        "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
+        "<a href='http://portforward.com/english/routers/port_forwarding/' target='_blank'>http://portforward.com/english/routers/port_forwarding/</a><br/><br/>"+
+        "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
+        width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
+    });
 }
 
 //==================================
@@ -574,14 +618,6 @@ function connectionTrigger() {
     });
 }
 
-function noSTEAMLockout(){
-    swal({   
-        title: "noSTEAM Release Detected",
-        text: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
-        html: true, type: "error", allowEscapeKey: false, showConfirmButton: false
-    });
-}
-
 function disconnectTrigger() {
     $('.closeButton').hide();
 	$('#serverTable_filter').css("right","-264px");
@@ -640,13 +676,13 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             if (e.control == "FACE_1") {
                 //console.log("A");
                 if($('.sweet-overlay').is(':visible')) {
-                    sweetAlert.close();   
+                    sweetAlert.closeModal();   
                 } else {
                     joinSelected();
                 }
             } else if (e.control == "FACE_2") {
                 //console.log("B");
-                sweetAlert.close();   
+                sweetAlert.closeModal();   
             } else if (e.control == "FACE_3") {
                 //console.log("X");
             } else if (e.control == "FACE_4") {
