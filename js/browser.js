@@ -25,17 +25,30 @@ swal.setDefaults({
     buttonsStyling: false
 })
 $(document).ready(function() {
-    fixResolution();
     getCurrentRelease();
     buildTable();
     setInterval( CheckPageFocus, 200 );
+
+    $( "#chatBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#chatHeader", cancel: "button" });
+    $( "#partyBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#partyHeader", cancel: "button" });
+
+    $( "#zoomSlider" ).slider({
+        value:1,
+        min: 0.75,
+        max: 2,
+        step: 0.05,
+        stop: function( event, ui ) {
+            var percentage = ui.value * 100;
+            adjustResolution( ui.value );
+            $('#zoomSlider .ui-slider-handle').text( percentage.toFixed(0) );
+        }
+    });
 });
 
-function fixResolution() {
-    zoomRatio = screen.width/1920;
-    if (zoomRatio > 1) {
-        $('body').css("zoom", zoomRatio);  
-    }
+/* Sets zoom level to specified value or reset if not specified */
+function adjustResolution(newZoom) {
+    if (!newZoom) { newZoom = 1; }
+    $('body').stop().animate({zoom: newZoom}, 500);
 }
 
 function getCurrentRelease() {
