@@ -332,14 +332,26 @@ function refreshTable() {
 }
 
 function quickMatch() {
-    var possibleServers = $('#serverTable').DataTable().order([13, 'desc'], [6,'asc']).draw();
-    console.log(possibleServers.rows( function (index, data, node){
-                                            if (eval(data[13]) == 1){
-                                                return false;
+    bestFrac = 0;
+    bestPing = 1000000;
+    joinServer($('#serverTable').DataTable().rows( function (index, data, node){
+                                            if (data[2] != ""){
+                                                return false;   //Remove private servers
                                             }
+                                            if (eval(data[13]) == 1){
+                                                return false;       //Remove full servers
+                                            }
+                                            if (eval(data[13]) < bestFrac){
+                                                return false;   //Better player fraction available
+                                            }
+                                            bestFrac = eval(data[13]);
+                                            if (data[6] > bestPing){
+                                                return false;   //Better ping available
+                                            }
+                                            bestPing = data[6];
                                             return true;
                                       }
-                                    ).data());
+    ).order([13, 'fracDesc']).draw().data()[0]);
 }
 
 function switchBrowser(browser) {
@@ -739,6 +751,18 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     },
 
     "playerCount-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    },
+    
+    "playerCount-fracAsc": function ( c, d ) {
+        var a = c;
+        var b = d;
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "playerCount-fracDesc": function ( c, d ) {
+        var a = c;
+        var b = d;
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 });
