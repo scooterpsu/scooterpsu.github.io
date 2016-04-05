@@ -454,7 +454,7 @@ function howToServe(){
     swal({   
         title: "How to Host a Server",
         html: 
-        "Hosting a server requires UDP port 9987 and TCP ports 11774 & 11775 to be forwarded on your router to your server's private IP address.<br/>"+
+        "Hosting a server requires UDP ports 9987 & 11774 and TCP port 11775 to be forwarded on your router to your server's private IP address.<br/>"+
         "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
         "<a href='http://portforward.com/english/routers/port_forwarding/' target='_blank'>http://portforward.com/english/routers/port_forwarding/</a><br/><br/>"+
         "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
