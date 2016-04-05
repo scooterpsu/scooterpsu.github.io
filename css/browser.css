@@ -30,13 +30,15 @@ b, strong{
 
 body {
 	background-color: #05152f;
-    position: relative;
-    width: -webkit-calc(100% - 30px);
-    margin-left: auto;
-    margin-right: auto;
-    overflow-y: hidden;
-    font-family: 'BlenderPro-Book'; 
-    letter-spacing: 1px;
+	position: relative;
+	box-sizing: border-box;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0 15px;
+	width: calc(100% - 30px);
+	overflow-y: hidden;
+	font-family: 'BlenderPro-Book';
+	letter-spacing: 1px;
 }
 
 img{
@@ -53,7 +55,7 @@ button {
     opacity: 0.8;
     position: absolute;
     top: -8px;
-    left: 12px;
+    left: 26px;
     z-index: 2;
 }
 
@@ -62,7 +64,7 @@ button {
     opacity: 0.8;
     position: absolute;
     top: 10px;
-    left: 200px;
+    left: 215px;
     color: white;
     font-size: 12pt;
     background-color: black;
@@ -70,7 +72,7 @@ button {
     height: 30px;
     border-style: solid;
     border: 1px solid white;
-	z-index:1000;
+    z-index:1000;
 }
 
 .refresh:hover{
@@ -115,13 +117,13 @@ button {
     padding: 8px;
     position: absolute;
     left: 588px;
-    bottom: 4px;
+    bottom: 4;
     z-index: 3;
     font-family: 'BlenderPro-Book';
 }
 
 .dewmenu{
-    left: 45px;
+    left: 60px;
 }
 
 .feeltrain{
@@ -141,18 +143,115 @@ button {
 }
 
 ::selection{
-  background-color: #13233d;
+  	background-color: #13233d;
 }
 
 #message{
-background-color: purple;
-color: white;
-position: absolute;
-top: 20px;
-left: 20px;
-width: 200px;
-height: 50px;
-z-index: 10;
+	background-color: purple;
+	color: white;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 200px;
+	height: 50px;
+	z-index: 10;
+}
+
+.slider {
+    position: absolute;
+    right: 0;
+    width: 40%;
+    z-index: 1000000;
+    background: #404F70;
+}
+
+.ui-slider-handle {
+    left: 78.2828%;
+    position: relative;
+    display: block;
+    width: 5%;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    line-height: 0;
+    background: rgb(205, 208, 213);
+}
+
+.serverPool{
+    position: absolute;
+    width: 600px;
+    height: 5px;
+    left: 25px;
+    top: 45px;
+    z-index: 10;
+}
+
+.howToServe{
+    opacity: 0.8;
+    position: absolute;
+    top: 10px;
+    left: 700px;
+    padding: 3px 20px;
+    padding-bottom: 50px;
+    background-color: #13233d;
+    border: 2px solid #404f70;
+    color: white;
+    font-size: 12pt;
+    font-family: 'BlenderPro-Medium';
+}
+
+.howToServe:hover{
+    background-color: #31415b;
+}
+
+.alertWindow, .howToServeWindow{
+    border-radius: 0;
+    background-color: #13233d !important;
+    color: white; 
+    font-family: 'BlenderPro-Book'; 
+    padding-top: 50px !important;
+    font-size: 18pt;
+    border: 2px solid #404f70;
+    outline: 0;
+    line-height: 1em;
+}
+
+.alertWindow .icon, .alertWindow .sweet-image{
+    margin-top: 10px;
+}
+
+.alertWindow .sweet-spacer, .howToServeWindow .sweet-spacer{
+    margin: 0 !important;
+    height: 20px !important;
+}
+
+.alertWindow h2, .howToServeWindow h2{
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    background-color: black;
+    font-size: 18pt;
+    border-bottom: 2px solid #404f70;
+}
+
+.alertConfirm, .alertCancel{
+    border-style: solid;
+    border: 1px solid white;
+    background-color: black;
+    font-family: 'BlenderPro-Book'; 
+    font-size: 14pt;
+    padding: 3px 20px;
+}
+
+.alertConfirm:hover, .alertCancel:hover{
+    background-color: #31415b;    
+}
+
+.howToServeWindow .sweet-content{
+    text-align: left;
 }
 
 /*==============================*/
@@ -444,7 +543,7 @@ z-index: 10;
     width: 250px;
     position: relative;
     top: 2px;
-    right: 2px;
+    right: -15px;
     float: right;
     z-index: 2;
     margin-top: 54px;
