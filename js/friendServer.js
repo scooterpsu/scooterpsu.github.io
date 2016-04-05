@@ -11,10 +11,11 @@ StartConnection = function() {
                 type: "connection",
                 message: " has connected.",
                 guid: puid,
-                player: pname
+                player: pname,
+                colour: color
             }));
             party = [];
-            party.push(pname + ":" + puid);
+            party.push(pname + ":" + puid + ":" + color);
             loadParty();
             console.log('Connected to Friend Server!');
             friendServerConnected = true;
@@ -165,7 +166,7 @@ StartConnection = function() {
 				case "acceptparty":
                     $("#chat").append("<span id='statusLine'>"+ result.player + " has joined your party.</span><br/>");
                     updateScroll();
-                    party.push(result.player + ":" + result.pguid);
+                    party.push(result.player + ":" + result.pguid + ":" + result.colour);
                     
                     for (var i = 0; i < party.length; i++) {
                         friendServer.send(JSON.stringify({
@@ -230,10 +231,11 @@ function partyInvite(accepted, guid) {
 	console.log(guid);
 	if (accepted) {
 		friendServer.send(JSON.stringify({
-			type: 'acceptparty',
-			player: pname,
-			guid: guid,
-			pguid: puid
+            type: 'acceptparty',
+            player: pname,
+            guid: guid,
+            pguid: puid,
+            colour: color
 		}));
 	}
 	console.log(accepted);
