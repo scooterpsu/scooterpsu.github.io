@@ -351,7 +351,7 @@ function quickMatch() {
                                             bestPing = data[6];
                                             return true;
                                       }
-    ).order([13, 'fracDesc']).draw().data()[0]);
+    ).order([13, 'fracDesc']).draw().data()[0][0]);
 }
 
 function switchBrowser(browser) {
