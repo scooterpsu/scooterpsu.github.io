@@ -103,7 +103,7 @@ button {
     opacity: 0.8;
     position: absolute;
     top: 5px;
-    left: 350px;
+    left: 500px;
     z-index: 2;
 }
 
@@ -188,7 +188,7 @@ z-index: 10;
     padding-top: 3px;
     padding-bottom: 9px;
     position: absolute;
-    left: 580px;
+    left: 690px;
     top: 10px;
     padding-left: 50px;
     padding-right: 20px;
@@ -583,7 +583,7 @@ z-index: 10;
     height:100vh;
     width: 100%;
     padding: 1px;
-    -webkit-clip-path: polygon(575px 0%, 625px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(700px 0%, 750px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
     z-index: 1;
 }
 
@@ -593,7 +593,7 @@ z-index: 10;
     left: 1px;
     height:100vh;
     padding: 5px;
-    -webkit-clip-path: polygon(573px 0%, 623px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
+    -webkit-clip-path: polygon(694px 0%, 744px 45px, 100% 45px, 100% 100%, 40px 100%, 0 -webkit-calc(100% - 45px), 0 0);
     z-index: 1;
 }
 
