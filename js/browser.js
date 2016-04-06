@@ -334,27 +334,39 @@ function refreshTable() {
 function quickMatch() {
     bestFrac = 0;
     bestPing = 1000000;
-    joinServer($('#serverTable').DataTable().rows( function (index, data, node){
+    var possibleServers = $('#serverTable').DataTable().rows( function (index, data, node){
                                             if (data[2] != ""){
+                                                //console.log("Removing for private: " + data);
                                                 return false;   //Remove private servers
                                             }
-                                            if (eval(data[13]) == 1){
+                                            if (1.0*eval(data[13]) == 1){
+                                                //console.log("Removing for full: " + data);
                                                 return false;       //Remove full servers
                                             }
                                             if (friendServerConnected && (serverList.servers[index].maxPlayers - serverList.servers[index].numPlayers) < party.length){
+                                                //console.log("Removing for party: " + data);
                                                 return false;   //Remove servers without enough space for your party
                                             }
                                             if (eval(data[13]) < bestFrac){
+                                                //console.log("Removing for frac: " + data);
                                                 return false;   //Better player fraction available
                                             }
-                                            bestFrac = eval(data[13]);
-                                            if (data[6] > bestPing){
+                                            if (eval(data[13]) == bestFrac && data[6] > bestPing){
+                                                /*console.log("Removing for ping: " + data);
+                                                console.log(bestPing + " | " + data[6]);
+                                                console.log(bestFrac + " | " + data[13]);*/
                                                 return false;   //Better ping available
                                             }
+                                            bestFrac = eval(data[13]);
                                             bestPing = data[6];
+                                            /*console.log(data);
+                                            console.log(bestFrac);
+                                            console.log(bestPing);*/
                                             return true;
                                       }
-    ).order([13, 'fracDesc']).draw().data()[0][0]);
+    ).order([13, 'fracDesc']).draw().data();
+    //console.log(possibleServers[possibleServers.length-1][0]);
+    joinServer(possibleServers[possibleServers.length-1][0]);
 }
 
 function switchBrowser(browser) {
