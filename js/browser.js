@@ -341,6 +341,9 @@ function quickMatch() {
                                             if (eval(data[13]) == 1){
                                                 return false;       //Remove full servers
                                             }
+                                            if (friendServerConnected && (serverList.servers[index].maxPlayers - serverList.servers[index].numPlayers) < party.length){
+                                                return false;   //Remove servers without enough space for your party
+                                            }
                                             if (eval(data[13]) < bestFrac){
                                                 return false;   //Better player fraction available
                                             }
