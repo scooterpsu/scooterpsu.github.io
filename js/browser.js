@@ -132,12 +132,12 @@ function buildTable() {
 	});
  
 	var jqhxr = $.ajax({
-        url: "http://eldewrito.red-m.net/list", 
+        url: "http://158.69.166.144:8080/list", 
             type: 'GET',
             datatype: 'json',
-            headers : {
-                'X-Player' : pname+":"+puid
-            }
+            //headers : {
+            //    'X-Player' : pname+":"+puid
+            //}
     })
     .done(function( data ) {
         var pingDelay = 120;
