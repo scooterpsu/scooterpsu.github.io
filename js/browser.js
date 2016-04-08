@@ -130,8 +130,15 @@ function buildTable() {
             "lengthMenu": "Show _MENU_ servers"
 		}
 	});
-
-	var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
+ 
+	var jqhxr = $.ajax({
+        url: "http://eldewrito.red-m.net/list", 
+            type: 'GET',
+            datatype: 'json',
+            headers : {
+                'X-Player' : pname+":"+puid
+            }
+    })
     .done(function( data ) {
         var pingDelay = 120;
         for(var i = 0; i < data.result.servers.length; i++) {
