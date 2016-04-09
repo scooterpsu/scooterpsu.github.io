@@ -53,34 +53,34 @@ function adjustResolution(newZoom) {
 }
 
 function getCurrentRelease() {
-	var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
+    var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
     .done(function( data ) {
         EDVersion = Object.keys(data)[0];
     })
 }
         
 function buildTable() {
-	$('#serverTable').on('click', 'tr', function() {
-		var tr = $(this).closest('tr');
-		var row = table.row( tr );
-		if (row.data()) {
-			joinServer(row.data()[0]);
-		} 
+    $('#serverTable').on('click', 'tr', function() {
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+        if (row.data()) {
+            joinServer(row.data()[0]);
+        } 
     });  
     $('#serverTable').on('mouseover', 'tr', function() {
-		var tr = $(this).closest('tr');
-		var row = table.row( tr );
-		if (row.data()) {
-			fillGameCard(row.data()[0]);
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+        if (row.data()) {
+            fillGameCard(row.data()[0]);
         }
     });
   
-	var table = $('#serverTable').DataTable( {
-		"footerCallback": function ( row, data, start, end, display ) {
+    var table = $('#serverTable').DataTable( {
+        "footerCallback": function ( row, data, start, end, display ) {
             var playerOut = playerCount + " players";
-			var serverOut = serverCount + " servers";
-			$('.playerCount').html(playerOut);
-			$('.serverCount').html(serverOut);
+            var serverOut = serverCount + " servers";
+            $('.playerCount').html(playerOut);
+            $('.serverCount').html(serverOut);
             if (playerCount >= 420 && playerCount < 426) {
                 $('.playerCount').css("color", "#007700");
             } else {
@@ -92,7 +92,7 @@ function buildTable() {
         scroller: true,
         destroy: true,
         "iDisplayLength": 10,
-		stateSave: true,
+        stateSave: true,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
@@ -103,35 +103,35 @@ function buildTable() {
                 return img_str;
             }, "aTargets":[ 5 ]}
         ],
-		columns: [
-			{ title: "ID", visible: false},
-			{ title: "IP", "width": "1%", visible: false},
+        columns: [
+            { title: "ID", visible: false},
+            { title: "IP", "width": "1%", visible: false},
             { title: "", "width": "0.5%"},
-			{ title: "Name" },
-			{ title: "Host" },
+            { title: "Name" },
+            { title: "Host" },
             { title: "Ping" , "width": "45px"},
             { title: "PingNum" , visible: false},           
-			{ title: "Map" },
-			{ title: "Map File", visible: false},
-			{ title: "Gametype"},
-			{ title: "Variant" },
-			{ title: "Status", visible: false},    
- 			{ title: "Num Players", visible: false},  
-			{ title: "Players", "width": "1%"},
+            { title: "Map" },
+            { title: "Map File", visible: false},
+            { title: "Gametype"},
+            { title: "Variant" },
+            { title: "Status", visible: false},    
+             { title: "Num Players", visible: false},  
+            { title: "Players", "width": "1%"},
             { title: "IsFull", "width": "1%", visible: false},
-			{ title: "Version", "width": "1%", visible: false}
-		],
-		"order": [[ 0 ]],
-		"language": {
-			"emptyTable": "No servers found",
+            { title: "Version", "width": "1%", visible: false}
+        ],
+        "order": [[ 0 ]],
+        "language": {
+            "emptyTable": "No servers found",
             "zeroRecords": "No matching servers found",
-			"infoEmpty": "No servers found",
+            "infoEmpty": "No servers found",
             "info": "Showing servers _START_ to _END_ of _TOTAL_",
             "lengthMenu": "Show _MENU_ servers"
-		}
-	});
+        }
+    });
  
-	var jqhxr = $.ajax({
+    var jqhxr = $.ajax({
         url: "http://eldewrito.red-m.net/list", 
             type: 'GET',
             datatype: 'json',
@@ -376,6 +376,44 @@ function refreshTable() {
     }
 }
 
+function quickMatch() {
+    bestFrac = 0;
+    bestPing = 1000000;
+    var possibleServers = $('#serverTable').DataTable().rows( function (index, data, node){
+        if (data[2] != ""){
+            //console.log("Removing for private: " + data);
+            return false;   //Remove private servers
+        }
+        if (1.0*eval(data[13]) == 1){
+            //console.log("Removing for full: " + data);
+            return false;       //Remove full servers
+        }
+        if (friendServerConnected && (serverList.servers[index].maxPlayers - serverList.servers[index].numPlayers) < party.length){
+            //console.log("Removing for party: " + data);
+            return false;   //Remove servers without enough space for your party
+        }
+        if (eval(data[13]) < bestFrac){
+            //console.log("Removing for frac: " + data);
+            return false;   //Better player fraction available
+        }
+        if (eval(data[13]) == bestFrac && data[6] > bestPing){
+            /*console.log("Removing for ping: " + data);
+            console.log(bestPing + " | " + data[6]);
+            console.log(bestFrac + " | " + data[13]);*/
+            return false;   //Better ping available
+        }
+        bestFrac = eval(data[13]);
+        bestPing = data[6];
+        /*console.log(data);
+        console.log(bestFrac);
+        console.log(bestPing);*/
+        return true;
+  }
+    ).order([13, 'fracDesc']).draw().data();
+    //console.log(possibleServers[possibleServers.length-1][0]);
+    joinServer(possibleServers[possibleServers.length-1][0]);
+}
+
 function switchBrowser(browser) {
     swal({   
         title: "Change Server Browser",   
@@ -431,18 +469,18 @@ function hasMap(map) {
 function closeBrowser() {
     ga('send', 'event', 'close-menu');
 
-	if(dewRconConnected) {
-		setTimeout(function() {
-			dewRcon.send('menu.show');
-			dewRcon.send('Game.SetMenuEnabled 0');
-		}, "1000");
-	} else{
-		window.close();
-	}
+    if(dewRconConnected) {
+        setTimeout(function() {
+            dewRcon.send('menu.show');
+            dewRcon.send('Game.SetMenuEnabled 0');
+        }, "1000");
+    } else{
+        window.close();
+    }
 }
 
 String.prototype.contains = function(it) {
-	return this.indexOf(it) != -1;
+    return this.indexOf(it) != -1;
 };
 
 function CheckPageFocus() {
@@ -505,9 +543,9 @@ function partyConnect(ip, pass) {
 }
 
 function loadOnline() {
-	$('#allOnline').empty();
-	if(onlinePlayers.length > 0) {
-		for(var i=0; i < onlinePlayers.length; i++) {
+    $('#allOnline').empty();
+    if(onlinePlayers.length > 0) {
+        for(var i=0; i < onlinePlayers.length; i++) {
             if($.inArray(onlinePlayers[i], party) == -1){
                 if (onlinePlayers[i].split(":")[1] != "not" && onlinePlayers[i].split(":")[0].length > 0 && onlinePlayers[i].split(":")[1].length > 0){
                     $('<div>', {
@@ -517,8 +555,8 @@ function loadOnline() {
                     }).appendTo('#allOnline');
                 }
             }
-		}
-	}
+        }
+    }
 }
 
 $(function() {
@@ -618,7 +656,7 @@ function connectionTrigger() {
         setTimeout(StartConnection, 2000);
     }
     $('.closeButton').show();
-	$('#serverTable_filter').css("right","-160px");
+    $('#serverTable_filter').css("right","-160px");
     dewRcon.send('game.version', function(resa) { 
         dewRcon.send('game.listmaps', function(resb) {
             dewRcon.send('player.name', function(resc) {
@@ -648,7 +686,7 @@ function connectionTrigger() {
 
 function disconnectTrigger() {
     $('.closeButton').hide();
-	$('#serverTable_filter').css("right","-264px");
+    $('#serverTable_filter').css("right","-264px");
 }
 
 //==============================
@@ -664,15 +702,15 @@ Mousetrap.bind('f11', function() {
 //=============================
 
 function updateSelection() {
-	$('#serverTable tbody tr.selected').removeClass('selected');
-	$("#serverTable tbody tr:eq(" + selectedID + ")").addClass("selected");
-	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
+    $('#serverTable tbody tr.selected').removeClass('selected');
+    $("#serverTable tbody tr:eq(" + selectedID + ")").addClass("selected");
+    var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
     fillGameCard(row[0]);
 }
 
 function joinSelected() {
-	var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
-	joinServer(row[0]);
+    var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
+    joinServer(row[0]);
 }
 
 var gamepad = new Gamepad();
@@ -792,6 +830,18 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     },
 
     "playerCount-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    },
+    
+    "playerCount-fracAsc": function ( c, d ) {
+        var a = c;
+        var b = d;
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "playerCount-fracDesc": function ( c, d ) {
+        var a = c;
+        var b = d;
         return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     }
 });
