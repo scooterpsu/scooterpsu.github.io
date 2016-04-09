@@ -10,24 +10,46 @@ var isThrottled = false;
 var throttleDuration = 30000; // ms
 var serverCount = 0;
 var playerCount = 0;
+var totalSlotCount = 0;
+var openSlotCount = 0;
 var gameVersion = 0;
 var pname = "";
 var puid = "";
+var color = "#000000"
 var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+swal.setDefaults({
+    customClass: "alertWindow",
+    confirmButtonClass: "alertConfirm",
+    cancelButtonClass: "alertCancel",
+    buttonsStyling: false
+})
 $(document).ready(function() {
-    fixResolution();
     getCurrentRelease();
     buildTable();
     setInterval( CheckPageFocus, 200 );
+
+    $( "#chatBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#chatHeader", cancel: "button" });
+    $( "#partyBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#partyHeader", cancel: "button" });
+
+    $( "#zoomSlider" ).slider({
+        value:1,
+        min: 0.75,
+        max: 2,
+        step: 0.05,
+        stop: function( event, ui ) {
+            var percentage = ui.value * 100;
+            adjustResolution( ui.value );
+            $('#zoomSlider .ui-slider-handle').text( percentage.toFixed(0) );
+        }
+    });
 });
 
-function fixResolution() {
-    zoomRatio = screen.width/1920;
-    if (zoomRatio > 1) {
-        $('body').css("zoom", zoomRatio);  
-    }
+/* Sets zoom level to specified value or reset if not specified */
+function adjustResolution(newZoom) {
+    if (!newZoom) { newZoom = 1; }
+    $('body').stop().animate({zoom: newZoom}, 500);
 }
 
 function getCurrentRelease() {
@@ -108,8 +130,15 @@ function buildTable() {
             "lengthMenu": "Show _MENU_ servers"
 		}
 	});
-
-	var jqhxr = $.getJSON( "http://eldewrito.red-m.net/list", null)
+ 
+	var jqhxr = $.ajax({
+        url: "http://eldewrito.red-m.net/list", 
+            type: 'GET',
+            datatype: 'json',
+            headers : {
+                'X-Player' : pname+":"+puid
+            }
+    })
     .done(function( data ) {
         var pingDelay = 120;
         for(var i = 0; i < data.result.servers.length; i++) {
@@ -151,6 +180,11 @@ function buildTable() {
                                 }
                                 if(!serverInfo.hasOwnProperty("passworded")) {
                                     serverInfo["passworded"] = "";
+                                    var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
+                                    totalSlotCount += serverInfo.maxPlayers;
+                                    openSlotCount += openSlots;
+                                    $(".serverPool").attr('value', openSlotCount);
+                                    $(".serverPool").attr('max', totalSlotCount);
                                 } else {
                                     serverInfo["passworded"] = "🔒";
                                 };
@@ -201,7 +235,6 @@ function buildTable() {
 }
 
 function joinServer(i) {
-    swal.setDefaults({ html: true });
     if(dewRconConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
@@ -234,7 +267,7 @@ function joinServer(i) {
                                                     } else {
                                                         closeBrowser();                                                       
                                                     }
-                                                    sweetAlert.close();
+                                                    sweetAlert.closeModal();
                                                 }
                                             }
                                         }
@@ -256,16 +289,28 @@ function joinServer(i) {
                         }
                     }
                 } else {    
-                    swal("Map File Missing","You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", "error");
+                    swal({
+                        title: "Map File Missing",
+                        html: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
+                        type: "error"
+                    });
                 }
             } else {
-                swal("Version Mismatch", "Host running different version.<br /> Unable to join.", "error");
+                swal({
+                    title: "Version Mismatch", 
+                    html: "Host running different version.<br /> Unable to join.", 
+                    type: "error"
+                });
             }
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
     } else {
-        swal("Communication Error", "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", "error");        
+        swal({
+        title: "Communication Error", 
+        html: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
+        type: "error"
+        });        
     }
 }
 
@@ -389,7 +434,7 @@ function switchBrowser(browser) {
             dewRcon.send('game.menuurl ' + browserURL);
             dewRcon.send('writeconfig');
         }, "1000");  
-        sweetAlert.close();
+        sweetAlert.closeModal();
     });
 }
 
@@ -404,8 +449,8 @@ function checkUpdate(ver) {
 
             swal({   
                 title: "Version Outdated!",
-                text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
-                html: true, type: "error", allowEscapeKey: false
+                html: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+                type: "error", allowEscapeKey: false
             });
         }
     }
@@ -456,6 +501,26 @@ function mapMatch(thing, mapFile) {
     }
 }
 
+function noSTEAMLockout(){
+    swal({   
+        title: "noSTEAM Release Detected",
+        html: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
+        type: "error", allowEscapeKey: false, showConfirmButton: false, allowOutsideClick: false
+    });
+}
+
+function howToServe(){
+    swal({   
+        title: "How to Host a Server",
+        html: 
+        "Hosting a server requires UDP ports 9987 & 11774 and TCP port 11775 to be forwarded on your router to your server's private IP address.<br/>"+
+        "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
+        "<a href='http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/' target='_blank'>http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/</a><br/><br/>"+
+        "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
+        width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
+    });
+}
+
 //==================================
 //===== Friendserver Functions =====
 //==================================
@@ -483,7 +548,11 @@ function loadOnline() {
 		for(var i=0; i < onlinePlayers.length; i++) {
             if($.inArray(onlinePlayers[i], party) == -1){
                 if (onlinePlayers[i].split(":")[1] != "not" && onlinePlayers[i].split(":")[0].length > 0 && onlinePlayers[i].split(":")[1].length > 0){
-                    $('#allOnline').append("<div class='friend'>"+onlinePlayers[i].split(":")[0]+"<button class='addToParty' onClick=\"inviteToParty('"+onlinePlayers[i].split(":")[1]+"');\">+</button></div>");
+                    $('<div>', {
+                        class: 'friend',
+                        text: onlinePlayers[i].split(":")[0],
+                        'data-pid': onlinePlayers[i].split(":")[1]
+                    }).appendTo('#allOnline');
                 }
             }
 		}
@@ -593,30 +662,25 @@ function connectionTrigger() {
             dewRcon.send('player.name', function(resc) {
                 dewRcon.send('player.printUID', function(resd) {
                     dewRcon.send('Game.LogName', function(rese) {
-                        if (gameVersion === 0) {
-                            gameVersion = resa;
-                            checkUpdate(gameVersion);
-                        }               
-                        if (resb.contains(",") && mapList[0].length == 0) {
-                            mapList = new Array(resb.split(','));
-                        }
-                        pname = resc;
-                        puid = resd.split(' ')[2];
-                        if (rese == "nosteam.log"){
-                            noSTEAMLockout();
-                        }
+                       dewRcon.send('Player.Colors.Primary', function(resf) {
+                            if (gameVersion === 0) {
+                                gameVersion = resa;
+                                checkUpdate(gameVersion);
+                            }               
+                            if (resb.contains(",") && mapList[0].length == 0) {
+                                mapList = new Array(resb.split(','));
+                            }
+                            pname = resc;
+                            puid = resd.split(' ')[2];
+                            if (rese == "nosteam.log"){
+                                noSTEAMLockout();
+                            }
+                            color = resf;
+                        });
                     });
                 });
             });
         });
-    });
-}
-
-function noSTEAMLockout(){
-    swal({   
-        title: "noSTEAM Release Detected",
-        text: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
-        html: true, type: "error", allowEscapeKey: false, showConfirmButton: false
     });
 }
 
@@ -678,13 +742,13 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             if (e.control == "FACE_1") {
                 //console.log("A");
                 if($('.sweet-overlay').is(':visible')) {
-                    sweetAlert.close();   
+                    sweetAlert.closeModal();   
                 } else {
                     joinSelected();
                 }
             } else if (e.control == "FACE_2") {
                 //console.log("B");
-                sweetAlert.close();   
+                sweetAlert.closeModal();   
             } else if (e.control == "FACE_3") {
                 //console.log("X");
             } else if (e.control == "FACE_4") {
