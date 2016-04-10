@@ -130,19 +130,38 @@ function buildTable() {
             "lengthMenu": "Show _MENU_ servers"
         }
     });
- 
-    var jqhxr = $.ajax({
-        url: "http://158.69.166.144:8080/list", 
-            type: 'GET',
-            datatype: 'json',
-            //headers : {
-            //    'X-Player' : pname+":"+puid
-            //}
-    })
+
+    var master_servers = [];
+    var server_list = [];
+    var mshxr = $.getJSON("https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dewrito.json")
     .done(function( data ) {
+        console.log(data);
+        var master_count = 0;
+        for (var i = 0; i<data.masterServers.length; i++){
+            master_count++
+            window.master_length = data.masterServers.length;
+            console.log(data.masterServers.length);
+            var jqhxr = $.ajax({
+            url: data.masterServers[i].list, 
+                type: 'GET',
+                datatype: 'json',
+                async: false
+                //headers : {
+                //    'X-Player' : pname+":"+puid
+                //}
+            })
+            .done(function( data ) {
+                for(var ii = 0; ii < data.result.servers.length; ii++) {
+                    if (!(data.result.servers[ii] in server_list)) {
+                        server_list.push(data.result.servers[ii]);
+                    }
+                }
+            });
+        }
+        server_list = unique(server_list);
         var pingDelay = 120;
-        for(var i = 0; i < data.result.servers.length; i++) {
-            var serverIP = data.result.servers[i];
+        for (var i = 0; i < server_list.length; i++){
+            serverIP = server_list[i];
             if(VerifyIPRegex.test(serverIP)) {
                 serverList.servers.push({serverIP, i});
                 (function(i, serverIP) {
@@ -230,7 +249,8 @@ function buildTable() {
             } else {
                 console.log(serverIP + " is invalid, skipping.");
             }
-        }                 
+        }
+        
     });
 }
 
@@ -352,6 +372,14 @@ function fillGameCard(i) {
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function unique(list) {
+  var result = [];
+  $.each(list, function(i, e) {
+    if ($.inArray(e, result) == -1) result.push(e);
+  });
+  return result;
 }
 
 function refreshTable() {
