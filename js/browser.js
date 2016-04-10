@@ -135,12 +135,10 @@ function buildTable() {
     var server_list = [];
     var mshxr = $.getJSON("https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dewrito.json")
     .done(function( data ) {
-        console.log(data);
         var master_count = 0;
         for (var i = 0; i<data.masterServers.length; i++){
             master_count++
             window.master_length = data.masterServers.length;
-            console.log(data.masterServers.length);
             var jqhxr = $.ajax({
             url: data.masterServers[i].list, 
                 type: 'GET',
