@@ -30,7 +30,7 @@ $(document).ready(function() {
     setInterval( CheckPageFocus, 200 );
     $( "#zoomSlider" ).slider({
         value:1,
-        min: 0.75,
+        min: 0.5,
         max: 2,
         step: 0.05,
         stop: function( event, ui ) {
@@ -64,7 +64,9 @@ function loadSettings(i){
 /* Sets zoom level to specified value or reset if not specified */
 function adjustResolution(newZoom) {
     if (!newZoom) { newZoom = 1; }
-    $('body').stop().animate({zoom: newZoom}, 500);
+    $('body').stop().animate({zoom: newZoom}, 500, function() {
+        $('#serverTable').DataTable().draw(); 
+  });
 }
 
 function getCurrentRelease() {
