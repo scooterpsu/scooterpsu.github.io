@@ -28,12 +28,9 @@ swal.setDefaults({
 })
 $(document).ready(function() {
     getCurrentRelease();
+    //loadSettings(0);
     buildTable();
     setInterval( CheckPageFocus, 200 );
-
-    $( "#chatBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#chatHeader", cancel: "button" });
-    $( "#partyBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#partyHeader", cancel: "button" });
-
     $( "#zoomSlider" ).slider({
         value:1,
         min: 0.75,
@@ -46,6 +43,26 @@ $(document).ready(function() {
         }
     });
 });
+
+var settingsToLoad = [['pname', 'player.name'], ['puid', 'player.printUID'], ['mapList', 'game.listmaps']];
+function loadSettings(i){
+	if (i != settingsToLoad.length) {
+		dew.command(settingsToLoad[i][1], {}, function(response) {
+			if(settingsToLoad[i][1].contains("listmaps")){
+				window[settingsToLoad[i][0]] = [[]];
+				mapList = new Array(response.split(','));
+			} else if(settingsToLoad[i][1].contains("printUID")){
+				window[settingsToLoad[i][0]] = response.split(' ')[2];
+			} else {
+				window[settingsToLoad[i][0]] = response;
+			}
+			i++;
+			loadSettings(i);
+		});
+	} else {
+		loadedSettings = true;
+	}
+}
 
 /* Sets zoom level to specified value or reset if not specified */
 function adjustResolution(newZoom) {
@@ -94,6 +111,7 @@ function buildTable() {
         destroy: true,
         "iDisplayLength": 10,
         stateSave: true,
+        bInfo: false,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
@@ -254,7 +272,6 @@ function buildTable() {
 }
 
 function joinServer(i) {
-    if(dewRconConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
@@ -324,13 +341,6 @@ function joinServer(i) {
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
-    } else {
-        swal({
-        title: "Communication Error", 
-        text: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
-        type: "error"
-        });        
-    }
 }
 
 function pingMe(ip, rowNum, delay) {
@@ -546,174 +556,6 @@ function howToServe(){
         "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
         width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
     });
-}
-
-//==================================
-//===== Friendserver Functions =====
-//==================================
-
-function partyConnect(ip, pass) {
-    if (party[0].split(':')[1] == puid) {
-        if(party.length > 1){
-            for (var p = 0; p < party.length; p++ ) {
-                if (party[p].split(':')[1] != puid) {
-                    friendServer.send(JSON.stringify({
-                        type: 'connect',
-                        guid: party[p].split(':')[1],
-                        address: ip,
-                        password: pass
-                    }));
-                }
-            }
-        }
-    }
-}
-
-function loadOnline() {
-    $('#allOnline').empty();
-    if(onlinePlayers.length > 0) {
-        for(var i=0; i < onlinePlayers.length; i++) {
-            if($.inArray(onlinePlayers[i], party) == -1){
-                if (onlinePlayers[i].split(":")[1] != "not" && onlinePlayers[i].split(":")[0].length > 0 && onlinePlayers[i].split(":")[1].length > 0){
-                    $('<div>', {
-                        class: 'friend',
-                        text: onlinePlayers[i].split(":")[0],
-                        'data-pid': onlinePlayers[i].split(":")[1]
-                    }).appendTo('#allOnline');
-                }
-            }
-        }
-    }
-}
-
-$(function() {
-    $("#messageBox").keypress(function (e) {
-        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-            $('#submitButton').click();
-            return false;
-        } else {
-            return true;
-        }
-    });
-});
-
-function chatInput(text){
-    if(friendServerConnected){
-        if(text.length > 0){
-            $("#chat").append(new Date().timeNow()+ "<b> "+ pname + ":</b> " + text + "<br/>");
-            updateScroll();
-            if(party.length > 0) {
-                sendPartyMessage(text);
-            }
-            $("#messageBox").val("");
-        }
-    } else {
-        console.log("not connected");
-        $("#messageBox").val("");
-    }
-}
-
-Date.prototype.timeNow = function () {
-     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes();
-}
-
-function sendPartyMessage(message){
-    friendServer.send(JSON.stringify({
-        type: "partymessage",
-        message: message,
-        player: pname,
-        senderguid: puid,
-        partymembers: party
-    }));  
-}
-
-var onlineShown = false;
-function showOnline(){
-    if (!onlineShown){
-        $("#allOnline").css("display", "block");
-        $("#party").css("display", "none");
-        onlineShown = true;
-    } else {
-        $("#allOnline").css("display", "none");
-        $("#party").css("display", "block");
-        onlineShown = false;
-    }
-}
-
-var chatShown = false;
-function showChat(){
-    if (!chatShown){
-        $("#chatBorder").css("display", "block");
-        chatShown = true;
-    } else {
-        $("#chatBorder").css("display", "none");
-        chatShown = false;
-    }
-}
-
-var partyListShown = false;
-function showPartyList(){
-    if (!partyListShown){
-        $("#partyBorder").css("display", "block");
-        partyListShown = true;
-    } else {
-        $("#partyBorder").css("display", "none");
-        partyListShown = false;
-    }
-}
-
-var scrolled = false;
-function updateScroll(){
-    if(!scrolled){
-        var element = document.getElementById("chat");
-        element.scrollTop = element.scrollHeight;
-    }
-}
-
-$("#chat").on('scroll', function(){
-    scrolled=true;
-});
-
-//============================
-//===== dewRcon triggers =====
-//============================
-
-function connectionTrigger() {
-    if(!friendServerConnected) {
-        setTimeout(StartConnection, 2000);
-    }
-    $('.closeButton').show();
-    $('#serverTable_filter').css("right","-160px");
-    dewRcon.send('game.version', function(resa) { 
-        dewRcon.send('game.listmaps', function(resb) {
-            dewRcon.send('player.name', function(resc) {
-                dewRcon.send('player.printUID', function(resd) {
-                    dewRcon.send('Game.LogName', function(rese) {
-                       dewRcon.send('Player.Colors.Primary', function(resf) {
-                            if (gameVersion === 0) {
-                                gameVersion = resa;
-                                checkUpdate(gameVersion);
-                            }               
-                            if (resb.contains(",") && mapList[0].length == 0) {
-                                mapList = new Array(resb.split(','));
-                            }
-                            pname = resc;
-                            puid = resd.split(' ')[2];
-                            if (rese == "nosteam.log"){
-                                noSTEAMLockout();
-                            }
-                            color = resf;
-                        });
-                    });
-                });
-            });
-        });
-    });
-}
-
-function disconnectTrigger() {
-    $('.closeButton').hide();
-    $('#serverTable_filter').css("right","-264px");
 }
 
 //==============================

@@ -4,12 +4,8 @@
     <title>Server Browser</title>
 		<!-- Includes -->
 		<script src="js/handlebars.min.js"></script>
-		<script src="js/jquery-1.11.3.min.js"></script>
+        <script src="js/jquery-2.2.1.min.js"></script>
         <script src="js/jquery-ui.js"></script>
-		<!-- Bootstrap -->
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-		<script src="js/bootstrap.min.js"></script>
 		<!-- DataTables -->
 		<link rel="stylesheet" href="css/jquery.dataTables.min.css">
 		<script src="js/jquery.dataTables.min.js"></script>
@@ -17,12 +13,11 @@
 		<!-- Sweet Alert -->
         <script src="js/sweetalert.min.js"></script> 
         <link rel="stylesheet" type="text/css" href="css/sweetalert.css">       
-        <link rel="stylesheet" type="text/css" href="css/eldorito.css">    
+        <link rel="stylesheet" type="text/css" href="css/eldorito.css">
         <!-- Gamepad support -->
         <script src="js/gamepad.js"></script>
 		<!-- Eldorito Stuff -->
-		<script src="js/dewRcon.js"></script>
-        <script src="js/friendServer.js"></script>
+        <script type="text/javascript" src="dew://lib/dew.js"></script>
 		<!-- Custom stuff -->
 		<script src="js/browser.js"></script>
 		<link rel="stylesheet" href="css/browser.css">
@@ -37,44 +32,24 @@
           ga('create', 'UA-72472081-1', 'auto');
           ga('send', 'pageview');
         </script>
+
 </head>
 
 <body>
 	<h3 class="browserTitle">Server Browser</h3>
 	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
-    <progress class="serverPool" value="0" max="100"></progress>
     <button class="refresh" onclick="refreshTable();">Refresh</button>
-    <button class="quickMatch" onclick="quickMatch();">Quick Match</button>
-	<button class="closeButton" onclick="closeBrowser();">Close<img class="controllerButton" src="images/360_Back.png"></button>
-    <button class="togglePartyList" onClick="showPartyList();">Party</button>
-    <!--<div id="connectionStatus"></div>-->
-    <button class="howToServe" onclick="howToServe();">How To Host</button>
+	<button class="closeButton" onclick="closeBrowser();">X</button>
     <table id="serverTable" class="display" width="100%"></table>
     <div id="gamecard">
     </div>
-    <div id="extBorder">
-    <div id="extBorder2">
+    <div id="backgroundFrame">
+    <div id="backgroundFrameInsert"></div>
     </div>
-    </div>
-    <button class="browserSwitch feeltrain" onclick="switchBrowser('theFeelTrain');">Switch to theFeelTrain</button>
-    <button class="browserSwitch dewmenu" onclick="switchBrowser('DewMenu');">Switch to DewMenu</button>
+    <!--<button class="browserSwitch feeltrain" onclick="switchBrowser('theFeelTrain');">Switch to theFeelTrain</button>   
+    <button class="browserSwitch dewmenu" onclick="switchBrowser('DewMenu');">Switch to DewMenu</button> -->
     
-    <div id="partyBorder">
-        <div id="partyHeader">Party List<button class="addPartyMember" onClick="showOnline();">+</button><button class="toggleChat" onClick="showChat();">Chat</button></div>
-        <div id="allOnline"></div>
-        <div id="party">
-        </div>
-    </div>
-    
-    <div id="chatBorder">
-        <div id="chatHeader">Party Chat<button class="closeChat" onClick="showChat();">X</button></div>
-        <div id="chat">
-        </div>        
-        <form name="message" action="">
-            <input name="usermsg" type="text" autocomplete="off" id="messageBox" size="63" />
-            <input name="submitmsg" type="button" id="submitButton" value="Send" onclick="chatInput(this.form.messageBox.value)"/>
-        </form>
-    </div>
+    <div id="xboxLabel"><img class="controllerButton" src="images/360_Y.png">Initialize Controller / Refresh List <img class="controllerButton" src="images/360_A.png">Join Game <img class="controllerButton" src="images/360_Back.png">Close Browser</div>
     
     <script id="gameinfo-template" type="text/x-handlebars-template">
         <div id="cardheaderborder">
