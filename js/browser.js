@@ -21,9 +21,6 @@ var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 swal.setDefaults({
     customClass: "alertWindow",
-    confirmButtonClass: "alertConfirm",
-    cancelButtonClass: "alertCancel",
-    buttonsStyling: false,
     html: true
 })
 $(document).ready(function() {
@@ -272,12 +269,10 @@ function buildTable() {
 }
 
 function joinServer(i) {
+    if(dewRconConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
-                    if(friendServerConnected && (serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) < party.length) {
-                        swal("Party Too Large","You have too many people in your party to join this game.", "error");
-                    } else {
                         ga('send', 'event', 'serverlist', 'connect');
                         if(serverList.servers[i].passworded) {
                             swal({   
@@ -323,7 +318,6 @@ function joinServer(i) {
                                 }
                             });
                         }
-                    }
                 } else {    
                     swal({
                         title: "Map File Missing",
@@ -341,6 +335,13 @@ function joinServer(i) {
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
+    } else {
+        swal({
+        title: "Communication Error", 
+        text: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
+        type: "error"
+        });        
+    }
 }
 
 function pingMe(ip, rowNum, delay) {
@@ -456,7 +457,7 @@ function switchBrowser(browser) {
         title: "Change Server Browser",   
         text: "Would you like to change your default server browser to "+browser+"?",   
         showCancelButton: true,   
-        confirmButtonText: "Yes, change it!",   
+        confirmButtontext: "Yes, change it!",   
         closeOnConfirm: false   
     }, function() {        
         if (browser == "theFeelTrain") {
@@ -554,7 +555,7 @@ function howToServe(){
         "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
         "<a href='http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/' target='_blank'>http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/</a><br/><br/>"+
         "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
-        width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
+        width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88", confirmButtonClass: "alertConfirm"
     });
 }
 
@@ -620,6 +621,7 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
                 sweetAlert.close();   
             } else if (e.control == "FACE_3") {
                 //console.log("X");
+                quickMatch();
             } else if (e.control == "FACE_4") {
                //console.log("Y");
                window.location.reload();
@@ -748,3 +750,39 @@ Handlebars.registerHelper('trimString', function(passedString, startstring, ends
    var theString = passedString.substring( startstring, endstring );
    return new Handlebars.SafeString(theString)
 });
+
+//============================
+//===== dewRcon triggers =====
+//============================
+
+function connectionTrigger() {
+    dewRcon.send('game.version', function(resa) { 
+        dewRcon.send('game.listmaps', function(resb) {
+            dewRcon.send('player.name', function(resc) {
+                dewRcon.send('player.printUID', function(resd) {
+                    dewRcon.send('Game.LogName', function(rese) {
+                       dewRcon.send('Player.Colors.Primary', function(resf) {
+                            if (gameVersion === 0) {
+                                gameVersion = resa;
+                                checkUpdate(gameVersion);
+                            }               
+                            if (resb.contains(",") && mapList[0].length == 0) {
+                                mapList = new Array(resb.split(','));
+                            }
+                            pname = resc;
+                            puid = resd.split(' ')[2];
+                            if (rese == "nosteam.log"){
+                                noSTEAMLockout();
+                            }
+                            color = resf;
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
+
+function disconnectTrigger() {
+
+}

@@ -1,7 +1,7 @@
 @font-face{font-family:"Conduit ITC";src:url(../fonts/Conduit-ITC.woff);}
 
 body {
-	background-color: transparent;
+	background-color: black;
     position: relative;
     width: -webkit-calc(100% - 30px);
     margin-left: auto;
@@ -79,6 +79,27 @@ button {
     font-size: 14pt;
 }
 
+.quickMatch {
+    opacity: 0.8;
+    position: absolute;
+    top: -4px;
+    left: 600px;
+    color: white;
+    font-size: 12pt;
+    background-color: black;
+    width: 95px;
+    height: 28px;
+    line-height: 23px;
+    border: 1px solid white;
+	z-index:1000;
+    border-radius: 5px;
+}
+
+.quickMatch:hover{
+    background-color: #31415b;
+}
+
+
 .closeButton {
     opacity: 0.8;
     position: absolute;
@@ -139,6 +160,134 @@ button {
   background-color: #13233d;
 }
 
+.serverPool{
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    left: 0;
+    top: 30px;
+    z-index: 10;
+    margin: 0;
+}
+
+.howToServe{
+    opacity: 0.8;
+    position: absolute;
+    top: -4px;
+    left: 700px;
+    color: white;
+    font-size: 12pt;
+    background-color: black;
+    width: 95px;
+    height: 28px;
+    line-height: 23px;
+    border: 1px solid white;
+	z-index:1000;
+    border-radius: 5px;
+}
+
+.howToServe:hover{
+    background-color: #31415b;
+}
+
+.alertWindow, .howToServeWindow{
+    font-family: "Conduit ITC"; 
+    border-radius: 0;
+    background-color: #13233d !important;
+    color: white; 
+    padding-top: 50px !important;
+    font-size: 18pt;
+    border: 2px solid #404f70;
+    outline: 0;
+    line-height: 1em;
+}
+
+.alertWindow p, .howToServeWindow p{
+    color: white !important; 
+    font-size: 14pt;    
+}
+
+.alertWindow .icon, .alertWindow .sweet-image{
+    margin-top: 10px;
+}
+
+.alertWindow .sweet-spacer, .howToServeWindow .sweet-spacer{
+    margin: 0 !important;
+    height: 20px !important;
+}
+
+.alertWindow h2, .howToServeWindow h2{
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    background-color: black;
+    font-size: 14pt;
+    border-bottom: 2px solid #404f70;
+    margin-top: 0;
+    text-align: center;
+}
+
+.alertWindow input{
+    height: 25px;
+    margin-bottom: 0;
+}
+
+.alertWindow .sa-input-error {
+    top: 22px;
+}
+
+.alertWindow .sa-error-container {
+    background-color: #13233d !important;   
+    padding: 0;
+    margin: 0;
+}
+
+.alertWindow button, .howToServeWindow button {
+    border-style: solid;
+    border: 1px solid white;
+    background-color: black !important;
+    font-size: 14pt;
+    padding: 3px 20px;
+    margin-right: 5px;
+    border-radius: 0;
+    color: white;
+}
+
+.alertConfirm:hover, .alertCancel:hover{
+    background-color: #31415b;    
+}
+
+.howToServeWindow .sweet-content{
+    text-align: left;
+}
+
+.slider {
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+    width: 30%;
+    height: 2%;
+    z-index: 1000000;
+    background: #404F70;
+}
+
+.ui-slider-handle {
+    left: 78.2828%;
+    position: relative;
+    display: block;
+    width: 8%;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    line-height: 0;
+    background: rgb(205, 208, 213);
+    margin-top: -0.5%;
+    text-align: center;
+}
+
 /*==============================*/
 /*===== Controller buttons =====*/
 /*==============================*/
@@ -153,7 +302,7 @@ button {
 
 #xboxLabel{
     position: absolute;
-    left: 10px;
+    left: 0;
     bottom: 2px;
     z-index: 1000;
     color: white;
