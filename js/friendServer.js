@@ -33,7 +33,6 @@ StartConnection = function() {
     friendServer.friendsServerSocket.onmessage = function(message) {
 		try {
 			var result = JSON.parse(JSON.stringify(eval('(' + message.data + ')')));
-            swal.setDefaults({ html: true });
 			switch (result.type) {
 				case "disconnected":
 					if ($.inArray(result.player + ":" + result.guid, party) != -1) {
@@ -94,17 +93,17 @@ StartConnection = function() {
                         closeOnConfirm: false,   
                         closeOnCancel: true, 
                         title: "Party Invite",   
-                        html: result.player + " has sent you a party invite. <br /><br /> Would you like to join?",   
+                        text: result.player + " has sent you a party invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
                         cancelButtonText: "Decline",   
                         showCancelButton: true, 
                     }, function(isConfirm){
                         if (isConfirm) {
                             partyInvite(true, result.senderguid);
-                            sweetAlert.closeModal();
+                            sweetAlert.close();
                         } else {
                             partyInvite(false, result.senderguid);  
-                            sweetAlert.closeModal();                             
+                            sweetAlert.close();                             
                         }
                     });
 				break;
@@ -118,16 +117,16 @@ StartConnection = function() {
                         closeOnConfirm: false,   
                         closeOnCancel: true, 
                         title: "Game Invite",   
-                        html: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
+                        text: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
                         cancelButtonText: "Decline",   
                     }, function(isConfirm){
                         if (isConfirm) {
                             gameInvite(true, result.senderguid);
-                            sweetAlert.closeModal();
+                            sweetAlert.close();
                         } else {
                             gameInvite(false, result.senderguid);  
-                            sweetAlert.closeModal();                             
+                            sweetAlert.close();                             
                         }
                     });
 				break;

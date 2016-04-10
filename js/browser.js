@@ -23,7 +23,8 @@ swal.setDefaults({
     customClass: "alertWindow",
     confirmButtonClass: "alertConfirm",
     cancelButtonClass: "alertCancel",
-    buttonsStyling: false
+    buttonsStyling: false,
+    html: true
 })
 $(document).ready(function() {
     getCurrentRelease();
@@ -285,7 +286,7 @@ function joinServer(i) {
                                                     } else {
                                                         closeBrowser();                                                       
                                                     }
-                                                    sweetAlert.closeModal();
+                                                    sweetAlert.close();
                                                 }
                                             }
                                         }
@@ -309,14 +310,14 @@ function joinServer(i) {
                 } else {    
                     swal({
                         title: "Map File Missing",
-                        html: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
+                        text: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
                         type: "error"
                     });
                 }
             } else {
                 swal({
                     title: "Version Mismatch", 
-                    html: "Host running different version.<br /> Unable to join.", 
+                    text: "Host running different version.<br /> Unable to join.", 
                     type: "error"
                 });
             }
@@ -326,7 +327,7 @@ function joinServer(i) {
     } else {
         swal({
         title: "Communication Error", 
-        html: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
+        text: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
         type: "error"
         });        
     }
@@ -460,7 +461,7 @@ function switchBrowser(browser) {
             dewRcon.send('game.menuurl ' + browserURL);
             dewRcon.send('writeconfig');
         }, "1000");  
-        sweetAlert.closeModal();
+        sweetAlert.close();
     });
 }
 
@@ -475,7 +476,7 @@ function checkUpdate(ver) {
 
             swal({   
                 title: "Version Outdated!",
-                html: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+                text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
                 type: "error", allowEscapeKey: false
             });
         }
@@ -530,7 +531,7 @@ function mapMatch(thing, mapFile) {
 function noSTEAMLockout(){
     swal({   
         title: "noSTEAM Release Detected",
-        html: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
+        text: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
         type: "error", allowEscapeKey: false, showConfirmButton: false, allowOutsideClick: false
     });
 }
@@ -538,7 +539,7 @@ function noSTEAMLockout(){
 function howToServe(){
     swal({   
         title: "How to Host a Server",
-        html: 
+        text: 
         "Hosting a server requires UDP ports 9987 & 11774 and TCP port 11775 to be forwarded on your router to your server's private IP address.<br/>"+
         "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
         "<a href='http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/' target='_blank'>http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/</a><br/><br/>"+
@@ -768,13 +769,13 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             if (e.control == "FACE_1") {
                 //console.log("A");
                 if($('.sweet-overlay').is(':visible')) {
-                    sweetAlert.closeModal();   
+                    sweetAlert.close();   
                 } else {
                     joinSelected();
                 }
             } else if (e.control == "FACE_2") {
                 //console.log("B");
-                sweetAlert.closeModal();   
+                sweetAlert.close();   
             } else if (e.control == "FACE_3") {
                 //console.log("X");
             } else if (e.control == "FACE_4") {
