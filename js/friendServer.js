@@ -11,10 +11,11 @@ StartConnection = function() {
                 type: "connection",
                 message: " has connected.",
                 guid: puid,
-                player: pname
+                player: pname,
+                colour: color
             }));
             party = [];
-            party.push(pname + ":" + puid);
+            party.push(pname + ":" + puid + ":" + color);
             loadParty();
             console.log('Connected to Friend Server!');
             friendServerConnected = true;
@@ -32,7 +33,6 @@ StartConnection = function() {
     friendServer.friendsServerSocket.onmessage = function(message) {
 		try {
 			var result = JSON.parse(JSON.stringify(eval('(' + message.data + ')')));
-            swal.setDefaults({ html: true });
 			switch (result.type) {
 				case "disconnected":
 					if ($.inArray(result.player + ":" + result.guid, party) != -1) {
@@ -59,60 +59,29 @@ StartConnection = function() {
 						}
 
 						console.log(result.player + ' has left your party.');
-						$("#chat").append("<span id='statusLine'>"+ result.player + " has left your party.</span><br/>");
+                        $('<span>', {
+                            id: 'statusLine',
+                            text: result.player + " has left your party."
+                            }).appendTo('#chat');
+						$("#chat").append("<br/>");
                         updateScroll();
 						loadParty();
 					}
 				break;
 
 				case "pm":
- 					console.log(result.player + ": " + result.message);
-                    swal({   
-                        imageUrl: "images/eldorito.png",  
-                        showCancelButton: true,   
-                        closeOnConfirm: false,   
-                        closeOnCancel: true, 
-                        title: "Private Message",   
-                        text: result.player + ": " + result.message,   
-                        confirmButtonText: "Reply",   
-                        cancelButtonText: "Close",   
-                        }, function(isConfirm){
-                            if (isConfirm) {
-                            //Reply window   
-                            swal({   
-                                imageUrl: "images/eldorito.png",  
-                                imageWidth: "102", 
-                                imageHeight: "88",
-                                showCancelButton: true,   
-                                closeOnConfirm: false,   
-                                closeOnCancel: true, 
-                                title: "Reply",   
-                                html: "To " + result.player +":",   
-                                type: "input",   
-                                confirmButtonText: "Send",   
-                                cancelButtonText: "Close",   
-                                showCancelButton: true,   
-                                closeOnConfirm: false,   
-                            }, function(inputValue){   
-                                if (inputValue === false) return false;      
-                                if (inputValue === "") {     
-                                    swal.showInputError("You need to write something!");     
-                                    return false
-                                }
-                                sendPM(senderguid, inputValue);
-                                sweetAlert.close();
-                            });
-                        } else {
-                            
-                        }
-                    });
+ 					//console.log(result.player + ": " + result.message);
                 break;
 
                 case "partymessage":
-                    //console.log(result.player + ": " + result.message);
-                    $("#chat").append(new Date().timeNow()+ "<b> "+ result.player + ":</b> " + result.message + "<br/>");
+                if ($.inArray(result.player + ":" + result.senderguid + ":" + getPlayerColour(result.senderguid), party) != -1){
+                    $('<span>', {
+                        text: new Date().timeNow()+ " " + result.player + ": " + result.message
+                    }).appendTo('#chat');
+                    $("#chat").append("<br/>");
                     updateScroll();
                     $("#chatBorder").css("display", "block");
+                }
 				break;
 
 				case "partyinvite":
@@ -124,17 +93,17 @@ StartConnection = function() {
                         closeOnConfirm: false,   
                         closeOnCancel: true, 
                         title: "Party Invite",   
-                        html: result.player + " has sent you a party invite. <br /><br /> Would you like to join?",   
+                        text: result.player + " has sent you a party invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
                         cancelButtonText: "Decline",   
                         showCancelButton: true, 
                     }, function(isConfirm){
                         if (isConfirm) {
                             partyInvite(true, result.senderguid);
-                            sweetAlert.closeModal();
+                            sweetAlert.close();
                         } else {
                             partyInvite(false, result.senderguid);  
-                            sweetAlert.closeModal();                             
+                            sweetAlert.close();                             
                         }
                     });
 				break;
@@ -148,24 +117,28 @@ StartConnection = function() {
                         closeOnConfirm: false,   
                         closeOnCancel: true, 
                         title: "Game Invite",   
-                        html: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
+                        text: result.player + " has sent you a game invite. <br /><br /> Would you like to join?",   
                         confirmButtonText: "Accept",   
                         cancelButtonText: "Decline",   
                     }, function(isConfirm){
                         if (isConfirm) {
                             gameInvite(true, result.senderguid);
-                            sweetAlert.closeModal();
+                            sweetAlert.close();
                         } else {
                             gameInvite(false, result.senderguid);  
-                            sweetAlert.closeModal();                             
+                            sweetAlert.close();                             
                         }
                     });
 				break;
 
 				case "acceptparty":
-                    $("#chat").append("<span id='statusLine'>"+ result.player + " has joined your party.</span><br/>");
+                    $('<span>', {
+                        id: 'statusLine',
+                        text: result.player + " has joined your party."
+                    }).appendTo('#chat');
+                    $("#chat").append("<br/>");
                     updateScroll();
-                    party.push(result.player + ":" + result.pguid);
+                    party.push(result.player + ":" + result.pguid + ":" + result.colour);
                     
                     for (var i = 0; i < party.length; i++) {
                         friendServer.send(JSON.stringify({
@@ -208,6 +181,7 @@ StartConnection = function() {
 					onlinePlayers = JSON.parse(result.players).sort();
 					//console.log(onlinePlayers);
                     loadOnline();
+                    $('#allOnline .friend').prepend("<button class='addToParty' onClick=\"inviteToParty($(this).parent().attr(\'data-pid\'));\">+</button>");
 				break;
 
 				default:
@@ -230,10 +204,11 @@ function partyInvite(accepted, guid) {
 	console.log(guid);
 	if (accepted) {
 		friendServer.send(JSON.stringify({
-			type: 'acceptparty',
-			player: pname,
-			guid: guid,
-			pguid: puid
+            type: 'acceptparty',
+            player: pname,
+            guid: guid,
+            pguid: puid,
+            colour: color
 		}));
 	}
 	console.log(accepted);
@@ -259,6 +234,15 @@ function sendPM(targetGuid, messageText){
         guid:targetGuid
         }
     friendServer.send(JSON.stringify(response));
+}
+
+function getPlayerColour(guid) {
+	for (var i = 0; i < onlinePlayers.length; i++) {
+		if (guid == onlinePlayers[i].split(":")[1]) {
+			return(onlinePlayers[i].split(":")[2] === 'undefined' || onlinePlayers[i].split(":")[2].length < 1 || onlinePlayers[i].split(":")[2] === null) ? "#000000" : onlinePlayers[i].split(":")[2];
+		}
+	}
+	return "#000000";
 }
 
 function inviteToParty(targetGuid){
@@ -291,10 +275,14 @@ function loadParty() {
 	$('#party').empty();
 	if(party.length > 0) {
 		for(var i=0; i < party.length; i++) {
-			$('#party').append("<div class='friend'>"+party[i].split(":")[0]+"</div>");
+            $('<div>', {
+                class: 'friend',
+                text: party[i].split(":")[0]
+            }).appendTo('#party');
 		}
 		$('#party .friend:first-of-type').attr('title','Party Leader');
 	} else {
+        
 		$('#party').append("<div class='nofriends'>You're not partying :(</div>");
 	}
 }
