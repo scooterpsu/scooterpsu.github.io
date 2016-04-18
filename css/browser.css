@@ -179,6 +179,7 @@ img{
     outline: 0;
     line-height: 1em;
     margin-bottom: -200px;
+    opacity: 0.8;
 }
 
 .alertWindow p, .howToServeWindow p{
@@ -236,7 +237,6 @@ img{
     margin-right: 5px;
     border-radius: 5px;
     color: white;
-    opacity: 0.8;
 }
 
 .alertWindow button:hover, .howToServeWindow button:hover{
