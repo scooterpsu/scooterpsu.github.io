@@ -440,6 +440,7 @@ img{
     padding-top: 29px;
     margin-bottom: -38px;
     border-bottom: 0 !important;
+    overflow-x: hidden !important;
 }
 
 #serverTable tbody tr:hover td{
