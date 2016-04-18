@@ -13,7 +13,6 @@ var playerCount = 0;
 var totalSlotCount = 0;
 var openSlotCount = 0;
 var gameVersion = 0;
-var dewConnected = false;
 var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
@@ -23,31 +22,28 @@ swal.setDefaults({
 })
 $(document).ready(function() {
     getCurrentRelease();
-    urlExists('dew://lib/dew.js', function(exists){
-        if(exists){
-            dew.getVersion().then(function (version) {
-                gameVersion = version;
-                checkUpdate(gameVersion);
-                loadSettings(0);
-                $("body").css("background-color", "transparent");
-                dewConnected = true;
-            });
-            dew.on("show", function (event) {
-                if($('#serverTable tr').length==0){
-                    buildTable();
-                }else{
-                    refreshTable();
-                }
-            });
-            dew.on("hide", function (event) {
-            });
-            dew.on("pong", function (event) {
-                setPing(event.data.address + ":11775", event.data.latency);
-            });
-        } else {
-            buildTable();         
-        }
-    });
+    if(dewConnected){
+        dew.getVersion().then(function (version) {
+            gameVersion = version;
+            checkUpdate(gameVersion);
+        });
+        dew.on("show", function (event) {
+            if($('#serverTable tr').length==0){
+                buildTable();
+            }else{
+                refreshTable();
+            }
+        });
+        dew.on("hide", function (event) {
+        });
+        dew.on("pong", function (event) {
+            setPing(event.data.address + ":11775", event.data.latency);
+        });
+        loadSettings(0);
+        $("body").css("background-color", "transparent");
+    }else{
+        buildTable();         
+    }
     setInterval( CheckPageFocus, 200 );
     $( "#zoomSlider" ).slider({
         value:1,
@@ -800,16 +796,3 @@ Handlebars.registerHelper('trimString', function(passedString, startstring, ends
    var theString = passedString.substring( startstring, endstring );
    return new Handlebars.SafeString(theString)
 });
-
-function urlExists(url, callback){
-  $.ajax({
-    type: 'HEAD',
-    url: url,
-    success: function(){
-      callback(true);
-    },
-    error: function() {
-      callback(false);
-    }
-  });
-}
