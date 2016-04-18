@@ -18,11 +18,6 @@ img{
     -webkit-user-drag: none;
 }
 
-button {
-    outline: none;
-    font-family: "Conduit ITC"; 
-}
-
 #backgroundFrame {
     position: absolute;
     margin: 0;
@@ -52,23 +47,42 @@ button {
     font-size: 18pt;
 }
 
-.refresh {
+.refresh, .quickMatch, .howToServe, .closeButton {
     opacity: 0.8;
     position: absolute;
     top: -9px;
-    left: 200px;
     color: white;
     font-size: 12pt;
     background-color: black;
-    width: 95px;
+    width: 100px;
     height: 28px;
-    line-height: 23px;
-    border: 1px solid white;
+    border: 2px solid white;
 	z-index:1000;
     border-radius: 5px;
+    text-align: center;
+    line-height: 28px;
+    cursor: pointer;
 }
 
-.refresh:hover{
+.refresh {
+    left: 200px;
+}
+
+.quickMatch {
+    left: 590px;
+}
+
+.howToServe{
+    left: 700px;
+}
+
+.closeButton {
+    right: -5px;
+    width: 28px;
+    height: 28px;
+}
+
+.refresh:hover, .quickMatch:hover, .howToServe:hover, .closeButton:hover{
     background-color: #B1572A;
 }
 
@@ -82,85 +96,12 @@ button {
     font-size: 14pt;
 }
 
-.quickMatch {
-    opacity: 0.8;
-    position: absolute;
-    top: -9px;
-    left: 600px;
-    color: white;
-    font-size: 12pt;
-    background-color: black;
-    width: 95px;
-    height: 28px;
-    line-height: 23px;
-    border: 1px solid white;
-	z-index:1000;
-    border-radius: 5px;
-}
-
-.quickMatch:hover{
-    background-color: #B1572A;
-}
-
-
-.closeButton {
-    opacity: 0.8;
-    position: absolute;
-    top: -9px;
-    right: -5px;
-    color: white;
-    font-weight: Medium;
-    background-color: black;
-    width: 28px;
-    height: 28px;
-    line-height: 22px;
-    border-style: solid;
-    border: 1px solid white;
-    border-radius: 5px;
-    z-index: 4;
-    font-size: 12pt;
-}
-
-.closeButton:hover{
-    background-color: #B1572A;
-}
-
-.browserSwitch{
-    opacity: 0.8;
-    font-size: 9pt;
-    background-color: black;
-    color: white;
-    border: 1px solid white;
-    padding: 6px;
-    position: absolute;
-    left: 588px;
-    bottom: -4px;
-    z-index: 3;
-    border-radius: 5px;
-}
-
-.dewmenu{
-    left: 0px;
-}
-
-.feeltrain{
-    left: 105px;
-}
-
-.browserSwitch:hover{
-    background-color: #B1572A;
-}
-
 .pingbars{
     float: left; 
     margin-right: 5px; 
     padding-top: 2px; 
     height: 15px; 
     width: 15px;
-}
-
-::selection{
-  background-color: #13233d;
 }
 
 .serverPool{
@@ -173,25 +114,39 @@ button {
     margin: 0;
 }
 
-.howToServe{
-    opacity: 0.8;
+::selection{
+  background-color: #13233d;
+}
+
+.slider {
     position: absolute;
-    top: -9px;
-    left: 700px;
-    color: white;
-    font-size: 12pt;
-    background-color: black;
-    width: 95px;
-    height: 28px;
-    line-height: 23px;
-    border: 1px solid white;
-	z-index:1000;
+    right: 0;
+    bottom: 5px;
+    width: 30%;
+    height: 10px;
+    z-index: 10;
+    background: #404F70;
+}
+
+.ui-slider-handle {
+    position: relative;
+    display: block;
+    width: 25px;
+    padding: 10px;
+    line-height: 0;
+    background: rgb(205, 208, 213);
+    margin-top: -5px;
+    text-align: center;
     border-radius: 5px;
 }
 
-.howToServe:hover{
-    background-color: #B1572A;
+.ui-slider-handle:focus {
+    outline:0;
 }
+
+/*=============================*/
+/*======== Sweet Alert ========*/
+/*=============================*/
 
 .alertWindow, .howToServeWindow{
     font-family: "Conduit ITC"; 
@@ -233,6 +188,7 @@ button {
     border-bottom: 2px solid #404f70;
     margin-top: 0;
     text-align: center;
+    font-weight: 700;
 }
 
 .alertWindow input{
@@ -251,43 +207,24 @@ button {
 }
 
 .alertWindow button, .howToServeWindow button {
+    font-family: "Conduit ITC";
     border-style: solid;
-    border: 1px solid white;
+    border: 2px solid white;
     background-color: black !important;
-    font-size: 14pt;
+    font-size: 13pt;
     padding: 3px 20px;
     margin-right: 5px;
-    border-radius: 0;
+    border-radius: 5px;
     color: white;
+    opacity: 0.8;
 }
 
-.alertConfirm:hover, .alertCancel:hover{
-    background-color: #31415b;    
+.alertWindow button:hover, .howToServeWindow button:hover{
+    background-color: #B1572A !important;    
 }
 
 .howToServeWindow .sweet-content{
     text-align: left;
-}
-
-.slider {
-    position: absolute;
-    right: 0;
-    bottom: 5px;
-    width: 30%;
-    height: 10px;
-    z-index: 10;
-    background: #404F70;
-}
-
-.ui-slider-handle {
-    position: relative;
-    display: block;
-    width: 25px;
-    padding: 10px;
-    line-height: 0;
-    background: rgb(205, 208, 213);
-    margin-top: -5px;
-    text-align: center;
 }
 
 /*==============================*/
@@ -513,12 +450,13 @@ button {
 
 #serverTable_filter{
     position: relative;
-    top: -52px;
+    top: -51px;
     right: -224px;
     z-index: 3;
 }
 
 #serverTable_filter label{
+    font-weight: 700;
     color: white;
 }
 
