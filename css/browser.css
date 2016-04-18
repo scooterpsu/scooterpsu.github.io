@@ -37,16 +37,16 @@ button {
 
 #backgroundFrameInsert {
     background-color: #14234a;
-    height: -webkit-calc(100% - 100px);
+    height: -webkit-calc(100% - 95px);
     width: 100%;
-    margin-top: 55px;
+    margin-top: 50px;
 }
 
 .browserTitle{
     color: white;
     opacity: 0.8;
     position: absolute;
-    top: -27px;
+    top: -35px;
     left: 12px;
     z-index: 2;
     font-size: 18pt;
@@ -55,7 +55,7 @@ button {
 .refresh {
     opacity: 0.8;
     position: absolute;
-    top: -4px;
+    top: -9px;
     left: 200px;
     color: white;
     font-size: 12pt;
@@ -76,7 +76,7 @@ button {
     color: white;
     opacity: 0.8;
     position: absolute;
-    top: -27px;
+    top: -32px;
     left: 350px;
     z-index: 2;
     font-size: 14pt;
@@ -85,7 +85,7 @@ button {
 .quickMatch {
     opacity: 0.8;
     position: absolute;
-    top: -4px;
+    top: -9px;
     left: 600px;
     color: white;
     font-size: 12pt;
@@ -106,7 +106,7 @@ button {
 .closeButton {
     opacity: 0.8;
     position: absolute;
-    top: -4px;
+    top: -9px;
     right: -5px;
     color: white;
     font-weight: Medium;
@@ -176,7 +176,7 @@ button {
 .howToServe{
     opacity: 0.8;
     position: absolute;
-    top: -4px;
+    top: -9px;
     left: 700px;
     color: white;
     font-size: 12pt;
@@ -513,7 +513,7 @@ button {
 
 #serverTable_filter{
     position: relative;
-    top: -47px;
+    top: -52px;
     right: -224px;
     z-index: 3;
 }
