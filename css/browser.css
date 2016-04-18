@@ -2,13 +2,16 @@
 
 body {
 	background-color: black;
-    position: relative;
+    position: absolute;
     width: -webkit-calc(100% - 30px);
     margin-left: auto;
     margin-right: auto;
+    top: 10px;
+    left: 10px;
     overflow-y: hidden;
     font-family: "Conduit ITC"; 
     letter-spacing: 1px;
+    height: -webkit-calc(100% - 30px) !important;
 }
 
 img{
@@ -26,17 +29,17 @@ button {
     padding: 0;
     background-color: black;
     left: -15px;
-    width: -webkit-calc(100% + 30px);
-    height: -webkit-calc(100% + 20px);
-    top: -10px;
+    width: -webkit-calc(100% + 35px);
+    height: -webkit-calc(100% + 35px);
+    top: -20px;
     opacity: 0.8;
 }
 
 #backgroundFrameInsert {
     background-color: #14234a;
-    height: -webkit-calc(100% - 80px);
+    height: -webkit-calc(100% - 100px);
     width: 100%;
-    margin-top: 40px;
+    margin-top: 55px;
 }
 
 .browserTitle{
