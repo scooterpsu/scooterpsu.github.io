@@ -554,9 +554,7 @@ function closeBrowser() {
     ga('send', 'event', 'close-menu');
     if(dewConnected) {
         dew.hide();
-    } else{
-        window.close();
-    }
+    } 
 }
 
 String.prototype.contains = function(it) {
