@@ -13,9 +13,7 @@ var playerCount = 0;
 var totalSlotCount = 0;
 var openSlotCount = 0;
 var gameVersion = 0;
-var pname = "";
-var puid = "";
-var color = "#000000"
+var dewConnected = false;
 var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
@@ -25,8 +23,31 @@ swal.setDefaults({
 })
 $(document).ready(function() {
     getCurrentRelease();
-    //loadSettings(0);
-    buildTable();
+    urlExists('dew://lib/dew.js', function(exists){
+        if(exists){
+            dew.getVersion().then(function (version) {
+                gameVersion = version;
+                checkUpdate(gameVersion);
+                loadSettings(0);
+                $("body").css("background-color", "transparent");
+                dewConnected = true;
+            });
+            dew.on("show", function (event) {
+                if($('#serverTable tr').length==0){
+                    buildTable();
+                }else{
+                    refreshTable();
+                }
+            });
+            dew.on("hide", function (event) {
+            });
+            dew.on("pong", function (event) {
+                setPing(event.data.address + ":11775", event.data.latency);
+            });
+        } else {
+            buildTable();         
+        }
+    });
     setInterval( CheckPageFocus, 200 );
     $( "#zoomSlider" ).slider({
         value:1,
@@ -39,9 +60,24 @@ $(document).ready(function() {
             $('#zoomSlider .ui-slider-handle').text( percentage.toFixed(0) );
         }
     });
+    $(document).on('click','#scoreBoardHeader',function(){
+        toggleScoreboard();
+    });
 });
 
-var settingsToLoad = [['pname', 'player.name'], ['puid', 'player.printUID'], ['mapList', 'game.listmaps']];
+var scoreBoardVisible = false;
+function toggleScoreboard(){
+    if (!scoreBoardVisible){
+        $('#scoreBoardHeader').text("Scoreboard (-)"); 
+        scoreBoardVisible = true;
+    } else{
+        $('#scoreBoardHeader').text("Scoreboard (+)");  
+        scoreBoardVisible = false;    
+    }
+     $('.statBreakdown').toggle('blind', 500); 
+}
+
+var settingsToLoad = [['pname', 'player.name'], ['puid', 'player.printUID'], ['mapList', 'game.listmaps'], ['color', 'player.colors.primary']];
 function loadSettings(i){
 	if (i != settingsToLoad.length) {
 		dew.command(settingsToLoad[i][1], {}, function(response) {
@@ -175,7 +211,11 @@ function buildTable() {
             });
         }
         server_list = unique(server_list);
-        var pingDelay = 120;
+        if(!dewConnected){
+            var pingDelay = 120;
+        }else{
+            var pingDelay = 10;
+        }
         for (var i = 0; i < server_list.length; i++){
             serverIP = server_list[i];
             if(VerifyIPRegex.test(serverIP)) {
@@ -184,23 +224,25 @@ function buildTable() {
                     setTimeout(function() {
                     var startTime = Date.now();
                     var endTime;
-                    var ping;
-                    var pingDisplay;
+                    var ping = 0;
+                    var pingDisplay = "0:0";
                     var rePing = false;
                     var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                     .done(function(serverInfo) {
-                        endTime = Date.now();
-                        ping = Math.round((endTime - startTime) * .45);
-                        if (ping > 0 && ping <= 100) {
-                            pingDisplay = ping+":3";
-                        }   else if(ping > 100 && ping <= 200) {
-                            pingDisplay = ping+":2";
-                        }   else if(ping > 200 && ping <= 500) {
-                            pingDisplay = ping+":1";  
-                            rePing = true;
-                        }   else {
-                            pingDisplay = ping+":0";
-                            rePing = true;
+                        if(!dewConnected){
+                            endTime = Date.now();
+                            ping = Math.round((endTime - startTime) * .45);
+                            if (ping > 0 && ping <= 100) {
+                                pingDisplay = ping+":3";
+                            }   else if(ping > 100 && ping <= 200) {
+                                pingDisplay = ping+":2";
+                            }   else if(ping > 200 && ping <= 500) {
+                                pingDisplay = ping+":1";  
+                                rePing = true;
+                            }   else {
+                                pingDisplay = ping+":0";
+                                rePing = true;
+                            }
                         }
                         serverInfo["serverId"] = i;
                         serverInfo["serverIP"] = serverIP;
@@ -249,9 +291,13 @@ function buildTable() {
                                 ]).draw();
                                 table.columns.adjust().draw();
                                 fillGameCard(serverInfo.serverId);
-                                if(rePing) {
-                                    console.log("repinging "+serverInfo.serverIP);
-                                    pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
+                                if(!dewConnected){
+                                    if(rePing) {
+                                        console.log("repinging "+serverInfo.serverIP);
+                                        pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
+                                    }
+                                } else {
+                                    dew.ping(serverInfo.serverIP.split(":")[0]);
                                 }
                             } else {
                                 console.log(serverInfo.serverIP + " is glitched");
@@ -271,7 +317,7 @@ function buildTable() {
 }
 
 function joinServer(i) {
-    if(dewRconConnected) {
+    if(dewConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
@@ -280,7 +326,8 @@ function joinServer(i) {
                             swal({   
                                 title: "Private Server", text: "Please enter password",   
                                 type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
-                                inputPlaceholder: "Password goes here" 
+                                inputPlaceholder: "Password goes here",
+                                imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
                             }, 
                             function(inputValue) {
                                 if (inputValue === false) return false;      
@@ -288,36 +335,27 @@ function joinServer(i) {
                                     sweetAlert.showInputError("Passwords are never blank");     
                                     return false   
                                 } else {
-                                    dewRcon.send('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
-                                        if (res.length > 0) {
-                                            if (res != "Command/Variable not found") {
-                                                if (res === "Incorrect password specified.") {
-                                                    sweetAlert.showInputError(res);
-                                                    return false
-                                                } else {
-                                                    if (friendServerConnected && party.length > 1) {
-                                                        partyConnect(serverList.servers[i].serverIP, inputValue);                                                    
-                                                    } else {
-                                                        closeBrowser();                                                       
-                                                    }
-                                                    sweetAlert.close();
-                                                }
-                                            }
-                                        }
+                                    dew.command('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
+                                        console.log(res);
+                                        //if (friendServerConnected && party.length > 1) {
+                                        //    partyConnect(serverList.servers[i].serverIP, inputValue);                                                    
+                                        //} else {
+                                            closeBrowser();                                                       
+                                        //}
+                                        sweetAlert.close();
+                                    }).catch(function (error) {
+                                        sweetAlert.showInputError(error.message);
+                                        return false
                                     });
                                 }
                             });
                         } else {
-                            dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
-                                if (res.length > 0) {
-                                    if (res != "Command/Variable not found") {
-                                        if (friendServerConnected && party.length > 1) {
-                                            partyConnect(serverList.servers[i].serverIP, null);                                                    
-                                        } else {
-                                            closeBrowser();                                           
-                                        }
-                                    }
-                                }
+                            dew.command('connect ' + serverList.servers[i].serverIP, function(res) {
+                                //if (friendServerConnected && party.length > 1) {
+                                //    partyConnect(serverList.servers[i].serverIP, null);                                                    
+                                //} else {
+                                    closeBrowser();                                           
+                                //}
                             });
                         }
                 } else {    
@@ -338,11 +376,7 @@ function joinServer(i) {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
     } else {
-        swal({
-        title: "Communication Error", 
-        text: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
-        type: "error"
-        });        
+    //not connected in-game, do nothing 
     }
 }
 
@@ -375,6 +409,23 @@ function pingMe(ip, rowNum, delay) {
             }
         });
     }, delay);   
+}
+
+function setPing(ip, ping){
+    var rowNum = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 1 )[0]; 
+	var pingDisplay;
+	if (ping > 0 && ping <= 100) {
+		pingDisplay = ping+":3";
+	}   else if(ping > 100 && ping <= 200) {
+		pingDisplay = ping+":2";
+	}   else if(ping > 200 && ping <= 500) {
+		pingDisplay = ping+":1";  
+	}   else {
+		pingDisplay = ping+":0";
+	}
+	$('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 5);
+	$('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
+	$('#serverTable').DataTable().columns.adjust().draw();
 }
 
 function fillGameCard(i) {
@@ -411,9 +462,6 @@ function refreshTable() {
     $('#serverTable').DataTable().clear(); 
     selectedID = 0;
     buildTable();
-    if(dewRconConnected) {
-        connectionTrigger();   
-    }
 }
 
 function quickMatch() {
@@ -508,12 +556,8 @@ function hasMap(map) {
 
 function closeBrowser() {
     ga('send', 'event', 'close-menu');
-
-    if(dewRconConnected) {
-        setTimeout(function() {
-            dewRcon.send('menu.show');
-            dewRcon.send('Game.SetMenuEnabled 0');
-        }, "1000");
+    if(dewConnected) {
+        dew.hide();
     } else{
         window.close();
     }
@@ -524,13 +568,11 @@ String.prototype.contains = function(it) {
 };
 
 function CheckPageFocus() {
-  //var info = document.getElementById("message");
-
-  if ( document.hasFocus() ) {
-    pageFocus = true;
-  } else {
-    pageFocus = false;
-  }
+    if ( document.hasFocus() ) {
+        pageFocus = true;
+    } else {
+        pageFocus = false;
+    }
 }
 
 function mapMatch(thing, mapFile) {
@@ -539,14 +581,6 @@ function mapMatch(thing, mapFile) {
     } else {
         thing.src='images/maps/unknown.png';
     }
-}
-
-function noSTEAMLockout(){
-    swal({   
-        title: "noSTEAM Release Detected",
-        text: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
-        type: "error", allowEscapeKey: false, showConfirmButton: false, allowOutsideClick: false
-    });
 }
 
 function howToServe(){
@@ -561,14 +595,6 @@ function howToServe(){
     });
 }
 
-//==============================
-//===== Keyboard functions =====
-//==============================
-
-Mousetrap.bind('f11', function() {
-    closeBrowser();
-});
-
 //=============================
 //===== Gamepad functions =====
 //=============================
@@ -577,7 +603,9 @@ function updateSelection() {
     $('#serverTable tbody tr.selected').removeClass('selected');
     $("#serverTable tbody tr:eq(" + selectedID + ")").addClass("selected");
     var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
-    fillGameCard(row[0]);
+    if(row){
+        fillGameCard(row[0]);
+    }
 }
 
 function joinSelected() {
@@ -621,6 +649,7 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             } else if (e.control == "FACE_2") {
                 //console.log("B");
                 sweetAlert.close();   
+                toggleScoreboard(); 
             } else if (e.control == "FACE_3") {
                 //console.log("X");
                 quickMatch();
@@ -719,6 +748,25 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     }
 });
 
+jQuery.fn.dataTableExt.oApi.fnFindCellRowIndexes = function ( oSettings, sSearch, iColumn ){
+    var i,iLen, j, jLen, val, aOut = [], aData, columns = oSettings.aoColumns;
+    for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ ){
+        aData = oSettings.aoData[i]._aData;
+        if ( iColumn === undefined ){
+            for ( j=0, jLen=columns.length ; j<jLen ; j++ ){
+                val = this.fnGetData(i, j);
+                if ( val == sSearch ) {
+                    aOut.push( i );
+                }
+            }
+        }
+        else if (this.fnGetData(i, iColumn) == sSearch ){
+            aOut.push( i );
+        }
+    }
+    return aOut;
+};
+
 //===========================
 //==== Handlebar Helpers ====
 //===========================
@@ -753,38 +801,15 @@ Handlebars.registerHelper('trimString', function(passedString, startstring, ends
    return new Handlebars.SafeString(theString)
 });
 
-//============================
-//===== dewRcon triggers =====
-//============================
-
-function connectionTrigger() {
-    dewRcon.send('game.version', function(resa) { 
-        dewRcon.send('game.listmaps', function(resb) {
-            dewRcon.send('player.name', function(resc) {
-                dewRcon.send('player.printUID', function(resd) {
-                    dewRcon.send('Game.LogName', function(rese) {
-                       dewRcon.send('Player.Colors.Primary', function(resf) {
-                            if (gameVersion === 0) {
-                                gameVersion = resa;
-                                checkUpdate(gameVersion);
-                            }               
-                            if (resb.contains(",") && mapList[0].length == 0) {
-                                mapList = new Array(resb.split(','));
-                            }
-                            pname = resc;
-                            puid = resd.split(' ')[2];
-                            if (rese == "nosteam.log"){
-                                noSTEAMLockout();
-                            }
-                            color = resf;
-                        });
-                    });
-                });
-            });
-        });
-    });
-}
-
-function disconnectTrigger() {
-
+function urlExists(url, callback){
+  $.ajax({
+    type: 'HEAD',
+    url: url,
+    success: function(){
+      callback(true);
+    },
+    error: function() {
+      callback(false);
+    }
+  });
 }

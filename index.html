@@ -9,7 +9,6 @@
 		<!-- DataTables -->
 		<link rel="stylesheet" href="css/jquery.dataTables.min.css">
 		<script src="js/jquery.dataTables.min.js"></script>
-		<script src="js/mousetrap.min.js"></script>
 		<!-- Sweet Alert -->
         <script src="js/sweetalert.min.js"></script> 
         <link rel="stylesheet" type="text/css" href="css/sweetalert.css">       
@@ -17,7 +16,6 @@
         <script src="js/gamepad.js"></script>
 		<!-- Eldorito Stuff -->
         <script type="text/javascript" src="dew://lib/dew.js"></script>
-        <script type="text/javascript" src="js/dewRcon.js"></script>
 		<!-- Custom stuff -->
 		<script src="js/browser.js"></script>
 		<link rel="stylesheet" href="css/browser.css">
@@ -53,7 +51,7 @@
     <!--<button class="browserSwitch feeltrain" onclick="switchBrowser('theFeelTrain');">Switch to theFeelTrain</button>   
     <button class="browserSwitch dewmenu" onclick="switchBrowser('DewMenu');">Switch to DewMenu</button> -->
     
-    <div id="xboxLabel"><img class="controllerButton" src="images/360_Y.png">Initialize Controller / Refresh List <img class="controllerButton" src="images/360_X.png">Quick Match <img class="controllerButton" src="images/360_A.png">Join Game <img class="controllerButton" src="images/360_Back.png">Close Browser</div>
+    <div id="xboxLabel"><img class="controllerButton" src="images/360_Y.png">Initialize Controller / Refresh List <img class="controllerButton" src="images/360_X.png">Quick Match <img class="controllerButton" src="images/360_A.png">Join Game <img class="controllerButton" src="images/360_B.png">Show Scoreboard <img class="controllerButton" src="images/360_Back.png">Close Browser</div>
     
     <script id="gameinfo-template" type="text/x-handlebars-template">
         <div id="cardheaderborder">
@@ -67,6 +65,7 @@
             {{#if passworded}}
                 <b>Private Game</b>
                 {{else}}
+                    <div id="scoreBoardHeader">Scoreboard (+)</div>
                     <table class="statBreakdown">
                         <thead class="tableHeader">
                             <th>Name</th>
