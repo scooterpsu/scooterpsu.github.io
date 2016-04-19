@@ -33,7 +33,7 @@ $(document).ready(function() {
         loadSettings(0);
         $("body").css("background-color", "transparent");
         dew.on("show", function (event) {
-            if($('#serverTable tr').length==0){
+            if($('#serverTable').children().length){
                 buildTable();
             }else{
                 refreshTable();
@@ -640,48 +640,11 @@ function checkGamepad(){
     var gamepad = navigator.getGamepads()[0];
     if(gamepad.timestamp != timestamp){
         for( var i = 0; i < gamepad.buttons.length; i++ ) {
-            currentState = gamepad.buttons[i].pressed // W3C Standard 
+            currentState = gamepad.buttons[i].pressed
             var prevState = lastButtons[i];
-            if( !prevState && currentState ){                    
-                switch (i) {
-                    case 0: //console.log("A");
-                        if($('.sweet-overlay').is(':visible')) {
-                            sweetAlert.close();   
-                        } else {
-                            joinSelected();
-                        }
-                        break;
-                    case 1: //console.log("B");
-                        if($('.sweet-overlay').is(':visible')) {
-                            sweetAlert.close();  
-                        } else {        
-                            toggleScoreboard(); 
-                        }
-                        break;
-                    case 2: //console.log("X");
-                        quickMatch();
-                        break;
-                    case 3: //console.log("Y");
-                        refreshTable();
-                        break;
-                    case 8: //console.log("Back");
-                        closeBrowser();
-                        break;
-                    case 12: //console.log("UP");
-                        if (selectedID > 0) {
-                            selectedID--;
-                            updateSelection();
-                        }
-                        break;
-                    case 13: //console.log("Down");
-                        if (selectedID < ($("#serverTable tbody tr").length-1)) {
-                            selectedID++;
-                            updateSelection();
-                        }
-                        break;
-                    default:
-                        console.log(i);
-                }    
+            if( !prevState && currentState ){     
+                //console.log("pressed "+i);
+                buttonAction(i);                
             }else if( prevState && !currentState ){
                 //console.log("released "+i);
             }
@@ -689,6 +652,48 @@ function checkGamepad(){
         }
         timestamp = gamepad.timestamp;
     }
+}
+
+function buttonAction(i){
+    switch (i) {
+        case 0: // A
+            if($('.sweet-overlay').is(':visible')) {
+                sweetAlert.close();   
+            } else {
+                joinSelected();
+            }
+            break;
+        case 1: // B
+            if($('.sweet-overlay').is(':visible')) {
+                sweetAlert.close();  
+            } else {        
+                toggleScoreboard(); 
+            }
+            break;
+        case 2: // X
+            quickMatch();
+            break;
+        case 3: // Y
+            refreshTable();
+            break;
+        case 8: // Back
+            closeBrowser();
+            break;
+        case 12: // Up
+            if (selectedID > 0) {
+                selectedID--;
+                updateSelection();
+            }
+            break;
+        case 13: // Down
+            if (selectedID < ($("#serverTable tbody tr").length-1)) {
+                selectedID++;
+                updateSelection();
+            }
+            break;
+        default:
+            console.log("nothing associated with " + i);
+    }  
 }
 
 //==========================
