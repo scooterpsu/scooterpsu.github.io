@@ -16,18 +16,22 @@ var selectedID = 0;
 var hasGP = false;
 var repGP;
 var lastArray = [];
+var dewConnected = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 swal.setDefaults({
     customClass: "alertWindow",
     html: true
 })
 $(document).ready(function() {
-    getCurrentRelease();
-    if(dewConnected){
+    $.getScript( "dew://lib/dew.js" )
+    .done(function() {
+        dewConnected = true;
         dew.getVersion().then(function (version) {
             gameVersion = version;
             checkUpdate(gameVersion);
         });
+        loadSettings(0);
+        $("body").css("background-color", "transparent");
         dew.on("show", function (event) {
             if($('#serverTable tr').length==0){
                 buildTable();
@@ -40,11 +44,11 @@ $(document).ready(function() {
         dew.on("pong", function (event) {
             setPing(event.data.address + ":11775", event.data.latency);
         });
-        loadSettings(0);
-        $("body").css("background-color", "transparent");
-    }else{
-        buildTable();         
-    }
+    })
+    .fail(function() {
+        buildTable();               
+    });
+    getCurrentRelease();
     setInterval( CheckPageFocus, 200 );
     $( "#zoomSlider" ).slider({
         value:1,
