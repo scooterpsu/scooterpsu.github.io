@@ -1,5 +1,4 @@
 var pageFocus = false;
-var zoomRatio;
 var mapList = [[]];
 var EDVersion = 0;
 var serverList = {
@@ -14,7 +13,9 @@ var totalSlotCount = 0;
 var openSlotCount = 0;
 var gameVersion = 0;
 var selectedID = 0;
-var controllersOn = false;
+var hasGP = false;
+var repGP;
+var lastArray = [];
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 swal.setDefaults({
     customClass: "alertWindow",
@@ -59,6 +60,25 @@ $(document).ready(function() {
     $(document).on('click','#scoreBoardHeader',function(){
         toggleScoreboard();
     });
+    if(controllerSupport()){
+        $(window).on("gamepadconnected", function(){
+            hasGP = true;
+            console.log("Gamepad connected");
+            updateSelection();
+            repGP = window.setInterval(checkGamepad,100);
+        });
+        $(window).on("gamepaddisconnected", function(){
+            hasGP = false;
+            console.log("Gamepad disconnected");
+            window.clearInterval(repGP);
+        });
+        var checkGP = window.setInterval(function(){
+            if(navigator.getGamepads()[0]){
+                if(!hasGP) $(window).trigger("gamepadconnected");
+                window.clearInterval(checkGP);
+            }
+        }, 500);
+    }	
 });
 
 var scoreBoardVisible = false;
@@ -530,7 +550,6 @@ function checkUpdate(ver) {
     } else {
         ga('send', 'event', 'version', ver);
         if (ver != EDVersion) {
-
             swal({   
                 title: "Version Outdated!",
                 text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
@@ -607,82 +626,65 @@ function joinSelected() {
     joinServer(row[0]);
 }
 
-var gamepad = new Gamepad();
-
-gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
-    //console.log("a new gamepad connected");
-    setTimeout(function() {
-        $('.controllerButton').show();
-        updateSelection();
-        controllersOn = true;
-    }, "400");
-});
-
-gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
-    //console.log("gamepad disconnected");
-    $('.controllerButton').hide();
-    $('#serverTable tr.selected').removeClass('selected');
-    controllersOn = false;
-});
-
-gamepad.bind(Gamepad.Event.UNSUPPORTED, function(device) {
-    //console.log("an unsupported gamepad connected (add new mapping)");
-});
-
-gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
-    if (pageFocus) {
-        if (controllersOn) {
-            //console.log(e.control + " of gamepad " + e.gamepad + " pressed down");
-            if (e.control == "FACE_1") {
-                //console.log("A");
-                if($('.sweet-overlay').is(':visible')) {
-                    sweetAlert.close();   
-                } else {
-                    joinSelected();
-                }
-            } else if (e.control == "FACE_2") {
-                //console.log("B");
-                sweetAlert.close();   
-                toggleScoreboard(); 
-            } else if (e.control == "FACE_3") {
-                //console.log("X");
-                quickMatch();
-            } else if (e.control == "FACE_4") {
-               //console.log("Y");
-               window.location.reload();
-            } else if (e.control == "DPAD_UP") {
-                //console.log("UP");
-                if (selectedID > 0) {
-                    selectedID--;
-                    updateSelection();
-                }
-            } else if (e.control == "DPAD_DOWN") {
-                //console.log("DOWN");
-                if (selectedID < ($("#serverTable tbody tr").length-1)) {
-                    selectedID++;
-                    updateSelection();
-                }
-            } else if (e.control == "DPAD_LEFT") {
-                //console.log("LEFT");
-            } else if (e.control == "DPAD_RIGHT") {
-                //console.log("RIGHT");
-            } else if (e.control == "SELECT_BACK") {
-                //console.log("BACK");
-                closeBrowser();
-            } else if (e.control == "START_FORWARD") {
-                //console.log("START");
-            } else if (e.control == "RIGHT_TOP_SHOULDER") {
-                //console.log("RIGHT BUMPER");        
-            } else if (e.control == "LEFT_TOP_SHOULDER") {
-                //console.log("LEFT BUMPER");
-            } else if (e.control == "LEFT_STICK") {
-                //console.log("LEFT STICK");
-            }          
+function controllerSupport(){
+    return "getGamepads" in navigator;
+}
+ 
+var timestamp; 
+var lastButtons = [];
+function checkGamepad(){
+    var gamepad = navigator.getGamepads()[0];
+    if(gamepad.timestamp != timestamp){
+        for( var i = 0; i < gamepad.buttons.length; i++ ) {
+            currentState = gamepad.buttons[i].pressed // W3C Standard 
+            var prevState = lastButtons[i];
+            if( !prevState && currentState ){                    
+                switch (i) {
+                    case 0: //console.log("A");
+                        if($('.sweet-overlay').is(':visible')) {
+                            sweetAlert.close();   
+                        } else {
+                            joinSelected();
+                        }
+                        break;
+                    case 1: //console.log("B");
+                        if($('.sweet-overlay').is(':visible')) {
+                            sweetAlert.close();  
+                        } else {        
+                            toggleScoreboard(); 
+                        }
+                        break;
+                    case 2: //console.log("X");
+                        quickMatch();
+                        break;
+                    case 3: //console.log("Y");
+                        refreshTable();
+                        break;
+                    case 8: //console.log("Back");
+                        closeBrowser();
+                        break;
+                    case 12: //console.log("UP");
+                        if (selectedID > 0) {
+                            selectedID--;
+                            updateSelection();
+                        }
+                        break;
+                    case 13: //console.log("Down");
+                        if (selectedID < ($("#serverTable tbody tr").length-1)) {
+                            selectedID++;
+                            updateSelection();
+                        }
+                        break;
+                    default:
+                        console.log(i);
+                }    
+            }else if( prevState && !currentState ){
+                //console.log("released "+i);
+            }
+            lastButtons[i] = currentState;
         }
+        timestamp = gamepad.timestamp;
     }
-});
-
-if (!gamepad.init()) {
 }
 
 //==========================
