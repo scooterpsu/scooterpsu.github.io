@@ -1,4 +1,5 @@
 var pageFocus = false;
+var zoomAmount;
 var mapList = [[]];
 var EDVersion = 0;
 var serverList = {
@@ -33,7 +34,7 @@ $(document).ready(function() {
         loadSettings(0);
         $("body").css("background-color", "transparent");
         dew.on("show", function (event) {
-            if($('#serverTable').children().length){
+            if($('#serverTable_wrapper').length == 0){
                 buildTable();
             }else{
                 refreshTable();
@@ -50,16 +51,23 @@ $(document).ready(function() {
     });
     getCurrentRelease();
     setInterval( CheckPageFocus, 200 );
+    if(typeof(Storage) !== "undefined") {
+        if(localStorage.getItem("zoom") !== null){
+            zoomAmount = localStorage.getItem("zoom");
+            $('body').css("zoom", zoomAmount );	
+        }      
+    }
     $( "#zoomSlider" ).slider({
-        value:1,
+        value:zoomAmount,
         min: 0.5,
         max: 2,
         step: 0.05,
-        stop: function( event, ui ) {
-            var percentage = ui.value * 100;
+        slide: function( event, ui ) {
             adjustResolution( ui.value );
-            $('#zoomSlider .ui-slider-handle').text( percentage.toFixed(0) );
         }
+    });
+    $( ".ui-slider-handle" ).dblclick(function() {
+        adjustResolution();
     });
     $(document).on('click','#scoreBoardHeader',function(){
         toggleScoreboard();
@@ -82,7 +90,7 @@ $(document).ready(function() {
                 window.clearInterval(checkGP);
             }
         }, 500);
-    }	
+    }
 });
 
 var scoreBoardVisible = false;
@@ -97,7 +105,7 @@ function toggleScoreboard(){
      $('.statBreakdown').toggle('blind', 500); 
 }
 
-var settingsToLoad = [['pname', 'player.name'], ['puid', 'player.printUID'], ['mapList', 'game.listmaps'], ['color', 'player.colors.primary']];
+var settingsToLoad = [['mapList', 'game.listmaps']];
 function loadSettings(i){
 	if (i != settingsToLoad.length) {
 		dew.command(settingsToLoad[i][1], {}, function(response) {
@@ -120,9 +128,13 @@ function loadSettings(i){
 /* Sets zoom level to specified value or reset if not specified */
 function adjustResolution(newZoom) {
     if (!newZoom) { newZoom = 1; }
+    var percentage = newZoom * 100;
+    $('#zoomSlider .ui-slider-handle').text( percentage.toFixed(0) );
+    zoomAmount = newZoom;
+    localStorage.setItem("zoom", newZoom);
     $('body').stop().animate({zoom: newZoom}, 500, function() {
         $('#serverTable').DataTable().draw(); 
-  });
+    });
 }
 
 function getCurrentRelease() {
@@ -636,21 +648,73 @@ function controllerSupport(){
  
 var timestamp; 
 var lastButtons = [];
+var lastAxes = [];
+var axisThreshold = .75;
 function checkGamepad(){
     var gamepad = navigator.getGamepads()[0];
     if(gamepad.timestamp != timestamp){
         for( var i = 0; i < gamepad.buttons.length; i++ ) {
             currentState = gamepad.buttons[i].pressed
             var prevState = lastButtons[i];
-            if( !prevState && currentState ){     
-                //console.log("pressed "+i);
+            if( !prevState && currentState ){ //Button i Pressed    
                 buttonAction(i);                
-            }else if( prevState && !currentState ){
-                //console.log("released "+i);
+            }else if( prevState && !currentState ){//Button i Released
+
             }
             lastButtons[i] = currentState;
         }
+        for( var x = 0; x < gamepad.axes.length; x++ ) {
+            currentState = 0
+            if(gamepad.axes[x] > 0){
+                if(gamepad.axes[x] > axisThreshold){
+                    currentState = 1;
+                }
+            }else if(gamepad.axes[x] < 0){
+                if(gamepad.axes[x] < -axisThreshold){
+                    currentState = -1;
+                }           
+            }
+            var prevState = lastAxes[x];
+            if( prevState != 1 && currentState == 1 ){
+                stickAction("+", x);
+            }else if( prevState != -1 && currentState == -1 ){
+                stickAction("-", x);
+            }else if( prevState != 0 && currentState == 0 ){  
+                stickAction("0", x);       
+            }
+            lastAxes[x] = currentState;
+        }
         timestamp = gamepad.timestamp;
+    }
+}
+
+function stickAction(direction, x){
+    if(x<2){//left stick
+        if(x==0 && direction=="+"){//LS Right
+          
+        }else if(x==0 && direction=="-"){//LS Left
+  
+        }else if(x==1 && direction=="+"){//LS Down
+            if (selectedID < ($("#serverTable tbody tr").length-1)) {
+                selectedID++;
+                updateSelection();
+            }
+        }else if(x==1 && direction=="-"){//LS Up
+            if (selectedID > 0) {
+                selectedID--;
+                updateSelection();
+            }            
+        }
+    }else{//right stick
+        if(x==2 && direction=="+"){ //RS Right
+          
+        }else if(x==2 && direction=="-"){//RS Left
+ 
+        }else if(x==3 && direction=="+"){//RS Down
+  
+        }else if(x==3 && direction=="-"){//RS Up
+                   
+        }
     }
 }
 
@@ -692,7 +756,7 @@ function buttonAction(i){
             }
             break;
         default:
-            console.log("nothing associated with " + i);
+            //console.log("nothing associated with " + i);
     }  
 }
 
