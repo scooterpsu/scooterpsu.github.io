@@ -1,4 +1,5 @@
 var pageFocus = false;
+var windowFocus = false;
 var zoomAmount;
 var mapList = [[]];
 var EDVersion = 0;
@@ -24,6 +25,7 @@ swal.setDefaults({
     html: true
 })
 $(document).ready(function() {
+    initTable();
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
         dewConnected = true;
@@ -34,11 +36,7 @@ $(document).ready(function() {
         loadSettings(0);
         $("body").css("background-color", "transparent");
         dew.on("show", function (event) {
-            if($('#serverTable_wrapper').length == 0){
-                buildTable();
-            }else{
-                refreshTable();
-            }
+            refreshTable();
         });
         dew.on("hide", function (event) {
         });
@@ -91,6 +89,11 @@ $(document).ready(function() {
             }
         }, 500);
     }
+    $(window).focus(function() {
+        windowFocus = true;
+    }).blur(function() {
+        windowFocus = false;
+    });
 });
 
 var scoreBoardVisible = false;
@@ -144,7 +147,7 @@ function getCurrentRelease() {
     })
 }
         
-function buildTable() {
+function initTable() {
     $('#serverTable').on('click', 'tr', function() {
         var tr = $(this).closest('tr');
         var row = table.row( tr );
@@ -216,7 +219,10 @@ function buildTable() {
             "lengthMenu": "Show _MENU_ servers"
         }
     });
-
+}
+    
+function buildTable() {
+    var table = $('#serverTable').DataTable();
     var master_servers = [];
     var server_list = [];
     var mshxr = $.getJSON("https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dewrito.json")
@@ -481,6 +487,10 @@ function refreshTable() {
     //Throttle refresh so people can't spam and break the count
     if (isThrottled) { return; }
     isThrottled = true;
+    var throttle;
+    if(dewConnected){
+        throttleDuration = 5000;
+    }
     setTimeout(function () { isThrottled = false; }, throttleDuration);
     ga('send', 'event', 'serverlist', 'refresh-list');
     serverList = {
@@ -597,9 +607,13 @@ String.prototype.contains = function(it) {
 };
 
 function CheckPageFocus() {
-    if ( document.hasFocus() ) {
-        pageFocus = true;
-    } else {
+    if(windowFocus){
+        if ( document.hasFocus() ) {
+            pageFocus = true;
+        } else {
+            pageFocus = false;
+        }
+    }else{
         pageFocus = false;
     }
 }
@@ -649,40 +663,42 @@ function controllerSupport(){
 var timestamp; 
 var lastButtons = [];
 var lastAxes = [];
-var axisThreshold = .75;
+var axisThreshold = .5;
 function checkGamepad(){
     var gamepad = navigator.getGamepads()[0];
     if(gamepad.timestamp != timestamp){
-        for( var i = 0; i < gamepad.buttons.length; i++ ) {
-            currentState = gamepad.buttons[i].pressed
-            var prevState = lastButtons[i];
-            if( !prevState && currentState ){ //Button i Pressed    
-                buttonAction(i);                
-            }else if( prevState && !currentState ){//Button i Released
+        if(pageFocus){
+            for( var i = 0; i < gamepad.buttons.length; i++ ) {
+                currentState = gamepad.buttons[i].pressed
+                var prevState = lastButtons[i];
+                if( !prevState && currentState ){ //Button i Pressed    
+                    buttonAction(i);                
+                }else if( prevState && !currentState ){//Button i Released
 
-            }
-            lastButtons[i] = currentState;
-        }
-        for( var x = 0; x < gamepad.axes.length; x++ ) {
-            currentState = 0
-            if(gamepad.axes[x] > 0){
-                if(gamepad.axes[x] > axisThreshold){
-                    currentState = 1;
                 }
-            }else if(gamepad.axes[x] < 0){
-                if(gamepad.axes[x] < -axisThreshold){
-                    currentState = -1;
-                }           
+                lastButtons[i] = currentState;
             }
-            var prevState = lastAxes[x];
-            if( prevState != 1 && currentState == 1 ){
-                stickAction("+", x);
-            }else if( prevState != -1 && currentState == -1 ){
-                stickAction("-", x);
-            }else if( prevState != 0 && currentState == 0 ){  
-                stickAction("0", x);       
+            for( var x = 0; x < gamepad.axes.length; x++ ) {
+                currentState = 0
+                if(gamepad.axes[x] > 0){
+                    if(gamepad.axes[x] > axisThreshold){
+                        currentState = 1;
+                    }
+                }else if(gamepad.axes[x] < 0){
+                    if(gamepad.axes[x] < -axisThreshold){
+                        currentState = -1;
+                    }           
+                }
+                var prevState = lastAxes[x];
+                if( prevState != 1 && currentState == 1 ){
+                    stickAction("+", x);
+                }else if( prevState != -1 && currentState == -1 ){
+                    stickAction("-", x);
+                }else if( prevState != 0 && currentState == 0 ){  
+                    stickAction("0", x);       
+                }
+                lastAxes[x] = currentState;
             }
-            lastAxes[x] = currentState;
         }
         timestamp = gamepad.timestamp;
     }
