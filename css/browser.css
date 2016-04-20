@@ -57,7 +57,7 @@ img{
     width: 100px;
     height: 28px;
     border: 2px solid white;
-	z-index:1000;
+	z-index:15;
     border-radius: 5px;
     text-align: center;
     line-height: 28px;
@@ -118,18 +118,82 @@ img{
   background-color: #13233d;
 }
 
-.slider {
+
+/*==============================*/
+/*========== Settings ==========*/
+/*==============================*/
+
+#settingsButton{
     position: absolute;
-    left: 0;
-    bottom: 5px;
-    width: 25%;
+    right: 0;
+    bottom: 0;
+    height: 25px;
+    width: 25px;
+    z-index: 100;
+    opacity: 0.8;
+}
+
+#settingsButton:hover{
+    opacity: 1;
+}
+
+#settingsWindow{
+    position: absolute;
+    top: 60%;
+    width: 60%;
+    height: 25%;
+    left: 20%;
+    z-index: 100;
+    background-color: #13233d;
+    border: 4px solid #404f70;
+    display: none;
+    opacity: 0.9;
+}
+
+.zoomLabel{
+    position: absolute;
+    top: 46%;
+    left: 3%;
+    color: white;
+    font-size: 16pt;
+}
+
+#settingsHeader{
+    position: absolute;
+    top: 0;
+    color: white;
+    width: 100%;
+    height: 35px;
+    text-align: center;
+    font-size: 18pt;
+    line-height: 35px;
+    border-bottom: 4px solid #404f70;
+    overflow: hidden;
+}
+
+#settingsHeader .closebutton{
+    right: 0.5%;
+    top: 10%;
+    height: 25px;
+    width: 25px;
+    font-size: 2.7vh;
+    line-height: 25px;
+}
+
+.slider {
+    position: relative;
+    display: block;
+    top: 52%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 65%;
     height: 10px;
     z-index: 100;
     background: #404F70;
 }
 
 .ui-slider-handle {
-    position: relative;
+    position: absolute;
     display: block;
     width: 25px;
     padding: 10px;
@@ -142,6 +206,28 @@ img{
 
 .ui-slider-handle:focus {
     outline:0;
+}
+
+#zoomReset{
+    opacity: 0.8;
+    position: absolute;
+    top: 46%;
+    right: 2%;
+    color: white;
+    font-size: 12pt;
+    background-color: black;
+    width: 12%;
+    height: 28px;
+    border: 2px solid white;
+	z-index:1000;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 28px;
+    cursor: pointer;    
+}
+
+#zoomReset:hover{
+    background-color: #B1572A;
 }
 
 /*==============================*/
@@ -158,7 +244,7 @@ img{
 
 #xboxLabel{
     position: absolute;
-    right: 0;
+    left: 0;
     bottom: 2px;
     z-index: 10;
     color: white;

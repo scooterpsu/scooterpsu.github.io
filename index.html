@@ -6,6 +6,7 @@
 		<script src="js/handlebars.min.js"></script>
         <script src="js/jquery-2.2.1.min.js"></script>
         <script src="js/jquery-ui.js"></script>
+        <script src="js/jquery.textfill.min.js"></script>
 		<!-- DataTables -->
 		<link rel="stylesheet" href="css/jquery.dataTables.min.css">
 		<script src="js/jquery.dataTables.min.js"></script>
@@ -29,100 +30,106 @@
 
 </head>
 
-<body>
-	<h3 class="browserTitle">Server Browser</h3>
-	<h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
-    <div class="refresh" onclick="refreshTable();">Refresh</div>
-    <div class="quickMatch" onclick="quickMatch();">Quick Match</div>
-    <div class="howToServe" onclick="howToServe();">How To Host</div>
-    <div class="closeButton" onclick="closeBrowser();">X</div>
-    <progress class="serverPool" value="0" max="100"></progress>
-    <div id="zoomSlider" class="slider"></div>
-    <table id="serverTable" class="display" width="100%"></table>
-    <div id="gamecard">
-    </div>
-    <div id="backgroundFrame">
-    <div id="backgroundFrameInsert"></div>
-    </div>
-    <!--<button class="browserSwitch feeltrain" onclick="switchBrowser('theFeelTrain');">Switch to theFeelTrain</button>   
-    <button class="browserSwitch dewmenu" onclick="switchBrowser('DewMenu');">Switch to DewMenu</button> -->
-    
-    <div id="xboxLabel"><img class="controllerButton" src="images/360_Y.png">Initialize Controller / Refresh List <img class="controllerButton" src="images/360_X.png">Quick Match <img class="controllerButton" src="images/360_A.png">Join Game <img class="controllerButton" src="images/360_B.png">Show Scoreboard <img class="controllerButton" src="images/360_Back.png">Close Browser</div>
-    
-    <script id="gameinfo-template" type="text/x-handlebars-template">
-        <div id="cardheaderborder">
-            <div id="cardheader">
-                <div id="title"><b>{{capitalize variantType}} on {{map}}</b></div>
-                <img id="mappic" src="images/maps/{{lowerCase mapFile}}.png" onError="mapMatch(this, '{{mapFile}}');">
-                <img id="varpic" src="images/gametypes/{{lowerCase variantType}}.png">
-            </div>
+<body>  
+    <div id="settingsWindow">
+        <div id="settingsHeader">Settings<div class="closeButton" onclick="$('#settingsWindow').hide();">X</div></div>
+        <label class="zoomLabel" for="zoomSlider">Zoom</label><div id="zoomSlider" class="slider"></div><div id="zoomReset" onclick="adjustResolution();">Reset</div>   
+    </div>   
+    <div id="zoomBox">
+        <h3 class="browserTitle">Server Browser</h3>
+        <h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
+        <div class="refresh" onclick="refreshTable();">Refresh</div>
+        <div class="quickMatch" onclick="quickMatch();">Quick Match</div>
+        <div class="howToServe" onclick="howToServe();">How To Host</div>
+        <div class="closeButton" onclick="closeBrowser();">X</div>
+        <progress class="serverPool" value="0" max="100"></progress>
+        <table id="serverTable" class="display" width="100%"></table>
+        <div id="gamecard">
         </div>
-        <div id="scoreboard">
-            {{#if passworded}}
-                <b>Private Game</b>
-                {{else}}
-                    <div id="scoreBoardHeader">Scoreboard (+)</div>
-                    <table class="statBreakdown">
-                        <thead class="tableHeader">
-                            <th>Name</th>
-                            <th><center>Score</center></th>
-                            <th><center>K</center></th>
-                            <th><center>D</center></th>
-                            <th><center>A</center></th>
-                        </thead>
-                        <tbody>
-                            {{#eachByScore players}}
-                            {{#if name}}
-                            <tr>
-                                <td class="statLines">{{trimString this.name 0 100}}</td>
-                                <td class="statLines"><center>{{score}}</center></td>
-                                <td class="statLines"><center>{{kills}}</center></td>
-                                <td class="statLines"><center>{{deaths}}</center></td>
-                                <td class="statLines"><center>{{assists}}</center></td>
-                            </tr>
-                            {{/if}}
-                            {{/eachByScore}}
-                        </tbody>
-                    </table>
-                {{/if}}
+        <div id="backgroundFrame">
+        <div id="backgroundFrameInsert"></div>
         </div>
-        <div id="gameinfoborder">
-            <div id="gameinfo">
-                <div id="host"><b>Host: </b>{{trimString hostPlayer 0 100}}</div>
-                <div id="name"><b>Name: </b>{{trimString name 0 100}}</div>
-                <div id="voip"><b>VoIP: </b>
-                    {{#if VoIP}} 
-                        Enabled
-                    {{else}}
-                        Disabled
-                    {{/if}}                             
+        <!--<button class="browserSwitch feeltrain" onclick="switchBrowser('theFeelTrain');">Switch to theFeelTrain</button>   
+        <button class="browserSwitch dewmenu" onclick="switchBrowser('DewMenu');">Switch to DewMenu</button> -->
+        
+        <img id="settingsButton" onclick="$('#settingsWindow').show();" src="images/settings.png">
+        <div id="xboxLabel"><img class="controllerButton" src="images/360_Y.png">Initialize Controller / Refresh List <img class="controllerButton" src="images/360_X.png">Quick Match <img class="controllerButton" src="images/360_A.png">Join Game <img class="controllerButton" src="images/360_B.png">Show Scoreboard <img class="controllerButton" src="images/360_Back.png">Close Browser</div>
+        
+        <script id="gameinfo-template" type="text/x-handlebars-template">
+            <div id="cardheaderborder">
+                <div id="cardheader">
+                    <div id="title"><b>{{capitalize variantType}} on {{map}}</b></div>
+                    <img id="mappic" src="images/maps/{{lowerCase mapFile}}.png" onError="mapMatch(this, '{{mapFile}}');">
+                    <img id="varpic" src="images/gametypes/{{lowerCase variantType}}.png">
                 </div>
-                <div id="sprint"><b>Sprint: </b>
-                    {{#ifCond sprintEnabled "1"}}
-                        {{#ifCond sprintUnlimitedEnabled "1"}}
-                            Unlimited
-                        {{else}}
+            </div>
+            <div id="scoreboard">
+                {{#if passworded}}
+                    <b>Private Game</b>
+                    {{else}}
+                        <div id="scoreBoardHeader">Scoreboard (+)</div>
+                        <table class="statBreakdown">
+                            <thead class="tableHeader">
+                                <th>Name</th>
+                                <th><center>Score</center></th>
+                                <th><center>K</center></th>
+                                <th><center>D</center></th>
+                                <th><center>A</center></th>
+                            </thead>
+                            <tbody>
+                                {{#eachByScore players}}
+                                {{#if name}}
+                                <tr>
+                                    <td class="statLines">{{trimString this.name 0 100}}</td>
+                                    <td class="statLines"><center>{{score}}</center></td>
+                                    <td class="statLines"><center>{{kills}}</center></td>
+                                    <td class="statLines"><center>{{deaths}}</center></td>
+                                    <td class="statLines"><center>{{assists}}</center></td>
+                                </tr>
+                                {{/if}}
+                                {{/eachByScore}}
+                            </tbody>
+                        </table>
+                    {{/if}}
+            </div>
+            <div id="gameinfoborder">
+                <div id="gameinfo">
+                    <div id="host"><b>Host: </b>{{trimString hostPlayer 0 100}}</div>
+                    <div id="name"><b>Name: </b>{{trimString name 0 100}}</div>
+                    <div id="voip"><b>VoIP: </b>
+                        {{#if VoIP}} 
                             Enabled
+                        {{else}}
+                            Disabled
+                        {{/if}}                             
+                    </div>
+                    <div id="sprint"><b>Sprint: </b>
+                        {{#ifCond sprintEnabled "1"}}
+                            {{#ifCond sprintUnlimitedEnabled "1"}}
+                                Unlimited
+                            {{else}}
+                                Enabled
+                            {{/ifCond}}  
+                        {{else}}
+                            Disabled
                         {{/ifCond}}  
-                    {{else}}
-                        Disabled
-                    {{/ifCond}}  
+                    </div>
+                    <div id="status"><b>Status: </b>
+                        {{#ifCond status "InGame"}}
+                            In Game
+                        {{else}}
+                            In Lobby
+                        {{/ifCond}}   
+                    </div>
+                    <div id="version"><b>Version: </b>{{eldewritoVersion}}</div>
                 </div>
-                <div id="status"><b>Status: </b>
-                    {{#ifCond status "InGame"}}
-                        In Game
-                    {{else}}
-                        In Lobby
-                    {{/ifCond}}   
-                </div>
-                <div id="version"><b>Version: </b>{{eldewritoVersion}}</div>
             </div>
-        </div>
-	</script>
-    
-    <script>
-		var serverTemplateSource = $("#gameinfo-template").html();
-		var serverTemplate = Handlebars.compile(serverTemplateSource);
-	</script>    
+        </script>
+        
+        <script>
+            var serverTemplateSource = $("#gameinfo-template").html();
+            var serverTemplate = Handlebars.compile(serverTemplateSource);
+        </script>   
+    </div> 
 </body>
 </html>

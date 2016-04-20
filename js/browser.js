@@ -51,7 +51,7 @@ $(document).ready(function() {
     if(typeof(Storage) !== "undefined") {
         if(localStorage.getItem("zoom") !== null){
             zoomAmount = localStorage.getItem("zoom");
-            $('body').css("zoom", zoomAmount );	
+            $('#zoomBox').css("zoom", zoomAmount );	      
         }      
     }
     $( "#zoomSlider" ).slider({
@@ -62,9 +62,6 @@ $(document).ready(function() {
         slide: function( event, ui ) {
             adjustResolution( ui.value );
         }
-    });
-    $( ".ui-slider-handle" ).dblclick(function() {
-        adjustResolution();
     });
     $(document).on('click','#scoreBoardHeader',function(){
         toggleScoreboard();
@@ -129,9 +126,10 @@ function adjustResolution(newZoom) {
     $('#zoomSlider .ui-slider-handle').text( percentage.toFixed(0) );
     zoomAmount = newZoom;
     localStorage.setItem("zoom", newZoom);
-    $('body').stop().animate({zoom: newZoom}, 500, function() {
+    $('#zoomBox').stop().animate({zoom: newZoom}, 500, function() {
         $('#serverTable').DataTable().draw(); 
     });
+    $( "#zoomSlider" ).slider({ value:newZoom });
 }
 
 function getCurrentRelease() {
