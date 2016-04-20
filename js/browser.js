@@ -1,5 +1,4 @@
 var pageFocus = false;
-var windowFocus = false;
 var zoomAmount;
 var mapList = [[]];
 var EDVersion = 0;
@@ -89,11 +88,6 @@ $(document).ready(function() {
             }
         }, 500);
     }
-    $(window).focus(function() {
-        windowFocus = true;
-    }).blur(function() {
-        windowFocus = false;
-    });
 });
 
 var scoreBoardVisible = false;
@@ -607,13 +601,9 @@ String.prototype.contains = function(it) {
 };
 
 function CheckPageFocus() {
-    if(windowFocus){
-        if ( document.hasFocus() ) {
-            pageFocus = true;
-        } else {
-            pageFocus = false;
-        }
-    }else{
+    if ( document.hasFocus() ) {
+        pageFocus = true;
+    } else {
         pageFocus = false;
     }
 }
@@ -649,6 +639,9 @@ function updateSelection() {
     if(row){
         fillGameCard(row[0]);
     }
+    $('.dataTables_scrollBody').scrollTop(
+        $(".dataTables_scrollBody tbody tr:eq(" + selectedID + ")").offset().top - $('.dataTables_scrollBody').offset().top + $('.dataTables_scrollBody').scrollTop()
+    );
 }
 
 function joinSelected() {
