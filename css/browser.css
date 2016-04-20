@@ -126,7 +126,7 @@ img{
 #settingsButton{
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: -2px;
     height: 25px;
     width: 25px;
     z-index: 100;
@@ -155,7 +155,7 @@ img{
     top: 46%;
     left: 3%;
     color: white;
-    font-size: 16pt;
+    font-size: 18pt;
 }
 
 #settingsHeader{
@@ -169,24 +169,24 @@ img{
     line-height: 35px;
     border-bottom: 4px solid #404f70;
     overflow: hidden;
+    background-color: black;
 }
 
 #settingsHeader .closebutton{
     right: 0.5%;
     top: 10%;
-    height: 25px;
-    width: 25px;
+    height: 27px;
+    width: 27px;
     font-size: 13pt;
-    line-height: 25px;
+    line-height: 27px;
 }
 
 .slider {
     position: relative;
     display: block;
     top: 52%;
-    margin-left: auto;
-    margin-right: auto;
-    width: 65%;
+    left: 19.5%;
+    width: 60%;
     height: 10px;
     z-index: 100;
     background: #404F70;
@@ -261,7 +261,7 @@ img{
     color: white; 
     padding-top: 50px !important;
     font-size: 18pt;
-    border: 2px solid #404f70;
+    border: 4px solid #404f70;
     outline: 0;
     line-height: 1em;
     margin-bottom: -200px;
@@ -292,7 +292,7 @@ img{
     color: white;
     background-color: black;
     font-size: 16pt;
-    border-bottom: 2px solid #404f70;
+    border-bottom: 4px solid #404f70;
     margin-top: 0;
     text-align: center;
     font-weight: 700;

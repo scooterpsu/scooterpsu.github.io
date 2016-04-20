@@ -84,6 +84,9 @@ $(document).ready(function() {
                 window.clearInterval(checkGP);
             }
         }, 500);
+        $("#settingsWindow").draggable({
+          handle: "#settingsHeader"
+        });
     }
 });
 
