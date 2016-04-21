@@ -12,6 +12,7 @@ body {
     font-family: "Conduit ITC"; 
     letter-spacing: 1px;
     height: -webkit-calc(100% - 30px) !important;
+    overflow: hidden;
 }
 
 img{
@@ -173,12 +174,12 @@ img{
 }
 
 #settingsHeader .closebutton{
-    right: 0.5%;
-    top: 10%;
-    height: 27px;
-    width: 27px;
-    font-size: 13pt;
-    line-height: 27px;
+    right: 4px;
+    top: 4px;
+    height: 25px;
+    width: 25px;
+    font-size: 12pt;
+    line-height: 25px;
 }
 
 .slider {

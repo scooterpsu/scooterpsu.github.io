@@ -69,13 +69,15 @@ $(document).ready(function() {
     if(controllerSupport()){
         $(window).on("gamepadconnected", function(){
             hasGP = true;
-            console.log("Gamepad connected");
+            //console.log("Gamepad connected");
+            $('#xboxLabel').html('<img class="controllerButton" src="images/360_Y.png">Refresh List <img class="controllerButton" src="images/360_X.png">Quick Match <img class="controllerButton" src="images/360_A.png">Join Game <img class="controllerButton" src="images/360_B.png">Show Scoreboard <img class="controllerButton" src="images/360_Back.png">Close Browser');
             updateSelection();
             repGP = window.setInterval(checkGamepad,100);
         });
         $(window).on("gamepaddisconnected", function(){
             hasGP = false;
-            console.log("Gamepad disconnected");
+            //console.log("Gamepad disconnected");
+            $('#xboxLabel').html('<img class="controllerButton" src="images/360_Y.png">Initialize Controller');
             window.clearInterval(repGP);
         });
         var checkGP = window.setInterval(function(){
