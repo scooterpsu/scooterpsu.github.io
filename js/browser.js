@@ -286,7 +286,6 @@ function buildTable() {
                                 for (var j = 0; j < serverList.servers.length; j++) {
                                     if (serverList.servers[j]["i"] == i) {
                                         serverList.servers[j] = serverInfo;
-                                        serverCount++;
                                         playerCount+=parseInt(serverInfo.numPlayers);
                                     }
                                 }
@@ -324,6 +323,7 @@ function buildTable() {
                                     serverInfo.sprintEnabled,
                                     serverInfo.sprintUnlimitedEnabled
                                 ]).draw();
+                                serverCount++;
                                 table.columns.adjust().draw();
                                 fillGameCard(serverInfo.serverId);
                                 if(!dewConnected){
