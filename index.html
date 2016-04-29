@@ -134,6 +134,13 @@
                         Disabled
                     {{/ifCond}}  
                 </div>
+                <div id="sprint"><b>Assassinations: </b>
+                    {{#ifCond assassinationEnabled "0"}}
+                        Disabled
+                    {{else}}
+                        Enabled
+                    {{/ifCond}}  
+                </div>
                 <div id="status"><b>Status: </b>
                     {{#ifCond status "InGame"}}
                         In Game

@@ -227,7 +227,8 @@ function buildTable() {
                                     isFull,
                                     serverInfo.eldewritoVersion,
                                     serverInfo.sprintEnabled,
-                                    serverInfo.sprintUnlimitedEnabled
+                                    serverInfo.sprintUnlimitedEnabled,
+                                    serverInfo.assassinationEnabled
                                 ]).draw();
                                 serverCount++;
                                 table.columns.adjust().draw();
