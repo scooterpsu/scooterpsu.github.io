@@ -499,7 +499,7 @@ function hasMap(map) {
 
 function closeBrowser() {
     ga('send', 'event', 'close-menu');
-
+    $('#serverTable').DataTable().state.clear();
     if(dewRconConnected) {
         setTimeout(function() {
             dewRcon.send('menu.show');
@@ -710,6 +710,7 @@ function connectionTrigger() {
                             if (gameVersion === 0) {
                                 gameVersion = resa;
                                 checkUpdate(gameVersion);
+                                $('#serverTable').dataTable().fnFilter( gameVersion, 15 );
                             }               
                             if (resb.contains(",") && mapList[0].length == 0) {
                                 mapList = new Array(resb.split(','));
