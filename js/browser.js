@@ -45,6 +45,9 @@ $(document).ready(function() {
             $('#zoomSlider .ui-slider-handle').text( percentage.toFixed(0) );
         }
     });
+    $(document).on('click','#scoreBoardHeader',function(){
+        toggleScoreboard();
+    });
 });
 
 /* Sets zoom level to specified value or reset if not specified */
@@ -548,6 +551,19 @@ function howToServe(){
         width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
     });
 }
+
+var scoreBoardVisible = false;
+function toggleScoreboard(){
+    if (!scoreBoardVisible){
+        $('#scoreBoardHeader').text("Scoreboard (-)"); 
+        scoreBoardVisible = true;
+    } else{
+        $('#scoreBoardHeader').text("Scoreboard (+)");  
+        scoreBoardVisible = false;    
+    }
+     $('.statBreakdown').toggle('blind', 500); 
+}
+
 
 //==================================
 //===== Friendserver Functions =====
