@@ -1,5 +1,6 @@
 var pageFocus = false;
 var zoomAmount;
+var scoreBoardVisible = false;
 var mapList = [[]];
 var EDVersion = 0;
 var serverList = {
@@ -93,7 +94,6 @@ $(document).ready(function() {
     }
 });
 
-var scoreBoardVisible = false;
 function toggleScoreboard(){
     if (!scoreBoardVisible){
         $('#scoreBoardHeader').text("Scoreboard (-)"); 
@@ -180,6 +180,11 @@ function initTable() {
         "iDisplayLength": 10,
         stateSave: true,
         bInfo: false,
+        "stateSaveParams": function (settings, data) {
+            for (var i = 0;i < data.columns.length; i++){
+              delete data.columns[i].search;
+            }
+        },
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
@@ -599,7 +604,6 @@ function closeBrowser() {
     if(dewConnected) {
         dew.hide();
     } 
-    $('#serverTable').DataTable().state.clear();
 }
 
 String.prototype.contains = function(it) {
@@ -883,4 +887,24 @@ Handlebars.registerHelper('lowerCase', function(str) {
 Handlebars.registerHelper('trimString', function(passedString, startstring, endstring) {
    var theString = passedString.substring( startstring, endstring );
    return new Handlebars.SafeString(theString)
+});
+
+Handlebars.registerHelper('scoreBoardPlus', function(str) {
+    ret = "";
+    if(scoreBoardVisible){
+        ret = "(-)";
+    } else {
+        ret = "(+)" 
+    }
+    return ret;
+});
+
+Handlebars.registerHelper('scoreBoardHidden', function(str) {
+    ret = "";
+    if(scoreBoardVisible){
+        ret = "display:table;";
+    } else{
+        ret = "display:none;";        
+    }
+    return ret;
 });
