@@ -31,6 +31,7 @@ $(document).ready(function() {
         dew.getVersion().then(function (version) {
             gameVersion = version;
             checkUpdate(gameVersion);
+            $('#serverTable').dataTable().fnFilter( gameVersion, 15 );
         });
         loadSettings(0);
         $("body").css("background-color", "transparent");
@@ -598,6 +599,7 @@ function closeBrowser() {
     if(dewConnected) {
         dew.hide();
     } 
+    $('#serverTable').DataTable().state.clear();
 }
 
 String.prototype.contains = function(it) {
