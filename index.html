@@ -88,8 +88,8 @@
             {{#if passworded}}
                 <b>Private Game</b>
                 {{else}}
-                    <div id="scoreBoardHeader">Scoreboard (+)</div>
-                    <table class="statBreakdown">
+                    <div id="scoreBoardHeader">Scoreboard {{scoreBoardPlus}}</div>
+                    <table class="statBreakdown" style="{{scoreBoardHidden}}">
                         <thead class="tableHeader">
                             <th>Name</th>
                             <th><center>Score</center></th>

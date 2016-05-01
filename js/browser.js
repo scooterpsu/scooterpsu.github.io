@@ -1,5 +1,6 @@
 var pageFocus = false;
 var zoomRatio;
+var scoreBoardVisible = false;
 var mapList = [[]];
 var EDVersion = 0;
 var serverList = {
@@ -97,6 +98,11 @@ function buildTable() {
         destroy: true,
         "iDisplayLength": 10,
         stateSave: true,
+        "stateSaveParams": function (settings, data) {
+            for (var i = 0;i < data.columns.length; i++){
+              delete data.columns[i].search;
+            }
+        },
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
@@ -499,7 +505,6 @@ function hasMap(map) {
 
 function closeBrowser() {
     ga('send', 'event', 'close-menu');
-    $('#serverTable').DataTable().state.clear();
     if(dewRconConnected) {
         setTimeout(function() {
             dewRcon.send('menu.show');
@@ -552,13 +557,12 @@ function howToServe(){
     });
 }
 
-var scoreBoardVisible = false;
 function toggleScoreboard(){
     if (!scoreBoardVisible){
         $('#scoreBoardHeader').text("Scoreboard (-)"); 
         scoreBoardVisible = true;
     } else{
-        $('#scoreBoardHeader').text("Scoreboard (+)");  
+        $('#scoreBoardHeader').text("Scoreboard (+)");
         scoreBoardVisible = false;    
     }
      $('.statBreakdown').toggle('blind', 500); 
@@ -923,4 +927,24 @@ Handlebars.registerHelper('lowerCase', function(str) {
 Handlebars.registerHelper('trimString', function(passedString, startstring, endstring) {
    var theString = passedString.substring( startstring, endstring );
    return new Handlebars.SafeString(theString)
+});
+
+Handlebars.registerHelper('scoreBoardPlus', function(str) {
+    ret = "";
+    if(scoreBoardVisible){
+        ret = "(-)";
+    } else {
+        ret = "(+)" 
+    }
+    return ret;
+});
+
+Handlebars.registerHelper('scoreBoardHidden', function(str) {
+    ret = "";
+    if(scoreBoardVisible){
+        ret = "display:table;";
+    } else{
+        ret = "display:none;";        
+    }
+    return ret;
 });
