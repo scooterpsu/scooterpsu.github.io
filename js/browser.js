@@ -144,9 +144,17 @@ function getCurrentRelease() {
         EDVersion = Object.keys(data)[0];
     })
 }
-        
-function initTable() {
+
+var clickDelay = 1000;
+var isDelayed = false;           
+function initTable() {   
+    $('#serverTable').on('dblclick', 'tr', function(event) {
+        event.preventDefault();
+    }); 
     $('#serverTable').on('click', 'tr', function() {
+        if (isDelayed) { return; }
+        isDelayed = true;
+        setTimeout(function () { isDelayed = false; }, clickDelay);
         var tr = $(this).closest('tr');
         var row = table.row( tr );
         if (row.data()) {
