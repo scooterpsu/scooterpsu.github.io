@@ -298,14 +298,14 @@ function joinServer(i) {
                                                 if (res === "Incorrect password specified.") {
                                                     sweetAlert.showInputError(res);
                                                     return false
-                                                } else {
+                                                } else if (res == "Attempting connection to " + serverList.servers[i].serverIP + "..."){
                                                     if (friendServerConnected && party.length > 1) {
-                                                        partyConnect(serverList.servers[i].serverIP, inputValue);                                                    
+                                                        partyConnect(serverList.servers[i].serverIP, inputValue);
                                                     } else {
-                                                        closeBrowser();                                                       
+                                                        closeBrowser();
                                                     }
                                                     sweetAlert.close();
-                                                }
+                                                } 
                                             }
                                         }
                                     });
@@ -314,11 +314,11 @@ function joinServer(i) {
                         } else {
                             dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
                                 if (res.length > 0) {
-                                    if (res != "Command/Variable not found") {
+                                    if (res == "Attempting connection to " + serverList.servers[i].serverIP + "..."){
                                         if (friendServerConnected && party.length > 1) {
-                                            partyConnect(serverList.servers[i].serverIP, null);                                                    
+                                            partyConnect(serverList.servers[i].serverIP, null);
                                         } else {
-                                            closeBrowser();                                           
+                                            closeBrowser();
                                         }
                                     }
                                 }
