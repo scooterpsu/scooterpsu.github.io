@@ -64,7 +64,7 @@ function getCurrentRelease() {
     })
 }
 
-var clickDelay = 1000;
+var clickDelay = 300;
 var isDelayed = false;        
 function buildTable() {
     $('#serverTable').on('dblclick', 'tr', function(event) {
@@ -298,7 +298,7 @@ function joinServer(i) {
                                                 if (res === "Incorrect password specified.") {
                                                     sweetAlert.showInputError(res);
                                                     return false
-                                                } else if (res == "Attempting connection to " + serverList.servers[i].serverIP + "..."){
+                                                } else if (res.startsWith("Attempting connection to ")){
                                                     if (friendServerConnected && party.length > 1) {
                                                         partyConnect(serverList.servers[i].serverIP, inputValue);
                                                     } else {
@@ -314,7 +314,8 @@ function joinServer(i) {
                         } else {
                             dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
                                 if (res.length > 0) {
-                                    if (res == "Attempting connection to " + serverList.servers[i].serverIP + "..."){
+                                    console.log(res);
+                                    if (res.startsWith("Attempting connection to ")){
                                         if (friendServerConnected && party.length > 1) {
                                             partyConnect(serverList.servers[i].serverIP, null);
                                         } else {
