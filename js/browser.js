@@ -145,7 +145,7 @@ function getCurrentRelease() {
     })
 }
 
-var clickDelay = 1000;
+var clickDelay = 300;
 var isDelayed = false;           
 function initTable() {   
     $('#serverTable').on('dblclick', 'tr', function(event) {
