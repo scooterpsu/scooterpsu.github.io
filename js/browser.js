@@ -722,6 +722,8 @@ function connectionTrigger() {
                             if (gameVersion === 0) {
                                 gameVersion = resa;
                                 checkUpdate(gameVersion);
+                            }
+                            if (gameVersion != 0){
                                 $('#serverTable').dataTable().fnFilter( gameVersion, 15 );
                             }               
                             if (resb.contains(",") && mapList[0].length == 0) {
