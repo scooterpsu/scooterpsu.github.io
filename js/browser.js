@@ -64,20 +64,20 @@ function getCurrentRelease() {
     })
 }
 
-var clickDelay = 300;
-var isDelayed = false;        
+var clickDelay = 300;  
+var isDelayed = false;   
 function buildTable() {
-    $('#serverTable').on('dblclick', 'tr', function(event) {
-        event.preventDefault();
-    }); 
     $('#serverTable').on('click', 'tr', function() {
-        if (isDelayed) { return; }
-        isDelayed = true;
-        setTimeout(function () { isDelayed = false; }, clickDelay);
         var tr = $(this).closest('tr');
         var row = table.row( tr );
-        if (row.data()) {
-            joinServer(row.data()[0]);
+        if (row.data()) {                 
+            if(!isDelayed){
+                isDelayed = true;
+                joinServer(row.data()[0]);
+                setTimeout(function(){
+                    isDelayed = false;
+                }, clickDelay);
+            }
         } 
     });  
     $('#serverTable').on('mouseover', 'tr', function() {
