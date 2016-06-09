@@ -714,34 +714,28 @@ function connectionTrigger() {
     }
     $('.closeButton').show();
     $('#serverTable_filter').css("right","-160px");
-    dewRcon.send('game.version', function(resa) { 
-        dewRcon.send('game.listmaps', function(resb) {
-            dewRcon.send('player.name', function(resc) {
-                dewRcon.send('player.printUID', function(resd) {
-                    dewRcon.send('Game.LogName', function(rese) {
-                       dewRcon.send('Player.Colors.Primary', function(resf) {
-                            if (gameVersion === 0) {
-                                gameVersion = resa;
-                                checkUpdate(gameVersion);
-                            }
-                            if (gameVersion != 0){
-                                $('#serverTable').dataTable().fnFilter( gameVersion, 15 );
-                            }               
-                            if (resb.contains(",") && mapList[0].length == 0) {
-                                mapList = new Array(resb.split(','));
-                            }
-                            pname = resc;
-                            puid = resd.split(' ')[2];
-                            if (rese == "nosteam.log"){
-                                noSTEAMLockout();
-                            }
-                            color = resf;
-                        });
-                    });
-                });
-            });
-        });
-    });
+    loadSettings(0);
+}
+
+var settingsToLoad = [['mapList', 'game.listmaps'],['gameVersion', 'game.version'],['pname', 'player.name'],['puid', 'player.printUID'],['color', 'Player.Colors.Primary']];
+function loadSettings(i){
+	if (i != settingsToLoad.length) {
+		dewRcon.send(settingsToLoad[i][1], function(response) {
+			if(settingsToLoad[i][1].contains("listmaps")){
+				window[settingsToLoad[i][0]] = [[]];
+				mapList = new Array(response.split(','));
+			} else if(settingsToLoad[i][1].contains("printUID")){
+				window[settingsToLoad[i][0]] = response.split(' ')[2];
+			} else {
+				window[settingsToLoad[i][0]] = response;
+			}
+			i++;
+			loadSettings(i);
+		});
+	} else {
+        checkUpdate(gameVersion);
+        $('#serverTable').dataTable().fnFilter( gameVersion, 15 );
+	}
 }
 
 function disconnectTrigger() {
