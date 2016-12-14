@@ -138,6 +138,7 @@ function buildTable() {
             { title: "Players", "width": "1%"},
             { title: "IsFull", "width": "1%", visible: false},
             { title: "Version", "width": "1%", visible: false},
+            { title: "Dedi", "width": "1%"}
         ],
         "order": [[ 0 ]],
         "language": {
@@ -226,6 +227,9 @@ function buildTable() {
                                 if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
                                     isFull = "open";
                                 }
+                                if(!serverInfo.hasOwnProperty("isDedicated")){
+                                    serverInfo["isDedicated"] = "";
+                                }
                                 table.row.add([
                                     serverInfo.serverId,
                                     serverInfo.serverIP,
@@ -243,6 +247,7 @@ function buildTable() {
                                     parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
                                     isFull,
                                     serverInfo.eldewritoVersion,
+                                    serverInfo.isDedicated,
                                     serverInfo.sprintEnabled,
                                     serverInfo.sprintUnlimitedEnabled,
                                     serverInfo.assassinationEnabled
