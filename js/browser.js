@@ -137,7 +137,7 @@ function buildTable() {
              { title: "Num Players", visible: false},  
             { title: "Players", "width": "1%"},
             { title: "IsFull", "width": "1%", visible: false},
-            { title: "Version", "width": "1%", visible: false}
+            { title: "Version", "width": "1%", visible: false},
         ],
         "order": [[ 0 ]],
         "language": {
