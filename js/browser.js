@@ -167,9 +167,11 @@ function buildTable() {
                 //}
             })
             .done(function( data ) {
-                for(var ii = 0; ii < data.result.servers.length; ii++) {
-                    if (!(data.result.servers[ii] in server_list)) {
-                        server_list.push(data.result.servers[ii]);
+                if(data.result.servers){
+                    for(var ii = 0; ii < data.result.servers.length; ii++) {
+                        if (!(data.result.servers[ii] in server_list)) {
+                            server_list.push(data.result.servers[ii]);
+                        }
                     }
                 }
             });
