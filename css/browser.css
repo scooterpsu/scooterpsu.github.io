@@ -42,7 +42,7 @@ img{
     color: white;
     opacity: 0.8;
     position: absolute;
-    top: -35px;
+    top: -33px;
     left: 12px;
     z-index: 2;
     font-size: 18pt;
@@ -91,7 +91,7 @@ img{
     color: white;
     opacity: 0.8;
     position: absolute;
-    top: -32px;
+    top: -30px;
     left: 350px;
     z-index: 2;
     font-size: 14pt;
@@ -107,7 +107,7 @@ img{
 
 .serverPool{
     position: absolute;
-    width: 100%;
+    width: calc(100% + 4px);
     height: 5px;
     left: 0;
     top: 30px;
@@ -361,10 +361,11 @@ img{
 
 #cardheaderborder{
     background-color: #608085;
-    width: 250px;
+    width: 248px;
     min-height: 140px;
     -webkit-clip-path: polygon(30px 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 30px);
     padding-bottom: 4px;
+    padding-right: 2px;
 }
 
 #title{
@@ -522,6 +523,10 @@ img{
     margin-bottom: -34px;
 }
 
+.dataTables_scrollHead{
+    padding-top: 10px;
+}
+
 .dataTables_scrollBody{
     padding-top: 29px;
     margin-bottom: -38px;
@@ -538,7 +543,7 @@ img{
 
 #serverTable_filter{
     position: relative;
-    top: -51px;
+    top: -41px;
     right: -224px;
     z-index: 3;
 }
@@ -582,10 +587,6 @@ img{
     width: -webkit-calc(100% - 10px);
     margin-bottom: 0;
     background-color: #05152f;
-}
-
-.dataTables_scrollHead{
-    padding-top: 10px;
 }
 
 ::-webkit-scrollbar {
