@@ -252,9 +252,11 @@ function buildTable() {
                 //}
             })
             .done(function( data ) {
-                for(var ii = 0; ii < data.result.servers.length; ii++) {
-                    if (!(data.result.servers[ii] in server_list)) {
-                        server_list.push(data.result.servers[ii]);
+                if(data.result.servers){
+                    for(var ii = 0; ii < data.result.servers.length; ii++) {
+                        if (!(data.result.servers[ii] in server_list)) {
+                            server_list.push(data.result.servers[ii]);
+                        }
                     }
                 }
             });
@@ -321,14 +323,14 @@ function buildTable() {
                                     serverInfo.serverId,
                                     serverInfo.serverIP,
                                     serverInfo.passworded,
-                                    serverInfo.name,
-                                    serverInfo.hostPlayer,
+                                    escapeHtml(serverInfo.name),
+                                    escapeHtml(serverInfo.hostPlayer),
                                     pingDisplay,
                                     ping,
-                                    serverInfo.map,
-                                    serverInfo.mapFile,
-                                    capitalizeFirstLetter(serverInfo.variantType),
-                                    capitalizeFirstLetter(serverInfo.variant),
+                                    escapeHtml(serverInfo.map),
+                                    escapeHtml(serverInfo.mapFile),
+                                    capitalizeFirstLetter(escapeHtml(serverInfo.variantType)),
+                                    capitalizeFirstLetter(escapeHtml(serverInfo.variant)),
                                     serverInfo.status,
                                     parseInt(serverInfo.numPlayers),
                                     parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
@@ -479,8 +481,20 @@ function setPing(ip, ping){
 }
 
 function fillGameCard(i) {
+    serverList.servers[i].hostPlayer = escapeHtml(serverList.servers[i].hostPlayer)
+    serverList.servers[i].name = escapeHtml(serverList.servers[i].name);
+    serverList.servers[i].map = escapeHtml(serverList.servers[i].map)
+    serverList.servers[i].mapFile = escapeHtml(serverList.servers[i].mapFile);
+    serverList.servers[i].variant = escapeHtml(serverList.servers[i].variant)
+    serverList.servers[i].variantType = escapeHtml(serverList.servers[i].variantType);
     var html = serverTemplate(serverList.servers[i]);
     $("#gamecard").html(html);
+}
+
+function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
 }
 
 function capitalizeFirstLetter(string) {
