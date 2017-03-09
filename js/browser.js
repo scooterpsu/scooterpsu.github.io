@@ -20,6 +20,8 @@ var repGP;
 var lastArray = [];
 var dewConnected = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+
+var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dewrito.json";
 swal.setDefaults({
     customClass: "alertWindow",
     html: true
@@ -46,7 +48,19 @@ $(document).ready(function() {
         });
     })
     .fail(function() {
-        buildTable();               
+        $.ajax({
+            url: dewritoURL,
+            error: function()
+            {
+               console.log("dewrito.json error, using backup");
+               dewritoURL = "http://scooterpsu.github.io/dewrito.json";
+               buildTable();
+            },
+            success: function()
+            {
+                buildTable();
+            }
+        });               
     });
     getCurrentRelease();
     setInterval( CheckPageFocus, 200 );
@@ -236,7 +250,7 @@ function buildTable() {
     var table = $('#serverTable').DataTable();
     var master_servers = [];
     var server_list = [];
-    var mshxr = $.getJSON("https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dewrito.json")
+    var mshxr = $.getJSON(dewritoURL)
     .done(function( data ) {
         var master_count = 0;
         for (var i = 0; i<data.masterServers.length; i++){
