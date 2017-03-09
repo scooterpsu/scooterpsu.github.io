@@ -32,7 +32,7 @@ swal.setDefaults({
 $(document).ready(function() {
     getCurrentRelease();
     $.ajax({
-        url:'http://www.example.com/3.html',
+        url: dewritoURL,
         error: function()
         {
            console.log("dewrito.json error, using backup");
