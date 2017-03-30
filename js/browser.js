@@ -291,6 +291,11 @@ function buildTable() {
 
 function joinServer(i) {
     if(dewRconConnected) {
+        if(gameVersion==0){
+            dewRcon.send("game.version", function(response) {
+                gameVersion = response;
+            });
+        }        
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
