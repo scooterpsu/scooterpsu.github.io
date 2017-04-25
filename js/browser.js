@@ -417,10 +417,20 @@ function fillGameCard(i) {
     $("#gamecard").html(html);
 }
 
+var blamList = [];
+
+$.getJSON("https://scooterpsu.github.io/blamList/blamList.json", function(json) {
+    blamList = json;
+})
+
 function escapeHtml(str) {
     var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
+    var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
+    //fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
+    for (var i = 0; i < blamList.length; i++) {
+        fixedText = fixedText.replace(blamList[i], "BLAM!");
+    }
+    return fixedText;
 }
 
 function capitalizeFirstLetter(string) {
