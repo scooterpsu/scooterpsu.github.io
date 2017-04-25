@@ -508,7 +508,7 @@ function fillGameCard(i) {
 var blamList = [];
 
 $.getJSON("https://scooterpsu.github.io/blamList/blamList.json", function(json) {
-    blamList = json;
+    blamList = json.words;
 })
 
 function escapeHtml(str) {
