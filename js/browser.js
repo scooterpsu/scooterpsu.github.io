@@ -215,7 +215,11 @@ function initTable() {
             { "mRender": function (data, type, row) {
                 img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
-            }, "aTargets":[ 5 ]}
+            }, "aTargets":[ 5 ]},
+            { "mRender": function (data, type, row) {
+                img_str = '<img class="flag" src="images/flags/' + data + '.png"/>';
+                return img_str;
+            }, "aTargets":[ 2 ]}
         ],
         columns: [
             { title: "ID", visible: false},
@@ -319,7 +323,9 @@ function buildTable() {
                                         playerCount+=parseInt(serverInfo.numPlayers);
                                     }
                                 }
+                                var locked;
                                 if(!serverInfo.hasOwnProperty("passworded")) {
+                                    locked = false;
                                     serverInfo["passworded"] = "";
                                     var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
                                     totalSlotCount += serverInfo.maxPlayers;
@@ -327,7 +333,8 @@ function buildTable() {
                                     $(".serverPool").attr('value', openSlotCount);
                                     $(".serverPool").attr('max', totalSlotCount);
                                 } else {
-                                    serverInfo["passworded"] = "🔒";
+                                    locked = true;
+                                    serverInfo["passworded"] = "lock";
                                 };
                                 var isFull = "full";
                                 if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
@@ -364,6 +371,9 @@ function buildTable() {
                                     }
                                 } else {
                                     dew.ping(serverInfo.serverIP.split(":")[0]);
+                                }
+                                if(!locked){
+                                    getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
                                 }
                             } else {
                                 console.log(serverInfo.serverIP + " is glitched");
@@ -531,6 +541,14 @@ function unique(list) {
     if ($.inArray(e, result) == -1) result.push(e);
   });
   return result;
+}
+
+function getFlag(ip, rowNum){
+    var ipSplit = ip.split(":")[0];
+    $.getJSON("http://ip-api.com/json/"+ipSplit, function(json) {
+        console.log(rowNum + " " + json.countryCode);  
+        $('#serverTable').dataTable().fnUpdate(json.countryCode, rowNum, 2);        
+    })
 }
 
 function refreshTable() {
