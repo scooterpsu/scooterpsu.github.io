@@ -326,7 +326,7 @@ function buildTable() {
                                 var locked;
                                 if(!serverInfo.hasOwnProperty("passworded")) {
                                     locked = false;
-                                    serverInfo["passworded"] = "";
+                                    serverInfo["passworded"] = "blank";
                                     var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
                                     totalSlotCount += serverInfo.maxPlayers;
                                     openSlotCount += openSlots;
@@ -526,7 +526,7 @@ function escapeHtml(str) {
     var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
     //fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
     for (var i = 0; i < blamList.length; i++) {
-        fixedText = fixedText.replace(blamList[i], "BLAM!");
+        fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!");
     }
     return fixedText;
 }
@@ -546,7 +546,6 @@ function unique(list) {
 function getFlag(ip, rowNum){
     var ipSplit = ip.split(":")[0];
     $.getJSON("http://ip-api.com/json/"+ipSplit, function(json) {
-        console.log(rowNum + " " + json.countryCode);  
         $('#serverTable').dataTable().fnUpdate(json.countryCode, rowNum, 2);        
     })
 }
