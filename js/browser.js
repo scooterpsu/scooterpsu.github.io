@@ -511,6 +511,9 @@ function fillGameCard(i) {
     serverList.servers[i].mapFile = escapeHtml(serverList.servers[i].mapFile);
     serverList.servers[i].variant = escapeHtml(serverList.servers[i].variant)
     serverList.servers[i].variantType = escapeHtml(serverList.servers[i].variantType);
+    if (serverList.servers[i].passworded = "blank"){
+        serverList.servers[i].passworded = "";
+    }
     var html = serverTemplate(serverList.servers[i]);
     $("#gamecard").html(html);
 }
