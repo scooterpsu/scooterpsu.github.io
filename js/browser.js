@@ -217,7 +217,10 @@ function initTable() {
                 return img_str;
             }, "aTargets":[ 5 ]},
             { "mRender": function (data, type, row) {
-                img_str = '<img class="flag" src="images/flags/' + data + '.png"/>';
+                img_str="";
+                if(data){
+                    img_str = '<img class="flag" src="images/flags/' + data + '.png"/>';
+                } 
                 return img_str;
             }, "aTargets":[ 2 ]}
         ],
@@ -326,7 +329,6 @@ function buildTable() {
                                 var locked;
                                 if(!serverInfo.hasOwnProperty("passworded")) {
                                     locked = false;
-                                    serverInfo["passworded"] = "blank";
                                     var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
                                     totalSlotCount += serverInfo.maxPlayers;
                                     openSlotCount += openSlots;
@@ -511,9 +513,6 @@ function fillGameCard(i) {
     serverList.servers[i].mapFile = escapeHtml(serverList.servers[i].mapFile);
     serverList.servers[i].variant = escapeHtml(serverList.servers[i].variant)
     serverList.servers[i].variantType = escapeHtml(serverList.servers[i].variantType);
-    if (serverList.servers[i].passworded = "blank"){
-        serverList.servers[i].passworded = "";
-    }
     var html = serverTemplate(serverList.servers[i]);
     $("#gamecard").html(html);
 }
@@ -549,7 +548,7 @@ function unique(list) {
 function getFlag(ip, rowNum){
     var ipSplit = ip.split(":")[0];
     $.getJSON("http://ip-api.com/json/"+ipSplit, function(json) {
-        $('#serverTable').dataTable().fnUpdate(json.countryCode, rowNum, 2);        
+        $('#serverTable').dataTable().fnUpdate(json.countryCode.toLowerCase(), rowNum, 2);        
     })
 }
 
