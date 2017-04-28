@@ -46,6 +46,12 @@ $(document).ready(function() {
         dew.on("pong", function (event) {
             setPing(event.data.address + ":11775", event.data.latency);
         });
+        dew.on("serverconnect", function (event) {
+            console.log(event.data);
+            if(event.data.success){
+                closeBrowser();
+            }
+        });
     })
     .fail(function() {
         $.ajax({
@@ -237,7 +243,7 @@ function initTable() {
             { title: "Gametype"},
             { title: "Variant" },
             { title: "Status", visible: false},    
-             { title: "Num Players", visible: false},  
+            { title: "Num Players", visible: false},  
             { title: "Players", "width": "1%"},
             { title: "IsFull", "width": "1%", visible: false},
             { title: "Version", "width": "1%", visible: false}
@@ -397,45 +403,39 @@ function buildTable() {
 function joinServer(i) {
     if(dewConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
-            if(serverList.servers[i].eldewritoVersion === gameVersion) {
-                if(hasMap(serverList.servers[i].mapFile)) {
-                        ga('send', 'event', 'serverlist', 'connect');
-                        if(serverList.servers[i].passworded) {
-                            swal({   
-                                title: "Private Server", text: "Please enter password",   
-                                type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
-                                inputPlaceholder: "Password goes here",
-                                imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
-                            }, 
-                            function(inputValue) {
-                                if (inputValue === false) return false;      
-                                if (inputValue === "") {     
-                                    sweetAlert.showInputError("Passwords are never blank");     
-                                    return false   
-                                } else {
-                                    dew.command('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
-                                        console.log(res);
-                                        //if (friendServerConnected && party.length > 1) {
-                                        //    partyConnect(serverList.servers[i].serverIP, inputValue);                                                    
-                                        //} else {
-                                            closeBrowser();                                                       
-                                        //}
-                                        sweetAlert.close();
-                                    }).catch(function (error) {
-                                        sweetAlert.showInputError(error.message);
-                                        return false
-                                    });
-                                }
+            if(hasMap(serverList.servers[i].mapFile)) {
+                    ga('send', 'event', 'serverlist', 'connect');
+                    if(serverList.servers[i].passworded) {
+                        swal({   
+                            title: "Private Server", text: "Please enter password",   
+                            type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
+                            inputPlaceholder: "Password goes here",
+                            imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
+                        }, 
+                        function(inputValue) {
+                            if (inputValue === false) return false;      
+                            if (inputValue === "") {     
+                                sweetAlert.showInputError("Passwords are never blank");     
+                                return false   
+                            } else {
+                                dew.command('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
+                                    sweetAlert.close();
+                                }).catch(function (error) {
+                                    sweetAlert.showInputError(error.message);
+                                    return false
+                                });
+                            }
+                        });
+                    } else {
+                        dew.command('connect ' + serverList.servers[i].serverIP, function(res) {
+                        }).catch(function (error) {
+                            swal({
+                                title: error.name, 
+                                text: error.message, 
+                                type: "error"
                             });
-                        } else {
-                            dew.command('connect ' + serverList.servers[i].serverIP, function(res) {
-                                //if (friendServerConnected && party.length > 1) {
-                                //    partyConnect(serverList.servers[i].serverIP, null);                                                    
-                                //} else {
-                                    closeBrowser();                                           
-                                //}
-                            });
-                        }
+                        });
+                    }
                 } else {    
                     swal({
                         title: "Map File Missing",
@@ -443,19 +443,10 @@ function joinServer(i) {
                         type: "error"
                     });
                 }
-            } else {
-                swal({
-                    title: "Version Mismatch", 
-                    text: "Host running different version.<br /> Unable to join.", 
-                    type: "error"
-                });
-            }
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
-    } else {
-    //not connected in-game, do nothing 
-    }
+    } 
 }
 
 function pingMe(ip, rowNum, delay) {
