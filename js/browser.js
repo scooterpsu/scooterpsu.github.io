@@ -31,6 +31,10 @@ swal.setDefaults({
     html: true
 })
 $(document).ready(function() {
+    $.getScript( "dew://lib/dew.js" )
+    .done(function() {
+        window.location.href = '/new/';
+    })
     getCurrentRelease();
     /*$.ajax({
         url: dewritoURL,
