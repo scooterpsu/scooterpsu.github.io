@@ -21,7 +21,7 @@ var lastArray = [];
 var dewConnected = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
-var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dewrito.json";
+var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/dewrito.json";
 swal.setDefaults({
     customClass: "alertWindow",
     html: true
@@ -53,7 +53,7 @@ $(document).ready(function() {
             error: function()
             {
                console.log("dewrito.json error, using backup");
-               dewritoURL = "http://scooterpsu.github.io/new/dewrito.json";
+               dewritoURL = "http://scooterpsu.github.io/dewrito.json";
                buildTable();
             },
             success: function()
@@ -215,7 +215,11 @@ function initTable() {
             { "mRender": function (data, type, row) {
                 img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
-            }, "aTargets":[ 5 ]}
+            }, "aTargets":[ 5 ]},
+            { "mRender": function (data, type, row) {
+                img_str = '<img class="flag" src="images/flags/' + data + '.png"/>';
+                return img_str;
+            }, "aTargets":[ 2 ]}
         ],
         columns: [
             { title: "ID", visible: false},
@@ -319,15 +323,18 @@ function buildTable() {
                                         playerCount+=parseInt(serverInfo.numPlayers);
                                     }
                                 }
+                                var locked;
                                 if(!serverInfo.hasOwnProperty("passworded")) {
-                                    serverInfo["passworded"] = "";
+                                    locked = false;
+                                    serverInfo["passworded"] = "blank";
                                     var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
                                     totalSlotCount += serverInfo.maxPlayers;
                                     openSlotCount += openSlots;
                                     $(".serverPool").attr('value', openSlotCount);
                                     $(".serverPool").attr('max', totalSlotCount);
                                 } else {
-                                    serverInfo["passworded"] = "🔒";
+                                    locked = true;
+                                    serverInfo["passworded"] = "lock";
                                 };
                                 var isFull = "full";
                                 if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
@@ -364,6 +371,9 @@ function buildTable() {
                                     }
                                 } else {
                                     dew.ping(serverInfo.serverIP.split(":")[0]);
+                                }
+                                if(!locked){
+                                    getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
                                 }
                             } else {
                                 console.log(serverInfo.serverIP + " is glitched");
@@ -501,14 +511,27 @@ function fillGameCard(i) {
     serverList.servers[i].mapFile = escapeHtml(serverList.servers[i].mapFile);
     serverList.servers[i].variant = escapeHtml(serverList.servers[i].variant)
     serverList.servers[i].variantType = escapeHtml(serverList.servers[i].variantType);
+    if (serverList.servers[i].passworded = "blank"){
+        serverList.servers[i].passworded = "";
+    }
     var html = serverTemplate(serverList.servers[i]);
     $("#gamecard").html(html);
 }
 
+var blamList = [];
+
+$.getJSON("https://scooterpsu.github.io/blamList/blamList.json", function(json) {
+    blamList = json.words;
+})
+
 function escapeHtml(str) {
     var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
+    var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
+    fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
+    for (var i = 0; i < blamList.length; i++) {
+        fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!");
+    }
+    return fixedText;
 }
 
 function capitalizeFirstLetter(string) {
@@ -521,6 +544,13 @@ function unique(list) {
     if ($.inArray(e, result) == -1) result.push(e);
   });
   return result;
+}
+
+function getFlag(ip, rowNum){
+    var ipSplit = ip.split(":")[0];
+    $.getJSON("http://ip-api.com/json/"+ipSplit, function(json) {
+        $('#serverTable').dataTable().fnUpdate(json.countryCode, rowNum, 2);        
+    })
 }
 
 function refreshTable() {
