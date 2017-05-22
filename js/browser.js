@@ -440,6 +440,7 @@ function escapeHtml(str) {
         }
         return fixedText;
     } else {
+        return "None";
     }
 }
 
