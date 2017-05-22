@@ -248,6 +248,9 @@ function buildTable() {
                                 if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
                                     isFull = "open";
                                 }
+                                if(serverInfo.variantType == "none"){
+                                   serverInfo.variantType = "slayer"; 
+                                }
                                 table.row.add([
                                     serverInfo.serverId,
                                     serverInfo.serverIP,
@@ -428,13 +431,16 @@ $.getJSON("https://scooterpsu.github.io/blamList/blamList.json", function(json) 
 })
 
 function escapeHtml(str) {
-    var div = document.createElement('div');
-    var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
-    //fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
-    for (var i = 0; i < blamList.length; i++) {
-        fixedText = fixedText.replace(blamList[i], "BLAM!");
+    if(str.length > 0){
+        var div = document.createElement('div');
+        var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
+        //fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
+        for (var i = 0; i < blamList.length; i++) {
+            fixedText = fixedText.replace(blamList[i], "BLAM!");
+        }
+        return fixedText;
+    } else {
     }
-    return fixedText;
 }
 
 function capitalizeFirstLetter(string) {
