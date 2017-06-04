@@ -542,19 +542,26 @@ img{
 }
 
 #serverTable_filter{
-    position: relative;
-    top: -41px;
-    right: -224px;
-    z-index: 3;
+    visibility: hidden;
 }
 
-#serverTable_filter label{
+#searchBox{
+    position: absolute;
+    top: -3px;
+    right: 40px;
+    z-index: 1;
+    color: black;
+    opacity:0.75
+}
+
+.searchLabel{
     font-weight: 700;
     color: white;
-}
-
-#serverTable_filter input{
-    color: black;
+    position: relative;
+    z-index:2;
+    opacity: 0.75;
+    right:20px;
+    top:-3px;
 }
 
 #serverTable_length{

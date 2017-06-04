@@ -13,6 +13,7 @@
         <script src="js/sweetalert.min.js"></script> 
         <link rel="stylesheet" type="text/css" href="css/sweetalert.css">       
 		<!-- Custom stuff -->
+        <script src="js/gamepad.js"></script>
 		<script src="js/browser.js"></script>
 		<link rel="stylesheet" href="css/browser.css">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -44,6 +45,7 @@
         <div class="refresh" onclick="refreshTable();">Refresh</div>
         <div class="quickMatch" onclick="quickMatch();">Quick Match</div>
         <div class="howToServe" onclick="howToServe();">How To Host</div>
+        <label class="searchLabel" for="searchBox">Search: </label><input type="text" id="searchBox">
         <div class="closeButton" onclick="closeBrowser();">X</div>
         <progress class="serverPool" value="0" max="100"></progress>
         <table id="serverTable" class="display" width="100%"></table>

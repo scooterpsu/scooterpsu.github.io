@@ -15,8 +15,6 @@ var totalSlotCount = 0;
 var openSlotCount = 0;
 var gameVersion = 0;
 var selectedID = 0;
-var hasGP = false;
-var repGP;
 var lastArray = [];
 var dewConnected = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
@@ -40,8 +38,31 @@ $(document).ready(function() {
         $("body").css("background-color", "transparent");
         dew.on("show", function (event) {
             refreshTable();
+            capturedInput = true;
+            if(controllerSupport()){
+                dew.command('Input.ControllerPort', {}).then(function(response){
+                    controllerPort = response;
+                });
+                $(window).on("gamepadconnected", function(){
+                    hasGP = true;
+                    repGP = window.setInterval(checkGamepad,100);
+                    onControllerConnect();
+                });
+                $(window).on("gamepaddisconnected", function(){
+                    hasGP = false;
+                    window.clearInterval(repGP);
+                    onControllerDisconnect();
+                });
+                var checkGP = window.setInterval(function(){
+                    if(navigator.getGamepads()[controllerPort]){
+                        if(!hasGP) $(window).trigger("gamepadconnected");
+                        window.clearInterval(checkGP);
+                    }
+                }, 500);
+            }
         });
         dew.on("hide", function (event) {
+            capturedInput = false;
         });
         dew.on("pong", function (event) {
             setPing(event.data.address + ":11775", event.data.latency);
@@ -88,30 +109,9 @@ $(document).ready(function() {
     $(document).on('click','#scoreBoardHeader',function(){
         toggleScoreboard();
     });
-    if(controllerSupport()){
-        $(window).on("gamepadconnected", function(){
-            hasGP = true;
-            //console.log("Gamepad connected");
-            $('#xboxLabel').html('<img class="controllerButton" src="images/360_Y.png">Refresh List <img class="controllerButton" src="images/360_X.png">Quick Match <img class="controllerButton" src="images/360_A.png">Join Game <img class="controllerButton" src="images/360_B.png">Show Scoreboard <img class="controllerButton" src="images/360_Back.png">Close Browser');
-            updateSelection();
-            repGP = window.setInterval(checkGamepad,100);
-        });
-        $(window).on("gamepaddisconnected", function(){
-            hasGP = false;
-            //console.log("Gamepad disconnected");
-            $('#xboxLabel').html('<img class="controllerButton" src="images/360_Y.png">Initialize Controller');
-            window.clearInterval(repGP);
-        });
-        var checkGP = window.setInterval(function(){
-            if(navigator.getGamepads()[0]){
-                if(!hasGP) $(window).trigger("gamepadconnected");
-                window.clearInterval(checkGP);
-            }
-        }, 500);
-        $("#settingsWindow").draggable({
-          handle: "#settingsHeader"
-        });
-    }
+    $("#settingsWindow").draggable({
+      handle: "#settingsHeader"
+    });
 });
 
 function toggleScoreboard(){
@@ -257,6 +257,9 @@ function initTable() {
             "lengthMenu": "Show _MENU_ servers"
         }
     });
+    $('#searchBox').keyup(function(){
+        table.search($(this).val()).draw() ;
+    })
 }
     
 function buildTable() {
@@ -722,52 +725,15 @@ function joinSelected() {
     joinServer(row[0]);
 }
 
-function controllerSupport(){
-    return "getGamepads" in navigator;
+function onControllerConnect(){
+    //console.log("Gamepad connected");
+    $('#xboxLabel').html('<img class="controllerButton" src="images/360_Y.png">Refresh List <img class="controllerButton" src="images/360_X.png">Quick Match <img class="controllerButton" src="images/360_A.png">Join Game <img class="controllerButton" src="images/360_B.png">Show Scoreboard <img class="controllerButton" src="images/360_Back.png">Close Browser');
+    updateSelection();
 }
- 
-var timestamp; 
-var lastButtons = [];
-var lastAxes = [];
-var axisThreshold = .5;
-function checkGamepad(){
-    var gamepad = navigator.getGamepads()[0];
-    if(gamepad.timestamp != timestamp){
-        if(pageFocus){
-            for( var i = 0; i < gamepad.buttons.length; i++ ) {
-                currentState = gamepad.buttons[i].pressed
-                var prevState = lastButtons[i];
-                if( !prevState && currentState ){ //Button i Pressed    
-                    buttonAction(i);                
-                }else if( prevState && !currentState ){//Button i Released
 
-                }
-                lastButtons[i] = currentState;
-            }
-            for( var x = 0; x < gamepad.axes.length; x++ ) {
-                currentState = 0
-                if(gamepad.axes[x] > 0){
-                    if(gamepad.axes[x] > axisThreshold){
-                        currentState = 1;
-                    }
-                }else if(gamepad.axes[x] < 0){
-                    if(gamepad.axes[x] < -axisThreshold){
-                        currentState = -1;
-                    }           
-                }
-                var prevState = lastAxes[x];
-                if( prevState != 1 && currentState == 1 ){
-                    stickAction("+", x);
-                }else if( prevState != -1 && currentState == -1 ){
-                    stickAction("-", x);
-                }else if( prevState != 0 && currentState == 0 ){  
-                    stickAction("0", x);       
-                }
-                lastAxes[x] = currentState;
-            }
-        }
-        timestamp = gamepad.timestamp;
-    }
+function onControllerDisconnect(){
+    //console.log("Gamepad disconnected");
+    $('#xboxLabel').html('<img class="controllerButton" src="images/360_Y.png">Initialize Controller');
 }
 
 function stickAction(direction, x){
