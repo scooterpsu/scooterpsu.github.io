@@ -395,6 +395,9 @@ function buildTable() {
                         } else {
                             console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
                         }
+                        if(hasGP){
+                            updateSelection();
+                        }
                     });
                   }, (i * pingDelay));  
                 })(i, serverIP);
@@ -402,7 +405,6 @@ function buildTable() {
                 console.log(serverIP + " is invalid, skipping.");
             }
         }
-        
     });
 }
 
