@@ -65,7 +65,8 @@ $(document).ready(function() {
             capturedInput = false;
         });
         dew.on("pong", function (event) {
-            setPing(event.data.address + ":11775", event.data.latency);
+            var port = ipPortArray[arrayInArray(event.data.address, ipPortArray)][1];
+            setPing(event.data.address + ":" + port, event.data.latency);
         });
         dew.on("serverconnect", function (event) {
             console.log(event.data);
@@ -262,7 +263,10 @@ function initTable() {
     })
 }
     
+var ipPortArray = [];
 function buildList() {
+    ipPortArray = [];
+    var newIpPortArray = [];
     var master_servers = [];
     var entire_server_list = [];
     var mshxr = $.getJSON(dewritoURL)
@@ -277,16 +281,22 @@ function buildList() {
             .done(function( data ) {
                 if(data.result.servers){
                     var server_list = [];
+                    var tempIpPortArray = [];
                     for(var ii = 0; ii < data.result.servers.length; ii++) {
                         if (!(data.result.servers[ii] in server_list)) {
                             server_list.push(data.result.servers[ii]);
+                            tempIpPortArray.push([data.result.servers[ii].split(':')[0], data.result.servers[ii].split(':')[1]]);
                         }
                     }
                 }
                 new_server_list = server_list.filter( function( el ) {
                   return entire_server_list.indexOf( el ) < 0;
                 });
+                newIpPortArray = tempIpPortArray.filter( function( el ) {
+                  return ipPortArray.indexOf( el ) < 0;
+                });
                 entire_server_list.push.apply(entire_server_list, new_server_list);
+                ipPortArray.push.apply(ipPortArray, newIpPortArray);
                 buildTable(new_server_list);
             });
         }
@@ -542,14 +552,6 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function unique(list) {
-  var result = [];
-  $.each(list, function(i, e) {
-    if ($.inArray(e, result) == -1) result.push(e);
-  });
-  return result;
-}
-
 function getFlag(ip, rowNum){
     var ipSplit = ip.split(":")[0];
     $.getJSON("http://ip-api.com/json/"+ipSplit, function(json) {
@@ -706,6 +708,14 @@ function howToServe(){
         "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
         width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88", confirmButtonClass: "alertConfirm"
     });
+}
+
+function arrayInArray(needle, haystack) {
+    for(i=0; i<haystack.length; i++) {
+        if (haystack[i].indexOf(needle) > -1){
+            return i
+        }
+    }
 }
 
 //=============================
