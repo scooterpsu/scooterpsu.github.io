@@ -25,6 +25,11 @@ swal.setDefaults({
     html: true
 })
 $(document).ready(function() {
+    $(document).keyup(function (e) {
+        if (e.keyCode === 27) {
+            dew.hide();
+        }
+    });
     initTable();
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
