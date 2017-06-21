@@ -25,6 +25,11 @@ swal.setDefaults({
     html: true
 })
 $(document).ready(function() {
+    $(document).keyup(function (e) {
+        if (e.keyCode === 27) {
+            dew.hide();
+        }
+    });
     initTable();
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
@@ -45,7 +50,7 @@ $(document).ready(function() {
                 });
                 $(window).on("gamepadconnected", function(){
                     hasGP = true;
-                    repGP = window.setInterval(checkGamepad,100);
+                    repGP = window.setInterval(checkGamepad,1000/60);
                     onControllerConnect();
                 });
                 $(window).on("gamepaddisconnected", function(){
@@ -718,6 +723,22 @@ function arrayInArray(needle, haystack) {
     }
 }
 
+var playQueue = [];
+var isPlaying = false;
+function play(audio){
+    isPlaying = true;
+    var audioElement = new Audio(audio);
+    audioElement.play();
+    audioElement.volume = 0.25;
+    audioElement.onended = function(){
+        isPlaying = false;
+        playQueue.splice(0, 1);
+        if(playQueue.length > 0){
+            play(playQueue[0]);	
+        }
+    }
+}
+
 //=============================
 //===== Gamepad functions =====
 //=============================
@@ -732,11 +753,13 @@ function updateSelection() {
     $('.dataTables_scrollBody').scrollTop(
         $(".dataTables_scrollBody tbody tr:eq(" + selectedID + ")").offset().top - $('.dataTables_scrollBody').offset().top + $('.dataTables_scrollBody').scrollTop()
     );
+    play('dew://assets/move.wav');
 }
 
 function joinSelected() {
     var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
     joinServer(row[0]);
+    play('dew://assets/toggle.wav');
 }
 
 function onControllerConnect(){
