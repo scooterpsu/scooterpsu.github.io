@@ -369,8 +369,11 @@ function buildTable(server_list){
                             if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
                                 isFull = "open";
                             }
-                            if(serverInfo.variantType == "none"){
-                                serverInfo.variantType = "slayer";
+                            if(!serverInfo.variantType || serverInfo.variantType == "none"){
+                                serverInfo.variantType = "Slayer"
+                            }
+                            if(!serverInfo.variant){
+                                serverInfo.variant = "Slayer"
                             }
                             table.row.add([
                                 serverInfo.serverId,
