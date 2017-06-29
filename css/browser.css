@@ -334,6 +334,10 @@ img{
     text-align: left;
 }
 
+.howToServeWindow a{
+    color: white;
+}
+
 /*==============================*/
 /*======= Game Info Card =======*/
 /*==============================*/
