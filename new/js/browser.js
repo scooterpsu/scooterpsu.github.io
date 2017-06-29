@@ -279,10 +279,7 @@ function initTable() {
     });
 }
     
-var ipPortArray = [];
 function buildList() {
-    ipPortArray = [];
-    var newIpPortArray = [];
     var master_servers = [];
     var entire_server_list = [];
     var mshxr = $.getJSON(dewritoURL)
@@ -297,22 +294,16 @@ function buildList() {
             .done(function( data ) {
                 if(data.result.servers){
                     var server_list = [];
-                    var tempIpPortArray = [];
                     for(var ii = 0; ii < data.result.servers.length; ii++) {
                         if (!(data.result.servers[ii] in server_list)) {
                             server_list.push(data.result.servers[ii]);
-                            tempIpPortArray.push([data.result.servers[ii].split(':')[0], data.result.servers[ii].split(':')[1]]);
                         }
                     }
                 }
                 new_server_list = server_list.filter( function( el ) {
                   return entire_server_list.indexOf( el ) < 0;
                 });
-                newIpPortArray = tempIpPortArray.filter( function( el ) {
-                  return ipPortArray.indexOf( el ) < 0;
-                });
                 entire_server_list.push.apply(entire_server_list, new_server_list);
-                ipPortArray.push.apply(ipPortArray, newIpPortArray);
                 buildTable(new_server_list);
             });
         }
@@ -384,9 +375,6 @@ function buildTable(server_list){
                                 if(!serverInfo.variantType || serverInfo.variantType == "none"){
                                     serverInfo.variantType = "Slayer"
                                 }
-                                if(!serverInfo.variant){
-                                    serverInfo.variant = "Slayer"
-                                }
                                 table.row.add([
                                     serverInfo.serverId,
                                     serverInfo.serverIP,
@@ -397,8 +385,8 @@ function buildTable(server_list){
                                     ping,
                                     escapeHtml(serverInfo.map),
                                     escapeHtml(serverInfo.mapFile),
-                                    capitalizeFirstLetter(escapeHtml(serverInfo.variantType)),
-                                    capitalizeFirstLetter(escapeHtml(serverInfo.variant)),
+                                    capitalize(escapeHtml(serverInfo.variantType)),
+                                    capitalize(escapeHtml(serverInfo.variant)),
                                     serverInfo.status,
                                     parseInt(serverInfo.numPlayers),
                                     parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
@@ -554,13 +542,12 @@ function fillGameCard(i) {
 }
 
 var blamList = [];
-
 $.getJSON("https://scooterpsu.github.io/blamList/blamList.json", function(json) {
     blamList = json.words;
 })
 
 function escapeHtml(str) {
-    if(str.length > 0){
+    if(str){
         var div = document.createElement('div');
         var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
         fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
@@ -573,7 +560,7 @@ function escapeHtml(str) {
     }
 }
 
-function capitalizeFirstLetter(string) {
+function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -716,10 +703,24 @@ function mapMatch(thing, mapFile) {
 }
 
 function howToServe(){
+    var gamePort = 11774;
+    var announcePort = 11775;
+    var signalServerPort = 11777;
+    if(dewConnected){
+        dew.command('Server.GamePort', {}).then(function(x){
+            dew.command('Server.Port', {}).then(function(y){
+                dew.command('Server.SignalServerPort', {}).then(function(z){
+                    gamePort = x;
+                    announcePort = y;
+                    signalServerPort = z;
+                });
+            });
+        });
+    }
     swal({   
         title: "How to Host a Server",
         text: 
-        "Hosting a server requires UDP ports 9987 & 11774 and TCP port 11775 to be forwarded on your router to your server's private IP address.<br/>"+
+        "Hosting a server requires UDP ports "+gamePort+" & "+signalServerPort+" and TCP port "+11775+" to be forwarded on your router to your server's private IP address.<br/>"+
         "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
         "<a href='http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/' target='_blank'>http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/</a><br/><br/>"+
         "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
