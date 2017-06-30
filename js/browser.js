@@ -141,6 +141,9 @@ $(document).ready(function() {
     $("#settingsWindow").draggable({
         handle: "#settingsHeader"
     });
+    $('#backgroundFrame').on('click', function(){
+        unorderList();
+    });
 });
 
 function toggleScoreboard(){
@@ -688,6 +691,11 @@ function closeBrowser() {
     if(dewConnected) {
         dew.hide();
     } 
+}
+
+function unorderList(){
+    var table = $('#serverTable').DataTable();
+    table.order([0, 'asc']).draw();
 }
 
 String.prototype.contains = function(it) {
