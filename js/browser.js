@@ -261,13 +261,27 @@ function initTable() {
             { title: "Version", visible: false},
             { title: "IPnoPort", visible: false}
         ],
-        "order": [[ 0 ]],
+        "order": [[ 0, "asc" ]],
         "language": {
             "emptyTable": "No servers found",
             "zeroRecords": "No matching servers found",
             "infoEmpty": "No servers found",
             "info": "Showing servers _START_ to _END_ of _TOTAL_",
             "lengthMenu": "Show _MENU_ servers"
+        },
+        "drawCallback": function(settings) {
+            if(settings.aoRowCreatedCallback){
+                if($('#serverTable tbody tr').length == 1 && !$('.dataTables_empty').length) {  
+                    var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(0)"));
+                    if(row){
+                        fillGameCard(row[0]);
+                    }
+                    if(hasGP && !$('.selected').length){
+                        selectedID = 0;
+                        updateSelection(0);
+                    }
+                }
+            }
         }
     });
     $('#searchBox').keyup(function(){
@@ -320,116 +334,110 @@ function buildTable(server_list){
     }else{
         var pingDelay = 10;
     }
-    for (var i = 0; i <= server_list.length; i++){
-        if(i < server_list.length){
-            serverIP = server_list[i];
-            if(VerifyIPRegex.test(serverIP)) {
-                serverList.servers.push({serverIP, i});
-                (function(i, serverIP) {
-                    setTimeout(function() {
-                    var startTime = Date.now();
-                    var endTime;
-                    var ping = 0;
-                    var pingDisplay = "0:0";
-                    var rePing = false;
-                    var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
-                    .done(function(serverInfo) {
-                        if(!dewConnected){
-                            endTime = Date.now();
-                            ping = Math.round((endTime - startTime) * .45);
-                            if (ping > 0 && ping <= 100) {
-                                pingDisplay = ping+":3";
-                            }   else if(ping > 100 && ping <= 200) {
-                                pingDisplay = ping+":2";
-                            }   else if(ping > 200 && ping <= 500) {
-                                pingDisplay = ping+":1";  
-                                rePing = true;
-                            }   else {
-                                pingDisplay = ping+":0";
-                                rePing = true;
-                            }
+    for (var i = 0; i < server_list.length; i++){
+        serverIP = server_list[i];
+        if(VerifyIPRegex.test(serverIP)) {
+            serverList.servers.push({serverIP, i});
+            (function(i, serverIP) {
+                setTimeout(function() {
+                var startTime = Date.now();
+                var endTime;
+                var ping = 0;
+                var pingDisplay = "0:0";
+                var rePing = false;
+                var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
+                .done(function(serverInfo) {
+                    if(!dewConnected){
+                        endTime = Date.now();
+                        ping = Math.round((endTime - startTime) * .45);
+                        if (ping > 0 && ping <= 100) {
+                            pingDisplay = ping+":3";
+                        }   else if(ping > 100 && ping <= 200) {
+                            pingDisplay = ping+":2";
+                        }   else if(ping > 200 && ping <= 500) {
+                            pingDisplay = ping+":1";  
+                            rePing = true;
+                        }   else {
+                            pingDisplay = ping+":0";
+                            rePing = true;
                         }
-                        serverInfo["serverId"] = i;
-                        serverInfo["serverIP"] = serverIP;
-                        if (serverInfo.maxPlayers <= 16 ) {
-                            if(serverInfo.map.length > 0) { //blank map means glitched server entry
-                                for (var j = 0; j < serverList.servers.length; j++) {
-                                    if (serverList.servers[j]["i"] == i) {
-                                        serverList.servers[j] = serverInfo;
-                                        playerCount+=parseInt(serverInfo.numPlayers);
-                                    }
+                    }
+                    serverInfo["serverId"] = i;
+                    serverInfo["serverIP"] = serverIP;
+                    if (serverInfo.maxPlayers <= 16 ) {
+                        if(serverInfo.map.length > 0) { //blank map means glitched server entry
+                            for (var j = 0; j < serverList.servers.length; j++) {
+                                if (serverList.servers[j]["i"] == i) {
+                                    serverList.servers[j] = serverInfo;
+                                    playerCount+=parseInt(serverInfo.numPlayers);
                                 }
-                                var locked;
-                                if(!serverInfo.hasOwnProperty("passworded")) {
-                                    locked = false;
-                                    var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
-                                    totalSlotCount += serverInfo.maxPlayers;
-                                    openSlotCount += openSlots;
-                                    $(".serverPool").attr('value', openSlotCount);
-                                    $(".serverPool").attr('max', totalSlotCount);
-                                } else {
-                                    locked = true;
-                                    serverInfo["passworded"] = "lock";
-                                };
-                                var isFull = "full";
-                                if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
-                                    isFull = "open";
-                                }
-                                if(!serverInfo.variantType || serverInfo.variantType == "none"){
-                                    serverInfo.variantType = "Slayer"
-                                }
-                                table.row.add([
-                                    serverInfo.serverId,
-                                    serverInfo.serverIP,
-                                    serverInfo.passworded,
-                                    escapeHtml(serverInfo.name),
-                                    escapeHtml(serverInfo.hostPlayer),
-                                    pingDisplay,
-                                    ping,
-                                    escapeHtml(serverInfo.map),
-                                    escapeHtml(serverInfo.mapFile),
-                                    capitalize(escapeHtml(serverInfo.variantType)),
-                                    capitalize(escapeHtml(serverInfo.variant)),
-                                    serverInfo.status,
-                                    parseInt(serverInfo.numPlayers),
-                                    parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
-                                    isFull,
-                                    serverInfo.eldewritoVersion,
-                                    serverInfo.serverIP.split(":")[0],
-                                    serverInfo.sprintEnabled,
-                                    serverInfo.sprintUnlimitedEnabled,
-                                    serverInfo.assassinationEnabled
-                                ]).draw();
-                                serverCount++;
-                                table.columns.adjust().draw();
-                                fillGameCard(serverInfo.serverId);
-                                if(!dewConnected){
-                                    if(rePing) {
-                                        console.log("repinging "+serverInfo.serverIP);
-                                        pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
-                                    }
-                                } else {
-                                    dew.ping(serverInfo.serverIP.split(":")[0]);
-                                }
-                                if(!locked){
-                                    getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
+                            }
+                            var locked;
+                            if(!serverInfo.hasOwnProperty("passworded")) {
+                                locked = false;
+                                var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
+                                totalSlotCount += serverInfo.maxPlayers;
+                                openSlotCount += openSlots;
+                                $(".serverPool").attr('value', openSlotCount);
+                                $(".serverPool").attr('max', totalSlotCount);
+                            } else {
+                                locked = true;
+                                serverInfo["passworded"] = "lock";
+                            };
+                            var isFull = "full";
+                            if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
+                                isFull = "open";
+                            }
+                            if(!serverInfo.variantType || serverInfo.variantType == "none"){
+                                serverInfo.variantType = "Slayer"
+                            }
+                            table.row.add([
+                                serverInfo.serverId,
+                                serverInfo.serverIP,
+                                serverInfo.passworded,
+                                escapeHtml(serverInfo.name),
+                                escapeHtml(serverInfo.hostPlayer),
+                                pingDisplay,
+                                ping,
+                                escapeHtml(serverInfo.map),
+                                escapeHtml(serverInfo.mapFile),
+                                capitalize(escapeHtml(serverInfo.variantType)),
+                                capitalize(escapeHtml(serverInfo.variant)),
+                                serverInfo.status,
+                                parseInt(serverInfo.numPlayers),
+                                parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
+                                isFull,
+                                serverInfo.eldewritoVersion,
+                                serverInfo.serverIP.split(":")[0],
+                                serverInfo.sprintEnabled,
+                                serverInfo.sprintUnlimitedEnabled,
+                                serverInfo.assassinationEnabled
+                            ]).draw();
+                            serverCount++;
+                            table.columns.adjust().draw();
+                            //fillGameCard(serverInfo.serverId);
+                            if(!dewConnected){
+                                if(rePing) {
+                                    console.log("repinging "+serverInfo.serverIP);
+                                    pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
                                 }
                             } else {
-                                console.log(serverInfo.serverIP + " is glitched");
+                                dew.ping(serverInfo.serverIP.split(":")[0]);
+                            }
+                            if(!locked){
+                                getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
                             }
                         } else {
-                            console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
+                            console.log(serverInfo.serverIP + " is glitched");
                         }
-                    });
-                  }, (i * pingDelay));  
-                })(i, serverIP);
-            } else {
-                console.log(serverIP + " is invalid, skipping.");
-            }
-        }else{
-            if(hasGP){
-                updateSelection(0);
-            }
+                    } else {
+                        console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
+                    }
+                });
+              }, (i * pingDelay));  
+            })(i, serverIP);
+        } else {
+            console.log(serverIP + " is invalid, skipping.");
         }
     }
 }
