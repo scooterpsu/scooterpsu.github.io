@@ -369,7 +369,7 @@ function buildTable(server_list){
                             for (var j = 0; j < serverList.servers.length; j++) {
                                 if (serverList.servers[j]["i"] == i) {
                                     serverList.servers[j] = serverInfo;
-                                    if(serverInfo.eldewritoVersion == gameVersion){
+                                    if(serverInfo.eldewritoVersion == gameVersion || gameVersion == 0){
                                     	playerCount+=parseInt(serverInfo.numPlayers);
                                     }
                                 }
@@ -415,7 +415,7 @@ function buildTable(server_list){
                                 serverInfo.sprintUnlimitedEnabled,
                                 serverInfo.assassinationEnabled
                             ]).draw();
-                             if(serverInfo.eldewritoVersion == gameVersion){
+                             if(serverInfo.eldewritoVersion == gameVersion || gameVersion == 0){
                                 serverCount++;
                             }
                             table.columns.adjust().draw();
