@@ -369,9 +369,9 @@ function buildTable(server_list){
                             for (var j = 0; j < serverList.servers.length; j++) {
                                 if (serverList.servers[j]["i"] == i) {
                                     serverList.servers[j] = serverInfo;
-									if(serverInfo.eldewritoVersion == gameVersion){
-										playerCount+=parseInt(serverInfo.numPlayers);
-									}
+                                    if(serverInfo.eldewritoVersion == gameVersion){
+                                    	playerCount+=parseInt(serverInfo.numPlayers);
+                                    }
                                 }
                             }
                             var locked;
