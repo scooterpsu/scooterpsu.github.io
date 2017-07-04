@@ -21,8 +21,7 @@ var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
-//var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/dewrito.json";
-var dewritoURL = "http://scooterpsu.github.io/dewrito.json";
+var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/dewrito.json";
 swal.setDefaults({
     customClass: "alertWindow",
     confirmButtonClass: "alertConfirm",
@@ -36,20 +35,20 @@ $(document).ready(function() {
         window.location.href = '/new/';
     })
     getCurrentRelease();
-    /*$.ajax({
+    $.ajax({
         url: dewritoURL,
         error: function()
         {
            console.log("dewrito.json error, using backup");
            dewritoURL = "http://scooterpsu.github.io/dewrito.json";
-           buildTable();
+           buildList();
         },
         success: function()
         {
-            buildTable();
+           buildList();
         }
-    });*/
-    buildTable();
+    });
+    initTable();
     setInterval( CheckPageFocus, 200 );
 
     $( "#chatBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#chatHeader", cancel: "button" });
@@ -84,9 +83,9 @@ function getCurrentRelease() {
     })
 }
 
-var clickDelay = 300;  
-var isDelayed = false;   
-function buildTable() {
+var clickDelay = 300;
+var isDelayed = false;           
+function initTable() {   
     $('#serverTable').on('click', 'tr', function() {
         var tr = $(this).closest('tr');
         var row = table.row( tr );
@@ -126,6 +125,7 @@ function buildTable() {
         destroy: true,
         "iDisplayLength": 10,
         stateSave: true,
+        bInfo: false,
         "stateSaveParams": function (settings, data) {
             for (var i = 0;i < data.columns.length; i++){
               delete data.columns[i].search;
@@ -139,11 +139,11 @@ function buildTable() {
             { "mRender": function (data, type, row) {
                 img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
-            }, "aTargets":[ 5 ]}
+            }, "aTargets":[ 5 ]},
         ],
         columns: [
             { title: "ID", visible: false},
-            { title: "IP", "width": "1%", visible: false},
+            { title: "IP", visible: false},
             { title: "", "width": "0.5%"},
             { title: "Name" },
             { title: "Host" },
@@ -154,49 +154,76 @@ function buildTable() {
             { title: "Gametype"},
             { title: "Variant" },
             { title: "Status", visible: false},    
-             { title: "Num Players", visible: false},  
+            { title: "Num Players", visible: false},  
             { title: "Players", "width": "1%"},
-            { title: "IsFull", "width": "1%", visible: false},
-            { title: "Version", "width": "1%", visible: false}
+            { title: "IsFull", visible: false},
+            { title: "Version", visible: false},
+            { title: "IPnoPort", visible: false}
         ],
-        "order": [[ 0 ]],
+        "order": [[ 0, "asc" ]],
         "language": {
             "emptyTable": "No servers found",
             "zeroRecords": "No matching servers found",
             "infoEmpty": "No servers found",
             "info": "Showing servers _START_ to _END_ of _TOTAL_",
             "lengthMenu": "Show _MENU_ servers"
+        },
+        "drawCallback": function(settings) {
+            if(settings.aoRowCreatedCallback){
+                if($('#serverTable tbody tr').length == 1 && !$('.dataTables_empty').length) {  
+                    var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(0)"));
+                    if(row){
+                        fillGameCard(row[0]);
+                    }
+                }
+            }
         }
     });
+    $('#searchBox').keyup(function(){
+        table.search($(this).val()).draw() ;
+    });
+    $('#serverTable').on('search.dt', function(){
+        if($('#serverTable').find('tbody tr td').not('.dataTables_empty').length>0) {
+            $('#gamecard').show();
+        }else{
+            $('#gamecard').hide();
+        }
+    });
+}
 
+function buildList() {
     var master_servers = [];
-    var server_list = [];
+    var entire_server_list = [];
     var mshxr = $.getJSON(dewritoURL)
     .done(function( data ) {
-        var master_count = 0;
         for (var i = 0; i<data.masterServers.length; i++){
-            master_count++
             window.master_length = data.masterServers.length;
             var jqhxr = $.ajax({
             url: data.masterServers[i].list, 
                 type: 'GET',
-                datatype: 'json',
-                async: false
-                //headers : {
-                //    'X-Player' : pname+":"+puid
-                //}
+                datatype: 'json'
             })
             .done(function( data ) {
                 if(data.result.servers){
+                    var server_list = [];
                     for(var ii = 0; ii < data.result.servers.length; ii++) {
                         if (!(data.result.servers[ii] in server_list)) {
                             server_list.push(data.result.servers[ii]);
                         }
                     }
                 }
+                new_server_list = server_list.filter( function( el ) {
+                  return entire_server_list.indexOf( el ) < 0;
+                });
+                entire_server_list.push.apply(entire_server_list, new_server_list);
+                buildTable(new_server_list);
             });
         }
-        server_list = unique(server_list);
+    });
+}
+
+function buildTable(server_list){
+    var table = $('#serverTable').DataTable();
         var pingDelay = 120;
         for (var i = 0; i < server_list.length; i++){
             serverIP = server_list[i];
@@ -227,7 +254,7 @@ function buildTable() {
                         serverInfo["serverId"] = i;
                         serverInfo["serverIP"] = serverIP;
                         if (serverInfo.maxPlayers <= 16 ) {
-                            if(serverInfo.map.length > 0) { //blank map means glitched server entry
+                            //if(serverInfo.map.length > 0) { //blank map means glitched server entry
                                 for (var j = 0; j < serverList.servers.length; j++) {
                                     if (serverList.servers[j]["i"] == i) {
                                         serverList.servers[j] = serverInfo;
@@ -282,9 +309,9 @@ function buildTable() {
                                     console.log("repinging "+serverInfo.serverIP);
                                     pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
                                 }
-                            } else {
-                                console.log(serverInfo.serverIP + " is glitched");
-                            }
+                            //} else {
+                            //    console.log(serverInfo.serverIP + " is glitched");
+                            //}
                         } else {
                             console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
                         }
@@ -295,8 +322,6 @@ function buildTable() {
                 console.log(serverIP + " is invalid, skipping.");
             }
         }
-        
-    });
 }
 
 function joinServer(i) {
