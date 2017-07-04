@@ -304,7 +304,7 @@ function buildTable(server_list){
                                 ]).draw();
                                 serverCount++;
                                 table.columns.adjust().draw();
-                                fillGameCard(serverInfo.serverId);
+                                //fillGameCard(serverInfo.serverId);
                                 if(rePing) {
                                     console.log("repinging "+serverInfo.serverIP);
                                     pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
@@ -326,13 +326,13 @@ function buildTable(server_list){
 
 function joinServer(i) {
     if(dewRconConnected) {
-        if(gameVersion==0){
+        /*if(gameVersion==0){
             dewRcon.send("game.version", function(response) {
                 gameVersion = response;
             });
-        }        
+        }*/        
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
-            if(serverList.servers[i].eldewritoVersion === gameVersion) {
+            //if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
                     if(friendServerConnected && (serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) < party.length) {
                         swal("Party Too Large","You have too many people in your party to join this game.", "error");
@@ -391,13 +391,13 @@ function joinServer(i) {
                         type: "error"
                     });
                 }
-            } else {
+            /*} else {
                 swal({
                     title: "Version Mismatch", 
                     text: "Host running different version.<br /> Unable to join.", 
                     type: "error"
                 });
-            }
+            }*/
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
