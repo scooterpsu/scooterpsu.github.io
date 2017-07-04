@@ -500,7 +500,7 @@ function refreshTable() {
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
     selectedID = 0;
-    buildTable();
+    buildList();
     if(dewRconConnected) {
         connectionTrigger();   
     }
