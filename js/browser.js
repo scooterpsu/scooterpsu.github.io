@@ -377,11 +377,13 @@ function buildTable(server_list){
                             var locked;
                             if(!serverInfo.hasOwnProperty("passworded")) {
                                 locked = false;
-                                var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
-                                totalSlotCount += serverInfo.maxPlayers;
-                                openSlotCount += openSlots;
-                                $(".serverPool").attr('value', openSlotCount);
-                                $(".serverPool").attr('max', totalSlotCount);
+                                if(serverInfo.eldewritoVersion == gameVersion || gameVersion == 0){
+                                    var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
+                                    totalSlotCount += serverInfo.maxPlayers;
+                                    openSlotCount += openSlots;
+                                    $(".serverPool").attr('value', openSlotCount);
+                                    $(".serverPool").attr('max', totalSlotCount);
+                                }
                             } else {
                                 locked = true;
                                 serverInfo["passworded"] = "lock";
