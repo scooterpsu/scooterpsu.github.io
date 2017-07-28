@@ -17,6 +17,10 @@ var selectedID = 0;
 var lastArray = [];
 var dewConnected = false;
 var hasGP = false;
+var axisThreshold = .5;
+var stickTicks = { left: 0, right: 0, up: 0, down: 0 };
+var repGP;
+var lastHeldUpdated = 0;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
 var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/dewrito.json";
@@ -49,11 +53,20 @@ $(document).ready(function() {
                 if(result == 1){
                     onControllerConnect();
                     hasGP = true;
+                    repGP = window.setInterval(checkGamepad,1000/60);
                 }else{
                     onControllerDisconnect();
                     hasGP = false;
+                    if(repGP){
+                        window.clearInterval(repGP);
+                    }
                 }
             });
+        });
+        dew.on('hide', function(e){
+            if(repGP){
+                window.clearInterval(repGP);
+            }
         });
         dew.on("pong", function (event) {
             setPing(event.data.address, event.data.latency);
@@ -100,6 +113,28 @@ $(document).ready(function() {
                 }
                 if(e.data.Select == 1){
                     closeBrowser();
+                }
+                if(e.data.AxisLeftX != 0){
+                    if(e.data.AxisLeftX > axisThreshold){
+                        stickTicks.right++;
+                    };
+                    if(e.data.AxisLeftX < -axisThreshold){
+                        stickTicks.left++;
+                    };
+                }else{
+                    stickTicks.right = 0;
+                    stickTicks.left = 0;
+                }
+                if(e.data.AxisLeftY != 0){
+                    if(e.data.AxisLeftY > axisThreshold){
+                        stickTicks.up++;
+                    };
+                    if(e.data.AxisLeftY < -axisThreshold){
+                        stickTicks.down++;
+                    };
+                }else{
+                    stickTicks.up = 0;
+                    stickTicks.down = 0;               
                 }
             }
         });
@@ -761,9 +796,7 @@ function updateSelection() {
     if(row){
         fillGameCard(row[0]);
     }
-    $('.dataTables_scrollBody').scrollTop(
-        $(".dataTables_scrollBody tbody tr:eq(" + selectedID + ")").offset().top - $('.dataTables_scrollBody').offset().top + $('.dataTables_scrollBody').scrollTop()
-    );
+        $(".dataTables_scrollBody tbody tr:eq(" + selectedID + ")")[0].scrollIntoView(false);
     dew.command('Game.PlaySound 0xAFE');
 }
 
@@ -783,6 +816,26 @@ function onControllerDisconnect(){
     $('#xboxLabel').html('');
     $('#serverTable tbody tr.selected').removeClass('selected');
 }
+
+function checkGamepad(){
+    var shouldUpdateHeld = false;
+    if(Date.now() - lastHeldUpdated > 100) {
+        shouldUpdateHeld = true;
+        lastHeldUpdated = Date.now();
+    }
+    if(stickTicks.up == 1 || (shouldUpdateHeld && stickTicks.up > 25)){
+        if (selectedID > 0) {
+            selectedID--;
+            updateSelection();
+        }
+    }
+    if(stickTicks.down == 1 || (shouldUpdateHeld && stickTicks.down > 25)){
+        if (selectedID < ($("#serverTable tbody tr").length-1)) {
+            selectedID++;
+            updateSelection();
+        }  
+    }
+};
 
 //==========================
 //==== Datatable Sorts =====
