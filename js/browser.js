@@ -464,7 +464,7 @@ function escapeHtml(str) {
         var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
         fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
         for (var i = 0; i < blamList.length; i++) {
-            fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!");
+            fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/&#x3C;/g,'&lt;').replace(/&#x3E;/g,'&gt;');
         }
         return fixedText.trim();
     } else {
