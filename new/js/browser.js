@@ -603,8 +603,10 @@ function escapeHtml(str) {
         var div = document.createElement('div');
         var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
         fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
-        for (var i = 0; i < blamList.length; i++) {
-            fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!");
+        if(window.location.href.indexOf('#nocensor') <= -1) {
+            for (var i = 0; i < blamList.length; i++) {
+                fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!");
+            }
         }
         return fixedText.trim();
     } else {
