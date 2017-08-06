@@ -1,6 +1,8 @@
 {
     "announcements":[{
+        "date": "08.06.2017",
         "title": "Welcome to 0.6!",
-        "content": "This is where the text goes!"
+        "content": "This is where the text goes!",
+        "image": "test.png"
     }]
 }
