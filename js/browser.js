@@ -67,14 +67,20 @@ $(document).ready(function() {
             if(repGP){
                 window.clearInterval(repGP);
             }
+            sweetAlert.close();
         });
         dew.on("pong", function (event) {
             setPing(event.data.address, event.data.latency);
         });
         dew.on("serverconnect", function (event) {
-            console.log(event.data);
             if(event.data.success){
                 closeBrowser();
+            }else{
+                swal({
+                    title: "Joining Game",
+                    text: "Attempting to join selected game...", 
+                    imageUrl: "images/eldorito.png"
+                });
             }
         });
         dew.on('controllerinput', function(e){       
