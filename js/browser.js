@@ -1014,7 +1014,7 @@ Handlebars.registerHelper('lowerCase', function(str) {
 
 Handlebars.registerHelper('trimString', function(passedString, startstring, endstring) {
    var theString = passedString.substring( startstring, endstring );
-   return new Handlebars.SafeString(theString)
+   return new Handlebars.SafeString(escapeHtml(theString))
 });
 
 Handlebars.registerHelper('scoreBoardPlus', function(str) {
