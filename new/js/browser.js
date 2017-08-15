@@ -26,7 +26,12 @@ var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|2
 var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/dewrito.json";
 swal.setDefaults({
     customClass: "alertWindow",
-    html: true
+    target: "#zoomBox",
+    reverseButtons: true,
+    imageWidth: "102", 
+    imageHeight: "88",
+    confirmButtonClass: "alertButton",
+    cancelButtonClass: "alertButton"
 })
 $(document).ready(function() {
     $(document).keyup(function (e) {
@@ -496,27 +501,28 @@ function joinServer(i) {
                     ga('send', 'event', 'serverlist', 'connect');
                     if(serverList.servers[i].passworded) {
                         swal({   
-                            title: "Private Server", text: "Please enter password",   
-                            type: "input", inputType: "password", showCancelButton: true, closeOnConfirm: false,
+                            title: "Private Server", 
+                            text: "Please enter password",   
+                            imageUrl: "images/eldorito.png",
+                            input: "password",
                             inputPlaceholder: "Password goes here",
-                            imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
-                        }, 
-                        function(inputValue) {
-                            if (inputValue === false) return false;      
-                            if (inputValue === "") {     
-                                sweetAlert.showInputError("Passwords are never blank");     
-                                return false   
-                            } else {
-                                dew.command('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function(res) {
-                                    sweetAlert.close();
-                                }).catch(function (error) {
-                                    sweetAlert.showInputError(error.message);
-                                    return false
-                                });
+                            showCancelButton: true,
+                            preConfirm: function (inputValue) {
+                                return new Promise(function (resolve, reject) {  
+                                    if (inputValue === "") {     
+                                        reject("Passwords are never blank");     
+                                    } else {
+                                        dew.command('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function() {
+                                            swal.close();
+                                        }).catch(function (error) {
+                                            reject(error.message);
+                                        });
+                                    }
+                                })
                             }
                         });
                     } else {
-                        dew.command('connect ' + serverList.servers[i].serverIP, function(res) {
+                        dew.command('connect ' + serverList.servers[i].serverIP, function() {
                         }).catch(function (error) {
                             swal({
                                 title: error.name, 
@@ -724,7 +730,7 @@ function checkUpdate(ver) {
         if (ver != EDVersion) {
             swal({   
                 title: "Version Outdated!",
-                text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+                html: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see <a href='http://www.reddit.com/r/HaloOnline/' target='_blank'>reddit.com/r/HaloOnline</a> for more info.",
                 type: "error", allowEscapeKey: false
             });
         }
@@ -782,12 +788,12 @@ function howToServe(){
     }
     swal({   
         title: "How to Host a Server",
-        text: 
+        html: 
         "Hosting a server requires UDP ports "+gamePort+" & "+signalServerPort+" and TCP port "+11775+" to be forwarded on your router to your server's private IP address.<br/>"+
         "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
         "<a href='http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/' target='_blank'>http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/</a><br/><br/>"+
         "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
-        width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88", confirmButtonClass: "alertConfirm"
+        width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png"
     });
 }
 
