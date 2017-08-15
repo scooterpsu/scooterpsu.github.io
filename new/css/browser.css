@@ -266,7 +266,7 @@ img{
     outline: 0;
     line-height: 1em;
     opacity: 0.85;
-    flex-grow: 0;
+    min-height: 0 !important;
 }
 
 .swal2-content{
