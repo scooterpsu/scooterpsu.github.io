@@ -48,7 +48,7 @@ img{
     font-size: 18pt;
 }
 
-.refresh, .quickMatch, .howToServe, .closeButton {
+.refresh, .quickMatch, .howToServe, .closeButton, .browserSwitch {
     opacity: 0.8;
     position: absolute;
     top: -9px;
@@ -77,13 +77,16 @@ img{
     left: 700px;
 }
 
+.browserSwitch{
+}
+
 .closeButton {
     right: -5px;
     width: 28px;
     height: 28px;
 }
 
-.refresh:hover, .quickMatch:hover, .howToServe:hover, .closeButton:hover{
+.refresh:hover, .quickMatch:hover, .howToServe:hover, .closeButton:hover, .browserSwitch:hover{
     background-color: #B1572A;
 }
 
