@@ -6,6 +6,7 @@ var serverList = {
 servers: []
 }; 
 var serverTable = [];
+var officialServers = [];
 var isThrottled = false;
 var throttleDuration = 30000; // ms
 var serverCount = 0;
@@ -40,7 +41,7 @@ $(document).ready(function() {
         }
     });
     initTable();
-    //getOfficial();
+    getOfficial();
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
         dewConnected = true;
@@ -68,12 +69,14 @@ $(document).ready(function() {
                     }
                 }
             });
+            dew.command('game.hideh3ui 1');
         });
         dew.on('hide', function(e){
             if(repGP){
                 window.clearInterval(repGP);
             }
             sweetAlert.close();
+            dew.command('game.hideh3ui 0');
         });
         dew.on("pong", function (event) {
             setPing(event.data.address, event.data.latency);
@@ -194,8 +197,14 @@ $(document).ready(function() {
 });
 
 function getOfficial(){
-    $.get("http://173.16.48.132/api/officialservers").done(function (data) {
-        console.log(data);
+    $.ajax({
+        url: 'http://173.16.48.132/api/officialservers',
+        headers: { 'Accept': "application/json" },
+        success: function(data){
+            for(i = 0; i < data.length; i++){
+                officialServers.push(data[i]);
+            }
+        }
     });
 }
 
@@ -703,28 +712,29 @@ function quickMatch() {
     joinServer(possibleServers[possibleServers.length-1][0]);
 }
 
-function switchBrowser(browser) {
-    swal({   
-        title: "Change Server Browser",   
-        text: "Would you like to change your default server browser to "+browser+"?",   
-        showCancelButton: true,   
-        confirmButtontext: "Yes, change it!",   
-        closeOnConfirm: false   
-    }, function() {        
-        if (browser == "theFeelTrain") {
-            var browserURL = "http://halo.thefeeltra.in/";
-            ga('send', 'event', 'change-menu', 'thefeeltrain');
-
-        } else if (browser == "DewMenu") {
-            var browserURL = "http://dewmenu.click/";
-            ga('send', 'event', 'change-menu', 'dewmenu');
+function switchBrowser() {   
+    swal({
+        title: 'Switch Server Browser',
+        input: 'select',
+        imageUrl: "images/eldorito.png",
+        inputOptions: {
+            'http://new.halostats.click/servers': 'HaloStats',
+            'http://halo.thefeeltra.in/': 'theFeelTrain'
+        },
+        inputPlaceholder: 'Select alternate server browser',
+        showCancelButton: true,
+        inputValidator: function (value) {
+            return new Promise(function (resolve, reject) {
+                dew.command('Game.MenuURL '+value, {}).then(function(response) {
+                    window.location.href = value;
+                    resolve();
+                })
+            })
         }
-        setTimeout(function() {
-            dewRcon.send('game.menuurl ' + browserURL);
-            dewRcon.send('writeconfig');
-        }, "1000");  
-        sweetAlert.close();
-    });
+    }).then(function (result) {
+        ga('send', 'event', 'change-menu', result.toLowerCase());
+        dew.command('writeconfig');
+    })
 }
 
 function checkUpdate(ver) {
