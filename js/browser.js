@@ -69,6 +69,7 @@ $(document).ready(function() {
                     }
                 }
             });
+            dew.command('game.hideh3ui 1');
         });
         dew.on('hide', function(e){
             if(repGP){

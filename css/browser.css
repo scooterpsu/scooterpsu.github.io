@@ -78,6 +78,8 @@ img{
 }
 
 .browserSwitch{
+    width: 125px;
+    left: 830px;
 }
 
 .closeButton {
