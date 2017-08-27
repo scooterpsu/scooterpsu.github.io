@@ -634,7 +634,7 @@ function escapeHtml(str) {
         for (var i = 0; i < blamList.length; i++) {
             fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/&#x3C;/g,'&lt;').replace(/&#x3E;/g,'&gt;');
         }
-        return fixedText.trim().substring(0,256);
+        return fixedText.trim().substring(0,140);
     } else {
         return "None";
     }
