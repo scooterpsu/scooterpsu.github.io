@@ -806,8 +806,8 @@ function howToServe(){
     swal({   
         title: "How to Host a Server",
         html: 
-        "Hosting a server requires UDP ports "+gamePort+" & "+signalServerPort+" and TCP port "+
-        announcePort+" to be forwarded on your router to your server's private IP address.<br/>"+
+        "Hosting a server requires UDP port "+gamePort+" and TCP ports "+
+        announcePort+" & "+signalServerPort+" to be forwarded on your router to your server's private IP address.<br/>"+
         "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
         "<a href='http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/' target='_blank'>http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/</a><br/><br/>"+
         "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
