@@ -218,6 +218,7 @@ function checkOfficial(ip){
                 }
                 var matchingLines = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 1 );
                 $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[0], 3);
+                $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[0], 4);
             }
         }
     });
@@ -305,12 +306,12 @@ function initTable() {
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
-            { type: "playerCount", targets: 15 },
-            { targets: [ 6 ], orderData: [ 7 ]},
+            { type: "playerCount", targets: 16 },
+            { targets: [ 7 ], orderData: [ 8 ]},
             { "mRender": function (data, type, row) {
                 img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
-            }, "aTargets":[ 6 ]},
+            }, "aTargets":[ 7 ]},
             { "mRender": function (data, type, row) {
                 img_str="";
                 if(data){
@@ -318,6 +319,7 @@ function initTable() {
                 } 
                 return img_str;
             }, "aTargets":[ 3 ]},
+            { targets: [ 3 ], orderData: [ 4 ]},
             { "mRender": function (data, type, row) {
                 img_str="";
                 if(data){
@@ -331,6 +333,7 @@ function initTable() {
             { title: "IP", visible: false},
             { title: "", "width": "0.5%"},
             { title: "Type" },
+            { title: "TypeText", visible: false},
             { title: "Name" },
             { title: "Host" },
             { title: "Ping" , "width": "45px"},
@@ -491,6 +494,7 @@ function buildTable(server_list){
                                 serverInfo.serverIP,
                                 serverInfo.passworded,
                                 serverType,
+                                serverType,
                                 escapeHtml(serverInfo.name),
                                 escapeHtml(serverInfo.hostPlayer),
                                 pingDisplay,
@@ -545,46 +549,46 @@ function joinServer(i) {
     if(dewConnected) {
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
             if(hasMap(serverList.servers[i].mapFile)) {
-                    ga('send', 'event', 'serverlist', 'connect');
-                    if(serverList.servers[i].passworded) {
-                        swal({   
-                            title: "Private Server", 
-                            text: "Please enter password",   
-                            imageUrl: "images/eldorito.png",
-                            input: "password",
-                            inputPlaceholder: "Password goes here",
-                            showCancelButton: true,
-                            preConfirm: function (inputValue) {
-                                return new Promise(function (resolve, reject) {  
-                                    if (inputValue === "") {     
-                                        reject("Passwords are never blank");     
-                                    } else {
-                                        dew.command('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function() {
-                                            swal.close();
-                                        }).catch(function (error) {
-                                            reject(error.message);
-                                        });
-                                    }
-                                })
-                            }
+                ga('send', 'event', 'serverlist', 'connect');
+                if(serverList.servers[i].passworded) {
+                    swal({   
+                        title: "Private Server", 
+                        text: "Please enter password",   
+                        imageUrl: "images/eldorito.png",
+                        input: "password",
+                        inputPlaceholder: "Password goes here",
+                        showCancelButton: true,
+                        preConfirm: function (inputValue) {
+                            return new Promise(function (resolve, reject) {  
+                                if (inputValue === "") {     
+                                    reject("Passwords are never blank");     
+                                } else {
+                                    dew.command('connect ' + serverList.servers[i].serverIP + ' ' + inputValue, function() {
+                                        swal.close();
+                                    }).catch(function (error) {
+                                        reject(error.message);
+                                    });
+                                }
+                            })
+                        }
+                    });
+                } else {
+                    dew.command('connect ' + serverList.servers[i].serverIP, function() {
+                    }).catch(function (error) {
+                        swal({
+                            title: error.name, 
+                            text: error.message, 
+                            type: "error"
                         });
-                    } else {
-                        dew.command('connect ' + serverList.servers[i].serverIP, function() {
-                        }).catch(function (error) {
-                            swal({
-                                title: error.name, 
-                                text: error.message, 
-                                type: "error"
-                            });
-                        });
-                    }
-                } else {    
-                    swal({
-                        title: "Map File Missing",
-                        text: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
-                        type: "error"
                     });
                 }
+            } else {    
+                swal({
+                    title: "Map File Missing",
+                    text: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
+                    type: "error"
+                });
+            }
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
@@ -614,8 +618,8 @@ function pingMe(ip, rowNum, delay) {
                 }   else {
                     pingDisplay = ping+":0";
                 }
-                $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 6);
-                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 7);
+                $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 7);
+                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 8);
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
@@ -635,8 +639,8 @@ function setPing(ip, ping){
         }   else {
             pingDisplay = ping+":0";
         }
-        $('#serverTable').dataTable().fnUpdate(pingDisplay, matchingLines[i], 6);
-        $('#serverTable').dataTable().fnUpdate(ping, matchingLines[i], 7);
+        $('#serverTable').dataTable().fnUpdate(pingDisplay, matchingLines[i], 7);
+        $('#serverTable').dataTable().fnUpdate(ping, matchingLines[i], 8);
         $('#serverTable').DataTable().columns.adjust().draw();
     }
 }
@@ -709,36 +713,32 @@ function quickMatch() {
     bestFrac = 0;
     bestPing = 1000000;
     var possibleServers = $('#serverTable').DataTable().rows( function (index, data, node){
-        if (data[2] != ""){
+        if (data[2] == "lock"){
             //console.log("Removing for private: " + data);
             return false;   //Remove private servers
         }
-        if (1.0*eval(data[13]) == 1){
+        if (1.0*eval(data[15]) == 1){
             //console.log("Removing for full: " + data);
             return false;       //Remove full servers
         }
-        if (friendServerConnected && (serverList.servers[index].maxPlayers - serverList.servers[index].numPlayers) < party.length){
-            //console.log("Removing for party: " + data);
-            return false;   //Remove servers without enough space for your party
-        }
-        if (eval(data[13]) < bestFrac){
+        if (eval(data[15]) < bestFrac){
             //console.log("Removing for frac: " + data);
             return false;   //Better player fraction available
         }
-        if (eval(data[13]) == bestFrac && data[6] > bestPing){
+        if (eval(data[15]) == bestFrac && data[6] > bestPing){
             /*console.log("Removing for ping: " + data);
             console.log(bestPing + " | " + data[6]);
             console.log(bestFrac + " | " + data[13]);*/
             return false;   //Better ping available
         }
-        bestFrac = eval(data[13]);
-        bestPing = data[6];
+        bestFrac = eval(data[15]);
+        bestPing = data[8];
         /*console.log(data);
         console.log(bestFrac);
         console.log(bestPing);*/
         return true;
-  }
-    ).order([13, 'fracDesc']).draw().data();
+    }
+    ).order([15, 'fracDesc']).draw().data();
     //console.log(possibleServers[possibleServers.length-1][0]);
     joinServer(possibleServers[possibleServers.length-1][0]);
 }
