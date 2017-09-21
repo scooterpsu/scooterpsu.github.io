@@ -105,7 +105,7 @@ $(document).ready(function() {
                     if(swal.isVisible()) {
                         sweetAlert.close();  
                     } else {        
-                        toggleScoreboard(); 
+                        closeBrowser();
                     }
                 }
                 if(e.data.X == 1){
@@ -127,7 +127,7 @@ $(document).ready(function() {
                     }  
                 }
                 if(e.data.Select == 1){
-                    closeBrowser();
+                    toggleScoreboard(); 
                 }
                 if(e.data.AxisLeftX != 0){
                     if(e.data.AxisLeftX > axisThreshold){
@@ -838,7 +838,7 @@ function joinSelected() {
 
 function onControllerConnect(){
     dew.command('Game.IconSet', {}).then(function(controllerType){
-        $('#xboxLabel').html('<img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_Y.png">Refresh List <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_X.png">Quick Match <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_A.png">Join Game <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_B.png">Show Scoreboard <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_Back.png">Close Browser');
+        $('#xboxLabel').html('<img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_Y.png">Refresh List <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_X.png">Quick Match <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_A.png">Join Game <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_Back.png">Toggle Player list/Scoreboard <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_B.png">Close');
     });
 }
 
