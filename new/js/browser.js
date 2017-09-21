@@ -212,9 +212,9 @@ function checkOfficial(ip){
     $.grep(officialServers, function(result, index){
         if(result){
             if(result[0] == ip){
-                var officialType = "Social";
+                var officialType = "social:Social Dedicated Server";
                 if(result[1]){
-                    officialType = "Ranked";
+                    officialType = "ranked:Ranked Dedicated Server";
                 }
                 var matchingLines = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 1 );
                 $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[i], 3);
@@ -311,6 +311,13 @@ function initTable() {
                 img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
             }, "aTargets":[ 6 ]},
+            { "mRender": function (data, type, row) {
+                img_str="";
+                if(data){
+                    img_str = '<img class="serverIcon" data-tooltip title="' + data.split(':')[1] + '" src="images/' + data.split(':')[0] + '.png"/>';
+                } 
+                return img_str;
+            }, "aTargets":[ 3 ]},
             { "mRender": function (data, type, row) {
                 img_str="";
                 if(data){
@@ -466,10 +473,10 @@ function buildTable(server_list){
                                 locked = true;
                                 serverInfo["passworded"] = "lock";
                             };
-                            var serverType = "Hosted";
+                            var serverType = "";
                             if(serverInfo.hasOwnProperty("isDedicated")){
                                 if(serverInfo.isDedicated){
-                                    serverType = "Dedicated";
+                                    serverType = "dedicated:Dedicated Server";
                                 }
                             }
                             var isFull = "full";
