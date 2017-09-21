@@ -217,7 +217,7 @@ function checkOfficial(ip){
                     officialType = "ranked:Ranked Dedicated Server";
                 }
                 var matchingLines = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 1 );
-                $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[i], 3);
+                $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[0], 3);
             }
         }
     });
