@@ -198,11 +198,26 @@ $(document).ready(function() {
 
 function getOfficial(){
     $.ajax({
-        url: 'http://173.16.48.132/api/officialservers',
+        url: 'http://new.halostats.click/api/officialservers',
         headers: { 'Accept': "application/json" },
         success: function(data){
             for(i = 0; i < data.length; i++){
-                officialServers.push(data[i]);
+                officialServers.push([data[i].address, data[i].ranked]);
+            }
+        }
+    });
+}
+
+function checkOfficial(ip){
+    $.grep(officialServers, function(result, index){
+        if(result){
+            if(result[0] == ip){
+                var officialType = "Social";
+                if(result[1]){
+                    officialType = "Ranked";
+                }
+                var matchingLines = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 1 );
+                $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[i], 3);
             }
         }
     });
@@ -290,12 +305,12 @@ function initTable() {
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
-            { type: "playerCount", targets: 13 },
-            { targets: [ 5 ], orderData: [ 6 ]},
+            { type: "playerCount", targets: 15 },
+            { targets: [ 6 ], orderData: [ 7 ]},
             { "mRender": function (data, type, row) {
                 img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
-            }, "aTargets":[ 5 ]},
+            }, "aTargets":[ 6 ]},
             { "mRender": function (data, type, row) {
                 img_str="";
                 if(data){
@@ -308,6 +323,7 @@ function initTable() {
             { title: "ID", visible: false},
             { title: "IP", visible: false},
             { title: "", "width": "0.5%"},
+            { title: "Type" },
             { title: "Name" },
             { title: "Host" },
             { title: "Ping" , "width": "45px"},
@@ -450,6 +466,12 @@ function buildTable(server_list){
                                 locked = true;
                                 serverInfo["passworded"] = "lock";
                             };
+                            var serverType = "Hosted";
+                            if(serverInfo.hasOwnProperty("isDedicated")){
+                                if(serverInfo.isDedicated){
+                                    serverType = "Dedicated";
+                                }
+                            }
                             var isFull = "full";
                             if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
                                 isFull = "open";
@@ -461,6 +483,7 @@ function buildTable(server_list){
                                 serverInfo.serverId,
                                 serverInfo.serverIP,
                                 serverInfo.passworded,
+                                serverType,
                                 escapeHtml(serverInfo.name),
                                 escapeHtml(serverInfo.hostPlayer),
                                 pingDisplay,
@@ -492,6 +515,7 @@ function buildTable(server_list){
                             } else {
                                 dew.ping(serverInfo.serverIP.split(":")[0]);
                             }
+                            checkOfficial(serverInfo.serverIP);
                             if(!locked){
                                 getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
                             }
@@ -583,8 +607,8 @@ function pingMe(ip, rowNum, delay) {
                 }   else {
                     pingDisplay = ping+":0";
                 }
-                $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 5);
-                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 6);
+                $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 6);
+                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 7);
                 $('#serverTable').DataTable().columns.adjust().draw();
             }
         });
@@ -604,8 +628,8 @@ function setPing(ip, ping){
         }   else {
             pingDisplay = ping+":0";
         }
-        $('#serverTable').dataTable().fnUpdate(pingDisplay, matchingLines[i], 5);
-        $('#serverTable').dataTable().fnUpdate(ping, matchingLines[i], 6);
+        $('#serverTable').dataTable().fnUpdate(pingDisplay, matchingLines[i], 6);
+        $('#serverTable').dataTable().fnUpdate(ping, matchingLines[i], 7);
         $('#serverTable').DataTable().columns.adjust().draw();
     }
 }
