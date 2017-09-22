@@ -48,7 +48,7 @@ $(document).ready(function() {
         dew.getVersion().then(function (version) {
             gameVersion = version;
             checkUpdate(gameVersion);
-            $('#serverTable').dataTable().fnFilter(gameVersion, 15 );
+            $('#serverTable').dataTable().fnFilter(gameVersion, 17 );
         });
         dew.command('Game.ListMaps', {}).then(function(response) {
             mapList = new Array(response.split(','));
