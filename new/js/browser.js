@@ -627,7 +627,7 @@ function pingMe(ip, rowNum, delay) {
 }
 
 function setPing(ip, ping){
-    var matchingLines = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 16 );
+    var matchingLines = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 18 );
     for (i = 0; i < matchingLines.length; i++) { 
         var pingDisplay;
         if (ping > 0 && ping <= 100) {
