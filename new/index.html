@@ -102,13 +102,6 @@
                 <div id="gameinfo">
                     <div id="host"><b>Host: </b>{{trimString hostPlayer 0 100}}</div>
                     <div id="name"><b>Name: </b>{{trimString name 0 100}}</div>
-                    <div id="voip"><b>VoIP: </b>
-                        {{#if VoIP}} 
-                            Enabled
-                        {{else}}
-                            Disabled
-                        {{/if}}                             
-                    </div>
                     <div id="sprint"><b>Sprint: </b>
                         {{#ifCond sprintEnabled "1"}}
                             {{#ifCond sprintUnlimitedEnabled "1"}}
