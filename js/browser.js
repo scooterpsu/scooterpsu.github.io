@@ -524,7 +524,7 @@ function buildTable(server_list){
                                     pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
                                 }
                             } else {
-                                dew.ping(serverInfo.serverIP.split(":")[0]);
+                                dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
                             }
                             checkOfficial(serverInfo.serverIP);
                             if(!locked){
@@ -757,6 +757,7 @@ function switchBrowser() {
         inputValidator: function (value) {
             return new Promise(function (resolve, reject) {
                 dew.command('Game.MenuURL '+value, {}).then(function(response) {
+                    dew.command('game.hideh3ui 0');
                     window.location.href = value;
                     resolve();
                 })
