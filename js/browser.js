@@ -27,7 +27,7 @@ var dewritoURLList = [
     "http://scooterpsu.github.io/dewrito.json"
 ];
 var URLIndex = 0;
-var dewritoURL = dewritoURLList[URLIndex]
+var dewritoURL = dewritoURLList[URLIndex];
     swal.setDefaults({
     customClass: "alertWindow",
     confirmButtonClass: "alertConfirm",
