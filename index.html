@@ -15,8 +15,9 @@
 		<script src="js/jquery.dataTables.min.js"></script>
 		<script src="js/mousetrap.min.js"></script>
 		<!-- Sweet Alert -->
-        <script src="js/sweetalert2.min.js"></script> 
-        <link rel="stylesheet" type="text/css" href="css/sweetalert2.css">       
+        <script src="js/sweetalert.min.js"></script> 
+        <link rel="stylesheet" type="text/css" href="css/sweetalert.css">       
+        <link rel="stylesheet" type="text/css" href="css/eldorito.css">    
         <!-- Gamepad support -->
         <script src="js/gamepad.js"></script>
 		<!-- Eldorito Stuff -->
@@ -35,6 +36,11 @@
 
           ga('create', 'UA-72472081-1', 'auto');
           ga('send', 'pageview');
+        </script>
+        <script>
+            var host = "scooterpsu.github.io";
+            if ((host == window.location.host) && (window.location.protocol != "http:"))
+                window.location.protocol = "http";
         </script>
 </head>
 
@@ -87,7 +93,8 @@
             {{#if passworded}}
                 <b>Private Game</b>
                 {{else}}
-                    <table class="statBreakdown">
+                    <div id="scoreBoardHeader">Scoreboard {{scoreBoardPlus}}</div>
+                    <table class="statBreakdown" style="{{scoreBoardHidden}}">
                         <thead class="tableHeader">
                             <th>Name</th>
                             <th><center>Score</center></th>
@@ -133,6 +140,13 @@
                         Disabled
                     {{/ifCond}}  
                 </div>
+                <div id="sprint"><b>Assassinations: </b>
+                    {{#ifCond assassinationEnabled "0"}}
+                        Disabled
+                    {{else}}
+                        Enabled
+                    {{/ifCond}}  
+                </div>
                 <div id="status"><b>Status: </b>
                     {{#ifCond status "InGame"}}
                         In Game
@@ -140,7 +154,6 @@
                         In Lobby
                     {{/ifCond}}   
                 </div>
-                <div id="ip"><b>IP: </b>{{serverIP}}</div>
                 <div id="version"><b>Version: </b>{{eldewritoVersion}}</div>
             </div>
         </div>

@@ -255,15 +255,20 @@ button {
     background-color: black;
     font-size: 18pt;
     border-bottom: 2px solid #404f70;
+    margin-top: 0;
+    text-align: center;
 }
 
-.alertConfirm, .alertCancel{
+.alertConfirm, .alertCancel, .alertWindow button {
     border-style: solid;
     border: 1px solid white;
-    background-color: black;
+    background-color: black !important;
     font-family: 'BlenderPro-Book'; 
     font-size: 14pt;
     padding: 3px 20px;
+    margin-right: 5px;
+    border-radius: 0;
+    
 }
 
 .alertConfirm:hover, .alertCancel:hover{
@@ -274,6 +279,10 @@ button {
     text-align: left;
 }
 
+.howToServeWindow{
+    width: 1000px;
+    left: 35%;
+}
 /*==============================*/
 /*======== Friends List ========*/
 /*==============================*/
@@ -616,6 +625,10 @@ button {
     height: 80px;
 }
 
+#scoreBoardHeader{
+    cursor: pointer;
+}
+
 #scoreboard{
     margin-top: 5px;
     width: 250px;
@@ -632,6 +645,7 @@ button {
     color: white;
     width: 245px;
     border-collapse: collapse;
+    display: none;
 }
 
 .statBreakdown td{

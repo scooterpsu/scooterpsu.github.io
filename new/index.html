@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Server Browser</title>
+		<!-- Includes -->
+		<script src="js/handlebars.min.js"></script>
+        <script src="js/jquery-2.2.1.min.js"></script>
+        <script src="js/jquery-ui.js"></script>
+        <script src="js/Tooltip.js"></script>
+		<!-- DataTables -->
+		<link rel="stylesheet" href="css/jquery.dataTables.min.css">
+		<script src="js/jquery.dataTables.min.js"></script>
+		<!-- Sweet Alert -->
+        <script src="js/sweetalert2.min.js"></script> 
+        <link rel="stylesheet" type="text/css" href="css/sweetalert2.min.css">       
+		<!-- Custom stuff -->
+		<script src="js/browser.js"></script>
+		<link rel="stylesheet" href="css/browser.css">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-72472081-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <script>
+            var host = "scooterpsu.github.io/new/";
+            if ((host == window.location.host) && (window.location.protocol != "http:"))
+                window.location.protocol = "http";
+        </script>
+</head>
+
+<body>  
+    <div id="settingsWindow">
+        <div id="settingsHeader">Settings<div class="closeButton" onclick="$('#settingsWindow').hide();">X</div></div>
+        <label class="zoomLabel" for="zoomSlider">Zoom</label><div id="zoomSlider" class="slider"></div><div id="zoomReset" onclick="adjustResolution();">Reset</div>   
+    </div>   
+    <div id="zoomBox">
+        <h3 class="browserTitle">Server Browser</h3>
+        <h4 class="serverStats"><span class="playerCount">00 players</span>  /  <span class="serverCount">00 servers</span></h4>
+        <div class="refresh" onclick="refreshTable();">Refresh</div>
+        <div class="quickMatch" onclick="quickMatch();">Quick Match</div>
+        <div class="howToServe" onclick="howToServe();">How To Host</div>
+        <div class="browserSwitch" onclick="switchBrowser();">Switch Browser</div>
+        <label class="searchLabel" for="searchBox">Search: </label><input type="text" id="searchBox">
+        <div class="closeButton" onclick="closeBrowser();">X</div>
+        <progress class="serverPool" value="0" max="100"></progress>
+        <table id="serverTable" class="display" width="100%"></table>
+        <div id="gamecard">
+        </div>
+        <div id="backgroundFrame">
+        <div id="backgroundFrameInsert"></div>
+        </div>
+        <!--<button class="browserSwitch feeltrain" onclick="switchBrowser('theFeelTrain');">Switch to theFeelTrain</button>   
+        <button class="browserSwitch dewmenu" onclick="switchBrowser('DewMenu');">Switch to DewMenu</button> -->
+        
+        <img id="settingsButton" onclick="$('#settingsWindow').show();" src="images/settings.png">
+        <div id="xboxLabel"></div>
+        
+        <script id="gameinfo-template" type="text/x-handlebars-template">
+            <div id="cardheaderborder">
+                <div id="cardheader">
+                    <div id="title"><b>{{capitalize variantType}} on {{map}}</b></div>
+                    <img id="mappic" src="images/maps/{{lowerCase mapFile}}.png" onError="mapMatch(this, '{{mapFile}}');">
+                    <img id="varpic" src="images/gametypes/{{lowerCase variantType}}.png">
+                </div>
+            </div>
+            <div id="scoreboard">
+                {{#if passworded}}
+                    <b>Private Game</b>
+                    {{else}}
+                        <div id="scoreBoardHeader">Scoreboard {{scoreBoardPlus}}</div>
+                        <table class="statBreakdown" style="{{scoreBoardHidden}}">
+                            <thead class="tableHeader">
+                                <th>Name</th>
+                                <th><center>Score</center></th>
+                                <th><center>K</center></th>
+                                <th><center>D</center></th>
+                                <th><center>A</center></th>
+                            </thead>
+                            <tbody>
+                                {{#eachByScore players}}
+                                {{#if name}}
+                                <tr>
+                                    <td class="statLines">{{trimString this.name 0 100}}</td>
+                                    <td class="statLines"><center>{{score}}</center></td>
+                                    <td class="statLines"><center>{{kills}}</center></td>
+                                    <td class="statLines"><center>{{deaths}}</center></td>
+                                    <td class="statLines"><center>{{assists}}</center></td>
+                                </tr>
+                                {{/if}}
+                                {{/eachByScore}}
+                            </tbody>
+                        </table>
+                    {{/if}}
+            </div>
+            <div id="gameinfoborder">
+                <div id="gameinfo">
+                    <div id="host"><b>Host: </b>{{trimString hostPlayer 0 100}}</div>
+                    <div id="name"><b>Name: </b>{{trimString name 0 100}}</div>
+                    <div id="sprint"><b>Sprint: </b>
+                        {{#ifCond sprintEnabled "1"}}
+                            {{#ifCond sprintUnlimitedEnabled "1"}}
+                                Unlimited
+                            {{else}}
+                                Enabled
+                            {{/ifCond}}  
+                        {{else}}
+                            Disabled
+                        {{/ifCond}}  
+                    </div>
+                    <div id="sprint"><b>Assassinations: </b>
+                        {{#ifCond assassinationEnabled "0"}}
+                            Disabled
+                        {{else}}
+                            Enabled
+                        {{/ifCond}}  
+                    </div>
+                    <div id="status"><b>Status: </b>
+                        {{#ifCond status "InGame"}}
+                            In Game
+                        {{else}}
+                            In Lobby
+                        {{/ifCond}}   
+                    </div>
+                    <div id="version"><b>Version: </b>{{eldewritoVersion}} </div>
+                </div>
+            </div>
+        </script>
+        
+        <script>
+            var serverTemplateSource = $("#gameinfo-template").html();
+            var serverTemplate = Handlebars.compile(serverTemplateSource);
+        </script>   
+    </div> 
+</body>
+</html>

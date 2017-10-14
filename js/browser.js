@@ -1,5 +1,6 @@
 var pageFocus = false;
 var zoomRatio;
+var scoreBoardVisible = false;
 var mapList = [[]];
 var EDVersion = 0;
 var serverList = {
@@ -19,15 +20,35 @@ var color = "#000000"
 var selectedID = 0;
 var controllersOn = false;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+
+var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/dewrito.json";
 swal.setDefaults({
     customClass: "alertWindow",
     confirmButtonClass: "alertConfirm",
     cancelButtonClass: "alertCancel",
-    buttonsStyling: false
+    buttonsStyling: false,
+    html: true
 })
 $(document).ready(function() {
+    $.getScript( "dew://lib/dew.js" )
+    .done(function() {
+        window.location.href = '/new/';
+    })
     getCurrentRelease();
-    buildTable();
+    $.ajax({
+        url: dewritoURL,
+        error: function()
+        {
+           console.log("dewrito.json error, using backup");
+           dewritoURL = "http://scooterpsu.github.io/dewrito.json";
+           buildList();
+        },
+        success: function()
+        {
+           buildList();
+        }
+    });
+    initTable();
     setInterval( CheckPageFocus, 200 );
 
     $( "#chatBorder" ).draggable({ containment: "body", scroll: false, snap: true, handle: "#chatHeader", cancel: "button" });
@@ -44,6 +65,9 @@ $(document).ready(function() {
             $('#zoomSlider .ui-slider-handle').text( percentage.toFixed(0) );
         }
     });
+    $(document).on('click','#scoreBoardHeader',function(){
+        toggleScoreboard();
+    });
 });
 
 /* Sets zoom level to specified value or reset if not specified */
@@ -58,13 +82,21 @@ function getCurrentRelease() {
         EDVersion = Object.keys(data)[0];
     })
 }
-        
-function buildTable() {
+
+var clickDelay = 300;
+var isDelayed = false;           
+function initTable() {   
     $('#serverTable').on('click', 'tr', function() {
         var tr = $(this).closest('tr');
         var row = table.row( tr );
-        if (row.data()) {
-            joinServer(row.data()[0]);
+        if (row.data()) {                 
+            if(!isDelayed){
+                isDelayed = true;
+                joinServer(row.data()[0]);
+                setTimeout(function(){
+                    isDelayed = false;
+                }, clickDelay);
+            }
         } 
     });  
     $('#serverTable').on('mouseover', 'tr', function() {
@@ -93,6 +125,12 @@ function buildTable() {
         destroy: true,
         "iDisplayLength": 10,
         stateSave: true,
+        bInfo: false,
+        "stateSaveParams": function (settings, data) {
+            for (var i = 0;i < data.columns.length; i++){
+              delete data.columns[i].search;
+            }
+        },
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
             { type: 'ip-address', targets: 2 },
@@ -101,11 +139,11 @@ function buildTable() {
             { "mRender": function (data, type, row) {
                 img_str = '<img class="pingbars" src="images/' + data.split(':')[1] + 'bars.png"/>  '+ data.split(':')[0];
                 return img_str;
-            }, "aTargets":[ 5 ]}
+            }, "aTargets":[ 5 ]},
         ],
         columns: [
             { title: "ID", visible: false},
-            { title: "IP", "width": "1%", visible: false},
+            { title: "IP", visible: false},
             { title: "", "width": "0.5%"},
             { title: "Name" },
             { title: "Host" },
@@ -116,47 +154,76 @@ function buildTable() {
             { title: "Gametype"},
             { title: "Variant" },
             { title: "Status", visible: false},    
-             { title: "Num Players", visible: false},  
+            { title: "Num Players", visible: false},  
             { title: "Players", "width": "1%"},
-            { title: "IsFull", "width": "1%", visible: false},
-            { title: "Version", "width": "1%", visible: false}
+            { title: "IsFull", visible: false},
+            { title: "Version", visible: false},
+            { title: "IPnoPort", visible: false}
         ],
-        "order": [[ 0 ]],
+        "order": [[ 0, "asc" ]],
         "language": {
             "emptyTable": "No servers found",
             "zeroRecords": "No matching servers found",
             "infoEmpty": "No servers found",
             "info": "Showing servers _START_ to _END_ of _TOTAL_",
             "lengthMenu": "Show _MENU_ servers"
+        },
+        "drawCallback": function(settings) {
+            if(settings.aoRowCreatedCallback){
+                if($('#serverTable tbody tr').length == 1 && !$('.dataTables_empty').length) {  
+                    var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(0)"));
+                    if(row){
+                        fillGameCard(row[0]);
+                    }
+                }
+            }
         }
     });
+    $('#searchBox').keyup(function(){
+        table.search($(this).val()).draw() ;
+    });
+    $('#serverTable').on('search.dt', function(){
+        if($('#serverTable').find('tbody tr td').not('.dataTables_empty').length>0) {
+            $('#gamecard').show();
+        }else{
+            $('#gamecard').hide();
+        }
+    });
+}
 
+function buildList() {
     var master_servers = [];
-    var server_list = [];
-    var mshxr = $.getJSON("https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dewrito.json")
+    var entire_server_list = [];
+    var mshxr = $.getJSON(dewritoURL)
     .done(function( data ) {
-        var master_count = 0;
         for (var i = 0; i<data.masterServers.length; i++){
-            master_count++
             window.master_length = data.masterServers.length;
             var jqhxr = $.ajax({
             url: data.masterServers[i].list, 
                 type: 'GET',
-                datatype: 'json',
-                async: false
-                //headers : {
-                //    'X-Player' : pname+":"+puid
-                //}
+                datatype: 'json'
             })
             .done(function( data ) {
-                for(var ii = 0; ii < data.result.servers.length; ii++) {
-                    if (!(data.result.servers[ii] in server_list)) {
-                        server_list.push(data.result.servers[ii]);
+                if(data.result.servers){
+                    var server_list = [];
+                    for(var ii = 0; ii < data.result.servers.length; ii++) {
+                        if (!(data.result.servers[ii] in server_list)) {
+                            server_list.push(data.result.servers[ii]);
+                        }
                     }
                 }
+                new_server_list = server_list.filter( function( el ) {
+                  return entire_server_list.indexOf( el ) < 0;
+                });
+                entire_server_list.push.apply(entire_server_list, new_server_list);
+                buildTable(new_server_list);
             });
         }
-        server_list = unique(server_list);
+    });
+}
+
+function buildTable(server_list){
+    var table = $('#serverTable').DataTable();
         var pingDelay = 120;
         for (var i = 0; i < server_list.length; i++){
             serverIP = server_list[i];
@@ -187,11 +254,10 @@ function buildTable() {
                         serverInfo["serverId"] = i;
                         serverInfo["serverIP"] = serverIP;
                         if (serverInfo.maxPlayers <= 16 ) {
-                            if(serverInfo.map.length > 0) { //blank map means glitched server entry
+                            //if(serverInfo.map.length > 0) { //blank map means glitched server entry
                                 for (var j = 0; j < serverList.servers.length; j++) {
                                     if (serverList.servers[j]["i"] == i) {
                                         serverList.servers[j] = serverInfo;
-                                        serverCount++;
                                         playerCount+=parseInt(serverInfo.numPlayers);
                                     }
                                 }
@@ -209,35 +275,43 @@ function buildTable() {
                                 if((parseInt(serverInfo.maxPlayers)-parseInt(serverInfo.numPlayers))>0) {
                                     isFull = "open";
                                 }
+                                if(!serverInfo.variantType || serverInfo.variantType == "none"){
+                                    serverInfo.variantType = "Slayer"
+                                }
+                                if(!serverInfo.variant){
+                                    serverInfo.variant = "Slayer"
+                                }
                                 table.row.add([
                                     serverInfo.serverId,
                                     serverInfo.serverIP,
                                     serverInfo.passworded,
-                                    serverInfo.name,
-                                    serverInfo.hostPlayer,
+                                    escapeHtml(serverInfo.name),
+                                    escapeHtml(serverInfo.hostPlayer),
                                     pingDisplay,
                                     ping,
-                                    serverInfo.map,
-                                    serverInfo.mapFile,
-                                    capitalizeFirstLetter(serverInfo.variantType),
-                                    capitalizeFirstLetter(serverInfo.variant),
+                                    escapeHtml(serverInfo.map),
+                                    escapeHtml(serverInfo.mapFile),
+                                    capitalizeFirstLetter(escapeHtml(serverInfo.variantType)),
+                                    capitalizeFirstLetter(escapeHtml(serverInfo.variant)),
                                     serverInfo.status,
                                     parseInt(serverInfo.numPlayers),
                                     parseInt(serverInfo.numPlayers) + "/" + parseInt(serverInfo.maxPlayers),
                                     isFull,
                                     serverInfo.eldewritoVersion,
                                     serverInfo.sprintEnabled,
-                                    serverInfo.sprintUnlimitedEnabled
+                                    serverInfo.sprintUnlimitedEnabled,
+                                    serverInfo.assassinationEnabled
                                 ]).draw();
+                                serverCount++;
                                 table.columns.adjust().draw();
-                                fillGameCard(serverInfo.serverId);
+                                //fillGameCard(serverInfo.serverId);
                                 if(rePing) {
                                     console.log("repinging "+serverInfo.serverIP);
                                     pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
                                 }
-                            } else {
-                                console.log(serverInfo.serverIP + " is glitched");
-                            }
+                            //} else {
+                            //    console.log(serverInfo.serverIP + " is glitched");
+                            //}
                         } else {
                             console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
                         }
@@ -248,14 +322,17 @@ function buildTable() {
                 console.log(serverIP + " is invalid, skipping.");
             }
         }
-        
-    });
 }
 
 function joinServer(i) {
     if(dewRconConnected) {
+        /*if(gameVersion==0){
+            dewRcon.send("game.version", function(response) {
+                gameVersion = response;
+            });
+        }*/        
         if(serverList.servers[i].numPlayers < serverList.servers[i].maxPlayers) {
-            if(serverList.servers[i].eldewritoVersion === gameVersion) {
+            //if(serverList.servers[i].eldewritoVersion === gameVersion) {
                 if(hasMap(serverList.servers[i].mapFile)) {
                     if(friendServerConnected && (serverList.servers[i].maxPlayers - serverList.servers[i].numPlayers) < party.length) {
                         swal("Party Too Large","You have too many people in your party to join this game.", "error");
@@ -279,14 +356,14 @@ function joinServer(i) {
                                                 if (res === "Incorrect password specified.") {
                                                     sweetAlert.showInputError(res);
                                                     return false
-                                                } else {
+                                                } else if (res.startsWith("Attempting connection to ")){
                                                     if (friendServerConnected && party.length > 1) {
-                                                        partyConnect(serverList.servers[i].serverIP, inputValue);                                                    
+                                                        partyConnect(serverList.servers[i].serverIP, inputValue);
                                                     } else {
-                                                        closeBrowser();                                                       
+                                                        closeBrowser();
                                                     }
-                                                    sweetAlert.closeModal();
-                                                }
+                                                    sweetAlert.close();
+                                                } 
                                             }
                                         }
                                     });
@@ -295,11 +372,12 @@ function joinServer(i) {
                         } else {
                             dewRcon.send('connect ' + serverList.servers[i].serverIP, function(res) {
                                 if (res.length > 0) {
-                                    if (res != "Command/Variable not found") {
+                                    console.log(res);
+                                    if (res.startsWith("Attempting connection to ")){
                                         if (friendServerConnected && party.length > 1) {
-                                            partyConnect(serverList.servers[i].serverIP, null);                                                    
+                                            partyConnect(serverList.servers[i].serverIP, null);
                                         } else {
-                                            closeBrowser();                                           
+                                            closeBrowser();
                                         }
                                     }
                                 }
@@ -309,24 +387,24 @@ function joinServer(i) {
                 } else {    
                     swal({
                         title: "Map File Missing",
-                        html: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
+                        text: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
                         type: "error"
                     });
                 }
-            } else {
+            /*} else {
                 swal({
                     title: "Version Mismatch", 
-                    html: "Host running different version.<br /> Unable to join.", 
+                    text: "Host running different version.<br /> Unable to join.", 
                     type: "error"
                 });
-            }
+            }*/
         } else {
             swal("Full Game", "Game is full or unavailable.", "error");
         }
     } else {
         swal({
         title: "Communication Error", 
-        html: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
+        text: "Unable to connect to Eldewrito.<br /><br />Please restart game and try again.", 
         type: "error"
         });        
     }
@@ -364,8 +442,34 @@ function pingMe(ip, rowNum, delay) {
 }
 
 function fillGameCard(i) {
+    serverList.servers[i].hostPlayer = escapeHtml(serverList.servers[i].hostPlayer)
+    serverList.servers[i].name = escapeHtml(serverList.servers[i].name);
+    serverList.servers[i].map = escapeHtml(serverList.servers[i].map)
+    serverList.servers[i].mapFile = escapeHtml(serverList.servers[i].mapFile);
+    serverList.servers[i].variant = escapeHtml(serverList.servers[i].variant)
+    serverList.servers[i].variantType = escapeHtml(serverList.servers[i].variantType);
     var html = serverTemplate(serverList.servers[i]);
     $("#gamecard").html(html);
+}
+
+var blamList = [];
+
+$.getJSON("https://scooterpsu.github.io/blamList/blamList.json", function(json) {
+    blamList = json.words;
+})
+
+function escapeHtml(str) {
+    if(str){
+        var div = document.createElement('div');
+        var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
+        fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
+        for (var i = 0; i < blamList.length; i++) {
+            fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/&#x3C;/g,'&lt;').replace(/&#x3E;/g,'&gt;');
+        }
+        return fixedText.trim().substring(0,128);
+    } else {
+        return "None";
+    }
 }
 
 function capitalizeFirstLetter(string) {
@@ -396,7 +500,7 @@ function refreshTable() {
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
     selectedID = 0;
-    buildTable();
+    buildList();
     if(dewRconConnected) {
         connectionTrigger();   
     }
@@ -460,7 +564,7 @@ function switchBrowser(browser) {
             dewRcon.send('game.menuurl ' + browserURL);
             dewRcon.send('writeconfig');
         }, "1000");  
-        sweetAlert.closeModal();
+        sweetAlert.close();
     });
 }
 
@@ -475,7 +579,7 @@ function checkUpdate(ver) {
 
             swal({   
                 title: "Version Outdated!",
-                html: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+                text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
                 type: "error", allowEscapeKey: false
             });
         }
@@ -494,7 +598,6 @@ function hasMap(map) {
 
 function closeBrowser() {
     ga('send', 'event', 'close-menu');
-
     if(dewRconConnected) {
         setTimeout(function() {
             dewRcon.send('menu.show');
@@ -530,7 +633,7 @@ function mapMatch(thing, mapFile) {
 function noSTEAMLockout(){
     swal({   
         title: "noSTEAM Release Detected",
-        html: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
+        text: "We have detected that you are using the nosTEAM release of Halo Online.<br/><br />We would appreciate if you downloaded an official Eldewrito release (which is also free).<br/><br/>Please see http://redd.it/423you for more info.",
         type: "error", allowEscapeKey: false, showConfirmButton: false, allowOutsideClick: false
     });
 }
@@ -538,13 +641,24 @@ function noSTEAMLockout(){
 function howToServe(){
     swal({   
         title: "How to Host a Server",
-        html: 
+        text: 
         "Hosting a server requires UDP ports 9987 & 11774 and TCP port 11775 to be forwarded on your router to your server's private IP address.<br/>"+
         "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
         "<a href='http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/' target='_blank'>http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/</a><br/><br/>"+
         "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
         width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png", imageWidth: "102", imageHeight: "88"
     });
+}
+
+function toggleScoreboard(){
+    if (!scoreBoardVisible){
+        $('#scoreBoardHeader').text("Scoreboard (-)"); 
+        scoreBoardVisible = true;
+    } else{
+        $('#scoreBoardHeader').text("Scoreboard (+)");
+        scoreBoardVisible = false;    
+    }
+     $('.statBreakdown').toggle('blind', 500); 
 }
 
 //==================================
@@ -683,31 +797,28 @@ function connectionTrigger() {
     }
     $('.closeButton').show();
     $('#serverTable_filter').css("right","-160px");
-    dewRcon.send('game.version', function(resa) { 
-        dewRcon.send('game.listmaps', function(resb) {
-            dewRcon.send('player.name', function(resc) {
-                dewRcon.send('player.printUID', function(resd) {
-                    dewRcon.send('Game.LogName', function(rese) {
-                       dewRcon.send('Player.Colors.Primary', function(resf) {
-                            if (gameVersion === 0) {
-                                gameVersion = resa;
-                                checkUpdate(gameVersion);
-                            }               
-                            if (resb.contains(",") && mapList[0].length == 0) {
-                                mapList = new Array(resb.split(','));
-                            }
-                            pname = resc;
-                            puid = resd.split(' ')[2];
-                            if (rese == "nosteam.log"){
-                                noSTEAMLockout();
-                            }
-                            color = resf;
-                        });
-                    });
-                });
-            });
-        });
-    });
+    loadSettings(0);
+}
+
+var settingsToLoad = [['mapList', 'game.listmaps'],['gameVersion', 'game.version'],['pname', 'player.name'],['puid', 'player.printUID'],['color', 'Player.Colors.Primary']];
+function loadSettings(i){
+	if (i != settingsToLoad.length) {
+		dewRcon.send(settingsToLoad[i][1], function(response) {
+			if(settingsToLoad[i][1].contains("listmaps")){
+				window[settingsToLoad[i][0]] = [[]];
+				mapList = new Array(response.split(','));
+			} else if(settingsToLoad[i][1].contains("printUID")){
+				window[settingsToLoad[i][0]] = response.split(' ')[2];
+			} else {
+				window[settingsToLoad[i][0]] = response;
+			}
+			i++;
+			loadSettings(i);
+		});
+	} else {
+        checkUpdate(gameVersion);
+        $('#serverTable').dataTable().fnFilter( gameVersion, 15 );
+	}
 }
 
 function disconnectTrigger() {
@@ -768,13 +879,13 @@ gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
             if (e.control == "FACE_1") {
                 //console.log("A");
                 if($('.sweet-overlay').is(':visible')) {
-                    sweetAlert.closeModal();   
+                    sweetAlert.close();   
                 } else {
                     joinSelected();
                 }
             } else if (e.control == "FACE_2") {
                 //console.log("B");
-                sweetAlert.closeModal();   
+                sweetAlert.close();   
             } else if (e.control == "FACE_3") {
                 //console.log("X");
             } else if (e.control == "FACE_4") {
@@ -903,5 +1014,25 @@ Handlebars.registerHelper('lowerCase', function(str) {
 
 Handlebars.registerHelper('trimString', function(passedString, startstring, endstring) {
    var theString = passedString.substring( startstring, endstring );
-   return new Handlebars.SafeString(theString)
+   return new Handlebars.SafeString(escapeHtml(theString))
+});
+
+Handlebars.registerHelper('scoreBoardPlus', function(str) {
+    ret = "";
+    if(scoreBoardVisible){
+        ret = "(-)";
+    } else {
+        ret = "(+)" 
+    }
+    return ret;
+});
+
+Handlebars.registerHelper('scoreBoardHidden', function(str) {
+    ret = "";
+    if(scoreBoardVisible){
+        ret = "display:table;";
+    } else{
+        ret = "display:none;";        
+    }
+    return ret;
 });
