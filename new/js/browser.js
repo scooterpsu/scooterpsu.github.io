@@ -161,9 +161,7 @@ $(document).ready(function() {
             }
         });
     })
-    .fail(function() {
-        initDewjson();              
-    });
+    .fail(initDewjson());
     getCurrentRelease();
     if(typeof(Storage) !== "undefined") {
         if(localStorage.getItem("zoom") !== null){
