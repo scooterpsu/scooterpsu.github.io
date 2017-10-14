@@ -24,7 +24,14 @@ var repGP;
 var lastHeldUpdated = 0;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 
-var dewritoURL = "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/dewrito.json";
+var dewritoURLList = [
+    "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/dewrito.json",
+    "https://raw.githubusercontent.com/ElDewrito/ElDorito/master/dist/mods/dewrito.json",
+    "http://scooterpsu.github.io/dewrito.json"
+];
+var URLIndex = 0;
+var dewritoURL = dewritoURLList[URLIndex];
+
 swal.setDefaults({
     customClass: "alertWindow",
     target: "#zoomBox",
@@ -155,19 +162,7 @@ $(document).ready(function() {
         });
     })
     .fail(function() {
-        $.ajax({
-            url: dewritoURL,
-            error: function()
-            {
-               console.log("dewrito.json error, using backup");
-               dewritoURL = "http://scooterpsu.github.io/dewrito.json";
-               buildList();
-            },
-            success: function()
-            {
-                buildList();
-            }
-        });               
+        initDewjson();              
     });
     getCurrentRelease();
     if(typeof(Storage) !== "undefined") {
@@ -195,6 +190,26 @@ $(document).ready(function() {
         unorderList();
     });
 });
+
+function initDewjson() {
+    dewritoURL = dewritoURLList[URLIndex];
+    $.ajax({
+        url: dewritoURL,
+        error: function()
+        {
+           console.log("dewrito.json error, trying next source: "+dewritoURL);
+           URLIndex += 1;
+           if (length(dewritoURLList)-1<URLIndex) {
+               URLIndex = 0;
+           }
+           initDewjson();
+        },
+        success: function()
+        {
+           buildList();
+        }
+    });
+}
 
 function getOfficial(){
     $.ajax({
@@ -706,7 +721,7 @@ function refreshTable() {
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear(); 
     selectedID = 0;
-    buildList();
+    initDewjson();
 }
 
 function quickMatch() {
