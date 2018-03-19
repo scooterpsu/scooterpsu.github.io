@@ -599,7 +599,7 @@ function joinServer(i) {
             } else {    
                 swal({
                     title: "Map File Missing",
-                    text: "You do not have the required 3rd party map.<br /><br />Please check reddit.com/r/HaloOnline for the applicable mod.", 
+                    html: "You do not have the required 3rd party map.<br /><br />Please check <a href='https://www.reddit.com/r/HaloOnline' target='_blank'>https://www.reddit.com/r/HaloOnline</a> for the applicable mod.", 
                     type: "error"
                 });
             }
