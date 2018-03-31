@@ -52,9 +52,13 @@ $(document).ready(function() {
     .done(function() {
         dewConnected = true;
         dew.getVersion().then(function (version) {
-            gameVersion = version;
+            if(version.contains('-')){
+                gameVersion = version.split('-')[0];
+            }else{
+                gameVersion = version;
+            }
             //checkUpdate(gameVersion);
-            //$('#serverTable').dataTable().fnFilter(gameVersion, 17 );
+            $('#serverTable').dataTable().fnFilter(gameVersion, 17 );
         });
         dew.command('Game.ListMaps', {}).then(function(response) {
             mapList = new Array(response.split(','));
