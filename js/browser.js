@@ -475,7 +475,7 @@ function buildTable(server_list){
                             for (var j = 0; j < serverList.servers.length; j++) {
                                 if (serverList.servers[j]["i"] == i) {
                                     serverList.servers[j] = serverInfo;
-                                    if(serverInfo.eldewritoVersion == gameVersion || gameVersion == 0){
+                                    if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
                                     	playerCount+=parseInt(serverInfo.numPlayers);
                                     }
                                 }
@@ -483,7 +483,7 @@ function buildTable(server_list){
                             var locked;
                             if(!serverInfo.hasOwnProperty("passworded")) {
                                 locked = false;
-                                if(serverInfo.eldewritoVersion == gameVersion || gameVersion == 0){
+                                if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
                                     var openSlots = serverInfo.maxPlayers - serverInfo.numPlayers;
                                     totalSlotCount += serverInfo.maxPlayers;
                                     openSlotCount += openSlots;
@@ -531,7 +531,7 @@ function buildTable(server_list){
                                 serverInfo.sprintUnlimitedEnabled,
                                 serverInfo.assassinationEnabled
                             ]).draw();
-                             if(serverInfo.eldewritoVersion == gameVersion || gameVersion == 0){
+                             if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
                                 serverCount++;
                             }
                             table.columns.adjust().draw();
