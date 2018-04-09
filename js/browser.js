@@ -333,7 +333,7 @@ function initTable() {
             { "mRender": function (data, type, row) {
                 img_str="";
                 if(data){
-                    img_str = '<img class="serverIcon" data-tooltip title="' + data.split(':')[1] + '" src="images/' + data.split(':')[0] + '.png"/>';
+                    img_str = '<div class="tooltip"><img class="serverIcon" src="images/' + data.split(':')[0] + '.png"/><span class="tooltiptext">' + data.split(':')[1] + '</span></div>';
                 } 
                 return img_str;
             }, "aTargets":[ 3 ]},
