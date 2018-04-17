@@ -263,19 +263,18 @@ img{
 .alertWindow, .howToServeWindow{
     font-family: "Conduit ITC"; 
     border-radius: 0;
-    background-color: #13233d !important;
-    color: white; 
+    background-color: rgba(0,0,0,0) !important;
+    background-image: -webkit-linear-gradient( -90deg, rgba(27,41,70,0.94902) 0%, rgba(24,39,69,0.9) 20%, rgba(24,39,69,0.90196) 20%, rgba(6,16,37,0.85098) 100%) !important;
     padding-top: 50px !important;
     font-size: 18pt;
-    border: 4px solid #404f70;
+    border: 1px solid #000;
     outline: 0;
     line-height: 1em;
-    opacity: 0.85;
     min-height: 0 !important;
 }
 
 .swal2-content{
-    color: white !important; 
+    color: #98b3d3 !important; 
     font-size: 16pt;    
 }
 
@@ -292,8 +291,8 @@ img{
     line-height: 40px;
     color: white !important;
     background-color: black;
-    font-size: 16pt;
-    border-bottom: 4px solid #404f70;
+    font-size: 20px;
+    border-bottom: solid 1px rgba(91, 106, 133, 0.3); 
     margin-top: 0;
     text-align: center;
     font-weight: 700;
@@ -313,13 +312,14 @@ img{
 .alertButton {
     font-family: "Conduit ITC";
     border-style: solid;
-    border: 2px solid white !important;
-    background-color: black !important;
-    font-size: 13pt;
-    padding: 3px 20px;
+    border: 0 !important;
+    background-color: rgba(0,0,0,0) !important;
+    font-size: 30px;
+
     margin-right: 5px;
-    border-radius: 5px;
+    font-weight: 600;
     color: white;
+    float: left;
 }
 
 .alertButton:focus {
@@ -327,7 +327,15 @@ img{
 }
 
 .alertButton:hover {
-    background-color: #B1572A !important;    
+    text-decoration: underline;
+}
+
+.alertButton .button{
+    display: none;
+    height: 30px;
+    margin-top: -5px;
+    float: left;
+    margin-right: 3px;
 }
 
 .howToServeWindow .swal2-content{

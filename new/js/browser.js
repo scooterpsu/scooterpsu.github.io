@@ -18,6 +18,7 @@ var selectedID = 0;
 var lastArray = [];
 var dewConnected = false;
 var hasGP = false;
+var controllerType = "360";
 var axisThreshold = .5;
 var stickTicks = { left: 0, right: 0, up: 0, down: 0 };
 var repGP;
@@ -37,13 +38,37 @@ swal.setDefaults({
     reverseButtons: true,
     imageWidth: "102", 
     imageHeight: "88",
-    confirmButtonClass: "alertButton",
-    cancelButtonClass: "alertButton"
+    confirmButtonClass: "alertButton okButton",
+    cancelButtonClass: "alertButton cancelButton",
+    confirmButtonText: "<img class='button'>Ok",
+    cancelButtonText: "<img class='button'>Cancel",
+    onOpen: () => {
+        if(hasGP){
+            $('.okButton .button').attr('src','dew://assets/buttons/'+controllerType+'_A.png');
+            $('.cancelButton .button').attr('src','dew://assets/buttons/'+controllerType+'_B.png');
+            $('.button').show();
+        }
+    }
 })
 $(document).ready(function() {
     $(document).keyup(function (e) {
         if (e.keyCode === 27) {
-            dew.hide();
+            if(swal.isVisible()) {
+                sweetAlert.close();  
+            } else {        
+                closeBrowser();
+            }
+        }
+    });
+    $(document).keydown(function (e) {
+        if(e.keyCode == 38){ //Up
+            upNav();
+        }
+        if(e.keyCode == 40){ //Down
+            downNav();
+        }
+        if(e.keyCode == 32 || e.keyCode == 13){ //Space and Enter        
+            joinSelected();
         }
     });
     initTable();
@@ -57,8 +82,6 @@ $(document).ready(function() {
             }else{
                 gameVersion = version;
             }
-            //checkUpdate(gameVersion);
-            $('#serverTable').dataTable().fnFilter(gameVersion, 17 );
         });
         dew.command('Game.ListMaps', {}).then(function(response) {
             mapList = new Array(response.split(','));
@@ -125,16 +148,10 @@ $(document).ready(function() {
                     refreshTable();
                 }
                 if(e.data.Up == 1){
-                    if (selectedID > 0) {
-                        selectedID--;
-                        updateSelection();
-                    }
+                    upNav();
                 }
                 if(e.data.Down == 1){
-                    if (selectedID < ($("#serverTable tbody tr").length-1)) {
-                        selectedID++;
-                        updateSelection();
-                    }  
+                    downNav();
                 }
                 if(e.data.Select == 1){
                     toggleScoreboard(); 
@@ -167,7 +184,6 @@ $(document).ready(function() {
     .fail(function() {
         initDewjson();              
     });
-    getCurrentRelease();
     if(typeof(Storage) !== "undefined") {
         if(localStorage.getItem("zoom") !== null){
             zoomAmount = localStorage.getItem("zoom");
@@ -264,13 +280,6 @@ function adjustResolution(newZoom) {
         $('#serverTable').DataTable().draw(); 
     });
     $( "#zoomSlider" ).slider({ value:newZoom });
-}
-
-function getCurrentRelease() {
-    var fgjkfld = $.getJSON( "http://eldewrito.anvilonline.net/update.json", null)
-    .done(function( data ) {
-        EDVersion = Object.keys(data)[0];
-    })
 }
 
 var clickDelay = 300;
@@ -477,7 +486,10 @@ function buildTable(server_list){
                                     serverList.servers[j] = serverInfo;
                                     if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
                                     	playerCount+=parseInt(serverInfo.numPlayers);
+                                    }else{
+                                        return
                                     }
+                                  
                                 }
                             }
                             var locked;
@@ -608,7 +620,11 @@ function joinServer(i) {
                 });
             }
         } else {
-            swal("Full Game", "Game is full or unavailable.", "error");
+            swal({
+                title: "Full Game", 
+                html: "Game is full or unavailable.", 
+                type: "error"
+            });
         }
     } 
 }
@@ -699,10 +715,10 @@ function capitalize(string) {
 
 function getFlag(ip, rowNum){
     var ipSplit = ip.split(":")[0];
-    $.getJSON("http://ip-api.com/json/"+ipSplit, function(json) {
-        $('#serverTable').dataTable().fnUpdate(json.countryCode.toLowerCase(), rowNum, 2);        
-    })
-}
+    $.getJSON( 'http://geoip.nekudo.com/api/'+ipSplit, function( data ) {
+        $('#serverTable').dataTable().fnUpdate(data.country.code.toLowerCase(), rowNum, 2); 
+    });
+    }
 
 function refreshTable() {
     //Throttle refresh so people can't spam and break the count
@@ -787,23 +803,6 @@ function switchBrowser() {
     })
 }
 
-function checkUpdate(ver) {
-    if (EDVersion == 0) {
-        setTimeout(function() {
-            checkUpdate(ver);
-        }, "500");  
-    } else {
-        ga('send', 'event', 'version', ver);
-        if (ver != EDVersion) {
-            swal({   
-                title: "Version Outdated!",
-                html: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see <a href='http://www.reddit.com/r/HaloOnline/' target='_blank'>reddit.com/r/HaloOnline</a> for more info.",
-                type: "error", allowEscapeKey: false
-            });
-        }
-    }
-}
-
 function hasMap(map) {
     if(mapList[0].length == 0) {
         return true;
@@ -856,11 +855,12 @@ function howToServe(){
     swal({   
         title: "How to Host a Server",
         html: 
-        "Hosting a server requires UDP port "+gamePort+" and TCP ports "+
-        announcePort+" & "+signalServerPort+" to be forwarded on your router to your server's private IP address.<br/>"+
+        "0.6 features UPnP, which automatically opens and forwards ports for you.<br/><br/>"+
+        "If your router does not support this, you will need to open UDP port "+gamePort+" and TCP ports "+
+        announcePort+" & "+signalServerPort+" and forward them on your router to your server's private IP address.<br/><br/>"+
         "Please refer to the following online guide for detailed instructions on how to do so.<br/>"+
         "<a href='http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/' target='_blank'>http://www.howtogeek.com/66214/how-to-forward-ports-on-your-router/</a><br/><br/>"+
-        "Then open the game and select 'Multiplayer' or 'Forge', change the network type to 'Online', and select 'Host Game'.",
+        "Then open the game and select 'Host Multiplayer', go up to 'Host Settings' and change the Network Mode to 'Online'.",
         width: "1000", customClass: "howToServeWindow", imageUrl: "images/eldorito.png"
     });
 }
@@ -887,7 +887,8 @@ function joinSelected() {
 }
 
 function onControllerConnect(){
-    dew.command('Game.IconSet', {}).then(function(controllerType){
+    dew.command('Game.IconSet', {}).then(function(res){
+        controllerType = res;
         $('#xboxLabel').html('<img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_Y.png">Refresh List <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_X.png">Quick Match <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_A.png">Join Game <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_Back.png">Toggle Player list/Scoreboard <img class="controllerButton" src="dew://assets/buttons/'+controllerType+'_B.png">Close');
     });
 }
@@ -904,18 +905,26 @@ function checkGamepad(){
         lastHeldUpdated = Date.now();
     }
     if(stickTicks.up == 1 || (shouldUpdateHeld && stickTicks.up > 25)){
-        if (selectedID > 0) {
-            selectedID--;
-            updateSelection();
-        }
+        upNav();
     }
     if(stickTicks.down == 1 || (shouldUpdateHeld && stickTicks.down > 25)){
-        if (selectedID < ($("#serverTable tbody tr").length-1)) {
-            selectedID++;
-            updateSelection();
-        }  
+        downNav();
     }
 };
+
+function upNav(){
+    if (selectedID > 0) {
+        selectedID--;
+        updateSelection();
+    }
+}
+
+function downNav(){
+    if (selectedID < ($("#serverTable tbody tr").length-1)) {
+        selectedID++;
+        updateSelection();
+    }  
+}
 
 //==========================
 //==== Datatable Sorts =====
