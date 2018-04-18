@@ -82,6 +82,7 @@ $(document).ready(function() {
             }else{
                 gameVersion = version;
             }
+            $('#serverTable').dataTable().fnFilter(gameVersion, 17 );
         });
         dew.command('Game.ListMaps', {}).then(function(response) {
             mapList = new Array(response.split(','));
@@ -434,12 +435,10 @@ function buildTable(server_list){
                         for (var j = 0; j < serverList.servers.length; j++) {
                             if (serverList.servers[j]["i"] == i) {
                                 serverList.servers[j] = serverInfo;
-                                if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
+                                if(serverInfo.eldewritoVersion.contains(gameVersion)|| gameVersion == 0){
                                     playerCount+=parseInt(serverInfo.numPlayers);
                                     serverCount++;
-                                } else {
-                                    return
-                                }
+                                } 
                             }
                         }
                         var locked;
