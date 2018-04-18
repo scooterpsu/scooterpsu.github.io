@@ -213,12 +213,10 @@ $(document).ready(function() {
 function initDewjson(){
     $.ajax({
         url:"http://new.halostats.click/privateapi/getServers",
-        error: function(error)
-        {
+        error: function(error){
            console.log(error);
         },
-        success: function(data)
-        {
+        success: function(data){
            buildTable(data);
         }
     });
@@ -300,7 +298,16 @@ function initTable() {
         }
     });
   
+    var blamRegex = new RegExp(blamList.join("|"), "gi");
     var table = $('#serverTable').DataTable( {
+        "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+            //console.log('name:'+aData[5]+' host:'+aData[6]+' map:'+aData[9]+' variant:'+aData[12]);
+            $('td:eq(2)', nRow).text( aData[5].replace(blamRegex, "BLAM!")); //Name
+            $('td:eq(3)', nRow).text( aData[6].replace(blamRegex, "BLAM!")); //Host
+            $('td:eq(5)', nRow).text( aData[9].replace(blamRegex, "BLAM!")); //Map
+            $('td:eq(7)', nRow).text( aData[12].replace(blamRegex, "BLAM!")); //Variant
+            return nRow;
+        },
         "footerCallback": function ( row, data, start, end, display ) {
             var playerOut = playerCount + " players";
             var serverOut = serverCount + " servers";
@@ -403,11 +410,6 @@ function initTable() {
             $('#gamecard').hide();
         }
     });
-    if(dewConnected){
-        table.column(7).visible(true);
-    }else{
-        table.column(7).visible(false);
-    }
 }
 
 function buildTable(server_list){
@@ -420,9 +422,6 @@ function buildTable(server_list){
     for (var i = 0; i < server_list.length; i++){
         serverIP = server_list[i].IP;
             serverList.servers.push({serverIP, i});
-
-                var startTime = Date.now();
-                var endTime;
                 var ping = 0;
                 var pingDisplay = "0:0";
                 var rePing = false;
@@ -493,7 +492,6 @@ function buildTable(server_list){
                             serverInfo.sprintUnlimitedEnabled,
                             serverInfo.assassinationEnabled
                         ]).draw();
-                        table.columns.adjust().draw();
                         fillGameCard(serverInfo.serverId);
                         if(dewConnected){
                             dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
@@ -626,18 +624,13 @@ function fillGameCard(i) {
     $("#gamecard").html(html);
 }
 
-var blamList = [];
-$.getJSON("https://scooterpsu.github.io/blamList/blamList.json", function(json) {
-    blamList = json.words;
-})
-
 function escapeHtml(str) {
     if(str){
         var div = document.createElement('div');
         var fixedText = div.appendChild(document.createTextNode(str)).textContent;   
         fixedText = fixedText.replace(/[^\x00-\x7F]/g, ""); //ASCII Only
         for (var i = 0; i < blamList.length; i++) {
-            fixedText = fixedText.replace(new RegExp(blamList[i], "ig"), "BLAM!").replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/&#x3C;/g,'&lt;').replace(/&#x3E;/g,'&gt;');
+            fixedText = fixedText.replace(/\</g,"&lt;").replace(/\>/g,"&gt;").replace(/&#x3C;/g,'&lt;').replace(/&#x3E;/g,'&gt;');
         }
         return fixedText.trim().substring(0,128);
     } else {
