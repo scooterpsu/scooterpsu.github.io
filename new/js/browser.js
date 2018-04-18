@@ -400,6 +400,7 @@ function initTable() {
             }
         }
     });
+    table.column(7).visible(true);
     $('#searchBox').keyup(function(){
         table.search($(this).val()).draw() ;
     });
