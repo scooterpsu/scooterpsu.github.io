@@ -233,7 +233,8 @@ function initCachejson() {
         },
         success: function(data){
            buildTable(data);
-        }
+        },
+        timeout: 10000
     });
 }
 
@@ -253,7 +254,8 @@ function initDewjson() {
         success: function()
         {
            buildList(dewritoURL);
-        }
+        },
+        timeout: 10000
     });
 }
 
