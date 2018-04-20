@@ -366,15 +366,16 @@ function initTable() {
             fillGameCard(row.data()[0]);
         }
     });
-  
     var blamRegex = new RegExp(blamList.join("|"), "gi");
     var table = $('#serverTable').DataTable( {
         "createdRow": function( nRow, aData, iDisplayIndex ) {
-            //console.log('name:'+aData[5]+' host:'+aData[6]+' map:'+aData[9]+' variant:'+aData[12]);
-            $('td:eq(2)', nRow).text( aData[5].replace(blamRegex, "BLAM!")); //Name
-            $('td:eq(3)', nRow).text( aData[6].replace(blamRegex, "BLAM!")); //Host
-            $('td:eq(5)', nRow).text( aData[9].replace(blamRegex, "BLAM!")); //Map
-            $('td:eq(7)', nRow).text( aData[12].replace(blamRegex, "BLAM!")); //Variant
+            if(filter){
+                //console.log('name:'+aData[5]+' host:'+aData[6]+' map:'+aData[9]+' variant:'+aData[12]);
+                $('td:eq(2)', nRow).text( aData[5].replace(blamRegex, "BLAM!")); //Name
+                $('td:eq(3)', nRow).text( aData[6].replace(blamRegex, "BLAM!")); //Host
+                $('td:eq(5)', nRow).text( aData[9].replace(blamRegex, "BLAM!")); //Map
+                $('td:eq(7)', nRow).text( aData[12].replace(blamRegex, "BLAM!")); //Variant
+            }
             return nRow;
         },
         bPaginate: false,
