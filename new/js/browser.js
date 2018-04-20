@@ -366,15 +366,20 @@ function initTable() {
             fillGameCard(row.data()[0]);
         }
     });
-  
+    var filter = true;
     var blamRegex = new RegExp(blamList.join("|"), "gi");
     var table = $('#serverTable').DataTable( {
         "createdRow": function( nRow, aData, iDisplayIndex ) {
-            //console.log('name:'+aData[5]+' host:'+aData[6]+' map:'+aData[9]+' variant:'+aData[12]);
-            $('td:eq(2)', nRow).text( aData[5].replace(blamRegex, "BLAM!")); //Name
-            $('td:eq(3)', nRow).text( aData[6].replace(blamRegex, "BLAM!")); //Host
-            $('td:eq(5)', nRow).text( aData[9].replace(blamRegex, "BLAM!")); //Map
-            $('td:eq(7)', nRow).text( aData[12].replace(blamRegex, "BLAM!")); //Variant
+            if(filter){
+                //console.log('name:'+aData[5]+' host:'+aData[6]+' map:'+aData[9]+' variant:'+aData[12]);
+                $('td:eq(2)', nRow).text( aData[5].replace(blamRegex, "BLAM!")); //Name
+                $('td:eq(3)', nRow).text( aData[6].replace(blamRegex, "BLAM!")); //Host
+                $('td:eq(5)', nRow).text( aData[9].replace(blamRegex, "BLAM!")); //Map
+                $('td:eq(7)', nRow).text( aData[12].replace(blamRegex, "BLAM!")); //Variant
+            }
+            if(hasGP){
+                updateSelection(false);
+            }
             return nRow;
         },
         bPaginate: false,
@@ -432,7 +437,7 @@ function initTable() {
         ],
         "order": [[ 0, "asc" ]],
         "language": {
-            "emptyTable": "No servers found",
+            "emptyTable": "<b>Loading...</b>",
             "zeroRecords": "No matching servers found",
             "infoEmpty": "No servers found",
             "info": "Showing servers _START_ to _END_ of _TOTAL_",
@@ -851,7 +856,7 @@ function refreshTable() {
     playerCount = 0;
     $('.serverCount').html(serverCount + " servers");
     $('.playerCount').html(playerCount + " players");
-    $('#serverTable').DataTable().clear(); 
+    $('#serverTable').DataTable().clear().draw();
     selectedID = 0;
     initCachejson();
 }
@@ -877,6 +882,10 @@ function quickMatch() {
             console.log(bestPing + " | " + data[6]);
             console.log(bestFrac + " | " + data[13]);*/
             return false;   //Better ping available
+        }
+        if (data[17] != gameVersion){
+            //console.log("Removing for version mismatch: " + data);
+            return false;   //Remove different version servers
         }
         bestFrac = eval(data[15]);
         bestPing = data[8];
@@ -982,7 +991,7 @@ function howToServe(){
 //===== Gamepad functions =====
 //=============================
 
-function updateSelection() {
+function updateSelection(sound) {
     $('#serverTable tbody tr.selected').removeClass('selected');
     $("#serverTable tbody tr:eq(" + selectedID + ")").addClass("selected");
     var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
@@ -990,7 +999,7 @@ function updateSelection() {
         fillGameCard(row[0]);
     }
     $(".dataTables_scrollBody tbody tr:eq(" + selectedID + ")")[0].scrollIntoView(false);
-    if(dewConnected){
+    if(dewConnected && sound){
         dew.command('Game.PlaySound 0xAFE');
     }
 }
@@ -1032,14 +1041,14 @@ function checkGamepad(){
 function upNav(){
     if (selectedID > 0) {
         selectedID--;
-        updateSelection();
+        updateSelection(true);
     }
 }
 
 function downNav(){
     if (selectedID < ($("#serverTable tbody tr").length-1)) {
         selectedID++;
-        updateSelection();
+        updateSelection(true);
     }  
 }
 
