@@ -207,7 +207,7 @@ $(document).ready(function() {
 
 var URLIndex = 0;
 var cacheJSONList = [
-    "http://new.halostats.click/privateapi/getServers",
+    "http://204.12.198.11/privateapi/getServers",
     "http://162.216.0.145/api/getServers"
 ];
 var dewritoURLList = [
@@ -387,7 +387,7 @@ function initTable() {
         scroller: true,
         destroy: true,
         "iDisplayLength": 10,
-        stateSave: true,
+        stateSave: false,
         bInfo: false,
         "lengthMenu": [[10, 15, 25, -1], [10, 15, 25, "All"]],
         columnDefs: [
