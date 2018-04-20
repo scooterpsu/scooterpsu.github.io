@@ -38,7 +38,7 @@ swal.setDefaults({
 $(document).ready(function() {
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
-        window.location.href = '/new/';
+        window.location.href = 'http://new.halostats.click/servers';
     })
     getCurrentRelease();
     initDewjson();
