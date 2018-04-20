@@ -66,6 +66,7 @@ $(document).ready(function() {
     });
     initTable();
     getOfficial();
+    $('#serverTable').DataTable().search('').columns().search('').draw();
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
         dewConnected = true;
@@ -311,8 +312,8 @@ function checkOfficial(ip){
                     officialType = "ranked:Ranked Dedicated Server";
                 }
                 var matchingLines = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 1 );
-                $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[0], 3);
-                $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[0], 4);
+                $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[0], 3, false, false);
+                $('#serverTable').dataTable().fnUpdate(officialType, matchingLines[0], 4, false, false);
             }
         }
     });
@@ -412,11 +413,11 @@ function initTable() {
             { title: "ID", visible: false},
             { title: "IP", visible: false},
             { title: "", "width": "0.5%"},
-            { title: "Type" },
+            { title: "Type", "width": "1.5%"},
             { title: "TypeText", visible: false},
-            { title: "Name" },
+            { title: "Name", "width": "25%"},
             { title: "Host" },
-            { title: "Ping" , "width": "45px"},
+            { title: "Ping", "width": "6%"},
             { title: "PingNum" , visible: false},           
             { title: "Map" },
             { title: "Map File", visible: false},
@@ -424,7 +425,7 @@ function initTable() {
             { title: "Variant" },
             { title: "Status", visible: false},    
             { title: "Num Players", visible: false},  
-            { title: "Players", "width": "1%"},
+            { title: "Players", "width": "0.5%"},
             { title: "IsFull", visible: false},
             { title: "Version", visible: false},
             { title: "IPnoPort", visible: false}
@@ -529,13 +530,15 @@ function buildTable(server_list){
                         serverInfo.sprintUnlimitedEnabled,
                         serverInfo.assassinationEnabled
                     ]).draw();
-                    fillGameCard(serverInfo.serverId);
-                    if(dewConnected){
-                        dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
-                    }
-                    checkOfficial(serverInfo.serverIP);
-                    if(!locked){
-                        getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
+                    if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
+                        fillGameCard(serverInfo.serverId);
+                        if(dewConnected){
+                            dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
+                        }
+                        checkOfficial(serverInfo.serverIP);
+                        if(!locked){
+                            getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
+                        }
                     }
                 } else {
                     //console.log(serverInfo.serverIP + " is glitched");
@@ -776,7 +779,7 @@ function pingMe(ip, rowNum, delay) {
     }, delay);   
 }
 
-function setPing(ip, ping){
+async function setPing(ip, ping){
     var matchingLines = $('#serverTable').dataTable().fnFindCellRowIndexes( ip, 18 );
     for (i = 0; i < matchingLines.length; i++) { 
         var pingDisplay;
@@ -789,9 +792,8 @@ function setPing(ip, ping){
         }   else {
             pingDisplay = ping+":0";
         }
-        $('#serverTable').dataTable().fnUpdate(pingDisplay, matchingLines[i], 7);
-        $('#serverTable').dataTable().fnUpdate(ping, matchingLines[i], 8);
-        $('#serverTable').DataTable().columns.adjust().draw();
+        $('#serverTable').dataTable().fnUpdate(pingDisplay, matchingLines[i], 7, false, false);
+        $('#serverTable').dataTable().fnUpdate(ping, matchingLines[i], 8, false, false);
     }
 }
 
@@ -824,10 +826,10 @@ function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function getFlag(ip, rowNum){
+async function getFlag(ip, rowNum){
     var ipSplit = ip.split(":")[0];
     $.getJSON( 'http://geoip.nekudo.com/api/'+ipSplit, function( data ) {
-        $('#serverTable').dataTable().fnUpdate(data.country.code.toLowerCase(), rowNum, 2); 
+        $('#serverTable').dataTable().fnUpdate(data.country.code.toLowerCase(), rowNum, 2, false, false); 
     });
     }
 
