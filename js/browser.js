@@ -366,6 +366,7 @@ function initTable() {
             fillGameCard(row.data()[0]);
         }
     });
+    var filter = true;
     var blamRegex = new RegExp(blamList.join("|"), "gi");
     var table = $('#serverTable').DataTable( {
         "createdRow": function( nRow, aData, iDisplayIndex ) {
