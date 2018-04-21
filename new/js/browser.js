@@ -24,6 +24,7 @@ var stickTicks = { left: 0, right: 0, up: 0, down: 0 };
 var repGP;
 var lastHeldUpdated = 0;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
+var pageVisible = false;
 
 swal.setDefaults({
     customClass: "alertWindow",
@@ -86,6 +87,7 @@ $(document).ready(function() {
         });
         $("body").css("background-color", "transparent");
         dew.on("show", function (event) {
+            pageVisible = true;
             refreshTable();
             dew.command('Settings.Gamepad', {}).then(function(result){
                 if(result == 1){
@@ -103,6 +105,7 @@ $(document).ready(function() {
             dew.command('game.hideh3ui 1');
         });
         dew.on('hide', function(e){
+            pageVisible = false;
             if(repGP){
                 window.clearInterval(repGP);
             }
@@ -113,14 +116,16 @@ $(document).ready(function() {
             setPing(event.data.address, event.data.latency);
         });
         dew.on("serverconnect", function (event) {
-            if(event.data.success){
-                closeBrowser();
-            }else{
-                swal({
-                    title: "Joining Game",
-                    text: "Attempting to join selected game...", 
-                    imageUrl: "images/eldorito.png"
-                });
+            if(pageVisible){
+                if(event.data.success){
+                    closeBrowser();
+                }else{
+                    swal({
+                        title: "Joining Game",
+                        text: "Attempting to join selected game...", 
+                        imageUrl: "images/eldorito.png"
+                    });
+                }
             }
         });
         dew.on('controllerinput', function(e){       
@@ -461,15 +466,13 @@ function initTable() {
     table.state.clear();
     table.search('').columns().search('').draw();
     $('#searchBox').keyup(function(){
-        table.search($(this).val()) ;
-    });
-    /*$('#serverTable').on('search.dt', function(){
+        table.search($(this).val()).draw();
         if($('#serverTable').find('tbody tr td').not('.dataTables_empty').length>0) {
             $('#gamecard').show();
         }else{
             $('#gamecard').hide();
         }
-    });*/
+    });
 }
 
 function buildTable(server_list){
