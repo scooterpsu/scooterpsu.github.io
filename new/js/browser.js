@@ -60,13 +60,15 @@ $(document).ready(function() {
         if(e.keyCode == 40){ //Down
             downNav();
         }
-        if(e.keyCode == 32 || e.keyCode == 13){ //Space and Enter        
+        if(e.keyCode == 13){ //Enter        
+            joinSelected();
+        }
+        if(e.keyCode == 32 && !$('#searchBox').is(':focus')){ //Space  
             joinSelected();
         }
     });
     initTable();
     //getOfficial();
-    $('#serverTable').DataTable().search('').columns().search('').draw();
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
         dewConnected = true;
@@ -382,6 +384,9 @@ function initTable() {
             if(hasGP){
                 updateSelection(false);
             }
+            if(iDisplayIndex == 0){
+                fillGameCard(aData[0]);
+            }
             return nRow;
         },
         bPaginate: false,
@@ -448,16 +453,17 @@ function initTable() {
     })
     table.column(7).visible(true);
     table.state.clear();
+    table.search('').columns().search('').draw();
     $('#searchBox').keyup(function(){
-        table.search($(this).val()).draw() ;
+        table.search($(this).val()) ;
     });
-    $('#serverTable').on('search.dt', function(){
+    /*$('#serverTable').on('search.dt', function(){
         if($('#serverTable').find('tbody tr td').not('.dataTables_empty').length>0) {
             $('#gamecard').show();
         }else{
             $('#gamecard').hide();
         }
-    });
+    });*/
 }
 
 function buildTable(server_list){
@@ -538,7 +544,7 @@ function buildTable(server_list){
                         serverInfo.assassinationEnabled
                     ]).draw();
                     if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
-                        fillGameCard(serverInfo.serverId);
+                        //fillGameCard(serverInfo.serverId);
                         if(dewConnected){
                             dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
                         }
@@ -574,7 +580,7 @@ function oldBuildTable(server_list){
     }else{
         var pingDelay = 10;
     }
-    for (var i = 0; i <= server_list.length; i++){
+    for (var i = 0; i < server_list.length; i++){
         serverIP = server_list[i];
         if(VerifyIPRegex.test(serverIP)) {
             serverList.servers.push({serverIP, i});
@@ -668,7 +674,7 @@ function oldBuildTable(server_list){
                                 serverInfo.sprintEnabled,
                                 serverInfo.sprintUnlimitedEnabled,
                                 serverInfo.assassinationEnabled
-                            ])
+                            ]).draw();
                              if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
                                 serverCount++;
                             }
