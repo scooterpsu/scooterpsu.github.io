@@ -48,7 +48,7 @@ img{
     font-size: 18pt;
 }
 
-.refresh, .quickMatch, .howToServe, .closeButton, .browserSwitch {
+.refresh, .stop, .quickMatch, .howToServe, .closeButton, .browserSwitch {
     opacity: 0.8;
     position: absolute;
     top: -9px;
@@ -69,17 +69,21 @@ img{
     left: 200px;
 }
 
+.stop {
+    left: 320px;
+}
+
 .quickMatch {
-    left: 590px;
+    left: 700px; 
 }
 
 .howToServe{
-    left: 700px;
+    left: 830px;
 }
 
 .browserSwitch{
     width: 125px;
-    left: 830px;
+    left: 960px;
 }
 
 .closeButton {
@@ -88,7 +92,7 @@ img{
     height: 28px;
 }
 
-.refresh:hover, .quickMatch:hover, .howToServe:hover, .closeButton:hover, .browserSwitch:hover{
+.refresh:hover, .stop:hover, .quickMatch:hover, .howToServe:hover, .closeButton:hover, .browserSwitch:hover{
     background-color: #B1572A;
 }
 
@@ -97,7 +101,7 @@ img{
     opacity: 0.8;
     position: absolute;
     top: -30px;
-    left: 350px;
+    left: 460px;
     z-index: 2;
     font-size: 14pt;
 }
