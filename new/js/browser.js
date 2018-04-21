@@ -907,7 +907,7 @@ function switchBrowser() {
         input: 'select',
         imageUrl: "images/eldorito.png",
         inputOptions: {
-            'http://new.halostats.click/servers': 'HaloStats',
+            //'http://new.halostats.click/servers': 'HaloStats',
             'http://halo.thefeeltra.in/': 'theFeelTrain'
         },
         inputPlaceholder: 'Select alternate server browser',
