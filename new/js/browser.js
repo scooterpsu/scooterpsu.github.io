@@ -698,7 +698,7 @@ function oldBuildTable(server_list){
                             }
                             //checkOfficial(serverInfo.serverIP);
                             if(!locked){
-                                getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
+                                //getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
                             }
                         } else {
                             console.log(serverInfo.serverIP + " is glitched");
