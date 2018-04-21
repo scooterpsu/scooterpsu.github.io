@@ -778,9 +778,8 @@ function pingMe(ip, rowNum, delay) {
                 }   else {
                     pingDisplay = ping+":0";
                 }
-                $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 7);
-                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 8);
-                $('#serverTable').DataTable().columns.adjust().draw();
+                $('#serverTable').dataTable().fnUpdate(pingDisplay, rowNum, 7, false, false);
+                $('#serverTable').dataTable().fnUpdate(ping, rowNum, 8, false, false);
             }
         });
     }, delay);   
