@@ -382,7 +382,7 @@ function initTable() {
                 $('td:eq(7)', nRow).text( aData[12].replace(blamRegex, "BLAM!")); //Variant
             }
             if(hasGP){
-                updateSelection(false);
+                updateSelection(false, false);
             }
             if(iDisplayIndex == 0){
                 fillGameCard(aData[0]);
@@ -1005,14 +1005,16 @@ function howToServe(){
 //===== Gamepad functions =====
 //=============================
 
-function updateSelection(sound) {
+function updateSelection(sound, scroll) {
     $('#serverTable tbody tr.selected').removeClass('selected');
     $("#serverTable tbody tr:eq(" + selectedID + ")").addClass("selected");
     var row = $('#serverTable').dataTable().fnGetData($("#serverTable tbody tr:eq(" + selectedID + ")"));
     if(row){
         fillGameCard(row[0]);
     }
+    if(scroll){
     $(".dataTables_scrollBody tbody tr:eq(" + selectedID + ")")[0].scrollIntoView(false);
+    }
     if(dewConnected && sound){
         dew.command('Game.PlaySound 0xAFE');
     }
@@ -1055,14 +1057,14 @@ function checkGamepad(){
 function upNav(){
     if (selectedID > 0) {
         selectedID--;
-        updateSelection(true);
+        updateSelection(true, true);
     }
 }
 
 function downNav(){
     if (selectedID < ($("#serverTable tbody tr").length-1)) {
         selectedID++;
-        updateSelection(true);
+        updateSelection(true, true);
     }  
 }
 
