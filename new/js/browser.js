@@ -177,7 +177,8 @@ $(document).ready(function() {
         });
     })
     .fail(function() {
-        initCachejson();     
+        //initCachejson();
+        initDewjson();     
     });
     if(typeof(Storage) !== "undefined") {
         if(localStorage.getItem("zoom") !== null){
@@ -858,7 +859,8 @@ function refreshTable() {
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear().draw();
     selectedID = 0;
-    initCachejson();
+    //initCachejson();
+    initDewjson();
 }
 
 function quickMatch() {
