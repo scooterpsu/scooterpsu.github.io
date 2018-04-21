@@ -70,6 +70,7 @@ $(document).ready(function() {
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
         dewConnected = true;
+        dew.command('Game.FirstRun 1');
         dew.getVersion().then(function (version) {
             if(version.contains('-')){
                 gameVersion = version.split('-')[0];
