@@ -65,7 +65,7 @@ $(document).ready(function() {
         }
     });
     initTable();
-    getOfficial();
+    //getOfficial();
     $('#serverTable').DataTable().search('').columns().search('').draw();
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
@@ -541,7 +541,7 @@ function buildTable(server_list){
                         if(dewConnected){
                             dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
                         }
-                        checkOfficial(serverInfo.serverIP);
+                        //checkOfficial(serverInfo.serverIP);
                         /*if(!locked){
                             getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
                         }*/
@@ -680,7 +680,7 @@ function oldBuildTable(server_list){
                             } else {
                                 dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
                             }
-                            checkOfficial(serverInfo.serverIP);
+                            //checkOfficial(serverInfo.serverIP);
                             if(!locked){
                                 getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
                             }
