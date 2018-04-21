@@ -389,6 +389,12 @@ function initTable() {
             }
             return nRow;
         },
+        "preDrawCallback": function (settings) {
+            pageScrollPos = $('div.dataTables_scrollBody').scrollTop();
+        },
+        "drawCallback": function (settings) {
+            $('div.dataTables_scrollBody').scrollTop(pageScrollPos);
+        },
         bPaginate: false,
         scrollY: "-webkit-calc(100% - 137px)",
         scroller: true,
