@@ -597,6 +597,7 @@ function oldBuildTable(server_list){
             serverList.servers.push({serverIP, i});
             (function(i, serverIP) {
                 setTimeout(function() {
+                if (stopTableBuilding) return;                    
                 var startTime = Date.now();
                 var endTime;
                 var ping = 0;
