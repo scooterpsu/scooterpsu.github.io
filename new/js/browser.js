@@ -701,9 +701,9 @@ function oldBuildTable(server_list){
                                 dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
                             }
                             //checkOfficial(serverInfo.serverIP);
-                            if(!locked){
+                            /*if(!locked){
                                 getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
-                            }
+                            }*/
                         } else {
                             console.log(serverInfo.serverIP + " is glitched");
                         }
