@@ -587,7 +587,7 @@ function buildTable(server_list){
 function oldBuildTable(server_list){
     var table = $('#serverTable').DataTable();
     //if(!dewConnected){
-        var pingDelay = 250;
+        var pingDelay = 120;
     /*}else{
         var pingDelay = 10;
     }*/
@@ -694,10 +694,10 @@ function oldBuildTable(server_list){
                             }
                             //fillGameCard(serverInfo.serverId);
                             //if(!dewConnected){
-                                if(rePing) {
+                                /*if(rePing) {
                                     //console.log("repinging "+serverInfo.serverIP);
                                     pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
-                                }
+                                }*/
                             //} else {
                             //    dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
                             //}
