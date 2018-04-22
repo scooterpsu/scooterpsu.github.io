@@ -25,6 +25,7 @@ var repGP;
 var lastHeldUpdated = 0;
 var VerifyIPRegex = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)(?:\:(?:\d|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))?$/;
 var pageVisible = false;
+var stopTableBuilding = false
 
 swal.setDefaults({
     customClass: "alertWindow",
@@ -619,13 +620,16 @@ function oldBuildTable(server_list){
                     }
                     serverInfo["serverId"] = i;
                     serverInfo["serverIP"] = serverIP;
-                    if (serverInfo.maxPlayers <= 16 ) {
+
+                    if (stopTableBuilding) return;
+                    
+                    if (serverInfo.maxPlayers <= 16) {
                         if(serverInfo.map.length > 0) { //blank map means glitched server entry
                             for (var j = 0; j < serverList.servers.length; j++) {
                                 if (serverList.servers[j]["i"] == i) {
                                     serverList.servers[j] = serverInfo;
                                     if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
-                                    	playerCount+=parseInt(serverInfo.numPlayers);
+                                        playerCount+=parseInt(serverInfo.numPlayers);
                                         var playerOut = playerCount + " players";
                                         var serverOut = serverCount + " servers";
                                         $('.playerCount').html(playerOut);
@@ -684,7 +688,7 @@ function oldBuildTable(server_list){
                                 serverInfo.sprintUnlimitedEnabled,
                                 serverInfo.assassinationEnabled
                             ]).draw();
-                             if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
+                                if(serverInfo.eldewritoVersion.contains(gameVersion) || gameVersion == 0){
                                 serverCount++;
                             }
                             //fillGameCard(serverInfo.serverId);
@@ -698,7 +702,7 @@ function oldBuildTable(server_list){
                             }
                             //checkOfficial(serverInfo.serverIP);
                             if(!locked){
-                                //getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
+                                getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
                             }
                         } else {
                             console.log(serverInfo.serverIP + " is glitched");
@@ -707,7 +711,7 @@ function oldBuildTable(server_list){
                         console.log(serverInfo.serverIP + " is hacked (maxPlayers over 16)");
                     }
                 });
-              }, (i * pingDelay));  
+                }, (i * pingDelay));  
             })(i, serverIP);
         } else {
             console.log(serverIP + " is invalid, skipping.");
@@ -874,8 +878,13 @@ function refreshTable() {
     $('.playerCount').html(playerCount + " players");
     $('#serverTable').DataTable().clear().draw();
     selectedID = 0;
+    stopTableBuilding = false;
     //initCachejson();
     initDewjson();
+}
+
+function stopTableBuild() {
+    stopTableBuilding = true;
 }
 
 function quickMatch() {
