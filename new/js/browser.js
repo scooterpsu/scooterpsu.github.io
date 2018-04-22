@@ -604,7 +604,7 @@ function oldBuildTable(server_list){
                 var rePing = false;
                 var jqhrxServerInfo = $.getJSON("http://" + serverIP, null )
                 .done(function(serverInfo) {
-                    if(!dewConnected){
+                    //if(!dewConnected){
                         endTime = Date.now();
                         ping = Math.round((endTime - startTime) * .45);
                         if (ping > 0 && ping <= 100) {
@@ -618,7 +618,7 @@ function oldBuildTable(server_list){
                             pingDisplay = ping+":0";
                             rePing = true;
                         }
-                    }
+                    //}
                     serverInfo["serverId"] = i;
                     serverInfo["serverIP"] = serverIP;
 
@@ -693,14 +693,14 @@ function oldBuildTable(server_list){
                                 serverCount++;
                             }
                             //fillGameCard(serverInfo.serverId);
-                            if(!dewConnected){
+                            //if(!dewConnected){
                                 if(rePing) {
-                                    console.log("repinging "+serverInfo.serverIP);
+                                    //console.log("repinging "+serverInfo.serverIP);
                                     pingMe(serverInfo.serverIP, $("#serverTable").DataTable().column(0).data().length-1, 200); 
                                 }
-                            } else {
-                                dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
-                            }
+                            //} else {
+                            //    dew.ping(serverInfo.serverIP.split(":")[0], serverInfo.port);
+                            //}
                             //checkOfficial(serverInfo.serverIP);
                             /*if(!locked){
                                 getFlag(serverIP,$("#serverTable").DataTable().column(0).data().length-1);
