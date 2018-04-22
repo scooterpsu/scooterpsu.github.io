@@ -106,6 +106,7 @@ $(document).ready(function() {
             dew.command('game.hideh3ui 1');
         });
         dew.on('hide', function(e){
+            stopTableBuild();
             pageVisible = false;
             if(repGP){
                 window.clearInterval(repGP);
