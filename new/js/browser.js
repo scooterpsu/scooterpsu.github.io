@@ -586,11 +586,11 @@ function buildTable(server_list){
 
 function oldBuildTable(server_list){
     var table = $('#serverTable').DataTable();
-    if(!dewConnected){
+    //if(!dewConnected){
         var pingDelay = 120;
-    }else{
+    /*}else{
         var pingDelay = 10;
-    }
+    }*/
     for (var i = 0; i < server_list.length; i++){
         serverIP = server_list[i];
         if(VerifyIPRegex.test(serverIP)) {
