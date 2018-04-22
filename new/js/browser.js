@@ -587,7 +587,7 @@ function buildTable(server_list){
 function oldBuildTable(server_list){
     var table = $('#serverTable').DataTable();
     //if(!dewConnected){
-        var pingDelay = 120;
+        var pingDelay = 250;
     /*}else{
         var pingDelay = 10;
     }*/
