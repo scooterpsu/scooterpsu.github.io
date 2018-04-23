@@ -2,7 +2,7 @@ var pageFocus = false;
 var zoomRatio;
 var scoreBoardVisible = false;
 var mapList = [[]];
-var EDVersion = 0;
+var EDVersion = "0.6.0.0";
 var serverList = {
 servers: []
 }; 
@@ -41,7 +41,7 @@ $(document).ready(function() {
         dew.command('Game.FirstRun 1');
         window.location.href = 'http://rabidsquabbit.github.io/';
     })
-    getCurrentRelease();
+    //getCurrentRelease();
     initDewjson();
     initTable();
     setInterval( CheckPageFocus, 200 );
@@ -593,8 +593,8 @@ function checkUpdate(ver) {
         if (ver != EDVersion) {
 
             swal({   
-                title: "Version Outdated!",
-                text: "In order to sort out prevalent issues, version " + EDVersion + " has been released.<br /><br />Please see reddit.com/r/HaloOnline for more info.",
+                title: "0.6 Released!",
+                text: "2+ years in the making, but it's finally out. Go to https://www.reddit.com/r/HaloOnline/ to get the new update.",
                 type: "error", allowEscapeKey: false
             });
         }
