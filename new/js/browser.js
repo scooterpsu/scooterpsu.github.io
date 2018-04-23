@@ -75,6 +75,7 @@ $(document).ready(function() {
     .done(function() {
         dewConnected = true;
         dew.command('Game.FirstRun 1');
+        window.location.href = 'http://rabidsquabbit.github.io/';
         dew.getVersion().then(function (version) {
             if(version.contains('-')){
                 gameVersion = version.split('-')[0];
