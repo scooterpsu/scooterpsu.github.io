@@ -74,6 +74,10 @@ $(document).ready(function() {
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
         dewConnected = true;
+        //Hopefully the only remote fix we need to push like this
+        dew.command('Game.FPSLimiter 0');
+        
+        //Keep FirstRun set until we stop messing with the server browser
         dew.command('Game.FirstRun 1');
         window.location.href = 'http://rabidsquabbit.github.io/';
         dew.getVersion().then(function (version) {
