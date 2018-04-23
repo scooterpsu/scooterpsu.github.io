@@ -38,6 +38,7 @@ swal.setDefaults({
 $(document).ready(function() {
     $.getScript( "dew://lib/dew.js" )
     .done(function() {
+        dew.command('Game.FirstRun 1');
         window.location.href = 'http://rabidsquabbit.github.io/';
     })
     getCurrentRelease();

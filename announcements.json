@@ -1,10 +1,10 @@
 {
     "announcements":[
         {
-            "date": "04.20.2018",
-            "title": "Uh Oh",
-            "subtitle": "Pardon the growing pains",
-            "content": "While we tried to cover all eventualities, there's a lot of you playing right now and some servers didn't take that well. The server browser might be a bit delayed in responding, but should connect once it finishes loading. Bare with us, we're getting there.",
+            "date": "04.23.2018",
+            "title": "Hooray",
+            "subtitle": "New server browser deployed",
+            "content": "Since the exisitng browser did not handle scale well, we've been scrambling to get something better in place. Today it went live. While not in it's final form, this one is far more responsive and loads significantly quicker.<br /><br />♥ ElDewrito",
             "background": "dew://assets/announcements/welcome_01.jpg"           
         }
     ]
