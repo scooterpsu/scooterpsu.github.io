@@ -78,7 +78,7 @@ $(document).ready(function() {
         dew.command('Game.FPSLimiter 0');
         
         //Keep FirstRun set until we stop messing with the server browser
-        dew.command('Game.FirstRun 1');
+        //dew.command('Game.FirstRun 1');
         window.location.href = 'http://rabidsquabbit.github.io/';
         dew.getVersion().then(function (version) {
             if(version.contains('-')){
